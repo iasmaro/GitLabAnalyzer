@@ -1,0 +1,42 @@
+# https://zgadzaj.com/development/docker/docker-compose/containers/mongodb
+# https://medium.com/faun/managing-mongodb-on-docker-with-docker-compose-26bf8a0bbae3
+# https://stackoverflow.com/a/54064268/6241010
+# https://stackoverflow.com/a/53522699/6241010
+# https://stackoverflow.com/a/57825166/6241010
+# https://hub.docker.com/_/mongo?tab=description&page=1&ordering=last_updated
+# https://github.com/docker-library/mongo/issues/329
+# if MONGO_INITDB_ROOT_USERNAME & MONGO_INITDB_ROOT_PASSWORD is not defined, authentication is disable
+# cd into the folder contain this file
+# docker-compose up --build -d -> start the container
+# docker-compose logs -f -> view logs of container build, for debugging
+# docker-compose down -> strop and destroy container
+# docker volume rm database_mongodb_data_container -> remove named volume assigned to this container
+# note: any pre-existing database will always be left untouched on container startup, of even after you destroy a container
+# if you reuse its volume, new set-up may not be used
+
+version: '3.7'
+services:
+  mongodb_container:
+    image: mongo:4.2
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: admin
+#      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+#      MONGO_INITDB_DATABASE: admin
+#      MONGO_INITDB_USERNAME: minh
+#      MONGO_INITDB_PASSWORD: minhpassword
+#      MONGO_NON_ROOT_USERNAME: minh
+#      MONGO_NON_ROOT_PASSWORD: minhpassword
+    ports:
+      - 27017:27017
+    volumes:
+#      - ./docker-entrypoint-initdb.d/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+#      - ./docker-entrypoint-initdb.d/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+#      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+#      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+#      - ./mongo/data:/data/db
+      - mongodb_data_container:/data/db
+volumes:
+  mongodb_data_container:
+
+
+
