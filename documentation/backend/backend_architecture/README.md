@@ -105,7 +105,7 @@ Please google how to install these tools on your OS.
 ## 3. Build the project
 
 - Open `application.properties` and decide how to connect to the database server:
-    - Remote server: uncomment the line start with `spring.data.mongodb.uri`
+    - Remote server: uncomment the line start with `spring.data.mongodb.uri` and comment out all other lines.
     - Local or docker container, no change needed. Note, the config is for default settings of mongodb (port 27017 on 
   local machine, 
   authentication disabled)
