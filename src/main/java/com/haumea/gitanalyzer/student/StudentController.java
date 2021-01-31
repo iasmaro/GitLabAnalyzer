@@ -37,14 +37,14 @@ public class StudentController {
     @GetMapping("/all/dal")
     public List<Student> getStudentDAL(){
 
-        return studentService.getStudentDLA();
+        return studentService.getStudentDAL();
     }
 
     // ID is auto generated
     @PostMapping("/add/dal")
     public String saveStudentDAL(@RequestBody Student student){
 
-        studentService.addStudentDLA(student);
+        studentService.addStudentDAL(student);
         return "Student added!";
 
     }

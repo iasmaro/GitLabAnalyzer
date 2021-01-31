@@ -29,13 +29,13 @@ public class StudentService {
         studentRepository.save(student);
     }
 
-    public List<Student> getStudentDLA(){
+    public List<Student> getStudentDAL(){
 
         return studentDAL.getAllStudents();
 
     }
 
-    public void addStudentDLA(Student student){
+    public void addStudentDAL(Student student){
 
         studentDAL.addNewStudent(student);
     }
