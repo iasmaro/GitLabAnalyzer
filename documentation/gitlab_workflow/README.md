@@ -1,3 +1,7 @@
+# Important note   
+
+NEVER modify the master branch directly, always add changes in a branch, merge the most recent master into your branch, resolve conflicts, before merge the branch back the master.  
+
 # GitLab Workflow
 
 1. Create an issue for the feature/bug you want to track
@@ -38,4 +42,14 @@
                - Whether to keep or delete your branch after the merge is entirely up to you. 
             - Submit your merge request and wait for the reviews to come in! 
    
-   
+# Workflow for adding/modify the documentation 
+
+- Again, do not modify master directly.  
+- Do as follow: 
+    - checkout documentation branch, pull most recent changes (since we all share this branch)
+    - working your documenation on the documentation branch (edit, commit, push)
+    - once done, checkout master, pull most recent changes -> checkout documenation branch, merge master into it, there should be no conflicts involving fontent and backend code
+    - merge documentation branch back to master, you can do this in 2 way
+        - if you don't need any feeback on your doc, do the merge locally 
+
+**May be we can make an exception on the rule of not modify master directly if you just work on the documentation folder? Or maybe from now on, we never merge documentation branch back to master again?**
