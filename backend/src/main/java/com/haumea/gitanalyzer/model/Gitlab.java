@@ -58,6 +58,10 @@ public class Gitlab {
 
     // called when the user selects a project
     public List<Student> getStudents(String projectName) throws GitLabApiException {
+        if(projects.isEmpty()) {
+            getProjects();
+        }
+
         selectProject(projectName);
 
         ProjectApi projectApi = new ProjectApi(gitLabApi);
@@ -72,19 +76,14 @@ public class Gitlab {
 
         }
 
-        for(Student cur : projects.get(selectedProject).getStudents()) {
-            System.out.println(cur.getName());
-        }
-
         return projects.get(selectedProject).getStudents();
-
 
     }
 
     // initializing the projects for the front end
     public List<ProjectWrapper> getProjects() throws GitLabApiException {
         if(projects.isEmpty()) {
-            gitLabApi = new GitLabApi("http://142.58.22.176/", "XqHspL4ix3qXsww4ismP");
+            gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
 
             // Get the list of projects your account has access to
             List<Project> projectList = gitLabApi.getProjectApi().getProjects();

@@ -67,7 +67,6 @@ public class Main {
        Gitlab app = new Gitlab("http://142.58.22.176/", "XqHspL4ix3qXsww4ismP");
 
 
-
     }
 }
 
