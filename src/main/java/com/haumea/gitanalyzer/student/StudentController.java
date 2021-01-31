@@ -34,15 +34,15 @@ public class StudentController {
     }
 
     // Using MongoTemplate under the hood
-    @GetMapping("/all/dla")
-    public List<Student> getStudentDLA(){
+    @GetMapping("/all/dal")
+    public List<Student> getStudentDAL(){
 
         return studentService.getStudentDLA();
     }
 
     // ID is auto generated
-    @PostMapping("/add/dla")
-    public String saveStudentDLA(@RequestBody Student student){
+    @PostMapping("/add/dal")
+    public String saveStudentDAL(@RequestBody Student student){
 
         studentService.addStudentDLA(student);
         return "Student added!";
