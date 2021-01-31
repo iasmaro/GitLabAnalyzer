@@ -51,3 +51,41 @@ We will the [Spring Boot recommended project structure](https://docs.spring.io/s
 - `application.properties`: Spring Boot app configs, including how to connect to the database
 - `gradle/`, `build.gradle`, `gradlew`, `gradlew.bat`, `settings.gradle`: build files
 - `.gitignore`: track only necessary files/folder for other to build & run this project
+
+# Build instructions 
+
+## Prerequisites
+
+- IDE: **Intellij** or your preferred IDE
+- Database GUI: **MongoDB Compass Community**
+- Testing REST API: **Postman**
+- Database: **MongoDB 4.2** 
+- DevOps: **docker** & **docker-compose** (if you want to run a mongo DB server in side a container)
+
+Please google how to install these tools on your OS. 
+
+## 1. Prepare the database server
+
+- Remote server: Already set-up and is always running, no further action required, if you decide to go with this 
+  option, just go to step 2 now.  
+  
+- Local MongoDB: [install version 4.2](https://docs.mongodb.com/v4.2/administration/install-on-linux/) and start the 
+  server 
+
+- MongoDB container: 
+  
+    ```
+    cd database 
+    # pull image & build container 
+    docker-compose up --build -d
+    # check if the container is running
+    docker ps 
+    # stop the container
+    docker-compose stop 
+    # destroy the container (the named volumn is not deleted though)
+    docker-compose down
+    ```
+
+## 2. Build the project
+
+
