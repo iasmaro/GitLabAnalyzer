@@ -128,7 +128,7 @@ Please google how to install these tools on your OS.
 
     - Retrieve students:
 
-    <img src="images/sc5.png" width="90%">
+    <img src="images/sc6.png" width="90%">
     
 
 
