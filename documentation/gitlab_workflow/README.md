@@ -21,7 +21,7 @@
             - Select the source branch and target branch from the dropdown and then click on the `Compare branches 
               and continue`:
               
-               <img src="images/sc2.png" width="90%">
+               <img src="images/sc1.png" width="90%">
           
             - Config you merge request: 
            
@@ -32,6 +32,7 @@
             merge request is merged into master, GitLab will automatically close issue #1 for use. Read more about 
             [Closing issues automatically](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically).
                  
+               - Pick label(s): `mr::need reviews` and may be the frameworks/tool related to this merge request, e.g., Spring Boot, MongoDB, React etc., 
                - NOTE: DO NOT select "Squash commits when merge request is accepted", this will condense your commit 
                  history, thus negatively affect how they mark your contribution.
                - Whether to keep or delete your branch after the merge is entirely up to you. 
