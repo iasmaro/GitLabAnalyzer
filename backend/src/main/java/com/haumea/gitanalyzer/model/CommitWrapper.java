@@ -19,9 +19,9 @@ Needed as the commit data and code differences are separated into 2 different ob
 public class CommitWrapper {
 
     private final Commit commitData;
-    private final List<Diff> newCode;
+    private final List<Diff> codeChanges;
 
-    public List<Diff> getNewCode() { return newCode; }
+    public List<Diff> getNewCode() { return codeChanges; }
 
     public Commit getCommitData() {
         return commitData;
@@ -32,7 +32,7 @@ public class CommitWrapper {
         CommitsApi commitApi = new CommitsApi(gitLabApi);
 
         this.commitData = commitData;
-        this.newCode = commitApi.getDiff(project, commitData.getId());
+        this.codeChanges = commitApi.getDiff(project, commitData.getId());
 
 
     }

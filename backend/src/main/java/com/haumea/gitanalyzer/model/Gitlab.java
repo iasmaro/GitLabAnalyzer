@@ -68,9 +68,9 @@ public class Gitlab {
 
         List<Member> members = projectApi.getAllMembers(projects.get(selectedProject).getProject());
 
-        for(Member cur : members) {
+        for(Member current : members) {
 
-            Student newStudent = new Student(cur.getName(), cur.getEmail(), projects.get(selectedProject).getProject(), cur.getId());
+            Student newStudent = new Student(current.getName(), current.getEmail(), projects.get(selectedProject).getProject(), current.getId());
 
             projects.get(selectedProject).addStudent(newStudent);
 
@@ -88,8 +88,8 @@ public class Gitlab {
             // Get the list of projects your account has access to
             List<Project> projectList = gitLabApi.getProjectApi().getProjects();
 
-            for(Project cur : projectList) {
-                ProjectWrapper project = new ProjectWrapper(cur);
+            for(Project current : projectList) {
+                ProjectWrapper project = new ProjectWrapper(current);
 
                 projects.add(project);
             }
