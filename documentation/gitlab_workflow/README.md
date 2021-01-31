@@ -4,6 +4,10 @@ NEVER modify the master branch directly, always add changes in a branch, merge t
 
 # GitLab Workflow
 
+<img src="images/sc3.png" width="90%">
+
+(source: Dr. Brian Fraser, [link](https://opencoursehub.cs.sfu.ca/bfraser/grav-cms/cmpt373/notes/files/04-GitLabProcess-c.pdf))
+
 1. Create an issue for the feature/bug you want to track
 2. Create a branch (either locally or through GitLab) for the issue you created (or any issue that no one is 
    currently working on and you want to start working on it)
@@ -49,7 +53,8 @@ NEVER modify the master branch directly, always add changes in a branch, merge t
     - checkout documentation branch, pull most recent changes (since we all share this branch)
     - working your documenation on the documentation branch (edit, commit, push)
     - once done, checkout master, pull most recent changes -> checkout documenation branch, merge master into it, there should be no conflicts involving fontent and backend code
-    - merge documentation branch back to master, you can do this in 2 way
-        - if you don't need any feeback on your doc, do the merge locally 
+    - merge documentation branch back to master, you can do this in 2 way:
+        - if you don't need any feeback on your doc, do the merge locally then push to master directly
+        - create a merge request, just don't select detele source branch after merge 
 
 **May be we can make an exception on the rule of not modify master directly if you just work on the documentation folder? Or maybe from now on, we never merge documentation branch back to master again?**
