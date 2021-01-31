@@ -88,14 +88,15 @@ Please google how to install these tools on your OS.
 ## 2. Check that you connect to the database
 
 - Open MongoDB Compass Community:
-
-    - Remote server connection string: `mongodb+srv://haumea:cmpt3732021@cmpt373-project.unzqm.mongodb.net/test?
+    - Enter connection string and click `CONNECT`:
+      
+        <img src="images/sc1.png" width="90%">
+      
+        - Remote server connection string: `mongodb+srv://haumea:cmpt3732021@cmpt373-project.unzqm.mongodb.net/test?
       authSource=admin&replicaSet=atlas-tadx14-shard-0&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=true`
-    - Local server: `mongodb://localhost:27017/`
-    - Local container: `mongodb://localhost:27017/`
-
-    <img src="images/sc1.png" width="90%">
-
+        - Local server: `mongodb://localhost:27017/`
+        - Local container: `mongodb://localhost:27017/`
+ 
 ## 3. Build the project
 
 - Open `application.properties` and decide how to connect to the database server:
@@ -105,6 +106,8 @@ Please google how to install these tools on your OS.
   authentication disabled)
 
 - Run `GitanalyzerApplication.java` to start up the server      
+
+
   
 ## 4. Test out the APIs
 
