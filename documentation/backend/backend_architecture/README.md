@@ -85,6 +85,11 @@ Please google how to install these tools on your OS.
     # destroy the container (the named volumn is not deleted though)
     docker-compose down
     ```
+  
+    If you see this, it mean your container is running:
+  
+    <img src="images/sc2.png" width="90%">
+
 ## 2. Check that you connect to the database
 
 - Open MongoDB Compass Community:
@@ -105,9 +110,25 @@ Please google how to install these tools on your OS.
   local machine, 
   authentication disabled)
 
-- Run `GitanalyzerApplication.java` to start up the server      
+- Run `GitanalyzerApplication.java` to start up the server. You should see something similar to this:
 
+    <img src="images/sc3.png" width="90%">
 
-  
 ## 4. Test out the APIs
+
+- Open Postman
+
+    - Add some students:
+
+    <img src="images/sc4.png" width="90%">
+    
+    - Monitor your database through MongoDB Compass (see [section 2](#2) for how to connect to a database server):
+    
+    <img src="images/sc5.png" width="90%">
+
+    - Retrieve students:
+
+    <img src="images/sc5.png" width="90%">
+    
+
 
