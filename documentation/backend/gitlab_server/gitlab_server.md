@@ -23,25 +23,25 @@
 
 1. Go to `http://142.58.22.176/`, you should see the sign in screen:
 
-    <img src="./images/sc1.png" width="90%">
+    <img src="images/sc1.png" width="90%">
 
 2. To login as admin: username: `root`, password: `haumea2021` 
 
 3. To access `Admin Area`, click the wrench symbol at the top:
 
-    <img src="./images/sc2.png" width="50%">
+    <img src="images/sc2.png" width="50%">
 
 4. To create a user
   - If you currently login as admin, logout first
   - Back the the sign in screen, click `Register now`
   - Fill in required info, they can be anything, for example I created a user whose name is `test user`, username is `test_user` and email address is `test_user@abc.com`, pass minimum length is 8 characters. Then click `Register`. 
 
-    <img src="./images/sc3.png" width="50%">
+    <img src="images/sc3.png" width="50%">
 
   - You will see this message: `You have signed up successfully. However, we could not sign you in because your account is awaiting approval from your GitLab administrator.`
   - Now log back in as admin, then go the `Admin Area` and approve the user you just register (click the gear symbol to see the dropdown menu). 
 
-      <img src="./images/sc4.png" width="90%">
+      <img src="images/sc4.png" width="90%">
   - Logout then login as the user you just approved  
   - Add a `Personal Access Tokens` for your user, we will need this for the API call:
    <img src="./images/sc6.png" width="90%">
@@ -61,7 +61,7 @@
 
   - `:id` is the project id:
 
-    <img src="./images/sc8.png" width="50%">
+    <img src="images/sc8.png" width="50%">
 
   - The API allow us to add attribute like `since`, `until` etc., so we can filter for time interval for example. 
   - You can check out [Postman](https://learning.postman.com/docs/getting-started/introduction/), it's like curl with GUI. 
