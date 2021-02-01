@@ -1,3 +1,11 @@
+# Notes on how to work with Intellij
+
+From the terminal, clone the repo: `git clone git@csil-git1.cs.surrey.sfu.ca:373-2021-1-Haumea/gitlabanalyzer.git`
+
+Open the `backend` folder, NOT the `gitlabanalyzer` folder in Intellij, if it's the first time you open the `backend` folder in Intellij, a `.idea` will be automatically generated. The gitignore is config to ignore that folder. 
+
+<img src="images/sc7.png" width="90%">
+
 # Project structure
 
 ```
