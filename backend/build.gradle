@@ -18,6 +18,9 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+	compile group: 'org.gitlab4j', name: 'gitlab4j-api', version: '4.15.7'
+
 }
 
 test {
