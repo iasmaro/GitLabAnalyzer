@@ -36,7 +36,7 @@ When you pull the repo for the first time, git will only pull the `master` branc
     - Branch naming convention: `issueID-issue-title`, for example, if you create a branch to resolve issue 
       number 9, whose title is  
     "lift component up", name your branch as "9-lift-component-up"
-      - NOTE: if you create a branch to work on multiple issue, say issue number 6, 8, 10, then name your branch as: `close-6-8-10` and when you submit your merge request, in the description, enter `Fix #6, #8, #10` to trigger the closing issues automatically feature (more details, see [step 4](#4)).
+      - NOTE: if you create a branch to work on multiple issue, say issue number 6, 8, 10, then name your branch as: `close-6-8-10` and when you submit your merge request, in the description, enter `Fix #6, #8, #10` to trigger the closing issues automatically feature (more details, see step 4 bellow).
           
 3. Working in your branch as you normal do: write code, add, commit, push (note: **you do all of this on your branch not the master branch**)
 4. When you are ready to submit a merge request:
