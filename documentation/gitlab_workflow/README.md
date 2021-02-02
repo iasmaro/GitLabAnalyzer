@@ -1,6 +1,28 @@
 # Important note   
 
-NEVER modify the master branch directly, always add changes in a branch, merge the most recent master into your branch, resolve conflicts, before merge the branch back the master.  
+NEVER modify the master branch directly, always add changes in a branch, merge the most recent master into your branch, resolve conflicts, before **submit a merge request** to merge the branch back the master.  
+
+# First time you pull the repo to your local machine
+
+When you pull the repo for the first time, git will only pull the `master` branch. To work on an issue (or any time you want to modify the code in the backend or frontend folder), you will either create/pull/switch to a branch on your local machine. 
+
+- Switch to a local branch: `git checkout branch-name`
+- Create a local branch and switch to it: `git checkout -b branch-name`
+- Pull remote branch to local (if it's not already exist): `git checkout --track origin/branch-name` 
+- Push a local branch on remote repo (if it's not already exist): `git push -u origin branch-name` 
+- To see what branch you're currently on: `git branch`
+- To merge master to your branch:
+  ```
+  # switch to master
+  git checkout master
+  # pull lastest changes
+  git pull
+  # switch back to your branch
+  git checkout your-branch
+  # merge master to your branch and resolve conflicts if needed
+  git merge master
+  ```
+- To merge your branch to master: push the latest local changes of your branch to its remote counterpart, then go to gitlab and submit a merge request
 
 # GitLab Workflow
 
