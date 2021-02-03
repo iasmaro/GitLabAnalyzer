@@ -1,5 +1,7 @@
-package com.haumea.gitanalyzer.student;
+package com.haumea.gitanalyzer.controller;
 
+import com.haumea.gitanalyzer.student.Student;
+import com.haumea.gitanalyzer.service.StudentService;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +22,9 @@ public class StudentController {
 
     // Using MongoRepository under the hood
     @GetMapping("/all")
-    public String getStudent(){
+    public List<Student> getStudent(){
 
-        return "Hello\\\n Hello again";
+        return studentService.getStudent();
     }
 
     // ID must be provide in the request body
@@ -51,9 +53,9 @@ public class StudentController {
     }
 
     @GetMapping("/commit")
-    public String getCommit() throws GitLabApiException {
+    public List<Student> getCommit() throws GitLabApiException {
 
-        return studentService.getCommit("tester");
+        return studentService.getCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "G9AYVYcZ54VzZRz2RTut");
     }
 
 }
