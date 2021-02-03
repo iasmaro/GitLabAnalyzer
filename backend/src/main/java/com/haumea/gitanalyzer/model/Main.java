@@ -3,6 +3,7 @@ package com.haumea.gitanalyzer.model;
 import org.gitlab4j.api.CommitsApi;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.GroupApi;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.Project;
@@ -13,14 +14,10 @@ import java.util.List;
 public class Main {
 
     // use this for debugging purposes
-    public static void printCommits(String projectName) throws GitLabApiException {
-        /* Create a GitLabApi instance to communicate with your GitLab server
-        Could replace the hosturl and token with userinput
-         */
-        GitLabApi gitLabApi = new GitLabApi("http://142.58.22.176/", "XqHspL4ix3qXsww4ismP");
+    public static void printCommits(String projectName, String hostUrl, String personalAccessToken) throws GitLabApiException {
+        GitLabApi gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
 
-        // Get the list of projects your account has access to
-        List<Project> projects = gitLabApi.getProjectApi().getProjects();
+        List<Project> projects = gitLabApi.getProjectApi().getMemberProjects();
 
         Project selectedProject = null;
 
@@ -38,9 +35,10 @@ public class Main {
         }
 
 
-        // getting the basic data about the commit such as author, message etc
 
         CommitsApi commits = new CommitsApi(gitLabApi);
+
+        // using api to get the data for all the commits
 
         List<Commit> commitData = commits.getCommits(selectedProject);
 
@@ -65,7 +63,6 @@ public class Main {
 
     public static void main(String[] args) throws GitLabApiException {
        Gitlab app = new Gitlab("http://142.58.22.176/", "XqHspL4ix3qXsww4ismP");
-
 
     }
 }

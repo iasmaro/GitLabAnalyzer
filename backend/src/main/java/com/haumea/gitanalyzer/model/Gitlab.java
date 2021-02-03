@@ -22,6 +22,8 @@ public class Gitlab {
 
     private GitLabApi gitLabApi;
 
+
+
     private String hostUrl;
     private String personalAccessToken;
 
@@ -32,6 +34,10 @@ public class Gitlab {
         this.personalAccessToken = personalAccessToken;
 
         this.projects = new ArrayList<>();
+    }
+
+    public GitLabApi getGitLabApi() {
+        return gitLabApi;
     }
 
     public ProjectWrapper getSelectedProject() {
@@ -86,7 +92,7 @@ public class Gitlab {
             gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
 
             // Get the list of projects your account has access to
-            List<Project> projectList = gitLabApi.getProjectApi().getProjects();
+            List<Project> projectList = gitLabApi.getProjectApi().getMemberProjects();
 
             for(Project current : projectList) {
                 ProjectWrapper project = new ProjectWrapper(current);
