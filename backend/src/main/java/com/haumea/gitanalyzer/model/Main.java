@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-
     // use this for debugging purposes
     public static void printCommits(String projectName, String hostUrl, String personalAccessToken) throws GitLabApiException {
         GitLabApi gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
@@ -22,33 +21,22 @@ public class Main {
         Project selectedProject = null;
 
         for(Project cur : projects) {
-
             System.out.println("Project is " + cur.getName());
-
             if(cur.getName().equals(projectName)) {
                 selectedProject = cur;
 
                 System.out.println("name in here is " + selectedProject.getName());
-
-
             }
         }
 
-
-
         CommitsApi commits = new CommitsApi(gitLabApi);
-
-        // using api to get the data for all the commits
 
         List<Commit> commitData = commits.getCommits(selectedProject);
 
-        // getting the diff in the commit
-
-
         for (int i=0; i<commitData.size(); i++) {
             System.out.println("Commit data");
-
             System.out.println(commitData.get(i));
+
             List<Diff> newCode = commits.getDiff(selectedProject, commitData.get(i).getId());
             for (Diff code : newCode) {
                 String difference = code.getDiff().trim();
@@ -56,10 +44,7 @@ public class Main {
                 System.out.println("New code: " + code.getDiff());
             }
         }
-
     }
-
-
 
     public static void main(String[] args) throws GitLabApiException {
        Gitlab app = new Gitlab("http://142.58.22.176/", "XqHspL4ix3qXsww4ismP");

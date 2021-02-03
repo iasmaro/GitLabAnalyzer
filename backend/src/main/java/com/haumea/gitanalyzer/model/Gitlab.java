@@ -22,12 +22,8 @@ public class Gitlab {
 
     private GitLabApi gitLabApi;
 
-
-
     private String hostUrl;
     private String personalAccessToken;
-
-
 
     public Gitlab(String hostUrl, String personalAccessToken) {
         this.hostUrl = hostUrl;
@@ -52,7 +48,6 @@ public class Gitlab {
         return personalAccessToken;
     }
 
-   // we can use this to find the project that the user wants
     public void selectProject(String projectName) {
        for(int i=0; i<projects.size(); i++) {
            if(projects.get(i).getProjectName().equals(projectName)) {
@@ -75,7 +70,6 @@ public class Gitlab {
         List<Member> members = projectApi.getAllMembers(projects.get(selectedProject).getProject());
 
         for(Member current : members) {
-
             Student newStudent = new Student(current.getName(), current.getEmail(), projects.get(selectedProject).getProject(), current.getId());
 
             projects.get(selectedProject).addStudent(newStudent);
@@ -86,12 +80,10 @@ public class Gitlab {
 
     }
 
-    // initializing the projects for the front end
     public List<ProjectWrapper> getProjects() throws GitLabApiException {
         if(projects.isEmpty()) {
             gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
 
-            // Get the list of projects your account has access to
             List<Project> projectList = gitLabApi.getProjectApi().getMemberProjects();
 
             for(Project current : projectList) {

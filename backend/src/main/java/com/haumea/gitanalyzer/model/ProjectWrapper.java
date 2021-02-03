@@ -7,9 +7,6 @@ import java.util.List;
 Wrapper class designed to encapsulate the project
 */
 
-
-
-
 public class ProjectWrapper {
     String projectName;
     private List<Student> students;

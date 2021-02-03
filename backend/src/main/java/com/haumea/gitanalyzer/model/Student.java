@@ -22,7 +22,6 @@ public class Student {
 
     private Project project;
 
-
     public String getName() {
         return studentName;
     }
@@ -42,7 +41,6 @@ public class Student {
     public void addCommitWrapper(CommitWrapper commit) {
         commits.add(commit);
     }
-
 
     public Student(String name, String email, Project project, int id) {
         this.studentName = name;
