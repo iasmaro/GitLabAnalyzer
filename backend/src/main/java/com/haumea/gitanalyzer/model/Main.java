@@ -49,6 +49,7 @@ public class Main {
     public static void main(String[] args) throws GitLabApiException {
        Gitlab app = new Gitlab("http://142.58.22.176/", "XqHspL4ix3qXsww4ismP");
 
+        printCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "G9AYVYcZ54VzZRz2RTut");
     }
 }
 

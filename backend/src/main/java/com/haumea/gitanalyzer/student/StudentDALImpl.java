@@ -23,7 +23,7 @@ public class StudentDALImpl implements StudentDAL{
 
     @Override
     public Student addNewStudent(Student student){
-        // with mongoTemplete, ID is auto generated
+        // with mongoTemplte, ID is auto generated
         mongoTemplate.save(student);
         return student;
     }
