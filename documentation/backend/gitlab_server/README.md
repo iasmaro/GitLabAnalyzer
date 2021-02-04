@@ -21,7 +21,7 @@
 
 # Access the server on your browser
 
-1. Go to `http://142.58.22.176/`, you should see the sign in screen:
+1. Go to `http://cmpt373-1211-11.cmpt.sfu.ca/gitlab`, you should see the sign in screen:
 
     <img src="images/sc1.png" width="90%">
 
@@ -57,7 +57,7 @@
 
   - Format: `GET /projects/:id/repository/commits`
 
-  - For example: `curl --include "http://142.58.22.176/api/v4/projects/2/repository/commits?private_token=<your_personal_access_token>"`
+  - For example: `curl --include "http://cmpt373-1211-11.cmpt.sfu.ca/gitlab/api/v4/projects/2/repository/commits?private_token=<your_personal_access_token>"`
 
   - `:id` is the project id:
 
