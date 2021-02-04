@@ -1,14 +1,12 @@
-package com.haumea.gitanalyzer.model;
+package com.haumea.gitanalyzer.gitlab;
 
 import org.gitlab4j.api.CommitsApi;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.GroupApi;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.Project;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {

@@ -1,6 +1,6 @@
 package com.haumea.gitanalyzer.controller;
 
-import com.haumea.gitanalyzer.student.Student;
+import com.haumea.gitanalyzer.model.Student;
 import com.haumea.gitanalyzer.service.StudentService;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;

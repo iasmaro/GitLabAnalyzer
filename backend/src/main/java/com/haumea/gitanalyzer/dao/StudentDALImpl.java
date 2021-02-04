@@ -1,5 +1,6 @@
-package com.haumea.gitanalyzer.student;
+package com.haumea.gitanalyzer.dao;
 
+import com.haumea.gitanalyzer.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
