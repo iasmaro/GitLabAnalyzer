@@ -1,4 +1,4 @@
-package com.haumea.gitanalyzer.model;
+package com.haumea.gitanalyzer.gitlab;
 import org.gitlab4j.api.models.Project;
 
 import java.util.ArrayList;

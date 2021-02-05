@@ -1,14 +1,12 @@
-package com.haumea.gitanalyzer.model;
+package com.haumea.gitanalyzer.gitlab;
 
 import org.gitlab4j.api.CommitsApi;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.GroupApi;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.Project;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -47,9 +45,9 @@ public class Main {
     }
 
     public static void main(String[] args) throws GitLabApiException {
-       Gitlab app = new Gitlab("http://142.58.22.176/", "XqHspL4ix3qXsww4ismP");
+       Gitlab app = new Gitlab("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "XqHspL4ix3qXsww4ismP");
+       printCommits("test_repo", "http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 
-        printCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "G9AYVYcZ54VzZRz2RTut");
     }
 }
 

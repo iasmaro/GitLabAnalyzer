@@ -1,8 +1,8 @@
 package com.haumea.gitanalyzer.service;
 
-import com.haumea.gitanalyzer.student.Student;
-import com.haumea.gitanalyzer.student.StudentDAL;
-import com.haumea.gitanalyzer.student.StudentRepository;
+import com.haumea.gitanalyzer.model.Student;
+import com.haumea.gitanalyzer.dao.StudentDAL;
+import com.haumea.gitanalyzer.dao.StudentRepository;
 import org.gitlab4j.api.CommitsApi;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
@@ -12,7 +12,6 @@ import org.gitlab4j.api.models.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
