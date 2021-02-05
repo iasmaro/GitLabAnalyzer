@@ -16,13 +16,16 @@ Open the `backend` folder, NOT the `gitlabanalyzer` folder in Intellij, if it's 
             +- gitanalyzer
                 +- GitanalyzerApplication.java
                 |
-                +- student
+                +- model
                 |   +- Student.java
-                |   +- StudentController.java
-                |   +- StudentService.java
+                +- controllder
+                |   +- StudentController.java                
+                +- dao
                 |   +- StudentRepository.java
                 |   +- StudentDAL.java
                 |   +- StudentDALImpl.java
+                +- service
+                |   +- StudentService.java
             +- resources
             |   +- application.properties
     +- test/java/com/haumea/gitanalyzer
@@ -34,23 +37,27 @@ Open the `backend` folder, NOT the `gitlabanalyzer` folder in Intellij, if it's 
 +- .gitignore
 ```
 
-We will the [Spring Boot recommended project structure](https://docs.spring.io/spring-boot/docs/current/reference/html/using-spring-boot.html#using-boot-locating-the-main-class)
+We will the order file by layers: 
+  - model: store data access objects, package: `com.haumea.gitanalyzer.model` 
+  - controller: store REST API handlers, package: `com.haumea.gitanalyzer.controller`   
+  - dao: store data transfer objects, package: `com.haumea.gitanalyzer.dao` 
+  - service: store business logic, package: `com.haumea.gitanalyzer.service` 
 
 - `GitanalyzerApplication.java`: top level class where the `main` function resides.
-- For each entity/model, we create a subpackage under the top level package `com.haumea.gitanalyzer`, for example, for the student entity, put all related class/interface in the `com.haumea.gitanalyzer.student` package
-    - `Entity.java`: define how Entity is stored as a collection in a mongodb database
-    - `EntityController.java`: expose REST API requests to client and decide what service(s) to call the handle the 
+- For each layer, we create a subpackage under the top level package `com.haumea.gitanalyzer`, for example, for the student entity: 
+    - `Student.java`: define how Entity is stored as a collection in a mongodb database, it's what we call a data transfer object
+    - `StudentController.java`: expose REST API requests to client and decide what service(s) to call the handle the 
       each request (i.
       e., calling relevant 
       methods from
-      `EntityService.java`)
-    - `EntityService.java`: all business logics concerning Entity go here, including interactions with the database 
+      `StudentService.java`)
+    - `StudentService.java`: all business logics concerning Entity go here, including interactions with the database 
       and making 
       API 
       call to GitLab server, and any computations needed to handle an API request
-    - `EntityRepository.java`: an interface extending the `MongoRepository` interface 
-    - `EntityDAL.java`: DAL (Data Access Layer) interface for Entity
-    - `EntityDALImpl.java`: implement the associated interface, making use of `MongoTemplate` internally
+    - `StudentRepository.java`: an interface extending the `MongoRepository` interface 
+    - `StudentDAL.java`: DAL (Data Access Layer) interface for Entity
+    - `StudentDALImpl.java`: implement the associated interface, making use of `MongoTemplate` internally
     - FYI: `MongoRepository` is much simpler to use than `MongoTemplate`, but template gives you more fine grained 
       control over the queries that you're implementing. They are multually excludsive, we can always use both, or 
       just pick one other the other, depending on the complexity of the database query you want to implement. For 
