@@ -2,9 +2,7 @@ import React from 'react';
 import './Navbar.css';
 
 class Navbar extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+
     render() {
         return (
             <nav className="nav-bar">
@@ -12,16 +10,15 @@ class Navbar extends React.Component {
 
                 <ul className="nav-bar-links">
                     <li> 
-                        <a href="#">Sign in</a>
+                        <a href="./">Sign in</a>
                     </li>
                     <li>
-                        <a href="#">About</a>
+                        <a href="./About">About</a>
                     </li>
                 </ul>
             </nav>
         )  
     }
 }
-
 
 export default Navbar

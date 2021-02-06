@@ -8,7 +8,7 @@ body {
     justify-content: space-between;
     align-items: center;
     font-size: 1.2rem;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .nav-bar-logo {
@@ -34,4 +34,8 @@ body {
     text-decoration: none;
     letter-spacing: 2px;
     padding: 0px 20px;
+}
+
+.nav-bar-links a:hover {
+    color: #47CE65;
 }
