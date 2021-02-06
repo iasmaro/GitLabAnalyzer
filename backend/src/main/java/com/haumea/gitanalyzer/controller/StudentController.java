@@ -1,6 +1,6 @@
 package com.haumea.gitanalyzer.controller;
 
-import com.haumea.gitanalyzer.student.Student;
+import com.haumea.gitanalyzer.model.Student;
 import com.haumea.gitanalyzer.service.StudentService;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,9 @@ public class StudentController {
     @GetMapping("/commit")
     public List<Student> getCommit() throws GitLabApiException {
 
-        return studentService.getCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "G9AYVYcZ54VzZRz2RTut");
+        return studentService.getCommits("test_repo",
+                "http://cmpt373-1211-11.cmpt.sfu.ca/gitlab",
+                "R-qyMoy2MxVPyj7Ezq_V");
     }
 
 }
