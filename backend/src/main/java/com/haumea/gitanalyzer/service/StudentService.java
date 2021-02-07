@@ -9,13 +9,18 @@ import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.Project;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class StudentService {
+
+    @Autowired
+    private BeanFactory beanFactory;
 
     private final StudentRepository studentRepository;
     private final StudentDAL studentDAL;
@@ -49,54 +54,20 @@ public class StudentService {
         studentDAL.addNewStudent(student);
     }
 
-    public Project getProject(String projectName, GitLabApi gitLabApi) throws GitLabApiException{
+    public GitLabApi connectToGitLab(String personalAccessToken){
+
+        return beanFactory.getBean(GitLabApi.class, personalAccessToken);
+    }
+
+    public List<String> getProjects(GitLabApi gitLabApi) throws GitLabApiException{
+
+        List<String> projectNames = new ArrayList<>();
 
         List<Project> projects = gitLabApi.getProjectApi().getMemberProjects();
-
-        Project selectedProject = null;
-
-        for(Project cur : projects) {
-            System.out.println("Project is " + cur.getName());
-            if(cur.getName().equals(projectName)) {
-                selectedProject = cur;
-
-                System.out.println("name in here is " + selectedProject.getName());
-            }
+        for(Project cur : projects){
+            projectNames.add(cur.getHttpUrlToRepo());
         }
 
-        return selectedProject;
+        return projectNames;
     }
-
-    public List<Student> getCommits(String projectName, String hostUrl, String personalAccessToken) throws GitLabApiException {
-        GitLabApi gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
-
-        Project selectedProject = getProject(projectName, gitLabApi);
-
-        CommitsApi commits = new CommitsApi(gitLabApi);
-
-        List<Commit> commitData = commits.getCommits(selectedProject);
-
-        for (int i = 0; i < commitData.size(); i++) {
-
-            Commit currentCommit = commitData.get(i);
-
-            String studentName = currentCommit.getCommitterName();
-            String studentID = currentCommit.getId();
-            String studentEmail = currentCommit.getCommitterEmail();
-            String committedCode = "";
-
-            List<Diff> newCode = commits.getDiff(selectedProject, commitData.get(i).getId());
-            for (Diff code : newCode) {
-
-                committedCode = committedCode + "New Code:\n" + code.getDiff();
-            }
-
-            studentDAL.addNewStudent(new Student(studentID, studentName, studentEmail, committedCode));
-        }
-
-        //studentRepository.deleteAll();
-
-        return studentRepository.findAll();
-    }
-
 }

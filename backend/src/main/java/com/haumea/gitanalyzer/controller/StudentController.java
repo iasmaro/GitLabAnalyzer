@@ -2,10 +2,14 @@ package com.haumea.gitanalyzer.controller;
 
 import com.haumea.gitanalyzer.model.Student;
 import com.haumea.gitanalyzer.service.StudentService;
+import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -52,12 +56,18 @@ public class StudentController {
 
     }
 
-    @GetMapping("/commit")
-    public List<Student> getCommit() throws GitLabApiException {
+    @GetMapping("/projects")
+    public List<String> getConnection(@RequestBody String personalAccessToken){
 
-        return studentService.getCommits("test_repo",
-                "http://cmpt373-1211-11.cmpt.sfu.ca/gitlab",
-                "R-qyMoy2MxVPyj7Ezq_V");
+        GitLabApi gitLabApi = studentService.connectToGitLab(personalAccessToken);
+
+        try{
+            return studentService.getProjects(gitLabApi);
+        }
+        catch (GitLabApiException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Projects not found.", e);
+
+        }
     }
 
 }
