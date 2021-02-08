@@ -1,24 +1,23 @@
 import React from 'react';
 import './Navbar.css';
+import {Nav, Navbar} from 'react-bootstrap';
 
-class Navbar extends React.Component {
+class NavbarComponent extends React.Component {
 
     render() {
         return (
-            <nav className="nav-bar">
-                <h1 className="nav-bar-logo">GitLab Analyzer</h1>
-
-                <ul className="nav-bar-links">
-                    <li> 
-                        <a href="./">Sign in</a>
-                    </li>
-                    <li>
-                        <a href="./About">About</a>
-                    </li>
-                </ul>
-            </nav>
-        )  
+            <Navbar variant='primary' expand="sm">
+                <Navbar.Brand href="/">GitLab Analyzer</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
+                    <Nav className="nav">
+                        <Nav.Link href="./">Sign In</Nav.Link>
+                        <Nav.Link href="./About">About</Nav.Link>
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        )   
     }
 }
 
-export default Navbar
+export default NavbarComponent
