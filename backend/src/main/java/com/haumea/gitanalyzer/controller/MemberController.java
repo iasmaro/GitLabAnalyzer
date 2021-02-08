@@ -1,7 +1,7 @@
 package com.haumea.gitanalyzer.controller;
 
-import com.haumea.gitanalyzer.model.Student;
-import com.haumea.gitanalyzer.service.StudentService;
+import com.haumea.gitanalyzer.model.Member;
+import com.haumea.gitanalyzer.service.MemberService;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,49 +9,48 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/v1/student")
-public class StudentController {
+@RequestMapping(path = "/api/v1/member")
+public class MemberController {
 
-    private final StudentService studentService;
+    private final MemberService memberService;
 
     @Autowired
-    public StudentController(StudentService studentService) {
+    public MemberController(MemberService memberService) {
 
-        this.studentService = studentService;
+        this.memberService = memberService;
     }
 
     // Using MongoRepository under the hood
     @GetMapping("/all")
-    public List<Student> getStudent(){
+    public List<Member> getMember(){
 
-        return studentService.getStudent();
+        return memberService.getMember();
     }
 
     // ID must be provide in the request body
     @PostMapping("/add")
-    public String saveStudent(@RequestBody Student student){
+    public String saveMember(@RequestBody Member member){
 
-        studentService.addStudent(student);
+        memberService.addMember(member);
         return "Student added!";
 
     }
 
     // Using MongoTemplate under the hood
     @GetMapping("/all/dal")
-    public List<Student> getStudentDAL(){
+    public List<Member> getMemberDAL(){
 
-        return studentService.getStudentDAL();
+        return memberService.getMemberDAL();
     }
 
     // ID is auto generated
     @PostMapping("/add/dal")
-    public String saveStudentDAL(@RequestBody Student student){
+    public String saveMemberDAL(@RequestBody Member member){
 
-        studentService.addStudentDAL(student);
+        memberService.addMemberDAL(member);
         return "Student added!";
 
     }
@@ -59,10 +58,10 @@ public class StudentController {
     @GetMapping("/projects")
     public List<String> getConnection(@RequestBody String personalAccessToken){
 
-        GitLabApi gitLabApi = studentService.connectToGitLab(personalAccessToken);
+        GitLabApi gitLabApi = memberService.connectToGitLab(personalAccessToken);
 
         try{
-            return studentService.getProjects(gitLabApi);
+            return memberService.getProjects(gitLabApi);
         }
         catch (GitLabApiException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Projects not found.", e);

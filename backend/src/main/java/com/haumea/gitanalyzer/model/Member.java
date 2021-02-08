@@ -3,8 +3,8 @@ package com.haumea.gitanalyzer.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "student")
-public class Student {
+@Document(collection = "member")
+public class Member {
 
     @Id
     private String id;
@@ -12,7 +12,7 @@ public class Student {
     private String email;
     private String commitData;
 
-    public Student(String id, String name, String email, String commitData) {
+    public Member(String id, String name, String email, String commitData) {
         this.id = id;
         this.name = name;
         this.email = email;

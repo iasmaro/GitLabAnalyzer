@@ -1,13 +1,10 @@
 package com.haumea.gitanalyzer.service;
 
-import com.haumea.gitanalyzer.model.Student;
-import com.haumea.gitanalyzer.dao.StudentDAL;
-import com.haumea.gitanalyzer.dao.StudentRepository;
-import org.gitlab4j.api.CommitsApi;
+import com.haumea.gitanalyzer.model.Member;
+import com.haumea.gitanalyzer.dao.MemberDAL;
+import com.haumea.gitanalyzer.dao.MemberRepository;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.Commit;
-import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.Project;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,41 +14,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class StudentService {
+public class MemberService {
 
     @Autowired
     private BeanFactory beanFactory;
 
-    private final StudentRepository studentRepository;
-    private final StudentDAL studentDAL;
+    private final MemberRepository memberRepository;
+    private final MemberDAL memberDAL;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, StudentDAL studentDAL) {
+    public MemberService(MemberRepository memberRepository, MemberDAL memberDAL) {
 
-        this.studentRepository = studentRepository;
-        this.studentDAL = studentDAL;
+        this.memberRepository = memberRepository;
+        this.memberDAL = memberDAL;
     }
 
-    public List<Student> getStudent(){
+    public List<Member> getMember(){
 
-        return studentRepository.findAll();
-
-    }
-
-    public void addStudent(Student student){
-
-        studentRepository.save(student);
-    }
-
-    public List<Student> getStudentDAL(){
-
-        return studentDAL.getAllStudents();
+        return memberRepository.findAll();
 
     }
 
-    public void addStudentDAL(Student student){
+    public void addMember(Member member){
 
-        studentDAL.addNewStudent(student);
+        memberRepository.save(member);
+    }
+
+    public List<Member> getMemberDAL(){
+
+        return memberDAL.getAllMembers();
+
+    }
+
+    public void addMemberDAL(Member member){
+
+        memberDAL.addNewMember(member);
     }
 
     public GitLabApi connectToGitLab(String personalAccessToken){
