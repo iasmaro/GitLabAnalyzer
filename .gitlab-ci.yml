@@ -7,15 +7,9 @@ build:
   script:
     - cd backend
     - gradle assemble
-  only:
-    refs:
-      - master
 
 test:
   stage: test
   script:
     - cd backend
     - gradle test
-  only:
-    refs:
-      - master
