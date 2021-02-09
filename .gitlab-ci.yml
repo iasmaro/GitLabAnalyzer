@@ -1,0 +1,15 @@
+stages:
+ - build
+ - test
+
+build:
+  stage: build
+  script:
+    - cd backend
+    - gradle assemble
+
+test:
+  stage: test
+  script:
+    - cd backend
+    - gradle test
