@@ -9,7 +9,7 @@ build_backend:
     - gradle assemble
   rules:
     - changes:
-      - /backend/*
+      - backend/*
 
 test_backend:
   stage: test
@@ -18,7 +18,7 @@ test_backend:
     - gradle test
   rules:
     - changes:
-      - /backend/*
+      - backend/*
 
 build_frontend:
   stage: build
@@ -28,7 +28,7 @@ build_frontend:
     - npm run build
   rules:
     - changes:
-      - /frontend/*
+      - frontend/*
 
 test_frontend:
   stage: test
@@ -38,4 +38,4 @@ test_frontend:
     - npm run test
   rules:
     - changes:
-      - /frontend/*
+      - frontend/*
