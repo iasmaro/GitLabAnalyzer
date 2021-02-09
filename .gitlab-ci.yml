@@ -2,14 +2,40 @@ stages:
  - build
  - test
 
-build:
+build_backend:
   stage: build
   script:
     - cd backend
     - gradle assemble
+  rules:
+    - changes:
+      - backend/*
 
-test:
+test_backend:
   stage: test
   script:
     - cd backend
     - gradle test
+  rules:
+    - changes:
+      - backend/*
+
+build_frontend:
+  stage: build
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  rules:
+    - changes:
+      - frontend/*
+
+test_frontend:
+  stage: test
+  script:
+    - cd frontend
+    - npm install
+    - npm run test
+  rules:
+    - changes:
+      - frontend/*
