@@ -56,7 +56,7 @@ public class MemberController {
     }
 
     @GetMapping("/projects")
-    public List<String> getConnection(@RequestBody String personalAccessToken){
+    public List<String> getProject(@RequestBody String personalAccessToken){
 
         GitLabApi gitLabApi = memberService.connectToGitLab(personalAccessToken);
 
