@@ -18,6 +18,7 @@ public class MemberWrapper {
     private int codeScore;
     private int codeReviewScore;
 
+    private List<String> aliases;
 
     private Project project;
 
@@ -37,12 +38,17 @@ public class MemberWrapper {
         return codeReviewScore;
     }
 
+    public void addAlias(String name) {
+        aliases.add(name);
+    }
 
     public MemberWrapper(String name, String email, Project project, int id) {
         this.studentName = name;
         this.email = email;
         this.project = project;
         this.studentId = id;
+
+        this.aliases = new ArrayList<>();
     }
 
 
