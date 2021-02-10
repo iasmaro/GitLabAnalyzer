@@ -44,7 +44,7 @@ public class Main {
             }
         }
     }
-    public static void printAllFunctions(Gitlab app) throws GitLabApiException {
+    public static void printAllFunctions(Gitlab app, int projectNum) throws GitLabApiException {
         List<ProjectWrapper> projects = app.getProjects();
 
         for(ProjectWrapper c : projects) {
@@ -52,7 +52,7 @@ public class Main {
             System.out.println(c.getProjectName());
         }
 
-        List<MemberWrapper> memberWrappers = app.getMembers(projects.get(6).getProject().getId());
+        List<MemberWrapper> memberWrappers = app.getMembers(projects.get(projectNum).getProject().getId());
 
         System.out.println();
 
@@ -62,12 +62,12 @@ public class Main {
 
         System.out.println();
 
-        List<MergeRequest> mergeRequests = app.getMergeRequests(projects.get(6).getProject().getId());
+        List<MergeRequest> mergeRequests = app.getMergeRequests(projects.get(projectNum).getProject().getId());
 
         for(MergeRequest current : mergeRequests) {
             System.out.println("Merge request: " + current);
 
-            List<Commit> commitList = app.getMergeRequestCommits(projects.get(6).getProject().getId(), current.getIid());
+            List<Commit> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
 
             for(Commit com : commitList) {
                 System.out.println("Commit: " + com);
@@ -75,7 +75,7 @@ public class Main {
         }
 
         System.out.println();
-        for(Commit current : app.getAllCommits(projects.get(6).getProject().getId())) {
+        for(Commit current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
            System.out.println("current commit: " + current);
         }
 
@@ -90,7 +90,7 @@ public class Main {
 //       printCommits("tester", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
 
 
-        printAllFunctions(app);
+        printAllFunctions(app2, 0);
     }
 }
 
