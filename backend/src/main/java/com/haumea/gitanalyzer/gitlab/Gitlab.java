@@ -2,8 +2,10 @@ package com.haumea.gitanalyzer.gitlab;
 
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.MergeRequestApi;
 import org.gitlab4j.api.ProjectApi;
-import org.gitlab4j.api.models.Member;
+import org.gitlab4j.api.models.Commit;
+import org.gitlab4j.api.models.MergeRequest;
 import org.gitlab4j.api.models.Project;
 
 import java.util.ArrayList;
@@ -21,15 +23,23 @@ public class Gitlab {
     private int selectedProject;
 
     private GitLabApi gitLabApi;
+    private MergeRequestApi mergeRequestApi;
+
+    private List<String> commitUsers;
 
     private String hostUrl;
     private String personalAccessToken;
+
 
     public Gitlab(String hostUrl, String personalAccessToken) {
         this.hostUrl = hostUrl;
         this.personalAccessToken = personalAccessToken;
 
         this.projects = new ArrayList<>();
+        this.commitUsers = new ArrayList<>();
+
+        this.gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
+        this.mergeRequestApi = new MergeRequestApi(gitLabApi);
     }
 
     public GitLabApi getGitLabApi() {
@@ -48,7 +58,7 @@ public class Gitlab {
         return personalAccessToken;
     }
 
-    public void selectProject(String projectName) {
+    private void selectProject(String projectName) {
        for(int i=0; i<projects.size(); i++) {
            if(projects.get(i).getProjectName().equals(projectName)) {
                selectedProject = i;
@@ -57,8 +67,8 @@ public class Gitlab {
 
     }
 
-    // called when the user selects a project
-    public List<Student> getStudents(String projectName) throws GitLabApiException {
+    // only call after the project has been selected
+    public List<Member> getMembers(String projectName) throws GitLabApiException {
         if(projects.isEmpty()) {
             getProjects();
         }
@@ -67,22 +77,23 @@ public class Gitlab {
 
         ProjectApi projectApi = new ProjectApi(gitLabApi);
 
-        List<Member> members = projectApi.getAllMembers(projects.get(selectedProject).getProject());
+        List<org.gitlab4j.api.models.Member> members = projectApi.getAllMembers(projects.get(selectedProject).getProject().getId());
 
-        for(Member current : members) {
-            Student newStudent = new Student(current.getName(), current.getEmail(), projects.get(selectedProject).getProject(), current.getId());
 
-            projects.get(selectedProject).addStudent(newStudent);
+        for(org.gitlab4j.api.models.Member current : members) {
+            Member newMember = new Member(current.getName(), current.getEmail(), projects.get(selectedProject).getProject(), current.getId());
+
+            projects.get(selectedProject).addMember(newMember);
 
         }
 
-        return projects.get(selectedProject).getStudents();
+        return projects.get(selectedProject).getMembers();
 
     }
 
     public List<ProjectWrapper> getProjects() throws GitLabApiException {
         if(projects.isEmpty()) {
-            gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
+
 
             List<Project> projectList = gitLabApi.getProjectApi().getMemberProjects();
 
@@ -94,6 +105,17 @@ public class Gitlab {
         }
 
         return projects;
+    }
+
+    public List<MergeRequest> getMergeRequests(int projectId) throws GitLabApiException {
+        List<MergeRequest> mergeRequests = mergeRequestApi.getMergeRequests(projectId);
+
+        return mergeRequests;
+
+    }
+
+    public List<Commit> getMergeRequestCommits(int projectId, MergeRequest mergeRequest) throws GitLabApiException {
+        return mergeRequestApi.getCommits(projectId, mergeRequest.getIid());
     }
 
 }

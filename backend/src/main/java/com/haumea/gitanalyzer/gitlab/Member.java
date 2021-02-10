@@ -10,7 +10,7 @@ import org.gitlab4j.api.models.Project;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Student {
+public class Member {
     private String studentName;
     private String email;
     private int studentId;
@@ -42,7 +42,7 @@ public class Student {
         commits.add(commit);
     }
 
-    public Student(String name, String email, Project project, int id) {
+    public Member(String name, String email, Project project, int id) {
         this.studentName = name;
         this.email = email;
         this.project = project;
