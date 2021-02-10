@@ -116,6 +116,7 @@ Please google how to install these tools on your OS.
       authSource=admin&replicaSet=atlas-tadx14-shard-0&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=true`
         - Local server: `mongodb://localhost:27017/`
         - Local container: `mongodb://localhost:27017/`
+        - Team VM: `mongodb://142.58.22.176:27017/`
  
 ## 3. Build the project
 
