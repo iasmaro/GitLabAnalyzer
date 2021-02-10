@@ -10,7 +10,7 @@ import org.gitlab4j.api.models.Project;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Member {
+public class MemberWrapper {
     private String studentName;
     private String email;
     private int studentId;
@@ -18,7 +18,6 @@ public class Member {
     private int codeScore;
     private int codeReviewScore;
 
-    private List<CommitWrapper> commits;
 
     private Project project;
 
@@ -38,22 +37,14 @@ public class Member {
         return codeReviewScore;
     }
 
-    public void addCommitWrapper(CommitWrapper commit) {
-        commits.add(commit);
-    }
 
-    public Member(String name, String email, Project project, int id) {
+    public MemberWrapper(String name, String email, Project project, int id) {
         this.studentName = name;
         this.email = email;
         this.project = project;
         this.studentId = id;
-
-        commits = new ArrayList<>();
     }
 
-    public void addCommit(CommitWrapper commit) {
-        commits.add(commit);
-    }
 
     /*
     TODO: Calculate the student code score by adding up all the code differences from their commits and merge requests

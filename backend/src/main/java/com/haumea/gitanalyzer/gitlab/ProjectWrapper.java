@@ -9,12 +9,7 @@ Wrapper class designed to encapsulate the project
 
 public class ProjectWrapper {
     private String projectName;
-    private List<Member> members;
     private Project project;
-
-    public List<Member> getMembers() {
-        return members;
-    }
 
     public Project getProject() {
         return project;
@@ -25,15 +20,11 @@ public class ProjectWrapper {
 
     public ProjectWrapper(Project project) {
 
-        this.members = new ArrayList<>();
         this.projectName = project.getName();
         this.project = project;
 
     }
 
-    public void addMember(Member member) {
-        members.add(member);
-    }
 
 
 }

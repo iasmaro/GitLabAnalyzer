@@ -1,10 +1,8 @@
 package com.haumea.gitanalyzer.gitlab;
 
-import org.gitlab4j.api.GitLabApi;
-import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.MergeRequestApi;
-import org.gitlab4j.api.ProjectApi;
+import org.gitlab4j.api.*;
 import org.gitlab4j.api.models.Commit;
+import org.gitlab4j.api.models.Member;
 import org.gitlab4j.api.models.MergeRequest;
 import org.gitlab4j.api.models.Project;
 
@@ -19,9 +17,7 @@ Uses wrapper classes and will be used by our spring boot code to hand back data
  */
 
 public class Gitlab {
-    private List<ProjectWrapper> projects;
-    private int selectedProject;
-
+//    private List<ProjectWrapper> projects;
     private GitLabApi gitLabApi;
     private MergeRequestApi mergeRequestApi;
 
@@ -35,7 +31,6 @@ public class Gitlab {
         this.hostUrl = hostUrl;
         this.personalAccessToken = personalAccessToken;
 
-        this.projects = new ArrayList<>();
         this.commitUsers = new ArrayList<>();
 
         this.gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
@@ -46,10 +41,6 @@ public class Gitlab {
         return gitLabApi;
     }
 
-    public ProjectWrapper getSelectedProject() {
-        return projects.get(selectedProject);
-    }
-
     public String getHostUrl() {
         return hostUrl;
     }
@@ -58,53 +49,41 @@ public class Gitlab {
         return personalAccessToken;
     }
 
-    private void selectProject(String projectName) {
-       for(int i=0; i<projects.size(); i++) {
-           if(projects.get(i).getProjectName().equals(projectName)) {
-               selectedProject = i;
-           }
-       }
-
-    }
-
     // only call after the project has been selected
-    public List<Member> getMembers(String projectName) throws GitLabApiException {
-        if(projects.isEmpty()) {
-            getProjects();
-        }
-
-        selectProject(projectName);
-
+    public List<MemberWrapper> getMembers(int projectId) throws GitLabApiException {
         ProjectApi projectApi = new ProjectApi(gitLabApi);
 
-        List<org.gitlab4j.api.models.Member> members = projectApi.getAllMembers(projects.get(selectedProject).getProject().getId());
+        List<Member> members = projectApi.getAllMembers(projectId);
+
+        Project selectedProject = projectApi.getProject(projectId);
+
+        List<MemberWrapper> allMembers = new ArrayList<>();
 
 
         for(org.gitlab4j.api.models.Member current : members) {
-            Member newMember = new Member(current.getName(), current.getEmail(), projects.get(selectedProject).getProject(), current.getId());
+            MemberWrapper newMemberWrapper = new MemberWrapper(current.getName(), current.getEmail(), selectedProject, current.getId());
 
-            projects.get(selectedProject).addMember(newMember);
+            allMembers.add(newMemberWrapper);
 
         }
 
-        return projects.get(selectedProject).getMembers();
+        return allMembers;
 
     }
 
     public List<ProjectWrapper> getProjects() throws GitLabApiException {
-        if(projects.isEmpty()) {
+        List<ProjectWrapper> projects = new ArrayList<>();
 
+        List<Project> projectList = gitLabApi.getProjectApi().getMemberProjects();
 
-            List<Project> projectList = gitLabApi.getProjectApi().getMemberProjects();
+        for(Project current : projectList) {
+            ProjectWrapper project = new ProjectWrapper(current);
 
-            for(Project current : projectList) {
-                ProjectWrapper project = new ProjectWrapper(current);
-
-                projects.add(project);
-            }
+            projects.add(project);
         }
 
         return projects;
+
     }
 
     public List<MergeRequest> getMergeRequests(int projectId) throws GitLabApiException {
@@ -114,8 +93,20 @@ public class Gitlab {
 
     }
 
-    public List<Commit> getMergeRequestCommits(int projectId, MergeRequest mergeRequest) throws GitLabApiException {
-        return mergeRequestApi.getCommits(projectId, mergeRequest.getIid());
+    public List<Commit> getMergeRequestCommits(int projectId, int mergeRequestId) throws GitLabApiException {
+        return mergeRequestApi.getCommits(projectId, mergeRequestId);
     }
+
+    public List<Commit> getAllCommits(int projectId) throws GitLabApiException {
+        CommitsApi commitsApi = new CommitsApi(gitLabApi);
+
+        for(Commit currentCommit : commitsApi.getCommits(projectId)) {
+            CommitWrapper newCommit = new CommitWrapper(gitLabApi, projectId, currentCommit);
+        }
+
+        return commitsApi.getCommits(projectId);
+    }
+
+
 
 }

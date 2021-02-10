@@ -44,7 +44,7 @@ public class Main {
             }
         }
     }
-    public static void mergeRequestTest(Gitlab app) throws GitLabApiException {
+    public static void printAllFunctions(Gitlab app) throws GitLabApiException {
         List<ProjectWrapper> projects = app.getProjects();
 
         for(ProjectWrapper c : projects) {
@@ -52,11 +52,11 @@ public class Main {
             System.out.println(c.getProjectName());
         }
 
-        List<Member> members = app.getMembers(projects.get(6).getProjectName());
+        List<MemberWrapper> memberWrappers = app.getMembers(projects.get(6).getProject().getId());
 
         System.out.println();
 
-        for(Member current : members) {
+        for(MemberWrapper current : memberWrappers) {
             System.out.println(current.getName());
         }
 
@@ -67,24 +67,30 @@ public class Main {
         for(MergeRequest current : mergeRequests) {
             System.out.println("Merge request: " + current);
 
-            List<Commit> commitList = app.getMergeRequestCommits(projects.get(6).getProject().getId(), current);
+            List<Commit> commitList = app.getMergeRequestCommits(projects.get(6).getProject().getId(), current.getIid());
 
             for(Commit com : commitList) {
                 System.out.println("Commit: " + com);
             }
         }
 
+        System.out.println();
+        for(Commit current : app.getAllCommits(projects.get(6).getProject().getId())) {
+           System.out.println("current commit: " + current);
+        }
 
     }
 
+
     public static void main(String[] args) throws GitLabApiException {
         Gitlab app = new Gitlab("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
+        Gitlab app2 = new Gitlab("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 
 //       printCommits("tester", "http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 //       printCommits("tester", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
 
 
-        mergeRequestTest(app);
+        printAllFunctions(app);
     }
 }
 

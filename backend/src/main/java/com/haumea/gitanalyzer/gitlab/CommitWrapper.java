@@ -28,11 +28,11 @@ public class CommitWrapper {
     }
 
     // need to create commitData list in calling code and create the student and commit wrapper objects from that list
-    public CommitWrapper(GitLabApi gitLabApi, Project project, Commit commitData) throws GitLabApiException {
+    public CommitWrapper(GitLabApi gitLabApi, int projectID, Commit commitData) throws GitLabApiException {
         CommitsApi commitApi = new CommitsApi(gitLabApi);
 
         this.commitData = commitData;
-        this.codeChanges = commitApi.getDiff(project, commitData.getId());
+        this.codeChanges = commitApi.getDiff(projectID, commitData.getId());
 
 
     }
