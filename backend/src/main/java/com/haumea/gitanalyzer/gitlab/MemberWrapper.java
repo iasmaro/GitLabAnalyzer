@@ -20,8 +20,6 @@ public class MemberWrapper {
 
     private List<String> aliases;
 
-    private Project project;
-
     public String getName() {
         return studentName;
     }
@@ -42,10 +40,9 @@ public class MemberWrapper {
         aliases.add(name);
     }
 
-    public MemberWrapper(String name, String email, Project project, int id) {
+    public MemberWrapper(String name, String email, int id) {
         this.studentName = name;
         this.email = email;
-        this.project = project;
         this.studentId = id;
 
         this.aliases = new ArrayList<>();

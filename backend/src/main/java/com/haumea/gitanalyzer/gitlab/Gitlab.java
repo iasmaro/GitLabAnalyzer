@@ -61,7 +61,7 @@ public class Gitlab {
 
 
         for(org.gitlab4j.api.models.Member current : members) {
-            MemberWrapper newMemberWrapper = new MemberWrapper(current.getName(), current.getEmail(), selectedProject, current.getId());
+            MemberWrapper newMemberWrapper = new MemberWrapper(current.getName(), current.getEmail(), current.getId());
 
             allMembers.add(newMemberWrapper);
 
