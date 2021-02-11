@@ -1,13 +1,12 @@
+image: docker:latest
+
 stages:
  - build
  - test
 
-variables:
-  DOCKER_HOST: tcp://localhost:2375
-
 build_backend:
   stage: build
-  # image: gradle:jre8-openj9
+  image: gradle:jre8-openj9
   script:
     - cd backend
     - gradle assemble
@@ -17,7 +16,7 @@ build_backend:
 
 test_backend:
   stage: test
-  # image: gradle:jre8-openj9
+  image: gradle:jre8-openj9
   script:
     - cd backend
     - gradle test
