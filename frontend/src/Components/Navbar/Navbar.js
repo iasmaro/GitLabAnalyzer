@@ -10,7 +10,7 @@ const NavbarComponent =(prop)=> {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
                 <Nav className="nav">
-                    <Nav.Link href="./Pages/Login/Login">Sign in</Nav.Link>
+                    <Nav.Link href="./Pages/Login/Login">Sign In</Nav.Link>
                     <Nav.Link href="./Pages/About/About">About</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
