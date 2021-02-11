@@ -1,0 +1,14 @@
+.profile-form {
+    background-color: #141538;
+    padding: 50px 200px;
+    height: 100%;
+}
+.form-group{
+    align-items: center;
+}
+
+.form-label {
+    color: #ffffff;
+    background-color: #747474;
+    text-align: center;
+}
