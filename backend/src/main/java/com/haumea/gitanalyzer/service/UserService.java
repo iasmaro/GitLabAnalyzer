@@ -25,4 +25,14 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exist", e);
         }
     }
+
+    public User updateUser(User user){
+        try {
+            userRepository.updateUser(user);
+            return user;
+        }
+        catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found", e);
+        }
+    }
 }
