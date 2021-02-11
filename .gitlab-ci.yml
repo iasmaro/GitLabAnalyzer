@@ -10,9 +10,9 @@ build_backend:
   script:
     - cd backend
     - gradle assemble
-  # rules:
-  #   - changes:
-  #     - backend/*
+  rules:
+    - changes:
+      - backend/*
 
 test_backend:
   stage: test
@@ -20,9 +20,9 @@ test_backend:
   script:
     - cd backend
     - gradle test
-  # rules:
-  #   - changes:
-  #     - backend/*
+  rules:
+    - changes:
+      - backend/*
 
 build_frontend:
   stage: build
@@ -32,8 +32,8 @@ build_frontend:
     - npm install
     - npm run build
   rules:
-    # - changes:
-    #   - frontend/*
+    - changes:
+      - frontend/*
 
 test_frontend:
   stage: test
@@ -43,5 +43,5 @@ test_frontend:
     - npm install
     - npm run test
   rules:
-    # - changes:
-    #   - frontend/*
+    - changes:
+      - frontend/*
