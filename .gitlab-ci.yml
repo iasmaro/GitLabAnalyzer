@@ -2,6 +2,9 @@ stages:
  - build
  - test
 
+variables:
+  DOCKER_HOST: tcp://docker:2375
+
 build_backend:
   stage: build
   # image: gradle:jre8-openj9
