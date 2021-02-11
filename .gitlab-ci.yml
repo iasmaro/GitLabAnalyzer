@@ -8,9 +8,9 @@ build_backend:
   script:
     - cd backend
     - gradle assemble
-  rules:
-    - changes:
-      - backend/*
+  # rules:
+  #   - changes:
+  #     - backend/*
 
 test_backend:
   stage: test
@@ -18,9 +18,9 @@ test_backend:
   script:
     - cd backend
     - gradle test
-  rules:
-    - changes:
-      - backend/*
+  # rules:
+  #   - changes:
+  #     - backend/*
 
 build_frontend:
   stage: build
