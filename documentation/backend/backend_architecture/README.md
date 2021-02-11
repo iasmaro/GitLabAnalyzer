@@ -116,6 +116,7 @@ Please google how to install these tools on your OS.
       authSource=admin&replicaSet=atlas-tadx14-shard-0&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=true`
         - Local server: `mongodb://localhost:27017/`
         - Local container: `mongodb://localhost:27017/`
+        - Team VM: `mongodb://142.58.22.176:27017/`
  
 ## 3. Build the project
 
@@ -144,6 +145,22 @@ Please google how to install these tools on your OS.
     - Retrieve students:
 
     <img src="images/sc6.png" width="90%">
+
+- Using Swagger
+
+    - Go to http://localhost:8080/swagger-ui/:
+
+    <img src="images/swagger1.png" width="90%">
+    
+    - Expand member-controller by clicking on it:
+
+    - Test Api's by clicking on them and pressing "Try it out" and "Execute" :
+
+    <img src="images/swagger2.png" width="90%">
+
+    <img src="images/swagger3.png" width="90%">
+
+
     
 
 
