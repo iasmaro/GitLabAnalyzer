@@ -10,17 +10,17 @@ public class Member {
 
     @Id
     private String id;
-    private String username;
+    private String userId;
     private ArrayList<String> alias;
 
-    public Member(String id, String username, ArrayList<String> alias) {
+    public Member(String id, String userId, ArrayList<String> alias) {
         this.id = id;
-        this.username = username;
+        this.userId = userId;
         this.alias = alias;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
     public ArrayList<String> getAlias() {

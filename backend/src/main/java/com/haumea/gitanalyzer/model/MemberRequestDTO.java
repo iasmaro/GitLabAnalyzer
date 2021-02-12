@@ -1,16 +1,16 @@
 package com.haumea.gitanalyzer.model;
 
 public class MemberRequestDTO {
-    private String username;
+    private String userId;
     private Integer projectId;
 
-    public MemberRequestDTO(String username, Integer projectId) {
-        this.username = username;
+    public MemberRequestDTO(String userId, Integer projectId) {
+        this.userId = userId;
         this.projectId = projectId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
     public Integer getProjectId() {

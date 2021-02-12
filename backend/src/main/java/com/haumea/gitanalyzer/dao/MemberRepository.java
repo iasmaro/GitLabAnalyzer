@@ -19,5 +19,5 @@ public class MemberRepository {
 
     // TODO: update member alias list
 
-    // TODO: return member by username
+    // TODO: return member by userId
 }
