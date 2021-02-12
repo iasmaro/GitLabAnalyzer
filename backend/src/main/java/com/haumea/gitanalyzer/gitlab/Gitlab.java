@@ -57,6 +57,10 @@ public class Gitlab {
 
     }
 
+    public int getSelectedProjectID(){
+        return selectedProject;
+    }
+
     // called when the user selects a project
     public List<Student> getStudents(String projectName) throws GitLabApiException {
         if(projects.isEmpty()) {
