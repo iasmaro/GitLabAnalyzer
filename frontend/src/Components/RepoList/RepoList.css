@@ -1,21 +1,10 @@
-.repo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.list-container {
+    max-height: 70%;
+    width: 60%;
+    top: 20%;
+    left: 20%;
+    position: absolute;
+    margin: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
-
-.repo-list {
-    min-width: 30%;
-    list-style: none;
-  }
-  
-.repo {
-margin: 0.5rem;
-background: white;
-font-size: 1.5rem;
-color: black;
-display: flex;
-justify-content: space-between;
-align-items: center;
-transition: all 1s ease;
-}
