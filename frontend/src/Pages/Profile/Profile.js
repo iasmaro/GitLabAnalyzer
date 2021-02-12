@@ -1,29 +1,61 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Profile.css';
 import {Form, Button, Col, Row} from 'react-bootstrap';
 
 function Profile() {
+
+    //Adapted from: https://www.code-boost.com/video/ultimate-react-todo-list/
+    const [tokens, setTokens] = useState([]);
+    const [token, setToken] = useState("");
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+    
+        const newToken = {
+            id: new Date().getTime(),
+            text: token
+        }
+        setTokens([...tokens].concat(newToken))
+        setToken("")
+    }
+
+    const handleDelete = (id) => {
+        const updatedTokens = [...tokens].filter((token) => token.id !== id);
+        setTokens(updatedTokens);
+    }
+
     return (
-        <Form className='profile-form'>
-            <Form.Group as={Row} controlId="formPlaintextEmail">
-                <Form.Label column sm="3">Account</Form.Label>
-                <Col sm="5">
-                <Form.Control type="text" placeholder="username@sfu.ca" readOnly />
-                </Col>
-            </Form.Group>
+        <div className="profile-page">
 
-            <Form.Group as={Row} controlId="formPlaintextPassword">
-                <Form.Label column sm="3">Access Token</Form.Label>
-                <Col sm="5">
-                    <Form.Control type="text" placeholder="1bnlkmcadsf89134iromlkdasfnjk431l13f98hadcvmkqlf34jknbfkn31oifnmkldmaskdnfg132i4junf9" readOnly />
-                </Col>
+            <Row>
                 <Col>
-                    <Button variant="danger" type="submit">Remove</Button>
+                    <Form.Label className="profile-title">Access Tokens for username@sfu.ca</Form.Label>
                 </Col>
-                
+            </Row>
 
-            </Form.Group>
-        </Form>
+            <Form className="profile-form" onSubmit={handleSubmit}>                
+                <Row>
+                    <Col sm="9">
+                        <Form.Control required type="text" placeholder="Enter access token" value={token} onChange={(event) => setToken(event.target.value)}/>
+                    </Col>
+                    <Col sm="3">
+                        <Button variant="success" type="submit">Save Token</Button>
+                    </Col>
+                </Row>
+            </Form>
+                        
+            {tokens.map((token) => 
+                <Row className="token" key={token.id}>
+                    <Col sm="9">
+                        {token.text}
+                    </Col>
+                    <Col sm="3">
+                        <Button variant="danger" type="submit" onClick={() => handleDelete(token.id)}>Delete</Button>
+                    </Col>
+                    
+                </Row>
+            )}
+        </div>
     )
 }
 
