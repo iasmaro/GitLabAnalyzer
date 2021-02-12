@@ -18,20 +18,25 @@ public class UserRepository {
         this.mongoTemplate = mongoTemplate;
     }
 
+    private User findUserByUserId(String userId){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+        return mongoTemplate.findOne(query, User.class);
+    }
+
     public User saveUser(User user) throws Exception{
 
         if(user.getUserId() == null){
             throw new Exception("userID cannot be empty");
         }
 
-        Query query = new Query();
-        query.addCriteria(Criteria.where("userId").is(user.getUserId()));
-        if(mongoTemplate.findOne(query, User.class) == null){
+        if(findUserByUserId(user.getUserId()) == null){
             mongoTemplate.save(user);
-            return user;
         } else {
             throw new Exception("User already exist!");
         }
+
+        return user;
     }
 
     public User updateUser(User user) throws Exception{
@@ -49,5 +54,16 @@ public class UserRepository {
         }
 
         return user;
+    }
+
+    public String getPersonalAccessToken(String userId) throws Exception{
+
+        User user = findUserByUserId(userId);
+
+        if(user == null){
+            throw new Exception("User not found!");
+        }
+
+        return user.getPersonalAccessToken();
     }
 }
