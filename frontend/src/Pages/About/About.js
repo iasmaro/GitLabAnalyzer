@@ -6,6 +6,8 @@ function About() {
         <div className='about-page'>
             <h1>About</h1>
         </div>
+        
+        
     )
 }
 

@@ -35,7 +35,7 @@ public class MemberController {
     public String saveMember(@RequestBody Member member){
 
         memberService.addMember(member);
-        return "Student added!";
+        return "Member added!";
 
     }
 
@@ -51,7 +51,7 @@ public class MemberController {
     public String saveMemberDAL(@RequestBody Member member){
 
         memberService.addMemberDAL(member);
-        return "Student added!";
+        return "Member added!";
 
     }
 

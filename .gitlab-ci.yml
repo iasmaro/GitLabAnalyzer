@@ -1,15 +1,47 @@
+image: docker:latest
+
 stages:
  - build
  - test
 
-build:
+build_backend:
   stage: build
+  image: gradle:6.8-jdk11
   script:
     - cd backend
     - gradle assemble
+  rules:
+    - changes:
+      - backend/*
 
-test:
+test_backend:
   stage: test
+  image: gradle:6.8-jdk11
   script:
     - cd backend
     - gradle test
+  rules:
+    - changes:
+      - backend/*
+
+build_frontend:
+  stage: build
+  image: node:14.15.5-alpine
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  rules:
+    - changes:
+      - frontend/*
+
+test_frontend:
+  stage: test
+  image: node:14.15.5-alpine
+  script:
+    - cd frontend
+    - npm install
+    - npm run test
+  rules:
+    - changes:
+      - frontend/*
