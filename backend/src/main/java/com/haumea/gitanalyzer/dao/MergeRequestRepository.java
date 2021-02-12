@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.dao;
 
 import com.haumea.gitanalyzer.gitlab.Gitlab;
 import com.haumea.gitanalyzer.model.MergeRequest;
+import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.MergeRequestApi;
 import org.gitlab4j.api.models.Commit;
@@ -23,17 +24,26 @@ public class MergeRequestRepository {
     private int projectID;
 
     @Autowired
-    public MergeRequestRepository(MongoTemplate mongoTemplate){
+    public MergeRequestRepository(MongoTemplate mongoTemplate) throws GitLabApiException {
         this.mongoTemplate = mongoTemplate;
 
-        Gitlab gitlab = new Gitlab("https://csil-git1.cs.surrey.sfu.ca/users/sign_in", "G9AYVYcZ54VzZRz2RTut");
-        gitlab.selectProject("GitLabAnalyzer");
+        GitLabApi gitlabApi = new GitLabApi("https://csil-git1.cs.surrey.sfu.ca/", "thDxkfQVmkRUJP9mKGsm");
 
-        this.projectID = gitlab.getSelectedProjectID();
-        this.mergeRequestApi = gitlab.getGitLabApi().getMergeRequestApi();
+        List<Project> projects = gitlabApi.getProjectApi().getMemberProjects();
+
+        Project project = null;
+
+        for(Project cur : projects) {
+            if(cur.getName().equals("GitLabAnalyzer")) {
+                project = cur;
+            }
+        }
+
+        this.projectID = project.getId();
+        this.mergeRequestApi = gitlabApi.getMergeRequestApi();
     }
 
-    private List<String> getAllCommitters(MergeRequestApi mergeREquestApi, int projectID, int mergeRequestID) throws GitLabApiException {
+    private List<String> getAllCommitters(MergeRequestApi mergeRequestApi, int projectID, int mergeRequestID) throws GitLabApiException {
         List<String> memberID = new ArrayList<>();
 
         List<Commit> commits = mergeRequestApi.getCommits(projectID, mergeRequestID);
@@ -61,6 +71,7 @@ public class MergeRequestRepository {
             List<String> memberID = getAllCommitters(mergeRequestApi, projectID, mergeID);
             Date mergeDate = mergeRequest.getMergedAt();
             int diffScore = 0;
+            System.out.println(userID);
 
             MergeRequest normalizedMR = new MergeRequest(userID, projectID, memberID, mergeID, mergeDate, diffScore);
             normalizedMergeRequestList.add(normalizedMR);
