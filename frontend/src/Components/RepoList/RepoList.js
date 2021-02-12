@@ -6,7 +6,7 @@ import Table from 'react-bootstrap/Table';
 const RepoList = ({repos}) => {
         return (
             <div className = 'list-container'>
-                <Table striped bordered hover>
+                <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>
                             <th>Repo Name</th>
