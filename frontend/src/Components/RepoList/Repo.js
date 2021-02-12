@@ -5,18 +5,9 @@ const Repo = ({repo}) => {
         <tr>
             <td>{repo.name}</td>
             <td>{repo.date}</td>
-            <td>Analyze</td>
+            <button>Analyze</button>
         </tr>
     );
 };
-
-// const Repo = ({repo}) => {
-//     return (
-//         <div className='repo'>
-//             <li className='repo-name'>{repo.name}</li>
-//             <li className='repo-date'>{repo.date}</li>
-//         </div>
-//     );
-// };
 
 export default Repo
