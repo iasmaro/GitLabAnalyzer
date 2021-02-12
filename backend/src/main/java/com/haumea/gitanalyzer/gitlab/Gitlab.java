@@ -1,12 +1,10 @@
 package com.haumea.gitanalyzer.gitlab;
 
 import org.gitlab4j.api.*;
-import org.gitlab4j.api.models.Commit;
-import org.gitlab4j.api.models.Member;
-import org.gitlab4j.api.models.MergeRequest;
-import org.gitlab4j.api.models.Project;
+import org.gitlab4j.api.models.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -17,7 +15,6 @@ Uses wrapper classes and will be used by our spring boot code to hand back data
  */
 
 public class Gitlab {
-//    private List<ProjectWrapper> projects;
     private GitLabApi gitLabApi;
     private MergeRequestApi mergeRequestApi;
 
@@ -55,15 +52,14 @@ public class Gitlab {
 
         List<Member> members = projectApi.getAllMembers(projectId);
 
-        Project selectedProject = projectApi.getProject(projectId);
 
         List<MemberWrapper> allMembers = new ArrayList<>();
-
 
         for(org.gitlab4j.api.models.Member current : members) {
             MemberWrapper newMemberWrapper = new MemberWrapper(current.getName(), current.getEmail(), current.getId());
 
             allMembers.add(newMemberWrapper);
+
 
         }
 
@@ -86,10 +82,18 @@ public class Gitlab {
 
     }
 
-    public List<MergeRequest> getMergeRequests(int projectId) throws GitLabApiException {
-        List<MergeRequest> mergeRequests = mergeRequestApi.getMergeRequests(projectId);
+    // add getmergerequests by user and filter by date
 
-        return mergeRequests;
+    public List<MergeRequest> getMergeRequestForMember(int projectId, int memberId) throws GitLabApiException {
+        MergeRequestFilter filter = new MergeRequestFilter();
+
+        filter.setAuthorId(memberId);
+
+        return mergeRequestApi.getMergeRequests(filter);
+    }
+
+    public List<MergeRequest> getAllMergeRequests(int projectId) throws GitLabApiException {
+        return mergeRequestApi.getMergeRequests(projectId);
 
     }
 
@@ -97,14 +101,40 @@ public class Gitlab {
         return mergeRequestApi.getCommits(projectId, mergeRequestId);
     }
 
-    public List<Commit> getAllCommits(int projectId) throws GitLabApiException {
+    // add a commits that is filtered by user and date
+
+    public List<CommitWrapper> filterCommitsForDateAndAuthor(int projectId, String authorName, Date start, Date end) throws GitLabApiException {
         CommitsApi commitsApi = new CommitsApi(gitLabApi);
+        List<CommitWrapper> commitList = new ArrayList<>();
+
+        System.out.println("project id is " + projectId);
+        System.out.println("size is " + commitsApi.getCommits(projectId,"master", start, end).size());
+
+        for(Commit currentCommit : commitsApi.getCommits(projectId, "master", start, end)) {
+
+            System.out.println("Author is " + currentCommit.getAuthorName());
+            if(currentCommit.getAuthorName().equals(authorName) ) {
+                CommitWrapper newCommit = new CommitWrapper(gitLabApi, projectId, currentCommit);
+
+                commitList.add(newCommit);
+            }
+        }
+
+        return commitList;
+
+    }
+
+    public List<CommitWrapper> getAllCommits(int projectId) throws GitLabApiException {
+        CommitsApi commitsApi = new CommitsApi(gitLabApi);
+        List<CommitWrapper> commitList = new ArrayList<>();
 
         for(Commit currentCommit : commitsApi.getCommits(projectId)) {
             CommitWrapper newCommit = new CommitWrapper(gitLabApi, projectId, currentCommit);
+
+            commitList.add(newCommit);
         }
 
-        return commitsApi.getCommits(projectId);
+        return commitList;
     }
 
 

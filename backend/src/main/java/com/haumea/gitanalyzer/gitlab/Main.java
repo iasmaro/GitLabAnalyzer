@@ -8,6 +8,9 @@ import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.MergeRequest;
 import org.gitlab4j.api.models.Project;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Main {
@@ -44,12 +47,13 @@ public class Main {
             }
         }
     }
-    public static void printAllFunctions(Gitlab app, int projectNum) throws GitLabApiException {
+    
+    public static void printAllProjectData(Gitlab app, int projectNum) throws GitLabApiException {
         List<ProjectWrapper> projects = app.getProjects();
 
-        for(ProjectWrapper c : projects) {
+        for(ProjectWrapper currentProject : projects) {
 
-            System.out.println(c.getProjectName());
+            System.out.println(currentProject.getProjectName() + " " + currentProject.getProject().getId());
         }
 
         List<MemberWrapper> memberWrappers = app.getMembers(projects.get(projectNum).getProject().getId());
@@ -62,21 +66,35 @@ public class Main {
 
         System.out.println();
 
-        List<MergeRequest> mergeRequests = app.getMergeRequests(projects.get(projectNum).getProject().getId());
+        List<MergeRequest> mergeRequests = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
 
         for(MergeRequest current : mergeRequests) {
             System.out.println("Merge request: " + current);
 
             List<Commit> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
 
-            for(Commit com : commitList) {
-                System.out.println("Commit: " + com);
+            for(Commit commit : commitList) {
+                System.out.println("Commit: " + commit);
             }
         }
 
         System.out.println();
-        for(Commit current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
-           System.out.println("current commit: " + current);
+//        for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
+//           System.out.println("current commit: " + current.getCommitData());
+//
+//        }
+
+        Calendar calender = new GregorianCalendar(2020, Calendar.APRIL, 30);
+
+
+        Date start = calender.getTime();
+
+        calender.set(2020, Calendar.MAY, 10);
+        Date end = calender.getTime();
+
+
+        for(CommitWrapper current : app.filterCommitsForDateAndAuthor(projects.get(projectNum).getProject().getId(), "Andrew Ursu", start, end)) {
+            System.out.println("current filtered commit: " + current.getCommitData());
         }
 
     }
@@ -90,7 +108,7 @@ public class Main {
 //       printCommits("tester", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
 
 
-        printAllFunctions(app2, 0);
+        printAllProjectData(app, 5);
     }
 }
 

@@ -5,15 +5,13 @@ package com.haumea.gitanalyzer.gitlab;
 Models a student and encapsulates his/her gitlab data
  */
 
-import org.gitlab4j.api.models.Project;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MemberWrapper {
     private String studentName;
     private String email;
-    private int studentId;
+    private int memberId;
 
     private int codeScore;
     private int codeReviewScore;
@@ -26,6 +24,10 @@ public class MemberWrapper {
 
     public String getEmail() {
         return email;
+    }
+
+    public int getMemberId() {
+        return memberId;
     }
 
     public int getCodeScore() {
@@ -43,7 +45,7 @@ public class MemberWrapper {
     public MemberWrapper(String name, String email, int id) {
         this.studentName = name;
         this.email = email;
-        this.studentId = id;
+        this.memberId = id;
 
         this.aliases = new ArrayList<>();
     }
