@@ -59,8 +59,6 @@ public class Gitlab {
             MemberWrapper newMemberWrapper = new MemberWrapper(current.getName(), current.getEmail(), current.getId());
 
             allMembers.add(newMemberWrapper);
-
-
         }
 
         return allMembers;
@@ -82,14 +80,18 @@ public class Gitlab {
 
     }
 
-    // add getmergerequests by user and filter by date
 
     public List<MergeRequest> getMergeRequestForMember(int projectId, int memberId) throws GitLabApiException {
-        MergeRequestFilter filter = new MergeRequestFilter();
+        List<MergeRequest> filteredList = new ArrayList<>();
 
-        filter.setAuthorId(memberId);
+        for(MergeRequest currentMergeRequest : getAllMergeRequests(projectId)) {
+            if(currentMergeRequest.getAuthor().getId() == memberId) {
+                filteredList.add(currentMergeRequest);
+            }
+        }
 
-        return mergeRequestApi.getMergeRequests(filter);
+        return filteredList;
+
     }
 
     public List<MergeRequest> getAllMergeRequests(int projectId) throws GitLabApiException {
@@ -101,18 +103,12 @@ public class Gitlab {
         return mergeRequestApi.getCommits(projectId, mergeRequestId);
     }
 
-    // add a commits that is filtered by user and date
-
     public List<CommitWrapper> filterCommitsForDateAndAuthor(int projectId, String authorName, Date start, Date end) throws GitLabApiException {
         CommitsApi commitsApi = new CommitsApi(gitLabApi);
         List<CommitWrapper> commitList = new ArrayList<>();
 
-        System.out.println("project id is " + projectId);
-        System.out.println("size is " + commitsApi.getCommits(projectId,"master", start, end).size());
-
         for(Commit currentCommit : commitsApi.getCommits(projectId, "master", start, end)) {
 
-            System.out.println("Author is " + currentCommit.getAuthorName());
             if(currentCommit.getAuthorName().equals(authorName) ) {
                 CommitWrapper newCommit = new CommitWrapper(gitLabApi, projectId, currentCommit);
 
@@ -136,7 +132,4 @@ public class Gitlab {
 
         return commitList;
     }
-
-
-
 }

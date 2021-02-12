@@ -61,7 +61,7 @@ public class Main {
         System.out.println();
 
         for(MemberWrapper current : memberWrappers) {
-            System.out.println(current.getName());
+            System.out.println(current.getName() + " " + current.getMemberId());
         }
 
         System.out.println();
@@ -74,41 +74,55 @@ public class Main {
             List<Commit> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
 
             for(Commit commit : commitList) {
-                System.out.println("Commit: " + commit);
+                System.out.println("MR Commit: " + commit);
             }
         }
 
         System.out.println();
-//        for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
-//           System.out.println("current commit: " + current.getCommitData());
-//
-//        }
+        for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
+            System.out.println("current commit: " + current.getCommitData());
 
-        Calendar calender = new GregorianCalendar(2020, Calendar.APRIL, 30);
+        }
+
+//        testCommitFiltering(projects, projectNum, app);
+
+//        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), 5368, app);
+
+    }
+
+
+    public static void testMergeRequestFiltering(int projectId, int memberId, Gitlab app) throws GitLabApiException {
+
+        List<MergeRequest> memberRequests = app.getMergeRequestForMember(projectId, memberId);
+
+        for(MergeRequest current : memberRequests) {
+            System.out.println("Filtered MR: " + current);
+        }
+
+    }
+
+    public static void testCommitFiltering(List<ProjectWrapper> projects, int projectNum, Gitlab app) throws GitLabApiException {
+        Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 1);
 
 
         Date start = calender.getTime();
 
-        calender.set(2020, Calendar.MAY, 10);
+        calender.set(2021, Calendar.MAY, 10);
         Date end = calender.getTime();
 
 
         for(CommitWrapper current : app.filterCommitsForDateAndAuthor(projects.get(projectNum).getProject().getId(), "Andrew Ursu", start, end)) {
             System.out.println("current filtered commit: " + current.getCommitData());
         }
-
     }
 
 
     public static void main(String[] args) throws GitLabApiException {
-        Gitlab app = new Gitlab("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
-        Gitlab app2 = new Gitlab("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
-
-//       printCommits("tester", "http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
-//       printCommits("tester", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
+        Gitlab csil = new Gitlab("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
+        Gitlab haumeaTeamGitlab = new Gitlab("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 
 
-        printAllProjectData(app, 5);
+        printAllProjectData(csil, 5);
     }
 }
 
