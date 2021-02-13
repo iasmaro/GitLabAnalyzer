@@ -5,22 +5,18 @@ package com.haumea.gitanalyzer.gitlab;
 Models a student and encapsulates his/her gitlab data
  */
 
-import org.gitlab4j.api.models.Project;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Student {
+public class MemberWrapper {
     private String studentName;
     private String email;
-    private int studentId;
+    private int memberId;
 
     private int codeScore;
     private int codeReviewScore;
 
-    private List<CommitWrapper> commits;
-
-    private Project project;
+    private List<String> aliases;
 
     public String getName() {
         return studentName;
@@ -28,6 +24,10 @@ public class Student {
 
     public String getEmail() {
         return email;
+    }
+
+    public int getMemberId() {
+        return memberId;
     }
 
     public int getCodeScore() {
@@ -38,22 +38,18 @@ public class Student {
         return codeReviewScore;
     }
 
-    public void addCommitWrapper(CommitWrapper commit) {
-        commits.add(commit);
+    public void addAlias(String name) {
+        aliases.add(name);
     }
 
-    public Student(String name, String email, Project project, int id) {
+    public MemberWrapper(String name, String email, int id) {
         this.studentName = name;
         this.email = email;
-        this.project = project;
-        this.studentId = id;
+        this.memberId = id;
 
-        commits = new ArrayList<>();
+        this.aliases = new ArrayList<>();
     }
 
-    public void addCommit(CommitWrapper commit) {
-        commits.add(commit);
-    }
 
     /*
     TODO: Calculate the student code score by adding up all the code differences from their commits and merge requests
