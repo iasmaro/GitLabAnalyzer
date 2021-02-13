@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "member")
 public class Member {
@@ -11,9 +12,9 @@ public class Member {
     @Id
     private String id;
     private String memberId;
-    private ArrayList<String> alias;
+    private List<String> alias;
 
-    public Member(String id, String memberId, ArrayList<String> alias) {
+    public Member(String id, String memberId, List<String> alias) {
         this.id = id;
         this.memberId = memberId;
         this.alias = alias;
@@ -23,7 +24,7 @@ public class Member {
         return memberId;
     }
 
-    public ArrayList<String> getAlias() {
+    public List<String> getAlias() {
         return alias;
     }
 }
