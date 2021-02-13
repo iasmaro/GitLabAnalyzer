@@ -7,7 +7,7 @@ import{repos} from './mockRepos'
 const Dashboard = (props) => {
     return (
         <div className='dashboard'>
-            {<RepoList repos={repos}/>}
+            <RepoList repos={repos}/>
         </div>
     )
 }
