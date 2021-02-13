@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import './Profile.css';
 import {Form, Button, Col, Row} from 'react-bootstrap';
+import './Profile.css';
 
 function Profile() {
 
