@@ -14,21 +14,17 @@ Uses wrapper classes and will be used by our spring boot code to hand back data
 
  */
 
-public class Gitlab {
+public class GitlabService {
     private GitLabApi gitLabApi;
     private MergeRequestApi mergeRequestApi;
-
-    private List<String> commitUsers;
 
     private String hostUrl;
     private String personalAccessToken;
 
 
-    public Gitlab(String hostUrl, String personalAccessToken) {
+    public GitlabService(String hostUrl, String personalAccessToken) {
         this.hostUrl = hostUrl;
         this.personalAccessToken = personalAccessToken;
-
-        this.commitUsers = new ArrayList<>();
 
         this.gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
         this.mergeRequestApi = new MergeRequestApi(gitLabApi);
@@ -81,11 +77,11 @@ public class Gitlab {
     }
 
 
-    public List<MergeRequest> getMergeRequestForMember(int projectId, int memberId) throws GitLabApiException {
+    public List<MergeRequest> getMergeRequestForMember(int projectId, String memberId) throws GitLabApiException {
         List<MergeRequest> filteredList = new ArrayList<>();
 
         for(MergeRequest currentMergeRequest : getAllMergeRequests(projectId)) {
-            if(currentMergeRequest.getAuthor().getId() == memberId) {
+            if(currentMergeRequest.getAuthor().getName().equals(memberId)) {
                 filteredList.add(currentMergeRequest);
             }
         }

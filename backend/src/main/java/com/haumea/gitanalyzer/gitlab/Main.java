@@ -48,7 +48,7 @@ public class Main {
         }
     }
     
-    public static void printAllProjectData(Gitlab app, int projectNum) throws GitLabApiException {
+    public static void printAllProjectData(GitlabService app, int projectNum) throws GitLabApiException {
         List<ProjectWrapper> projects = app.getProjects();
 
         for(ProjectWrapper currentProject : projects) {
@@ -67,7 +67,6 @@ public class Main {
         System.out.println();
 
         List<MergeRequest> mergeRequests = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
-
         for(MergeRequest current : mergeRequests) {
             System.out.println("Merge request: " + current);
 
@@ -84,14 +83,14 @@ public class Main {
 
         }
 
-//        testCommitFiltering(projects, projectNum, app);
+        testCommitFiltering(projects, projectNum, app);
 
-//        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), 5368, app);
+        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
 
     }
 
 
-    public static void testMergeRequestFiltering(int projectId, int memberId, Gitlab app) throws GitLabApiException {
+    public static void testMergeRequestFiltering(int projectId, String memberId, GitlabService app) throws GitLabApiException {
 
         List<MergeRequest> memberRequests = app.getMergeRequestForMember(projectId, memberId);
 
@@ -101,7 +100,7 @@ public class Main {
 
     }
 
-    public static void testCommitFiltering(List<ProjectWrapper> projects, int projectNum, Gitlab app) throws GitLabApiException {
+    public static void testCommitFiltering(List<ProjectWrapper> projects, int projectNum, GitlabService app) throws GitLabApiException {
         Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 1);
 
 
@@ -118,8 +117,8 @@ public class Main {
 
 
     public static void main(String[] args) throws GitLabApiException {
-        Gitlab csil = new Gitlab("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
-        Gitlab haumeaTeamGitlab = new Gitlab("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
+        GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
+        GitlabService haumeaTeamGitlabService = new GitlabService("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 
 
         printAllProjectData(csil, 5);
