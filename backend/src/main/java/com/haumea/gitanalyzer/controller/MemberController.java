@@ -3,8 +3,6 @@ package com.haumea.gitanalyzer.controller;
 import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.model.MemberRequestDTO;
 import com.haumea.gitanalyzer.service.MemberService;
-import org.gitlab4j.api.GitLabApi;
-import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +25,12 @@ public class MemberController {
     @GetMapping
     public ArrayList<Member> getMembers(@RequestBody MemberRequestDTO memberRequestDTO){
         // TODO: handle error throw by called function
-        return memberService.getMembers(memberRequestDTO);
+        try {
+            return memberService.getMembers(memberRequestDTO);
+        }
+        catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
 }

@@ -50,7 +50,7 @@ public class MemberService {
 
         ArrayList<Member> members = new ArrayList<>();
         for(org.gitlab4j.api.models.Member current: gitlabMembers){
-            Member member = new Member(current.getUsername(), new ArrayList<String>());
+//            Member member = new Member(current.getUsername(), new ArrayList<String>());
         }
 
         // return
