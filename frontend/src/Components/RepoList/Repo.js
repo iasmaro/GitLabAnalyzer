@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Repo = ({repo}) => {
+const Repo = (props) => {
     return (
         <tr>
-            <td>{repo.name}</td>
-            <td>{repo.date}</td>
+            <td>{props.repo.name}</td>
+            <td>{props.repo.date}</td>
             <button>Analyze</button>
         </tr>
     );

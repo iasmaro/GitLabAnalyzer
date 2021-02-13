@@ -1,5 +1,4 @@
 import React from 'react';
-import Home from './Pages/Home/Home';
 import About from './Pages/About/About';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import Navbar from './Components/Navbar/Navbar';
@@ -13,10 +12,9 @@ function App() {
     <div className="App">
      
       <Navbar />
-      <Login />
-      <Route exact path="/" component={Home}></Route>
+      <Route exact path="/" component={Login}></Route>
       <Route exact path="/about" component={About}></Route>
-      <Route exact path="/dashboard" component={Dashboard}></Route>
+      <Route exact path="/dashboard" component={Dashboard}/>
     </div>
   );
 }

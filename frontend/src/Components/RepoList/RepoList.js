@@ -1,7 +1,8 @@
 import React from 'react';
+import Table from 'react-bootstrap/Table';
+
 import Repo from './Repo';
 import './RepoList.css';
-import Table from 'react-bootstrap/Table';
 
 const RepoList = ({repos}) => {
         return (
