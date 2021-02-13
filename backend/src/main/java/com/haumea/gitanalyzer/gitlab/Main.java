@@ -47,7 +47,8 @@ public class Main {
             }
         }
     }
-    
+
+    // warning comment out the sections you do not wish to run or else it will take at least a min to run
     public static void printAllProjectData(GitlabService app, int projectNum) throws GitLabApiException {
         List<ProjectWrapper> projects = app.getProjects();
 
