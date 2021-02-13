@@ -64,7 +64,13 @@ public class UserRepository {
             throw new Exception("User not found!");
         }
 
-        return user.getPersonalAccessToken();
+        String token = user.getPersonalAccessToken();
+
+        if(token == null){
+            throw new Exception("Token not found!");
+        }
+
+        return token;
     }
 
 }

@@ -1,6 +1,5 @@
 package com.haumea.gitanalyzer.controller;
 
-import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.dto.MemberRequestDTO;
 import com.haumea.gitanalyzer.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/members")
@@ -23,8 +22,8 @@ public class MemberController {
     }
 
     @GetMapping
-    public ArrayList<Member> getMembers(@RequestBody MemberRequestDTO memberRequestDTO){
-        // TODO: handle error throw by called function
+    public List<String> getMembers(@RequestBody MemberRequestDTO memberRequestDTO){
+
         try {
             return memberService.getMembers(memberRequestDTO);
         }
