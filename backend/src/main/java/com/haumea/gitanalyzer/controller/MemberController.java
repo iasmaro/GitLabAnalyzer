@@ -20,7 +20,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping
+    @GetMapping
     public List<String> getMembers(@RequestParam String userId, @RequestParam Integer projectId){
 
         try {
