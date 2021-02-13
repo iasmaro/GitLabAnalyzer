@@ -1,9 +1,9 @@
-.login-form{
+.login-form {
     display: block;
     position: relative;
 }
 
-.login-form:after{
+.login-form:after {
     content: '';
     display: block;
     position: absolute;
@@ -12,11 +12,10 @@
     left: -5px;
     right: -5px;
     z-index: 1;
-    background-image: linear-gradient(to bottom right, #141538, #fe4880 );
-
+    background-image: linear-gradient(to bottom right, #141538, #fe4880);
 }
 
-.form-inner{
+.form-inner {
     position: relative;
     display: block;
     background-color: white;
@@ -24,7 +23,7 @@
     z-index: 2;
 }
 
-.form-inner h2{
+.form-inner h2 {
     color: #888;
     font-size: 28px;
     font-weight: 500;
@@ -39,7 +38,7 @@
 
 .form-inner .form-group label {
     display: block;
-    color: #666; 
+    color: #666;
     font-size: 12px;
     margin-bottom: 5px;
     transition: 0.4s;

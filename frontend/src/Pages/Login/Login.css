@@ -5,8 +5,7 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.login-page     
-{
+.login-page {
     height: 100vh;
     display: flex;
     align-items: center;

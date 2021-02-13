@@ -1,9 +1,8 @@
-body{
+body {
     overflow: hidden;
 }
 
-.profile-page     
-{
+.profile-page {
     font-family: 'Roboto', sans-serif;
     height: 100vh;
     background-color: #acbed8;
