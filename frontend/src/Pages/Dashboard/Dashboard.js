@@ -4,7 +4,7 @@ import './Dashboard.css';
 import RepoList from '../.././Components/RepoList/RepoList';
 import{repos} from './mockRepos'
 
-function Dashboard() {
+const Dashboard = (props) => {
     return (
         <div className='dashboard'>
             {<RepoList repos={repos}/>}
