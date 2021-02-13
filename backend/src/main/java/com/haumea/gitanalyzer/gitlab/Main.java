@@ -5,8 +5,12 @@ import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
+import org.gitlab4j.api.models.MergeRequest;
 import org.gitlab4j.api.models.Project;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Main {
@@ -44,10 +48,81 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws GitLabApiException {
-       Gitlab app = new Gitlab("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "XqHspL4ix3qXsww4ismP");
-       printCommits("test_repo", "http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
+    // warning comment out the sections you do not wish to run or else it will take at least a min to run
+    public static void printAllProjectData(GitlabService app, int projectNum) throws GitLabApiException {
+        List<ProjectWrapper> projects = app.getProjects();
 
+        for(ProjectWrapper currentProject : projects) {
+
+            System.out.println(currentProject.getProjectName() + " " + currentProject.getProject().getId());
+        }
+
+        List<MemberWrapper> memberWrappers = app.getMembers(projects.get(projectNum).getProject().getId());
+
+        System.out.println();
+
+        for(MemberWrapper current : memberWrappers) {
+            System.out.println(current.getName() + " " + current.getMemberId());
+        }
+
+        System.out.println();
+
+        List<MergeRequest> mergeRequests = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
+        for(MergeRequest current : mergeRequests) {
+            System.out.println("Merge request: " + current);
+
+            List<Commit> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
+
+            for(Commit commit : commitList) {
+                System.out.println("MR Commit: " + commit);
+            }
+        }
+
+        System.out.println();
+        for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
+            System.out.println("current commit: " + current.getCommitData());
+
+        }
+
+        testCommitFiltering(projects, projectNum, app);
+
+        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
+
+    }
+
+
+    public static void testMergeRequestFiltering(int projectId, String memberId, GitlabService app) throws GitLabApiException {
+
+        List<MergeRequest> memberRequests = app.getMergeRequestForMember(projectId, memberId);
+
+        for(MergeRequest current : memberRequests) {
+            System.out.println("Filtered MR: " + current);
+        }
+
+    }
+
+    public static void testCommitFiltering(List<ProjectWrapper> projects, int projectNum, GitlabService app) throws GitLabApiException {
+        Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 1);
+
+
+        Date start = calender.getTime();
+
+        calender.set(2021, Calendar.MAY, 10);
+        Date end = calender.getTime();
+
+
+        for(CommitWrapper current : app.filterCommitsForDateAndAuthor(projects.get(projectNum).getProject().getId(), "Andrew Ursu", start, end)) {
+            System.out.println("current filtered commit: " + current.getCommitData());
+        }
+    }
+
+
+    public static void main(String[] args) throws GitLabApiException {
+        GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
+        GitlabService haumeaTeamGitlabService = new GitlabService("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
+
+
+        printAllProjectData(csil, 5);
     }
 }
 
