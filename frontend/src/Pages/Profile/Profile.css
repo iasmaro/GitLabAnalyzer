@@ -1,4 +1,4 @@
-*{
+body{
     overflow: hidden;
 }
 
@@ -6,7 +6,7 @@
 {
     font-family: 'Roboto', sans-serif;
     height: 100vh;
-    background-color: #141538;
+    background-color: #656683;
     color: #ffffff;
     padding: 75px 350px;
     margin: 0;
