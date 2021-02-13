@@ -1,5 +1,4 @@
 import React from 'react';
-import Home from './Pages/Home/Home';
 import About from './Pages/About/About';
 import Profile from './Pages/Profile/Profile';
 import Navbar from './Components/Navbar/Navbar';
