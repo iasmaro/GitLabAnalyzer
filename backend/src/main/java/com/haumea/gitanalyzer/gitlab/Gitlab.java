@@ -133,13 +133,13 @@ public class Gitlab {
         return commitList;
     }
 
-    public List<Commit> getMergeRequestCommitsForMember(int projectId, int mergeRequestId, int memberId) throws GitLabApiException {
+    public List<Commit> getMergeRequestCommitsForMember(int projectId, int mergeRequestId, String memberId) throws GitLabApiException {
         List<Commit> memberCommits = new ArrayList<>();
 
         List<Commit> mergeRequestCommits = mergeRequestApi.getCommits(projectId, mergeRequestId);
 
         for(Commit currentCommit : mergeRequestCommits) {
-            if(currentCommit.getAuthor().getId() == memberId) {
+            if(currentCommit.getAuthorName() == memberId) {
                 memberCommits.add(currentCommit);
             }
         }
