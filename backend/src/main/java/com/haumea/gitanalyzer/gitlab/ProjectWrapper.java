@@ -8,13 +8,8 @@ Wrapper class designed to encapsulate the project
 */
 
 public class ProjectWrapper {
-    String projectName;
-    private List<Student> students;
+    private String projectName;
     private Project project;
-
-    public List<Student> getStudents() {
-        return students;
-    }
 
     public Project getProject() {
         return project;
@@ -25,15 +20,11 @@ public class ProjectWrapper {
 
     public ProjectWrapper(Project project) {
 
-        this.students = new ArrayList<>();
         this.projectName = project.getName();
         this.project = project;
 
     }
 
-    public void addStudent(Student student) {
-        students.add(student);
-    }
 
 
 }
