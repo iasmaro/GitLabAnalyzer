@@ -1,7 +1,6 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.MemberRepository;
-import com.haumea.gitanalyzer.dto.MemberRequestDTO;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
