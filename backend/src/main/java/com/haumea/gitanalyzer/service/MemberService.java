@@ -25,15 +25,15 @@ public class MemberService {
         this.userService = userService;
     }
 
-    public List<String> getMembers(MemberRequestDTO memberRequestDTO) throws Exception{
+    public List<String> getMembers(String userId, Integer projectId) throws Exception{
 
-        if(memberRequestDTO.getUserId() == null || memberRequestDTO.getProjectId() == null){
+        if(userId == null || projectId == null){
             throw new Exception("useId and projectId must be provided!");
         }
 
         String token;
         try {
-            token = userService.getPersonalAccessToken(memberRequestDTO.getUserId());
+            token = userService.getPersonalAccessToken(userId);
         }
         catch (Exception e){
             throw new Exception(e.getMessage());
@@ -43,7 +43,7 @@ public class MemberService {
 
         List<String> members = new ArrayList<>();
         try {
-            List<MemberWrapper> gitlabMembers = gitlabService.getMembers(memberRequestDTO.getProjectId());
+            List<MemberWrapper> gitlabMembers = gitlabService.getMembers(projectId);
             for(MemberWrapper current: gitlabMembers){
                 members.add(current.getMemberId());
             }
