@@ -1,7 +1,7 @@
 package com.haumea.gitanalyzer.controller;
 
 import com.haumea.gitanalyzer.model.Member;
-import com.haumea.gitanalyzer.model.MemberRequestDTO;
+import com.haumea.gitanalyzer.dto.MemberRequestDTO;
 import com.haumea.gitanalyzer.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

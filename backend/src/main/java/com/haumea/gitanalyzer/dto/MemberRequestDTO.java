@@ -1,4 +1,4 @@
-package com.haumea.gitanalyzer.model;
+package com.haumea.gitanalyzer.dto;
 
 public class MemberRequestDTO {
     private String userId;

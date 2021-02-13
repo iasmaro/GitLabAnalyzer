@@ -3,7 +3,7 @@ package com.haumea.gitanalyzer.service;
 import com.haumea.gitanalyzer.dao.MemberRepository;
 import com.haumea.gitanalyzer.dao.UserRepository;
 import com.haumea.gitanalyzer.model.Member;
-import com.haumea.gitanalyzer.model.MemberRequestDTO;
+import com.haumea.gitanalyzer.dto.MemberRequestDTO;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.ProjectApi;
