@@ -3,35 +3,27 @@ package com.haumea.gitanalyzer.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document(collection = "member")
 public class Member {
 
     @Id
     private String id;
-    private String name;
-    private String email;
-    private String commitData;
+    private String memberId;
+    private List<String> alias;
 
-    public Member(String id, String name, String email, String commitData) {
+    public Member(String id, String memberId, List<String> alias) {
         this.id = id;
-        this.name = name;
-        this.email = email;
-        this.commitData = commitData;
+        this.memberId = memberId;
+        this.alias = alias;
     }
 
-    public String getId() {
-        return id;
+    public String getMemberId() {
+        return memberId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getCommitData() {
-        return commitData;
+    public List<String> getAlias() {
+        return alias;
     }
 }

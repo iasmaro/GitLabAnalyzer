@@ -52,7 +52,7 @@ public class GitlabService {
         List<MemberWrapper> allMembers = new ArrayList<>();
 
         for(org.gitlab4j.api.models.Member current : members) {
-            MemberWrapper newMemberWrapper = new MemberWrapper(current.getName(), current.getEmail(), current.getId());
+            MemberWrapper newMemberWrapper = new MemberWrapper(current.getName(), current.getEmail(), current.getUsername());
 
             allMembers.add(newMemberWrapper);
         }

@@ -11,7 +11,7 @@ import java.util.List;
 public class MemberWrapper {
     private String studentName;
     private String email;
-    private int memberId;
+    private String memberId;
 
     private int codeScore;
     private int codeReviewScore;
@@ -26,7 +26,7 @@ public class MemberWrapper {
         return email;
     }
 
-    public int getMemberId() {
+    public String getMemberId() {
         return memberId;
     }
 
@@ -42,7 +42,7 @@ public class MemberWrapper {
         aliases.add(name);
     }
 
-    public MemberWrapper(String name, String email, int id) {
+    public MemberWrapper(String name, String email, String id) {
         this.studentName = name;
         this.email = email;
         this.memberId = id;
