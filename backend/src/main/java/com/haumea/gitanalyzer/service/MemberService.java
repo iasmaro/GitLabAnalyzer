@@ -1,12 +1,10 @@
 package com.haumea.gitanalyzer.service;
 
-import com.haumea.gitanalyzer.model.Member;
-import com.haumea.gitanalyzer.dao.MemberDAL;
 import com.haumea.gitanalyzer.dao.MemberRepository;
-import org.gitlab4j.api.GitLabApi;
+import com.haumea.gitanalyzer.gitlab.GitlabService;
+import com.haumea.gitanalyzer.gitlab.MemberWrapper;
+import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.Project;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,55 +14,44 @@ import java.util.List;
 @Service
 public class MemberService {
 
-    @Autowired
-    private BeanFactory beanFactory;
-
     private final MemberRepository memberRepository;
-    private final MemberDAL memberDAL;
+    private final UserService userService;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, MemberDAL memberDAL) {
+    public MemberService(MemberRepository memberRepository, UserService userService) {
 
         this.memberRepository = memberRepository;
-        this.memberDAL = memberDAL;
+        this.userService = userService;
     }
 
-    public List<Member> getMember(){
+    public List<String> getMembers(String userId, Integer projectId) throws Exception{
 
-        return memberRepository.findAll();
-
-    }
-
-    public void addMember(Member member){
-
-        memberRepository.save(member);
-    }
-
-    public List<Member> getMemberDAL(){
-
-        return memberDAL.getAllMembers();
-
-    }
-
-    public void addMemberDAL(Member member){
-
-        memberDAL.addNewMember(member);
-    }
-
-    public GitLabApi connectToGitLab(String personalAccessToken){
-
-        return beanFactory.getBean(GitLabApi.class, personalAccessToken);
-    }
-
-    public List<String> getProjects(GitLabApi gitLabApi) throws GitLabApiException{
-
-        List<String> projectNames = new ArrayList<>();
-
-        List<Project> projects = gitLabApi.getProjectApi().getMemberProjects();
-        for(Project cur : projects){
-            projectNames.add(cur.getHttpUrlToRepo());
+        if(userId == null || projectId == null){
+            throw new Exception("useId and projectId must be provided!");
         }
 
-        return projectNames;
+        String token;
+        try {
+            token = userService.getPersonalAccessToken(userId);
+        }
+        catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+
+        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+
+        List<String> members = new ArrayList<>();
+        try {
+            List<MemberWrapper> gitlabMembers = gitlabService.getMembers(projectId);
+            for(MemberWrapper current: gitlabMembers){
+                members.add(current.getMemberId());
+            }
+
+            return members;
+        }
+        catch(GitLabApiException e){
+            throw new Exception(e.getMessage());
+        }
     }
+
 }
