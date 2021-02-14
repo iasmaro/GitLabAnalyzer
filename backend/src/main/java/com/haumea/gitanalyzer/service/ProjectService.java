@@ -24,7 +24,7 @@ public class ProjectService {
     public List<ProjectDTO> getProjects(String userId) throws Exception{
 
         if(userId == null){
-            throw new Exception("useId must be provided!");
+            throw new Exception("userId must be provided!");
         }
 
         String token;
