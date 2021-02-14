@@ -4,11 +4,15 @@ import com.haumea.gitanalyzer.model.User;
 import com.haumea.gitanalyzer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/api/v1/users")
+@Validated
 public class UserController {
 
     private final UserService userService;
@@ -19,24 +23,15 @@ public class UserController {
     }
 
     @PostMapping
-    public void saveUser(@RequestBody User user){
-        try{
-            userService.saveUser(user);
-        }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    public void saveUser(@Valid @RequestBody User user){
 
+        userService.saveUser(user);
     }
 
     @PutMapping
-    public void updateUser(@RequestBody User user){
-        try{
-            userService.updateUser(user);
-        }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    public void updateUser(@Valid @RequestBody User user){
+
+        userService.updateUser(user);
 
     }
 

@@ -4,6 +4,7 @@ import com.haumea.gitanalyzer.dto.ProjectDTO;
 import com.haumea.gitanalyzer.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,11 +26,12 @@ public class ProjectController {
 
     @GetMapping
     public List<ProjectDTO> getProjects(@RequestParam String userId){
+        System.out.println(userId);
         try{
             return projectService.getProjects(userId);
         }
         catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.toString(), e);
         }
     }
 }
