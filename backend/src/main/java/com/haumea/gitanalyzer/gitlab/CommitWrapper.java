@@ -17,7 +17,6 @@ Needed as the commit data and code differences are separated into 2 different ob
 
 
 public class CommitWrapper {
-
     private final Commit commitData;
     private final List<Diff> codeChanges;
 

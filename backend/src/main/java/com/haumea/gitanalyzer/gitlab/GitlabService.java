@@ -77,25 +77,59 @@ public class GitlabService {
     }
 
 
-    public List<MergeRequest> getMergeRequestForMember(int projectId, String memberId) throws GitLabApiException {
-        List<MergeRequest> filteredList = new ArrayList<>();
+    public List<MergeRequestWrapper> getMergeRequestForMember(int projectId, String memberId) throws GitLabApiException {
+        List<MergeRequestWrapper> filteredList = new ArrayList<>();
 
-        for(MergeRequest currentMergeRequest : getAllMergeRequests(projectId)) {
-            if(currentMergeRequest.getAuthor().getName().equals(memberId)) {
+        for(MergeRequestWrapper currentMergeRequest : getAllMergeRequests(projectId)) {
+            if(currentMergeRequest.getMergeRequestData().getAuthor().getName().equals(memberId)) {
                 filteredList.add(currentMergeRequest);
             }
+
         }
 
         return filteredList;
 
     }
 
-    public List<MergeRequest> getAllMergeRequests(int projectId) throws GitLabApiException {
+    public List<MergeRequest> getAllMergeRequestData(int projectId) throws GitLabApiException {
         return mergeRequestApi.getMergeRequests(projectId);
 
     }
+    public List<MergeRequestWrapper> getAllMergeRequests(int projectId) throws GitLabApiException {
 
-    public List<Commit> getMergeRequestCommits(int projectId, int mergeRequestId) throws GitLabApiException {
+        List<MergeRequestWrapper> mergeRequestList = new ArrayList<>();
+
+        for(MergeRequest currentMR : mergeRequestApi.getMergeRequests(projectId)) {
+
+            MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, currentMR);
+
+            for(int i=0; i<newMergeRequest.getMergeRequestChangeData().size(); i++) {
+                MergeRequestDiff diff = mergeRequestApi.getMergeRequestDiff(projectId, currentMR.getIid(), newMergeRequest.getMergeRequestChangeData().get(i).getId());
+                newMergeRequest.addMergeRequestChange(diff);
+
+                mergeRequestList.add(newMergeRequest);
+            }
+
+        }
+        return mergeRequestList;
+    }
+
+
+    public List<CommitWrapper> getMergeRequestCommits(int projectId, int mergeRequestId) throws GitLabApiException {
+        List<CommitWrapper> commitListMR = new ArrayList<>();
+
+        for(Commit currentCommit : mergeRequestApi.getCommits(projectId, mergeRequestId)) {
+            CommitWrapper newCommit = new CommitWrapper(gitLabApi, projectId, currentCommit);
+
+            commitListMR.add(newCommit);
+        }
+
+        return commitListMR;
+    }
+
+    // use if you just want the merge request Data and not the code diffs
+    public List<Commit> getMergeRequestCommitsData(int projectId, int mergeRequestId) throws GitLabApiException {
+
         return mergeRequestApi.getCommits(projectId, mergeRequestId);
     }
 
