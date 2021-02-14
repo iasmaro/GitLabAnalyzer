@@ -1,6 +1,5 @@
 package com.haumea.gitanalyzer.controller;
 
-import com.haumea.gitanalyzer.dto.MemberRequestDTO;
 import com.haumea.gitanalyzer.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +21,10 @@ public class MemberController {
     }
 
     @GetMapping
-    public List<String> getMembers(@RequestBody MemberRequestDTO memberRequestDTO){
+    public List<String> getMembers(@RequestParam String userId, @RequestParam Integer projectId){
 
         try {
-            return memberService.getMembers(memberRequestDTO);
+            return memberService.getMembers(userId, projectId);
         }
         catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
