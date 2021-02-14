@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping(path = "/api/v1/users")
@@ -30,6 +33,11 @@ public class UserController {
 
     @PutMapping
     public void updateUser(@Valid @RequestBody User user){
+
+        if(user.getPersonalAccessToken() == null || user.getPersonalAccessToken().trim().isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "getPersonalAccessToken cannot be null, empty or blank.");
+        }
 
         userService.updateUser(user);
 

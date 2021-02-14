@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/projects")
+@Validated
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -25,13 +29,8 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<ProjectDTO> getProjects(@RequestParam String userId){
-        System.out.println(userId);
-        try{
-            return projectService.getProjects(userId);
-        }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.toString(), e);
-        }
+    public List<ProjectDTO> getProjects(@NotBlank @RequestParam String userId){
+
+        return projectService.getProjects(userId);
     }
 }
