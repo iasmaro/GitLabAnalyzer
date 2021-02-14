@@ -24,11 +24,11 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<ProjectDTO> getProjects(@RequestParam String userId){
-        try{
+    public List<ProjectDTO> getProjects(@RequestParam String userId) {
+        try {
             return projectService.getProjects(userId);
         }
-        catch (Exception e){
+        catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }

@@ -27,7 +27,7 @@ public class MemberService {
     public List<String> getMembers(String userId, Integer projectId) throws Exception{
 
         if(userId == null || projectId == null){
-            throw new Exception("useId and projectId must be provided!");
+            throw new Exception("userId and projectId must be provided!");
         }
 
         String token;

@@ -1,6 +1,5 @@
 package com.haumea.gitanalyzer.gitlab;
 
-import com.haumea.gitanalyzer.dto.MemberRequestDTO;
 import org.gitlab4j.api.*;
 import org.gitlab4j.api.models.*;
 
@@ -130,10 +129,10 @@ public class GitlabService {
         return commitList;
     }
 
-    public List<Commit> getMergeRequestCommitsForMember(MemberRequestDTO memberRequestDTO, int mergeRequestId, String memberId) throws GitLabApiException {
+    public List<Commit> getMergeRequestCommitsForMember(Integer projectId, Integer mergeRequestId, String memberId) throws GitLabApiException {
         List<Commit> memberCommits = new ArrayList<>();
 
-        List<Commit> mergeRequestCommits = mergeRequestApi.getCommits(memberRequestDTO.getProjectId(), mergeRequestId);
+        List<Commit> mergeRequestCommits = mergeRequestApi.getCommits(projectId, mergeRequestId);
 
         for(Commit currentCommit : mergeRequestCommits) {
             if(currentCommit.getAuthorName() == memberId) {

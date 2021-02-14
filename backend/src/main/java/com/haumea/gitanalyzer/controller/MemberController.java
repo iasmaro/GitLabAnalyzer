@@ -16,17 +16,15 @@ public class MemberController {
 
     @Autowired
     public MemberController(MemberService memberService) {
-
         this.memberService = memberService;
     }
 
     @GetMapping
-    public List<String> getMembers(@RequestParam String userId, @RequestParam Integer projectId){
-
+    public List<String> getMembers(@RequestParam String userId, @RequestParam Integer projectId) {
         try {
             return memberService.getMembers(userId, projectId);
         }
-        catch (Exception e){
+        catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
