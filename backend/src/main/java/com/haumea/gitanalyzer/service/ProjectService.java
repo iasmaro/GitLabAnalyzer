@@ -1,8 +1,8 @@
 package com.haumea.gitanalyzer.service;
 
-import com.haumea.gitanalyzer.dao.MemberRepository;
+import com.haumea.gitanalyzer.dto.ProjectDTO;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
-import com.haumea.gitanalyzer.gitlab.MemberWrapper;
+import com.haumea.gitanalyzer.gitlab.ProjectWrapper;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,22 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MemberService {
+public class ProjectService {
 
-    private final MemberRepository memberRepository;
     private final UserService userService;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, UserService userService) {
-
-        this.memberRepository = memberRepository;
+    public ProjectService(UserService userService) {
         this.userService = userService;
     }
 
-    public List<String> getMembers(String userId, Integer projectId) throws Exception{
+    public List<ProjectDTO> getProjects(String userId) throws Exception{
 
-        if(userId == null || projectId == null){
-            throw new Exception("useId and projectId must be provided!");
+        if(userId == null){
+            throw new Exception("userId must be provided!");
         }
 
         String token;
@@ -40,18 +37,21 @@ public class MemberService {
 
         GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
-        List<String> members = new ArrayList<>();
-        try {
-            List<MemberWrapper> gitlabMembers = gitlabService.getMembers(projectId);
-            for(MemberWrapper current: gitlabMembers){
-                members.add(current.getMemberId());
+        try{
+            List<ProjectWrapper> gitlabProjects = gitlabService.getProjects();
+            List<ProjectDTO> projects = new ArrayList<>();
+
+            for(ProjectWrapper current: gitlabProjects){
+                ProjectDTO project = new ProjectDTO(current.getProjectName(), current.getProject().getId(),
+                        current.getProject().getWebUrl());
+                projects.add(project);
             }
 
-            return members;
+            return projects;
         }
-        catch(GitLabApiException e){
+        catch (GitLabApiException e){
             throw new Exception(e.getMessage());
         }
-    }
 
+    }
 }
