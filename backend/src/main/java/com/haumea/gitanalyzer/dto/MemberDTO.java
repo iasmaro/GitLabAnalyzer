@@ -10,4 +10,20 @@ public class MemberDTO {
         this.memberId = memberId;
         this.alias = alias;
     }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public List<String> getAlias() {
+        return alias;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
+    public void setAlias(List<String> alias) {
+        this.alias = alias;
+    }
 }
