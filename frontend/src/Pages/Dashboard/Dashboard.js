@@ -1,7 +1,8 @@
 import React from 'react';
 
+import RepoList from 'Components/RepoList/RepoList';
+
 import './Dashboard.css';
-import RepoList from '../.././Components/RepoList/RepoList';
 import{repos} from './mockRepos'
 
 const Dashboard = (props) => {

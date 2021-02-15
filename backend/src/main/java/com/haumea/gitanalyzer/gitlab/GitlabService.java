@@ -2,7 +2,6 @@ package com.haumea.gitanalyzer.gitlab;
 
 import org.gitlab4j.api.*;
 import org.gitlab4j.api.models.*;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,10 +34,6 @@ public class GitlabService {
         return gitLabApi;
     }
 
-    public MergeRequestApi getMergeRequestApi() {
-        return mergeRequestApi;
-    }
-
     public String getHostUrl() {
         return hostUrl;
     }
@@ -53,17 +48,15 @@ public class GitlabService {
 
         List<Member> members = projectApi.getAllMembers(projectId);
 
-
         List<MemberWrapper> allMembers = new ArrayList<>();
 
         for(org.gitlab4j.api.models.Member current : members) {
-            MemberWrapper newMemberWrapper = new MemberWrapper(current.getName(), current.getEmail(), current.getUsername());
+            MemberWrapper newMemberWrapper = new MemberWrapper(current.getName(), current.getEmail(), current.getUsername(), current.getId());
 
             allMembers.add(newMemberWrapper);
+
         }
-
         return allMembers;
-
     }
 
     public List<ProjectWrapper> getProjects() throws GitLabApiException {
@@ -81,43 +74,82 @@ public class GitlabService {
 
     }
 
-    public Project getSelectedProject(String projectName) throws Exception {
-        List<ProjectWrapper> projects = getProjects();
-        Project selectedProject = null;
+    /* TODO: Filter via the contributions a member has made to a merge request regardless of whether the member is the author */
+    // Warning: Make sure to pass dates in the UTC time format. Not doing so may give unexpected results
+    public List<MergeRequestWrapper> filterMergeRequestByDate(int projectId, String name, Date start, Date end) throws GitLabApiException {
+        MergeRequestFilter filter = new MergeRequestFilter();
 
-        try {
-            for (ProjectWrapper project : projects) {
-                if (project.getProjectName().equals(projectName)) {
-                    selectedProject = project.getProject();
-                }
-            }
-        }
-        catch(Exception e){
-            throw new Exception("There is no project " + projectName);
+
+        filter.setCreatedAfter(start);
+        filter.setCreatedBefore(end);
+        filter.setProjectId(projectId);
+
+        List<MergeRequestWrapper> result = new ArrayList<>();
+
+        for(MergeRequest current : mergeRequestApi.getMergeRequests(filter)) {
+
+            MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, current);
+
+            result.add(newMergeRequest);
         }
 
-        return selectedProject;
+        return result;
+
     }
 
-    public List<MergeRequest> getMergeRequestForMember(int projectId, String memberId) throws GitLabApiException {
-        List<MergeRequest> filteredList = new ArrayList<>();
 
-        for(MergeRequest currentMergeRequest : getAllMergeRequests(projectId)) {
-            if(currentMergeRequest.getAuthor().getName().equals(memberId)) {
+    public List<MergeRequestWrapper> getMergeRequestForMember(int projectId, String name) throws GitLabApiException {
+        List<MergeRequestWrapper> filteredList = new ArrayList<>();
+
+        for(MergeRequestWrapper currentMergeRequest : getAllMergeRequests(projectId)) {
+            if(currentMergeRequest.getMergeRequestData().getAuthor().getName().equals(name)) {
                 filteredList.add(currentMergeRequest);
             }
+
         }
 
         return filteredList;
 
     }
 
-    public List<MergeRequest> getAllMergeRequests(int projectId) throws GitLabApiException {
+    public List<MergeRequest> getAllMergeRequestData(int projectId) throws GitLabApiException {
         return mergeRequestApi.getMergeRequests(projectId);
 
     }
+    public List<MergeRequestWrapper> getAllMergeRequests(int projectId) throws GitLabApiException {
 
-    public List<Commit> getMergeRequestCommits(int projectId, int mergeRequestId) throws GitLabApiException {
+        List<MergeRequestWrapper> mergeRequestList = new ArrayList<>();
+
+        for(MergeRequest currentMR : mergeRequestApi.getMergeRequests(projectId)) {
+
+            MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, currentMR);
+
+            MergeRequestDiff diff = mergeRequestApi.getMergeRequestDiff(projectId, currentMR.getIid(), newMergeRequest.getMergeRequestVersion().get(0).getId());
+            newMergeRequest.addMergeRequestChange(diff);
+
+
+            mergeRequestList.add(newMergeRequest);
+
+        }
+        return mergeRequestList;
+    }
+
+
+    public List<CommitWrapper> getMergeRequestCommits(int projectId, int mergeRequestId) throws GitLabApiException {
+        List<CommitWrapper> commitListMR = new ArrayList<>();
+
+        for(Commit currentCommit : mergeRequestApi.getCommits(projectId, mergeRequestId)) {
+            CommitWrapper newCommit = new CommitWrapper(gitLabApi, projectId, currentCommit);
+
+            commitListMR.add(newCommit);
+        }
+
+        return commitListMR;
+    }
+
+    // use if you just want the merge request Data and not the code diffs
+    public List<Commit> getMergeRequestCommitsData(int projectId, int mergeRequestId) throws GitLabApiException {
+
         return mergeRequestApi.getCommits(projectId, mergeRequestId);
     }
 
@@ -132,6 +164,18 @@ public class GitlabService {
 
                 commitList.add(newCommit);
             }
+        }
+
+        return commitList;
+
+    }
+    public List<CommitWrapper> filterCommitsForDate(int projectId, Date start, Date end) throws GitLabApiException {
+        CommitsApi commitsApi = new CommitsApi(gitLabApi);
+        List<CommitWrapper> commitList = new ArrayList<>();
+
+        for(Commit currentCommit : commitsApi.getCommits(projectId, "master", start, end)) {
+            CommitWrapper newCommit = new CommitWrapper(gitLabApi, projectId, currentCommit);
+            commitList.add(newCommit);
         }
 
         return commitList;

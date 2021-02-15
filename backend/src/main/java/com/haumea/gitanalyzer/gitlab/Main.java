@@ -3,14 +3,9 @@ package com.haumea.gitanalyzer.gitlab;
 import org.gitlab4j.api.CommitsApi;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.MergeRequestApi;
 import org.gitlab4j.api.models.*;
-import org.springframework.util.StringUtils;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 public class Main {
     // use this for debugging purposes
@@ -61,19 +56,41 @@ public class Main {
         System.out.println();
 
         for(MemberWrapper current : memberWrappers) {
-            System.out.println(current.getName() + " " + current.getMemberId());
+            System.out.println("Author is: " + current.getName() + " " + current.getMemberId());
+//            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
         }
 
         System.out.println();
 
-        List<MergeRequest> mergeRequests = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
+        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
         for(MergeRequest current : mergeRequests) {
             System.out.println("Merge request: " + current);
 
-            List<Commit> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
+            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
 
-            for(Commit commit : commitList) {
-                System.out.println("MR Commit: " + commit);
+            for(CommitWrapper commit : commitList) {
+                System.out.println("MR Commit: " + commit.getCommitData());
+            }
+        }
+
+        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
+        for(MergeRequestWrapper current : mergeRequestWrappers) {
+            System.out.println("Merge request: " + current.getMergeRequestData());
+
+            System.out.println();
+
+            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
+
+            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
+
+                System.out.println("change is: " + change.getDiffs());
+
+            }
+
+            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
+
+            for(CommitWrapper commit : commitList) {
+                System.out.println("MR Commit: " + commit.getCommitData());
             }
         }
 
@@ -90,20 +107,19 @@ public class Main {
     }
 
 
+
     public static void testMergeRequestFiltering(int projectId, String memberId, GitlabService app) throws GitLabApiException {
 
-        List<MergeRequest> memberRequests = app.getMergeRequestForMember(projectId, memberId);
+        List<MergeRequestWrapper> memberRequests = app.getMergeRequestForMember(projectId, memberId);
 
-        for(MergeRequest current : memberRequests) {
-            System.out.println("Filtered MR: " + current);
+        for(MergeRequestWrapper current : memberRequests) {
+            System.out.println("Filtered MR: " + current.getMergeRequestData());
         }
 
     }
 
     public static void testCommitFiltering(List<ProjectWrapper> projects, int projectNum, GitlabService app) throws GitLabApiException {
-        Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 1);
-
-
+        Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 20);
         Date start = calender.getTime();
 
         calender.set(2021, Calendar.MAY, 10);
@@ -115,42 +131,34 @@ public class Main {
         }
     }
 
-    private static double getMRDifScore(GitlabService gitlabService, int projectID, int mergeRequestIiD) throws GitLabApiException {
+    public static void newMRFilterTest(int projectId, String name, GitlabService app) throws GitLabApiException {
+        Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 14);
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        calender.setTimeZone(utc);
 
-        MergeRequestApi mergeRequestApi = gitlabService.getMergeRequestApi();
-        MergeRequest mergeRequest = mergeRequestApi.getMergeRequest(projectID, mergeRequestIiD);
-        List<Commit> commits = mergeRequestApi.getCommits(projectID, mergeRequestIiD);
-        CommitsApi commitsApi = gitlabService.getGitLabApi().getCommitsApi();
-        double MRDifScore = 0;
-        int insertions = 0;
-        int deletions = 0;
+        Date start = calender.getTime();
 
-        for(Commit commit : commits){
+        calender.set(2021, Calendar.FEBRUARY, 26);
+        calender.setTimeZone(utc);
+        Date end = calender.getTime();
 
-            List<Diff> newCode = commitsApi.getDiff(projectID, commit.getId());
-            for (Diff code : newCode) {
+        List<MergeRequestWrapper> mergeRequestWrappers = app.filterMergeRequestByDate(projectId, name, start, end);
 
-                insertions = insertions + StringUtils.countOccurrencesOf(code.getDiff(), "\n+");
-                deletions = deletions + StringUtils.countOccurrencesOf(code.getDiff(), "\n-");
-            }
-
+        for(MergeRequestWrapper current : mergeRequestWrappers) {
+            System.out.println("data is " + current.getMergeRequestData());
         }
 
-        MRDifScore = insertions + deletions*0.2;
-        System.out.println(insertions);
-        System.out.println(deletions);
-        System.out.println(MRDifScore);
-
-        return MRDifScore;
     }
 
-    public static void main(String[] args) throws Exception {
-        GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "thDxkfQVmkRUJP9mKGsm");
+
+    public static void main(String[] args) throws GitLabApiException {
+        GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
         GitlabService haumeaTeamGitlabService = new GitlabService("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 
-        printCommits("GitLabAnalyzer","https://csil-git1.cs.surrey.sfu.ca/", "thDxkfQVmkRUJP9mKGsm");
 
-        //printAllProjectData(csil, 5);
+        printAllProjectData(csil, 5);
+
+//        printCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
     }
 }
 
