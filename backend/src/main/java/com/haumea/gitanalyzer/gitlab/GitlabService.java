@@ -26,12 +26,16 @@ public class GitlabService {
         this.hostUrl = hostUrl;
         this.personalAccessToken = personalAccessToken;
 
-        this.gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
+        this.gitLabApi = new GitLabApi("https://csil-git1.cs.surrey.sfu.ca/", "thDxkfQVmkRUJP9mKGsm");
         this.mergeRequestApi = new MergeRequestApi(gitLabApi);
     }
 
     public GitLabApi getGitLabApi() {
         return gitLabApi;
+    }
+
+    public MergeRequestApi getMergeRequestApi() {
+        return mergeRequestApi;
     }
 
     public String getHostUrl() {
@@ -76,6 +80,23 @@ public class GitlabService {
 
     }
 
+    public Project getSelectedProject(String projectName) throws Exception {
+        List<ProjectWrapper> projects = getProjects();
+        Project selectedProject = null;
+
+        try {
+            for (ProjectWrapper project : projects) {
+                if (project.getProjectName().equals(projectName)) {
+                    selectedProject = project.getProject();
+                }
+            }
+        }
+        catch(Exception e){
+            throw new Exception("There is no project " + projectName);
+        }
+
+        return selectedProject;
+    }
 
     public List<MergeRequest> getMergeRequestForMember(int projectId, String memberId) throws GitLabApiException {
         List<MergeRequest> filteredList = new ArrayList<>();

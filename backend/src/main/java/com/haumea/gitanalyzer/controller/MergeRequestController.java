@@ -22,7 +22,7 @@ public class MergeRequestController {
     }
 
     @GetMapping
-    public List<MergeRequest> getAllMergeRequests() throws GitLabApiException {
+    public List<MergeRequest> getAllMergeRequests() throws Exception {
         return mergeRequestService.getAllMergeRequests();
     }
 }
