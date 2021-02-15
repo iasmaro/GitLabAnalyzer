@@ -42,7 +42,7 @@ function Profile() {
                 </Row>
             </Form>
                          
-            {tokens !== "" && <Row className="token">
+            {tokens && <Row className="token">
                 <Col sm="9">
                     {tokens}
                 </Col>
