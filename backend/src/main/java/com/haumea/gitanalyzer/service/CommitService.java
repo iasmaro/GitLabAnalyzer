@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
+import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.User;
 import com.haumea.gitanalyzer.dao.MemberRepository;
@@ -40,12 +41,12 @@ public class CommitService {
         GitlabService gitLabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
         try {
-            List<Commit> mergeRequestCommits = gitLabService.getMergeRequestCommits(projectId, mergeRequestId);
+            List<CommitWrapper> mergeRequestCommits = gitLabService.getMergeRequestCommits(projectId, mergeRequestId);
             List<CommitDTO> memberCommits= new ArrayList<>();
 
-            for(Commit currentCommit : mergeRequestCommits) {
-                if(currentCommit.getAuthorName() == memberId) {
-                    CommitDTO commit = new CommitDTO(currentCommit.getId(), currentCommit.getCommittedDate(), currentCommit.getAuthorName(), 0);
+            for(CommitWrapper currentCommit : mergeRequestCommits) {
+                if(currentCommit.getCommitData().getAuthorName() == memberId) {
+                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
                     memberCommits.add(commit);
                 }
             }
