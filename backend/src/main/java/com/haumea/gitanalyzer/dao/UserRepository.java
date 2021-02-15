@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.mongodb.core.query.UpdateDefinition;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -65,7 +64,13 @@ public class UserRepository {
             throw new Exception("User not found!");
         }
 
-        return user.getPersonalAccessToken();
+        String token = user.getPersonalAccessToken();
+
+        if(token == null){
+            throw new Exception("Token not found!");
+        }
+
+        return token;
     }
 
 }
