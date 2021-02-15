@@ -1,0 +1,32 @@
+body {
+    overflow: hidden;
+}
+
+.profile-page {
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    background-color: #acbed8;
+    color: #ffffff;
+    padding: 75px 350px;
+    margin: 0;
+    overflow: auto;
+}
+
+.profile-title {
+    background-color: #747474;
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 3px;
+}
+
+.profile-form {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.token {
+    text-align: center;
+    margin-top: 45px;
+    margin-bottom: 45px;
+    word-wrap: break-word
+}
