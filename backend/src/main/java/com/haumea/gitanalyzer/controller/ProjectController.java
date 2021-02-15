@@ -3,17 +3,19 @@ package com.haumea.gitanalyzer.controller;
 import com.haumea.gitanalyzer.dto.ProjectDTO;
 import com.haumea.gitanalyzer.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/projects")
+@Validated
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -24,12 +26,8 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<ProjectDTO> getProjects(@RequestParam String userId) {
-        try {
-            return projectService.getProjects(userId);
-        }
-        catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    public List<ProjectDTO> getProjects(@NotBlank @RequestParam String userId){
+
+        return projectService.getProjects(userId);
     }
 }
