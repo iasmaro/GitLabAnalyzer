@@ -5,10 +5,7 @@ import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.*;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 public class Main {
     // use this for debugging purposes
@@ -59,7 +56,8 @@ public class Main {
         System.out.println();
 
         for(MemberWrapper current : memberWrappers) {
-            System.out.println(current.getName() + " " + current.getMemberId());
+            System.out.println("Author is: " + current.getName() + " " + current.getMemberId());
+            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
         }
 
         System.out.println();
@@ -81,11 +79,11 @@ public class Main {
 
             System.out.println();
 
-            System.out.println("          Size of diff list is: " + current.getMergeRequestChangeData().size());
+            System.out.println("Size of diff list is: " + current.getMergeRequestChangeData().size());
 
             for(MergeRequestDiff change : current.getMergeRequestChanges()) {
 
-                System.out.println("          change is: " + change.getDiffs());
+                System.out.println("change is: " + change.getDiffs());
 
             }
 
@@ -109,6 +107,7 @@ public class Main {
     }
 
 
+
     public static void testMergeRequestFiltering(int projectId, String memberId, GitlabService app) throws GitLabApiException {
 
         List<MergeRequestWrapper> memberRequests = app.getMergeRequestForMember(projectId, memberId);
@@ -120,9 +119,7 @@ public class Main {
     }
 
     public static void testCommitFiltering(List<ProjectWrapper> projects, int projectNum, GitlabService app) throws GitLabApiException {
-        Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 1);
-
-
+        Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 20);
         Date start = calender.getTime();
 
         calender.set(2021, Calendar.MAY, 10);
@@ -132,6 +129,25 @@ public class Main {
         for(CommitWrapper current : app.filterCommitsForDateAndAuthor(projects.get(projectNum).getProject().getId(), "Andrew Ursu", start, end)) {
             System.out.println("current filtered commit: " + current.getCommitData());
         }
+    }
+
+    public static void newMRFilterTest(int projectId, String name, GitlabService app) throws GitLabApiException {
+        Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 14);
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        calender.setTimeZone(utc);
+
+        Date start = calender.getTime();
+
+        calender.set(2021, Calendar.FEBRUARY, 26);
+        calender.setTimeZone(utc);
+        Date end = calender.getTime();
+
+        List<MergeRequestWrapper> mergeRequestWrappers = app.filterMergeRequestByDate(projectId, name, start, end);
+
+        for(MergeRequestWrapper current : mergeRequestWrappers) {
+            System.out.println("data is " + current.getMergeRequestData());
+        }
+
     }
 
 

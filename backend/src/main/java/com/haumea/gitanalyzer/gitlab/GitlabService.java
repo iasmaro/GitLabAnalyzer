@@ -48,17 +48,15 @@ public class GitlabService {
 
         List<Member> members = projectApi.getAllMembers(projectId);
 
-
         List<MemberWrapper> allMembers = new ArrayList<>();
 
         for(org.gitlab4j.api.models.Member current : members) {
             MemberWrapper newMemberWrapper = new MemberWrapper(current.getName(), current.getEmail(), current.getId());
 
             allMembers.add(newMemberWrapper);
+
         }
-
         return allMembers;
-
     }
 
     public List<ProjectWrapper> getProjects() throws GitLabApiException {
@@ -76,12 +74,35 @@ public class GitlabService {
 
     }
 
+    /* TODO: Filter via the contributions a member has made to a merge request regardless of whether the member is the author */
+    // Warning: Make sure to pass dates in the UTC time format. Not doing so may give unexpected results
+    public List<MergeRequestWrapper> filterMergeRequestByDate(int projectId, String name, Date start, Date end) throws GitLabApiException {
+        MergeRequestFilter filter = new MergeRequestFilter();
 
-    public List<MergeRequestWrapper> getMergeRequestForMember(int projectId, String memberId) throws GitLabApiException {
+
+        filter.setCreatedAfter(start);
+        filter.setCreatedBefore(end);
+        filter.setProjectId(projectId);
+
+        List<MergeRequestWrapper> result = new ArrayList<>();
+
+        for(MergeRequest current : mergeRequestApi.getMergeRequests(filter)) {
+
+            MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, current);
+
+            result.add(newMergeRequest);
+        }
+
+        return result;
+
+    }
+
+
+    public List<MergeRequestWrapper> getMergeRequestForMember(int projectId, String name) throws GitLabApiException {
         List<MergeRequestWrapper> filteredList = new ArrayList<>();
 
         for(MergeRequestWrapper currentMergeRequest : getAllMergeRequests(projectId)) {
-            if(currentMergeRequest.getMergeRequestData().getAuthor().getName().equals(memberId)) {
+            if(currentMergeRequest.getMergeRequestData().getAuthor().getName().equals(name)) {
                 filteredList.add(currentMergeRequest);
             }
 
