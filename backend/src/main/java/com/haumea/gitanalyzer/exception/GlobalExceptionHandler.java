@@ -3,7 +3,7 @@
 
 package com.haumea.gitanalyzer.exception;
 
-import org.gitlab4j.api.GitLabApiException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     // handling specific exception
@@ -24,7 +25,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> methodArgumentNotValidExceptionHandling(MethodArgumentNotValidException exception,
                                                                           WebRequest request){
 
-//        System.out.println(new Exception().getStackTrace()[0].getMethodName());
+        log.info(new Exception().getStackTrace()[0].getMethodName());
 
         return buildResponseEntity(buildStandardError(exception, "Validation error",request, HttpStatus.BAD_REQUEST));
 
@@ -35,7 +36,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> constraintViolationExceptionHandling(ConstraintViolationException exception,
                                                                           WebRequest request){
 
-//        System.out.println(new Exception().getStackTrace()[0].getMethodName());
+        log.info(new Exception().getStackTrace()[0].getMethodName());
 
         return buildResponseEntity(buildStandardError(exception, "Validation error", request, HttpStatus.BAD_REQUEST));
 
@@ -45,7 +46,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> httpMessageNotReadableExceptionHandling(HttpMessageNotReadableException exception,
                                                                        WebRequest request){
 
-//        System.out.println(new Exception().getStackTrace()[0].getMethodName());
+        log.info(new Exception().getStackTrace()[0].getMethodName());
 
         return buildResponseEntity(buildStandardError(exception, "Malformed JSON request",request, HttpStatus.BAD_REQUEST));
 
@@ -55,7 +56,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> responseStatusExceptionHandling(ResponseStatusException exception,
                                                                   WebRequest request){
 
-//        System.out.println(new Exception().getStackTrace()[0].getMethodName());
+        log.info(new Exception().getStackTrace()[0].getMethodName());
 
         return buildResponseEntity(buildStandardError(exception, "Validation error",request, HttpStatus.BAD_REQUEST));
 
@@ -64,7 +65,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> resourceNotFoundHandling(ResourceNotFoundException exception, WebRequest request){
 
-//        System.out.println(new Exception().getStackTrace()[0].getMethodName());
+        log.info(new Exception().getStackTrace()[0].getMethodName());
 
         return buildResponseEntity(buildStandardError(exception, "Requested resource not found", request,
                 HttpStatus.NOT_FOUND));
@@ -74,7 +75,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> resourceAlredyExistExceptionHandling(ResourceAlredyExistException exception,
                                                                        WebRequest request){
 
-//        System.out.println(new Exception().getStackTrace()[0].getMethodName());
+        log.info(new Exception().getStackTrace()[0].getMethodName());
 
         return buildResponseEntity(buildStandardError(exception, "Resource already exists",request,
                 HttpStatus.BAD_REQUEST));
@@ -83,7 +84,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GitLabRuntimeException.class)
     public ResponseEntity<Object> gitLabRuntimeExceptionHandling(GitLabRuntimeException exception, WebRequest request){
 
-//        System.out.println(new Exception().getStackTrace()[0].getMethodName());
+        log.info(new Exception().getStackTrace()[0].getMethodName());
 
         return buildResponseEntity(buildStandardError(exception, "GitLab server error",request,
                 HttpStatus.BAD_REQUEST));
@@ -93,8 +94,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> globalExceptionHandling(Exception exception, WebRequest request){
 
-//        System.out.println(new Exception().getStackTrace()[0].getMethodName());
-//        System.out.println(exception.toString());
+        log.info(new Exception().getStackTrace()[0].getMethodName());
+        log.info(exception.toString());
 
         return buildResponseEntity(buildStandardError(exception, "Unexpected error",request,
                 HttpStatus.INTERNAL_SERVER_ERROR));
