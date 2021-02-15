@@ -129,18 +129,4 @@ public class GitlabService {
         return commitList;
     }
 
-    public List<Commit> getMergeRequestCommitsForMember(Integer projectId, Integer mergeRequestId, String memberId) throws GitLabApiException {
-        List<Commit> memberCommits = new ArrayList<>();
-
-        List<Commit> mergeRequestCommits = mergeRequestApi.getCommits(projectId, mergeRequestId);
-
-        for(Commit currentCommit : mergeRequestCommits) {
-            if(currentCommit.getAuthorName() == memberId) {
-                memberCommits.add(currentCommit);
-            }
-        }
-
-        return memberCommits;
-    }
-
 }

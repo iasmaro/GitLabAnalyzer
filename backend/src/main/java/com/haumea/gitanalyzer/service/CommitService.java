@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.service;
 
+import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.User;
 import com.haumea.gitanalyzer.dao.MemberRepository;
@@ -9,6 +10,7 @@ import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,7 +23,7 @@ public class CommitService {
         this.userService = userService;
     }
 
-    public List<Commit> getMergeRequestCommitsForMember(String userId, Integer projectId, Integer mergeRequestId, String memberId) throws Exception{
+    public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId, Integer mergeRequestId, String memberId) throws Exception{
 
         if(userId == null || projectId == null || mergeRequestId == null || memberId == null){
             throw new Exception("userId, projectId, mergeRequestId, and memberId must be provided!");
@@ -38,7 +40,17 @@ public class CommitService {
         GitlabService gitLabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
         try {
-            return gitLabService.getMergeRequestCommitsForMember(projectId, mergeRequestId, memberId);
+            List<Commit> mergeRequestCommits = gitLabService.getMergeRequestCommits(projectId, mergeRequestId);
+            List<CommitDTO> memberCommits= new ArrayList<>();
+
+            for(Commit currentCommit : mergeRequestCommits) {
+                if(currentCommit.getAuthorName() == memberId) {
+                    CommitDTO commit = new CommitDTO(currentCommit.getId(), currentCommit.getCommittedDate(), currentCommit.getAuthorName(), 0);
+                    memberCommits.add(commit);
+                }
+            }
+            return memberCommits;
+
         }
         catch (GitLabApiException e){
             throw new Exception(e.getMessage());

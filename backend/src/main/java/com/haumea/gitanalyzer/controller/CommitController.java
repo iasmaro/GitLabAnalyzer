@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.controller;
 
+import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.service.CommitService;
 import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class CommitController {
     }
 
     @GetMapping
-    public List<Commit> getMergeRequestCommitsForMember(@RequestParam String userId, @RequestParam Integer projectId, @RequestParam Integer mergeRequestId, @RequestParam String memberId) {
+    public List<CommitDTO> getMergeRequestCommitsForMember(@RequestParam String userId, @RequestParam Integer projectId, @RequestParam Integer mergeRequestId, @RequestParam String memberId) {
         try {
             return commitService.getMergeRequestCommitsForMember(userId, projectId, mergeRequestId, memberId);
         }
