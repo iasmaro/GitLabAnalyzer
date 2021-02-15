@@ -14,36 +14,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User saveUser(User user) throws Exception{
-        try {
-            userRepository.saveUser(user);
-            return user;
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+    public User saveUser(User user){
+
+        return userRepository.saveUser(user);
     }
 
-    public User updateUser(User user) throws Exception{
-        try {
-            userRepository.updateUser(user);
-            return user;
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+    public User updateUser(User user){
+
+        return userRepository.updateUser(user);
     }
 
-    public String getPersonalAccessToken(String userId) throws Exception{
-        String token;
+    public String getPersonalAccessToken(String userId) {
 
-        try{
-            token = userRepository.getPersonalAccessToken(userId);
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-
-        return token;
+        return userRepository.getPersonalAccessToken(userId);
     }
 }
