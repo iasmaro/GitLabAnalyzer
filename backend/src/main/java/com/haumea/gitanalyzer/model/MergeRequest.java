@@ -9,16 +9,16 @@ public class MergeRequest {
 
     private String userID;
     private int projectID;
-    //private List<String> memberID;
+    private String memberID;
 
     private int mergeID;
     private Date mergeDate;
     private int MRdiffScore;
 
-    public MergeRequest(String userID, int projectID, int mergeID, Date mergeDate, int MRdiffScore) {
+    public MergeRequest(String userID, int projectID, String memberID, int mergeID, Date mergeDate, int MRdiffScore) {
         this.userID = userID;
         this.projectID = projectID;
-        //this.memberID = memberID;
+        this.memberID = memberID;
         this.mergeID = mergeID;
         this.mergeDate = mergeDate;
         this.MRdiffScore = MRdiffScore;
@@ -32,9 +32,9 @@ public class MergeRequest {
         return projectID;
     }
 
-    /*public List<String> getMemberID() {
+    public String getMemberID() {
         return memberID;
-    }*/
+    }
 
     public int getMergeID() {
         return mergeID;

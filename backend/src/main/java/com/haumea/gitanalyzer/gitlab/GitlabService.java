@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.gitlab;
 
 import org.gitlab4j.api.*;
 import org.gitlab4j.api.models.*;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +27,7 @@ public class GitlabService {
         this.hostUrl = hostUrl;
         this.personalAccessToken = personalAccessToken;
 
-        this.gitLabApi = new GitLabApi("https://csil-git1.cs.surrey.sfu.ca/", "thDxkfQVmkRUJP9mKGsm");
+        this.gitLabApi = new GitLabApi(hostUrl, personalAccessToken);
         this.mergeRequestApi = new MergeRequestApi(gitLabApi);
     }
 
