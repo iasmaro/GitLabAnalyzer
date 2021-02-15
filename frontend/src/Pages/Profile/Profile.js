@@ -5,8 +5,8 @@ import './Profile.css';
 function Profile() {
 
     //Adapted from: https://www.code-boost.com/video/ultimate-react-todo-list/
-    const [tokens, setTokens] = useState("");
-    const [token, setToken] = useState("");
+    const [tokens, setTokens] = useState('');
+    const [token, setToken] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
