@@ -11,12 +11,26 @@ import java.util.List;
 public class MemberWrapper {
     private String studentName;
     private String email;
-    private String memberId;
+    private String username;
+    private int memberId;
+
 
     private int codeScore;
     private int codeReviewScore;
 
     private List<String> aliases;
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public int getMemberId() {
+        return memberId;
+    }
+
+    public List<String> getAliases() {
+        return aliases;
+    }
 
     public String getName() {
         return studentName;
@@ -26,8 +40,8 @@ public class MemberWrapper {
         return email;
     }
 
-    public String getMemberId() {
-        return memberId;
+    public String getUsername() {
+        return username;
     }
 
     public int getCodeScore() {
@@ -42,10 +56,11 @@ public class MemberWrapper {
         aliases.add(name);
     }
 
-    public MemberWrapper(String name, String email, String id) {
+    public MemberWrapper(String name, String email, String username, int memberId) {
         this.studentName = name;
         this.email = email;
-        this.memberId = id;
+        this.username = username;
+        this.memberId = memberId;
 
         this.aliases = new ArrayList<>();
     }

@@ -36,7 +36,7 @@ public class MemberService {
         try {
             List<MemberWrapper> gitlabMembers = gitlabService.getMembers(projectId);
             for(MemberWrapper current: gitlabMembers){
-                members.add(current.getMemberId());
+                members.add(current.getUsername());
             }
 
             return members;
