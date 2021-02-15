@@ -2,10 +2,10 @@ import React from 'react';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { parseString, processors } from 'react-native-xml2js';
 
-import About from './Pages/About/About';
-import Home from './Pages/Home/Home';
-import Dashboard from './Pages/Dashboard/Dashboard';
-import Navbar from './Components/Navbar/Navbar';
+import About from 'Pages/About/About';
+import Home from 'Pages/Home/Home';
+import Dashboard from 'Pages/Dashboard/Dashboard';
+import Navbar from 'Components/Navbar/Navbar';
 
 import { useUserDispatch } from './UserContext';
 import ProtectedRoute from './ProtectedRoute';
