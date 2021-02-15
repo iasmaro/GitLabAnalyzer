@@ -11,11 +11,15 @@ function Profile() {
     const handleSubmit = (event) => {
         event.preventDefault();
         setTokens(token)
-        setToken("")
+        setToken('')
+    }
+
+    const handleChange = (event) => {
+        setToken(event.target.value)
     }
 
     const handleDelete = () => {
-        setTokens("");
+        setTokens('');
     }
 
     return (
@@ -30,7 +34,7 @@ function Profile() {
             <Form className="profile-form" onSubmit={handleSubmit}>                
                 <Row>
                     <Col sm="9">
-                        <Form.Control required type="text" placeholder="Enter access token" value={token} onChange={(event) => setToken(event.target.value)}/>
+                        <Form.Control required type="text" placeholder="Enter access token" value={token} onChange={handleChange}/>
                     </Col>
                     <Col sm="3">
                         <Button variant="success" type="submit">Save Token</Button>
