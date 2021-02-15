@@ -5,23 +5,17 @@ import './Profile.css';
 function Profile() {
 
     //Adapted from: https://www.code-boost.com/video/ultimate-react-todo-list/
-    const [tokens, setTokens] = useState([]);
+    const [tokens, setTokens] = useState("");
     const [token, setToken] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
-    
-        const newToken = {
-            id: new Date().getTime(),
-            text: token
-        }
-        setTokens([...tokens].concat(newToken))
+        setTokens(token)
         setToken("")
     }
 
-    const handleDelete = (id) => {
-        const updatedTokens = [...tokens].filter((token) => token.id !== id);
-        setTokens(updatedTokens);
+    const handleDelete = () => {
+        setTokens("");
     }
 
     return (
@@ -43,18 +37,15 @@ function Profile() {
                     </Col>
                 </Row>
             </Form>
-                        
-            {tokens.map((token) => 
-                <Row className="token" key={token.id}>
-                    <Col sm="9">
-                        {token.text}
-                    </Col>
-                    <Col sm="3">
-                        <Button variant="danger" type="submit" onClick={() => handleDelete(token.id)}>Delete</Button>
-                    </Col>
-                    
-                </Row>
-            )}
+                         
+            {tokens !== "" && <Row className="token">
+                <Col sm="9">
+                    {tokens}
+                </Col>
+                <Col sm="3">
+                    <Button variant="danger" type="submit" onClick={() => handleDelete(token)}>Delete</Button>
+                </Col>
+            </Row>}
         </div>
     )
 }
