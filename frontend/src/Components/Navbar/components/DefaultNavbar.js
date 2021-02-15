@@ -1,6 +1,8 @@
 import React from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
 
+import { config } from 'Constants/constants';
+
 const DefaultNavbar = ()=> {
 
     return (
@@ -9,7 +11,7 @@ const DefaultNavbar = ()=> {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
                 <Nav className="nav">
-                    <Nav.Link href="https://cas.sfu.ca/cas/login?service=http://localhost:3000/">Sign In</Nav.Link>
+                    <Nav.Link href={config.SFU_LOGIN_URL}>Sign In</Nav.Link>
                     <Nav.Link href="/About/">About</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
