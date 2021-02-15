@@ -7,7 +7,7 @@ import Home from './Pages/Home/Home';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import Navbar from './Components/Navbar/Navbar';
 
-import { useUserState, useUserDispatch } from './UserContext';
+import { useUserDispatch } from './UserContext';
 import ProtectedRoute from './ProtectedRoute';
 import ProtectedPage from './ProtectedPage';
 
