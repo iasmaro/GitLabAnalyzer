@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.ProjectDTO;
+import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.ProjectWrapper;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
@@ -21,19 +22,9 @@ public class ProjectService {
         this.userService = userService;
     }
 
-    public List<ProjectDTO> getProjects(String userId) throws Exception{
+    public List<ProjectDTO> getProjects(String userId) throws GitLabRuntimeException {
 
-        if(userId == null){
-            throw new Exception("userId must be provided!");
-        }
-
-        String token;
-        try {
-            token = userService.getPersonalAccessToken(userId);
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+        String token = userService.getPersonalAccessToken(userId);
 
         GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
@@ -50,7 +41,7 @@ public class ProjectService {
             return projects;
         }
         catch (GitLabApiException e){
-            throw new Exception(e.getMessage());
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
 
     }

@@ -1,21 +1,43 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
-import Home from './Pages/Home/Home'
-import About from './Pages/About/About';
-import Profile from './Pages/Profile/Profile';
-import Dashboard from './Pages/Dashboard/Dashboard';
-import Navbar from './Components/Navbar/Navbar';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+
+import About from 'Pages/About/About';
+import Home from 'Pages/Home/Home';
+import Navbar from 'Components/Navbar/Navbar';
+import getUserData from 'Utils/getUserData';
+
+import { useUserDispatch } from './UserContext';
+import ProtectedRoute from './ProtectedRoute';
+import LogoutPage from './LogoutPage';
+
 
 function App() {
+  const url = useLocation();
+  const history = useHistory();
+  const dispatch = useUserDispatch();
+  
+  const { search } = url || {};
+  let ticket;
+  if (search) {
+    ticket = search.split('ticket=')[1];
+    getUserData(ticket, dispatch);
+    history.replace({
+      search: '',
+    })
+  }
+
+
   return (
     <div className="App">
-
       <Navbar />
-      <Route exact path="/" component={Home}></Route>
-      <Route exact path="/about" component={About}></Route>
-      <Route exact path="/profile" component={Profile}></Route>
-      <Route exact path="/dashboard" component={Dashboard}/>
-
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/about" component={About} />
+        <ProtectedRoute exact path="/Configurations" Component={Home} />
+        <ProtectedRoute exact path="/Reports" Component={Home} />
+        <ProtectedRoute exact path="/Profile" Component={Home} />
+        <LogoutPage exact path="/Logout" />
+      </Switch>
     </div>
   );
 }

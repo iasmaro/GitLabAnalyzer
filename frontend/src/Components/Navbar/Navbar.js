@@ -1,21 +1,19 @@
 import React from 'react';
-import {Nav, Navbar} from 'react-bootstrap';
+
+import { useUserState } from 'UserContext';
+
+import DefaultNavbar from './components/DefaultNavbar';
+import FullNavbar from './components/FullNavbar';
 import './Navbar.css';
 
-const NavbarComponent =(prop)=> {
+const Navbar = ()=> {
+    const isLoggedIn = useUserState();
 
-    return (
-        <Navbar variant='primary' expand="sm">
-            <Navbar.Brand href="/">GitLab Analyzer</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
-                <Nav className="nav">
-                    <Nav.Link href="/">Sign In</Nav.Link>
-                    <Nav.Link href="/About">About</Nav.Link>
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
-    )   
+    return isLoggedIn ? (
+        <FullNavbar />
+    ) : (
+        <DefaultNavbar />
+    )
 }
 
-export default NavbarComponent
+export default Navbar

@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.MemberRepository;
+import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
@@ -24,33 +25,24 @@ public class MemberService {
         this.userService = userService;
     }
 
-    public List<String> getMembers(String userId, Integer projectId) throws Exception{
+    public List<String> getMembers(String userId, Integer projectId) throws GitLabRuntimeException {
 
-        if(userId == null || projectId == null){
-            throw new Exception("useId and projectId must be provided!");
-        }
-
-        String token;
-        try {
-            token = userService.getPersonalAccessToken(userId);
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+        String token = userService.getPersonalAccessToken(userId);
 
         GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
         List<String> members = new ArrayList<>();
+
         try {
             List<MemberWrapper> gitlabMembers = gitlabService.getMembers(projectId);
             for(MemberWrapper current: gitlabMembers){
-                members.add(current.getMemberId());
+                members.add(current.getUsername());
             }
 
             return members;
         }
         catch(GitLabApiException e){
-            throw new Exception(e.getMessage());
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
     }
 
