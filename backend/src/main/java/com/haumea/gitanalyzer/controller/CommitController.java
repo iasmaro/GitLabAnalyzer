@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -23,13 +25,12 @@ public class CommitController {
     }
 
     @GetMapping
-    public List<CommitDTO> getMergeRequestCommitsForMember(@RequestParam String userId, @RequestParam Integer projectId, @RequestParam Integer mergeRequestId, @RequestParam String memberId) {
-        try {
-            return commitService.getMergeRequestCommitsForMember(userId, projectId, mergeRequestId, memberId);
-        }
-        catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    public List<CommitDTO> getMergeRequestCommitsForMember(@RequestParam @NotBlank String userId,
+                                                           @RequestParam @NotNull Integer projectId,
+                                                           @RequestParam @NotNull Integer mergeRequestId,
+                                                           @RequestParam @NotBlank String memberId) {
+
+        return commitService.getMergeRequestCommitsForMember(userId, projectId, mergeRequestId, memberId);
     }
 }
 

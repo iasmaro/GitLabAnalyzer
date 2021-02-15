@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
+import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.User;
@@ -24,19 +25,10 @@ public class CommitService {
         this.userService = userService;
     }
 
-    public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId, Integer mergeRequestId, String memberId) throws Exception{
+    public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
+                                                           Integer mergeRequestId, String memberId) throws GitLabRuntimeException {
 
-        if(userId == null || projectId == null || mergeRequestId == null || memberId == null){
-            throw new Exception("userId, projectId, mergeRequestId, and memberId must be provided!");
-        }
-
-        String token;
-        try {
-            token = userService.getPersonalAccessToken(userId);
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+        String token = userService.getPersonalAccessToken(userId);
 
         GitlabService gitLabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
@@ -54,7 +46,7 @@ public class CommitService {
 
         }
         catch (GitLabApiException e){
-            throw new Exception(e.getMessage());
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
     }
 }
