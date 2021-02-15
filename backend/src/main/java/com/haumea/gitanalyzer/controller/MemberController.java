@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -33,14 +34,16 @@ public class MemberController {
     }
 
     @PostMapping("alias")
-    public void mapAliasToMember(@RequestParam List<MemberDTO> membersAndAliases){
+    public void mapAliasToMember(@Valid @RequestBody List<MemberDTO> membersAndAliases) {
 
-        try{
-            memberService.mapAliasToMember(membersAndAliases);
+        for(MemberDTO memberDTO : membersAndAliases){
+            if(memberDTO.getMemberId() == null || memberDTO.getMemberId().trim().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "getMemberId cannot be null, empty or blank.");
+            }
         }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+
+        memberService.mapAliasToMember(membersAndAliases);
     }
 }
 

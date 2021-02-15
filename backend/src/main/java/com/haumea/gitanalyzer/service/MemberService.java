@@ -48,13 +48,9 @@ public class MemberService {
         }
     }
 
-    public void mapAliasToMember(List<MemberDTO> membersAndAliases) throws Exception{
+    public List<MemberDTO> mapAliasToMember(List<MemberDTO> membersAndAliases){
 
-        if(membersAndAliases == null){
-            throw new Exception("List of MemberDTO must be provided!");
-        }
-
-
+        return memberRepository.mapAliasToMember(membersAndAliases);
 
     }
 
