@@ -1,12 +1,14 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.MemberRepository;
+import com.haumea.gitanalyzer.dto.MemberDTO;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,16 @@ public class MemberService {
         catch(GitLabApiException e){
             throw new Exception(e.getMessage());
         }
+    }
+
+    public void mapAliasToMember(List<MemberDTO> membersAndAliases) throws Exception{
+
+        if(membersAndAliases == null){
+            throw new Exception("List of MemberDTO must be provided!");
+        }
+
+
+
     }
 
 }
