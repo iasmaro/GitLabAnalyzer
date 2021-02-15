@@ -32,8 +32,6 @@ public class CommitWrapper {
 
         this.commitData = commitData;
         this.codeChanges = commitApi.getDiff(projectId, commitData.getId());
-
-
     }
 }
 

@@ -169,6 +169,18 @@ public class GitlabService {
         return commitList;
 
     }
+    public List<CommitWrapper> filterCommitsForDate(int projectId, Date start, Date end) throws GitLabApiException {
+        CommitsApi commitsApi = new CommitsApi(gitLabApi);
+        List<CommitWrapper> commitList = new ArrayList<>();
+
+        for(Commit currentCommit : commitsApi.getCommits(projectId, "master", start, end)) {
+            CommitWrapper newCommit = new CommitWrapper(gitLabApi, projectId, currentCommit);
+            commitList.add(newCommit);
+        }
+
+        return commitList;
+
+    }
 
     public List<CommitWrapper> getAllCommits(int projectId) throws GitLabApiException {
         CommitsApi commitsApi = new CommitsApi(gitLabApi);
