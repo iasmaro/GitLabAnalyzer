@@ -41,7 +41,6 @@ public class MemberController {
         catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
-        
     }
-
 }
+
