@@ -11,7 +11,7 @@ import java.util.List;
 public class MergeRequestWrapper {
     private MergeRequest mergeRequestData;
 
-    private List<MergeRequestDiff> mergeRequestChangeData; // used to create mergeRequestChanges in calling code
+    private List<MergeRequestDiff> mergeRequestVersion; // used to create mergeRequestChanges in calling code
     private List<MergeRequestDiff> mergeRequestChanges;
 
 
@@ -22,8 +22,8 @@ public class MergeRequestWrapper {
         return mergeRequestChanges;
     }
 
-    public List<MergeRequestDiff> getMergeRequestChangeData() {
-        return mergeRequestChangeData;
+    public List<MergeRequestDiff> getMergeRequestVersion() {
+        return mergeRequestVersion;
     }
 
     public void addMergeRequestChange(MergeRequestDiff newDiff) {
@@ -32,7 +32,7 @@ public class MergeRequestWrapper {
 
     public MergeRequestWrapper(MergeRequestApi mergeRequestApi, int projectId, MergeRequest mergeRequestData) throws GitLabApiException {
         this.mergeRequestData = mergeRequestData;
-        this.mergeRequestChangeData = mergeRequestApi.getMergeRequestDiffs(projectId, this.mergeRequestData.getIid());
+        this.mergeRequestVersion = mergeRequestApi.getMergeRequestDiffs(projectId, this.mergeRequestData.getIid());
 
         mergeRequestChanges = new ArrayList<>();
     }

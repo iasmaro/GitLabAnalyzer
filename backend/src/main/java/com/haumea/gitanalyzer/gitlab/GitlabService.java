@@ -124,12 +124,11 @@ public class GitlabService {
 
             MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, currentMR);
 
-            for(int i=0; i<newMergeRequest.getMergeRequestChangeData().size(); i++) {
-                MergeRequestDiff diff = mergeRequestApi.getMergeRequestDiff(projectId, currentMR.getIid(), newMergeRequest.getMergeRequestChangeData().get(i).getId());
-                newMergeRequest.addMergeRequestChange(diff);
+            MergeRequestDiff diff = mergeRequestApi.getMergeRequestDiff(projectId, currentMR.getIid(), newMergeRequest.getMergeRequestVersion().get(0).getId());
+            newMergeRequest.addMergeRequestChange(diff);
 
-                mergeRequestList.add(newMergeRequest);
-            }
+
+            mergeRequestList.add(newMergeRequest);
 
         }
         return mergeRequestList;

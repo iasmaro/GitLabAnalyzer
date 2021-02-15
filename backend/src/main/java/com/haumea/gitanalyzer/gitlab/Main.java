@@ -57,7 +57,7 @@ public class Main {
 
         for(MemberWrapper current : memberWrappers) {
             System.out.println("Author is: " + current.getName() + " " + current.getMemberId());
-            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
+//            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
         }
 
         System.out.println();
@@ -79,7 +79,7 @@ public class Main {
 
             System.out.println();
 
-            System.out.println("Size of diff list is: " + current.getMergeRequestChangeData().size());
+            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
 
             for(MergeRequestDiff change : current.getMergeRequestChanges()) {
 
