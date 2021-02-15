@@ -13,15 +13,18 @@ public class MergeRequest {
 
     private int mergeID;
     private Date mergeDate;
-    private int MRdiffScore;
+    private double MRScore;
+    private double memberScore;
 
-    public MergeRequest(String userID, int projectID, String memberID, int mergeID, Date mergeDate, int MRdiffScore) {
+
+    public MergeRequest(String userID, int projectID, String memberID, int mergeID, Date mergeDate, double MRScore, double memberScore) {
         this.userID = userID;
         this.projectID = projectID;
         this.memberID = memberID;
         this.mergeID = mergeID;
         this.mergeDate = mergeDate;
-        this.MRdiffScore = MRdiffScore;
+        this.MRScore = MRScore;
+        this.memberScore = memberScore;
     }
 
     public String getUserID() {
@@ -44,8 +47,12 @@ public class MergeRequest {
         return mergeDate;
     }
 
-    public int getMRdiffScore() {
-        return MRdiffScore;
+    public double getMRScore() {
+        return MRScore;
+    }
+
+    public double getMemberScore() {
+        return memberScore;
     }
 
     public int getSumOfCommitScore(String userID){

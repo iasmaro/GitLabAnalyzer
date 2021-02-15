@@ -3,10 +3,9 @@ package com.haumea.gitanalyzer.gitlab;
 import org.gitlab4j.api.CommitsApi;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.Commit;
-import org.gitlab4j.api.models.Diff;
-import org.gitlab4j.api.models.MergeRequest;
-import org.gitlab4j.api.models.Project;
+import org.gitlab4j.api.MergeRequestApi;
+import org.gitlab4j.api.models.*;
+import org.springframework.util.StringUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -116,13 +115,42 @@ public class Main {
         }
     }
 
+    private static double getMRDifScore(GitlabService gitlabService, int projectID, int mergeRequestIiD) throws GitLabApiException {
 
-    public static void main(String[] args) throws GitLabApiException {
-        GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
+        MergeRequestApi mergeRequestApi = gitlabService.getMergeRequestApi();
+        MergeRequest mergeRequest = mergeRequestApi.getMergeRequest(projectID, mergeRequestIiD);
+        List<Commit> commits = mergeRequestApi.getCommits(projectID, mergeRequestIiD);
+        CommitsApi commitsApi = gitlabService.getGitLabApi().getCommitsApi();
+        double MRDifScore = 0;
+        int insertions = 0;
+        int deletions = 0;
+
+        for(Commit commit : commits){
+
+            List<Diff> newCode = commitsApi.getDiff(projectID, commit.getId());
+            for (Diff code : newCode) {
+
+                insertions = insertions + StringUtils.countOccurrencesOf(code.getDiff(), "\n+");
+                deletions = deletions + StringUtils.countOccurrencesOf(code.getDiff(), "\n-");
+            }
+
+        }
+
+        MRDifScore = insertions + deletions*0.2;
+        System.out.println(insertions);
+        System.out.println(deletions);
+        System.out.println(MRDifScore);
+
+        return MRDifScore;
+    }
+
+    public static void main(String[] args) throws Exception {
+        GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "thDxkfQVmkRUJP9mKGsm");
         GitlabService haumeaTeamGitlabService = new GitlabService("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 
+        printCommits("GitLabAnalyzer","https://csil-git1.cs.surrey.sfu.ca/", "thDxkfQVmkRUJP9mKGsm");
 
-        printAllProjectData(csil, 5);
+        //printAllProjectData(csil, 5);
     }
 }
 
