@@ -43,7 +43,7 @@ function Profile() {
                     {tokens}
                 </Col>
                 <Col sm="3">
-                    <Button variant="danger" type="submit" onClick={() => handleDelete(token)}>Delete</Button>
+                    <Button variant="danger" type="submit" onClick={() => handleDelete()}>Delete</Button>
                 </Col>
             </Row>}
         </div>
