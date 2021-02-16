@@ -38,7 +38,7 @@ public class MergeRequestService {
         return false;
     }
 
-    private double getMRDiffScoreAndMemberScore(List<CommitWrapper> commits, String memberID) throws GitLabRuntimeException {
+    private double getMRDiffScoreAndMemberScore(List<CommitWrapper> commits, String memberID){
 
         double MRDifScore = 0;
         int insertions = 0;
@@ -86,27 +86,25 @@ public class MergeRequestService {
         return calendar.getTime();
     }
 
-    public List<MergeRequestDTO> getAllMergeRequests(String userID, int projectID, String memberID, Date start, Date end){
+    public List<MergeRequestDTO> getAllMergeRequests(String userID, int projectID, String memberID, Date start, Date end) throws GitLabRuntimeException{
 
         String accessToken = userService.getPersonalAccessToken(userID);
 
         GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, accessToken);
 
         Project project = null;
+        List<MergeRequestWrapper> mergeRequestsList = null;
+
         try {
             project = gitlabService.getSelectedProject(projectID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        List<MergeRequestWrapper> mergeRequestsList = null;
-        try {
 
             Date convertedStartDate = convertPSTtoUTC(start);
             Date convertedEndDate = convertPSTtoUTC(end);
 
             mergeRequestsList = gitlabService.filterMergeRequestByDate(projectID, project.getName(), convertedStartDate, convertedEndDate);
+
         } catch (GitLabApiException e) {
+
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
 
@@ -125,7 +123,7 @@ public class MergeRequestService {
             try {
                 commits = gitlabService.getMergeRequestCommits(projectID, mergeRequestIiD);
             } catch (GitLabApiException e) {
-                e.printStackTrace();
+                throw new GitLabRuntimeException(e.getLocalizedMessage());
             }
 
             double memberScore = 0;
