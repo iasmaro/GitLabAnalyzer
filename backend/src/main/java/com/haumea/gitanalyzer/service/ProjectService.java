@@ -33,8 +33,12 @@ public class ProjectService {
             List<ProjectDTO> projects = new ArrayList<>();
 
             for(ProjectWrapper current: gitlabProjects){
-                ProjectDTO project = new ProjectDTO(current.getProjectName(), current.getProject().getId(),
-                        current.getProject().getWebUrl());
+                ProjectDTO project = new ProjectDTO(
+                        current.getProjectName(),
+                        current.getProject().getId(),
+                        current.getProject().getWebUrl(),
+                        current.getProject().getCreatedAt(),
+                        current.getProject().getLastActivityAt());
                 projects.add(project);
             }
 
