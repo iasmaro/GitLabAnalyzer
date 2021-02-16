@@ -56,13 +56,13 @@ public class MemberService {
 
     }
 
-    // leave for next iteration
-//    public List<Member> getMembersAndAliases(String userId, Integer projectId) throws GitLabRuntimeException{
-//
-//        List<String> members = getMembers(userId, projectId);
-//
-//        return memberRepository.getMembersAndAliases(members);
-//
-//    }
+
+    public List<Member> getMembersAndAliases(String userId, Integer projectId) throws GitLabRuntimeException{
+
+        List<String> members = getMembers(userId, projectId);
+
+        return memberRepository.getMembersAndAliases(members);
+
+    }
 
 }
