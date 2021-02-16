@@ -78,19 +78,19 @@ public class GitlabService {
 
     }
 
-    public Project getSelectedProject(int projectID) throws Exception {
-        List<ProjectWrapper> projects = getProjects();
+    public Project getSelectedProject(int projectID) {
+        List<ProjectWrapper> projects = null;
+        try {
+            projects = getProjects();
+        } catch (GitLabApiException e) {
+            e.printStackTrace();
+        }
         Project selectedProject = null;
 
-        try {
-            for (ProjectWrapper project : projects) {
-                if (project.getProject().getId() == projectID) {
-                    selectedProject = project.getProject();
-                }
+        for (ProjectWrapper project : projects) {
+            if (project.getProject().getId() == projectID) {
+                selectedProject = project.getProject();
             }
-        }
-        catch(Exception e){
-            throw new Exception("There is no project " + projectID);
         }
 
         return selectedProject;
@@ -110,6 +110,10 @@ public class GitlabService {
         List<MergeRequestWrapper> result = new ArrayList<>();
 
         for(MergeRequest current : mergeRequestApi.getMergeRequests(filter)) {
+
+            if(!current.getMergeStatus().equals("merged")){
+                continue;
+            }
 
             MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, current);
 

@@ -4,27 +4,16 @@ import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
-import com.haumea.gitanalyzer.model.MergeRequest;
-import com.haumea.gitanalyzer.model.User;
+import com.haumea.gitanalyzer.dto.MergeRequestDTO;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
-import org.gitlab4j.api.CommitsApi;
-import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.MergeRequestApi;
-import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
-import org.gitlab4j.api.models.MergeRequestDiff;
 import org.gitlab4j.api.models.Project;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MergeRequestService {
@@ -84,36 +73,69 @@ public class MergeRequestService {
         return MRDifScore;
     }
 
-    public List<MergeRequest> getAllMergeRequests(String userID, int projectID, String memberID, Date start, Date end) throws Exception {
+    private Date convertPSTtoUTC(Date date){
+
+        int convertedYear = date.getYear() + 1900;
+        int convertMonth = date.getMonth() - 1;
+        int convertedDate = date.getDate();
+
+        Calendar calendar = new GregorianCalendar(convertedYear, convertMonth, convertedDate);
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        calendar.setTimeZone(utc);
+
+        return calendar.getTime();
+    }
+
+    public List<MergeRequestDTO> getAllMergeRequests(String userID, int projectID, String memberID, Date start, Date end){
 
         String accessToken = userService.getPersonalAccessToken(userID);
 
         GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, accessToken);
 
         Project project = null;
-        project = gitlabService.getSelectedProject(projectID);
+        try {
+            project = gitlabService.getSelectedProject(projectID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        List<MergeRequestWrapper> mergeRequestsList = gitlabService.filterMergeRequestByDate(projectID, project.getName(), start, end);
+        List<MergeRequestWrapper> mergeRequestsList = null;
+        try {
 
-        List<MergeRequest> normalizedMergeRequestList = new ArrayList<>();
+            Date convertedStartDate = convertPSTtoUTC(start);
+            Date convertedEndDate = convertPSTtoUTC(end);
+
+            mergeRequestsList = gitlabService.filterMergeRequestByDate(projectID, project.getName(), convertedStartDate, convertedEndDate);
+        } catch (GitLabApiException e) {
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
+
+        List<MergeRequestDTO> normalizedMergeRequestDTOList = new ArrayList<>();
 
         for(int i = 0; i < mergeRequestsList.size(); i++){
             org.gitlab4j.api.models.MergeRequest mergeRequest = mergeRequestsList.get(i).getMergeRequestData();
 
             int mergeRequestIiD = mergeRequest.getIid();
-            int mergeID = mergeRequest.getId();
-            Date mergeDate = mergeRequest.getMergedAt();
+            int mergeIiD = mergeRequest.getIid();
+            Date mergedDate = mergeRequest.getMergedAt();
+            Date createdDate = mergeRequest.getCreatedAt();
+            Date updatedDate = mergeRequest.getUpdatedAt();
 
-            List<CommitWrapper> commits = gitlabService.getMergeRequestCommits(projectID, mergeRequestIiD);
+            List<CommitWrapper> commits = null;
+            try {
+                commits = gitlabService.getMergeRequestCommits(projectID, mergeRequestIiD);
+            } catch (GitLabApiException e) {
+                e.printStackTrace();
+            }
 
             double memberScore = 0;
             double MRScore = Math.round(getMRDiffScoreAndMemberScore(commits, memberID)*10)/10.0;
             memberScore = Math.round(memberScore*10)/10.0;
 
-            MergeRequest normalizedMR = new MergeRequest(mergeID, mergeDate, MRScore, memberScore);
-            normalizedMergeRequestList.add(normalizedMR);
+            MergeRequestDTO normalizedMR = new MergeRequestDTO(mergeIiD, mergedDate, createdDate, updatedDate, MRScore, memberScore);
+            normalizedMergeRequestDTOList.add(normalizedMR);
         }
 
-        return normalizedMergeRequestList;
+        return normalizedMergeRequestDTOList;
     }
 }
