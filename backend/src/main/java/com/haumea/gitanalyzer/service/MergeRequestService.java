@@ -120,7 +120,7 @@ public class MergeRequestService {
             double MRScore = Math.round(getMRDiffScoreAndMemberScore(commits, memberID)*10)/10.0;
             memberScore = Math.round(memberScore*10)/10.0;
 
-            MergeRequest normalizedMR = new MergeRequest(userID, projectID, memberID, mergeID, mergeDate, MRScore, memberScore);
+            MergeRequest normalizedMR = new MergeRequest(mergeID, mergeDate, MRScore, memberScore);
             normalizedMergeRequestList.add(normalizedMR);
         }
 

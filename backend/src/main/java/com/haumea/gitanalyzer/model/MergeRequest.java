@@ -7,36 +7,17 @@ import java.util.List;
 
 public class MergeRequest {
 
-    private String userID;
-    private int projectID;
-    private String memberID;
-
     private int mergeID;
     private Date mergeDate;
     private double MRScore;
     private double memberScore;
 
 
-    public MergeRequest(String userID, int projectID, String memberID, int mergeID, Date mergeDate, double MRScore, double memberScore) {
-        this.userID = userID;
-        this.projectID = projectID;
-        this.memberID = memberID;
+    public MergeRequest( int mergeID, Date mergeDate, double MRScore, double memberScore) {
         this.mergeID = mergeID;
         this.mergeDate = mergeDate;
         this.MRScore = MRScore;
         this.memberScore = memberScore;
-    }
-
-    public String getUserID() {
-        return userID;
-    }
-
-    public int getProjectID() {
-        return projectID;
-    }
-
-    public String getMemberID() {
-        return memberID;
     }
 
     public int getMergeID() {
