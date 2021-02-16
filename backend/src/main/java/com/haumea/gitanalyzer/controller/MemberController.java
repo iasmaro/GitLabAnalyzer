@@ -37,22 +37,8 @@ public class MemberController {
     @PostMapping("alias")
     public void mapAliasToMember(@Valid @RequestBody List<MemberDTO> membersAndAliases) {
 
-        for(MemberDTO memberDTO : membersAndAliases){
-            if(memberDTO.getMemberId() == null || memberDTO.getMemberId().trim().isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "getMemberId cannot be null, empty or blank.");
-            }
-        }
-
         memberService.mapAliasToMember(membersAndAliases);
     }
 
-    // leave for next iteration
-//    @GetMapping("alias")
-//    public List<Member>  getMembersAndAliases(@RequestParam @NotBlank String userId,
-//                                              @RequestParam @NotNull Integer projectId){
-//
-//        return memberService.getMembersAndAliases(userId, projectId);
-//    }
 }
 

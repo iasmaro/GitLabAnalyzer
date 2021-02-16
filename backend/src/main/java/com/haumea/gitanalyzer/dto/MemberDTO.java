@@ -1,8 +1,10 @@
 package com.haumea.gitanalyzer.dto;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 public class MemberDTO {
+    @NotBlank
     private String memberId;
     private List<String> alias;
 
