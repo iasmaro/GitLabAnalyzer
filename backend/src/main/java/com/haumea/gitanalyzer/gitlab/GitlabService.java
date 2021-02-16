@@ -34,6 +34,10 @@ public class GitlabService {
         return gitLabApi;
     }
 
+    public MergeRequestApi getMergeRequestApi(){
+        return mergeRequestApi;
+    }
+
     public String getHostUrl() {
         return hostUrl;
     }
@@ -73,6 +77,25 @@ public class GitlabService {
         return projects;
 
     }
+
+    public Project getSelectedProject(int projectID) throws Exception {
+        List<ProjectWrapper> projects = getProjects();
+        Project selectedProject = null;
+
+        try {
+            for (ProjectWrapper project : projects) {
+                if (project.getProject().getId() == projectID) {
+                    selectedProject = project.getProject();
+                }
+            }
+        }
+        catch(Exception e){
+            throw new Exception("There is no project " + projectID);
+        }
+
+        return selectedProject;
+    }
+
 
     /* TODO: Filter via the contributions a member has made to a merge request regardless of whether the member is the author */
     // Warning: Make sure to pass dates in the UTC time format. Not doing so may give unexpected results

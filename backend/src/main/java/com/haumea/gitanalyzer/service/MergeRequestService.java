@@ -1,7 +1,11 @@
 package com.haumea.gitanalyzer.service;
 
+import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
+import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.MergeRequest;
+import com.haumea.gitanalyzer.model.User;
+import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.CommitsApi;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
@@ -23,73 +27,64 @@ import java.util.List;
 
 @Service
 public class MergeRequestService {
+    private final UserService userService;
+    private double memberScore;
 
-    private GitlabService gitlabService;
-
-    private List<String> getAllCommitters(MergeRequestApi mergeRequestApi, int projectID, int mergeRequestID) throws GitLabApiException {
-
-        List<String> members = new ArrayList<>();
-
-        List<Commit> commits = mergeRequestApi.getCommits(projectID, mergeRequestID);
-        for(int i = 0; i < commits.size(); i++){
-            Commit commit = commits.get(i);
-            String member = commit.getCommitterName();
-            if(!members.contains(member)){
-                members.add(member);
-            }
-        }
-
-        return members;
+    @Autowired
+    public MergeRequestService(UserService userService) {
+        this.userService = userService;
+        memberScore = 0;
     }
 
-    private double getMRDiffScore(int projectID, int mergeRequestIiD) throws GitLabApiException {
+    private List<org.gitlab4j.api.models.MergeRequest> filterMergedMRsForDate(GitlabService gitlabService, Project project, Date start, Date end) throws GitLabApiException {
 
         MergeRequestApi mergeRequestApi = gitlabService.getMergeRequestApi();
-        List<Commit> commits = mergeRequestApi.getCommits(projectID, mergeRequestIiD);
-        CommitsApi commitsApi = gitlabService.getGitLabApi().getCommitsApi();
+        List<org.gitlab4j.api.models.MergeRequest> mergeRequestsList = mergeRequestApi.getMergeRequests(project);
 
-        double MRDifScore = 0;
-        int insertions = 0;
-        int deletions = 0;
+        List<org.gitlab4j.api.models.MergeRequest> filteredMrs = new ArrayList<>();
 
-        for(Commit commit : commits){
+        for(int i = 0; i < mergeRequestsList.size(); i++){
 
-            List<Diff> newCode = commitsApi.getDiff(projectID, commit.getId());
-            for (Diff code : newCode) {
-
-                insertions = insertions + StringUtils.countOccurrencesOf(code.getDiff(), "\n+");
-                deletions = deletions + StringUtils.countOccurrencesOf(code.getDiff(), "\n-");
-            }
-
-        }
-
-        MRDifScore = insertions + deletions*0.2;
-
-        return MRDifScore;
-    }
-
-    private double getScoreForMember(int projectID, int mergeRequestIiD, String memberID) throws GitLabApiException {
-
-        MergeRequestApi mergeRequestApi = gitlabService.getMergeRequestApi();
-        List<Commit> commits = mergeRequestApi.getCommits(projectID, mergeRequestIiD);
-        CommitsApi commitsApi = gitlabService.getGitLabApi().getCommitsApi();
-
-        double MRDifScore = 0;
-        int insertions = 0;
-        int deletions = 0;
-
-        for(Commit commit : commits){
-
-            if(!commit.getAuthorName().equals(memberID) && !(commit.getAuthorEmail().equals(memberID + "@sfu.ca"))){
+            org.gitlab4j.api.models.MergeRequest mergeRequest = mergeRequestsList.get(i);
+            Date mergedDate = mergeRequest.getMergedAt();
+            if(mergedDate == null || mergedDate.before(start) || mergedDate.after(end) || !mergeRequest.getState().equals("merged")){
 
                 continue;
             }
 
-            List<Diff> newCode = commitsApi.getDiff(projectID, commit.getId());
+            filteredMrs.add(mergeRequest);
+        }
+
+        return filteredMrs;
+    }
+
+    private double getMRDiffScoreAndMemberScore(List<CommitWrapper> commits, String memberID) throws GitLabRuntimeException {
+
+        double MRDifScore = 0;
+        int insertions = 0;
+        int deletions = 0;
+
+        //TODO: Recalculate scores using more appropriate analysis
+        for(CommitWrapper commit : commits){
+
+            List<Diff> newCode = commit.getNewCode();
             for (Diff code : newCode) {
 
-                insertions = insertions + StringUtils.countOccurrencesOf(code.getDiff(), "\n+");
-                deletions = deletions + StringUtils.countOccurrencesOf(code.getDiff(), "\n-");
+                int newInsertions = 0;
+                newInsertions = StringUtils.countOccurrencesOf(code.getDiff(), "\n+");
+                int newDeletions = 0;
+                newDeletions = StringUtils.countOccurrencesOf(code.getDiff(), "\n-");
+
+                insertions = insertions + newInsertions;
+                deletions = deletions + newDeletions;
+
+                //Temporarily comparing author and email to capture alias
+                //TODO: Update the comparison with data from alias
+                if(commit.getCommitData().getAuthorName().equals(memberID) || (commit.getCommitData().getAuthorEmail().equals(memberID + "@sfu.ca"))){
+
+                    memberScore = memberScore + newInsertions + newDeletions*0.2;
+                }
+
             }
 
         }
@@ -99,43 +94,31 @@ public class MergeRequestService {
         return MRDifScore;
     }
 
-    public List<MergeRequest> getAllMergeRequests() throws GitLabApiException {
+    public List<MergeRequest> getAllMergeRequests(String userID, int projectID, String memberID, Date start, Date end) throws Exception {
 
-        gitlabService = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "thDxkfQVmkRUJP9mKGsm");
+        String accessToken = userService.getPersonalAccessToken(userID);
+
+        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, accessToken);
 
         Project project = null;
-        try {
-            project = gitlabService.getSelectedProject("GitLabAnalyzer");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        project = gitlabService.getSelectedProject(projectID);
 
-        MergeRequestApi mergeRequestApi = gitlabService.getMergeRequestApi();
-        List<org.gitlab4j.api.models.MergeRequest> mergeRequestsList = null;
-        try {
-            mergeRequestsList = mergeRequestApi.getMergeRequests(project);
-        } catch (GitLabApiException e) {
-            e.printStackTrace();
-        }
+        List<org.gitlab4j.api.models.MergeRequest> mergeRequestsList = filterMergedMRsForDate(gitlabService, project, start, end);
 
         List<MergeRequest> normalizedMergeRequestList = new ArrayList<>();
 
         for(int i = 0; i < mergeRequestsList.size(); i++){
             org.gitlab4j.api.models.MergeRequest mergeRequest = mergeRequestsList.get(i);
 
-            if(!mergeRequest.getState().equals("merged")){
-                continue;
-            }
-
             int mergeRequestIiD = mergeRequest.getIid();
-
-            String userID = "BFraser";
-            int projectID = mergeRequest.getProjectId();
             int mergeID = mergeRequest.getId();
-            String memberID = mergeRequest.getAuthor().getName();
             Date mergeDate = mergeRequest.getMergedAt();
-            double MRScore = getMRDiffScore(projectID, mergeRequestIiD);
-            double memberScore = getScoreForMember(projectID, mergeRequestIiD, memberID);
+
+            List<CommitWrapper> commits = gitlabService.getMergeRequestCommits(projectID, mergeRequestIiD);
+
+            double memberScore = 0;
+            double MRScore = Math.round(getMRDiffScoreAndMemberScore(commits, memberID)*10)/10.0;
+            memberScore = Math.round(memberScore*10)/10.0;
 
             MergeRequest normalizedMR = new MergeRequest(userID, projectID, memberID, mergeID, mergeDate, MRScore, memberScore);
             normalizedMergeRequestList.add(normalizedMR);
