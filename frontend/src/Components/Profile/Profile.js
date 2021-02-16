@@ -1,5 +1,9 @@
 import React, {useState} from 'react';
 import {Form, Button, Col, Row} from 'react-bootstrap';
+
+import updateToken from 'Utils/updateToken';
+import addToken from 'Utils/addToken';
+
 import './Profile.css';
 
 const Profile = (props) => {
@@ -10,6 +14,11 @@ const Profile = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (savedToken) {
+            updateToken(username, token);
+        } else {
+            addToken(username, token);
+        }
         setSavedToken(token)
         setToken('')
     }
@@ -19,6 +28,7 @@ const Profile = (props) => {
     }
 
     const handleDelete = () => {
+        updateToken(username, '');
         setSavedToken('');
     }
 

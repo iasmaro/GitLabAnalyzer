@@ -1,12 +1,12 @@
 import { config } from 'Constants/constants';
 
-const getRepos = async (username) => {
-    const response = await fetch(`${config.USERS_API_URL}?userId=${username}`);
-    const data = await response.json();
+const getToken = async (username) => {
+    const response = await fetch(`${config.USERS_API_URL}/token?userId=${username}`);
+    const data = await response.text();
     if (response.ok) {
         return data;
     }
     return null
 }
 
-export default getRepos;
+export default getToken;

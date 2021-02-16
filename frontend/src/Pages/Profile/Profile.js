@@ -20,7 +20,7 @@ const ProfilePage = () => {
 
     return (
         <div className="profile-page">
-            {isLoading ? <Spinner animation="border" className="spinner" givenToken={token} /> : <Profile username={username} />}
+            {isLoading ? <Spinner animation="border" className="spinner" /> : <Profile username={username} givenToken={token} />}
         </div>
     )
 }

@@ -11,3 +11,9 @@ body {
     margin: 0;
     overflow: auto;
 }
+
+.spinner {
+    position: absolute;
+    right: 50%;
+    top: 50%;
+}
