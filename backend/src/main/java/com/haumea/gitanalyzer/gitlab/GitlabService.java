@@ -107,7 +107,7 @@ public class GitlabService {
 
         for(MergeRequest current : mergeRequestApi.getMergeRequests(filter)) {
 
-            if(!current.getMergeStatus().equals("merged")){
+            if(!current.getState().equals("merged")){
                 continue;
             }
 
