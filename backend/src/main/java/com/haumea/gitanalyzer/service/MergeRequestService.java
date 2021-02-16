@@ -37,12 +37,25 @@ public class MergeRequestService {
         memberScore = 0;
     }
 
+
+    //TODO: Update the comparison with data from alias
+    private boolean filterMemberID(String authorName, String authorEmail, String memberID){
+
+        if(authorName.equals(memberID) || authorEmail.equals(memberID + "@sfu.ca")){
+
+            return true;
+        }
+
+        return false;
+    }
+
     private double getMRDiffScoreAndMemberScore(List<CommitWrapper> commits, String memberID) throws GitLabRuntimeException {
 
         double MRDifScore = 0;
         int insertions = 0;
         int deletions = 0;
 
+        //Temporarily comparing author and email to capture alias
         //TODO: Recalculate scores using more appropriate analysis
         for(CommitWrapper commit : commits){
 
@@ -57,9 +70,7 @@ public class MergeRequestService {
                 insertions = insertions + newInsertions;
                 deletions = deletions + newDeletions;
 
-                //Temporarily comparing author and email to capture alias
-                //TODO: Update the comparison with data from alias
-                if(commit.getCommitData().getAuthorName().equals(memberID) || (commit.getCommitData().getAuthorEmail().equals(memberID + "@sfu.ca"))){
+                if(filterMemberID(commit.getCommitData().getAuthorName(), commit.getCommitData().getAuthorEmail(), memberID)){
 
                     memberScore = memberScore + newInsertions + newDeletions*0.2;
                 }
