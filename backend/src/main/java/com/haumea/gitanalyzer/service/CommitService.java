@@ -26,27 +26,12 @@ public class CommitService {
     }
 
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
-                                                           Integer mergeRequestId, String memberId) throws GitLabRuntimeException {
+                                                           Integer mergeRequestId, String memberId) {
 
         String token = userService.getPersonalAccessToken(userId);
 
         GitlabService gitLabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
-        try {
-            List<CommitWrapper> mergeRequestCommits = gitLabService.getMergeRequestCommits(projectId, mergeRequestId);
-            List<CommitDTO> memberCommits= new ArrayList<>();
-
-            for(CommitWrapper currentCommit : mergeRequestCommits) {
-                if(currentCommit.getCommitData().getAuthorName() == memberId) {
-                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
-                    memberCommits.add(commit);
-                }
-            }
-            return memberCommits;
-
-        }
-        catch (GitLabApiException e){
-            throw new GitLabRuntimeException(e.getLocalizedMessage());
-        }
+        return gitLabService.getMergeRequestCommitsForMember(projectId, mergeRequestId, memberId);
     }
 }

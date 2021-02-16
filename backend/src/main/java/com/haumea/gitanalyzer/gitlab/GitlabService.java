@@ -1,5 +1,7 @@
 package com.haumea.gitanalyzer.gitlab;
 
+import com.haumea.gitanalyzer.dto.CommitDTO;
+import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import org.gitlab4j.api.*;
 import org.gitlab4j.api.models.*;
 
@@ -193,6 +195,28 @@ public class GitlabService {
         }
 
         return commitList;
+    }
+
+    public List<CommitDTO> getMergeRequestCommitsForMember(Integer projectId, Integer mergeRequestId,
+                                                           String memberId) throws GitLabRuntimeException {
+
+        try {
+            List<CommitWrapper> mergeRequestCommits = getMergeRequestCommits(projectId, mergeRequestId);
+            List<CommitDTO> memberCommits= new ArrayList<>();
+
+            for(CommitWrapper currentCommit : mergeRequestCommits) {
+                if(currentCommit.getCommitData().getAuthorName() == memberId) {
+                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
+                    memberCommits.add(commit);
+                }
+            }
+            return memberCommits;
+
+        }
+        catch (GitLabApiException e){
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
+
     }
 
 }
