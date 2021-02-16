@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @RestController
 @RequestMapping(path = "/api/v1/users")
@@ -38,6 +39,11 @@ public class UserController {
 
         userService.updateUser(user);
 
+    }
+
+    @GetMapping("/token")
+    public String getPersonalAccessToken(@RequestParam @NotBlank String userId){
+      return userService.getPersonalAccessToken(userId);
     }
 
 }
