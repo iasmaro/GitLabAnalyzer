@@ -11,6 +11,7 @@ import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.haumea.gitanalyzer.model.Member;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,34 +20,23 @@ import java.util.List;
 public class CommitService {
 
     private final UserService userService;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public CommitService(UserService userService) {
+    public CommitService(UserService userService, MemberRepository memberRepository) {
         this.userService = userService;
+        this.memberRepository = memberRepository;
     }
 
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
-                                                           Integer mergeRequestId, String memberId) throws GitLabRuntimeException {
+                                                           Integer mergeRequestId, String memberId) {
 
         String token = userService.getPersonalAccessToken(userId);
 
         GitlabService gitLabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
-        try {
-            List<CommitWrapper> mergeRequestCommits = gitLabService.getMergeRequestCommits(projectId, mergeRequestId);
-            List<CommitDTO> memberCommits= new ArrayList<>();
+        Member member = memberRepository.findMemberByMemberId(memberId);
 
-            for(CommitWrapper currentCommit : mergeRequestCommits) {
-                if(currentCommit.getCommitData().getAuthorName().equals(memberId)) {
-                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
-                    memberCommits.add(commit);
-                }
-            }
-            return memberCommits;
-
-        }
-        catch (GitLabApiException e){
-            throw new GitLabRuntimeException(e.getLocalizedMessage());
-        }
+        return gitLabService.getMergeRequestCommitsForMember(projectId, mergeRequestId, member);
     }
 }
