@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -32,5 +33,14 @@ public class CommitController {
 
         return commitService.getMergeRequestCommitsForMember(userId, projectId, mergeRequestId, memberId);
     }
+
+//    @GetMapping
+//    public List<CommitDTO> getCommitsForMemberAndDate(@RequestParam @NotBlank String userId,
+//                                                      @RequestParam @NotNull Integer projectId,
+//                                                      @RequestParam @NotNull String commitAuthor,
+//                                                      @RequestParam @NotNull String start,
+//                                                      @RequestParam @NotNull String end) {
+//
+//    }
 }
 

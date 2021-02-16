@@ -37,7 +37,7 @@ public class CommitService {
             List<CommitDTO> memberCommits= new ArrayList<>();
 
             for(CommitWrapper currentCommit : mergeRequestCommits) {
-                if(currentCommit.getCommitData().getAuthorName() == memberId) {
+                if(currentCommit.getCommitData().getAuthorName().equals(memberId)) {
                     CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
                     memberCommits.add(commit);
                 }
