@@ -1,4 +1,10 @@
 .dashboard {
-    color: #000000;
     text-align: center;
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    background-color: #acbed8;
+    color: #ffffff;
+    padding: 75px 350px;
+    margin: 0;
+    overflow: auto;
 }
