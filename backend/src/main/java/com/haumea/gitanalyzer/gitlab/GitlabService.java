@@ -78,13 +78,9 @@ public class GitlabService {
 
     }
 
-    public Project getSelectedProject(int projectID) {
+    public Project getSelectedProject(int projectID) throws GitLabApiException {
         List<ProjectWrapper> projects = null;
-        try {
-            projects = getProjects();
-        } catch (GitLabApiException e) {
-            e.printStackTrace();
-        }
+        projects = getProjects();
         Project selectedProject = null;
 
         for (ProjectWrapper project : projects) {
