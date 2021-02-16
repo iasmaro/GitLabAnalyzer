@@ -14,7 +14,6 @@ public class Member {
     private List<String> alias;
 
     public Member(String memberId, List<String> alias) {
-        //this.id = id;
         this.memberId = memberId;
         this.alias = alias;
     }

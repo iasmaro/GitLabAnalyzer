@@ -47,11 +47,12 @@ public class MemberController {
         memberService.mapAliasToMember(membersAndAliases);
     }
 
-    @GetMapping("alias")
-    public List<Member>  getMembersAndAliases(@RequestParam @NotBlank String userId,
-                                              @RequestParam @NotNull Integer projectId){
-
-        return memberService.getMembersAndAliases(userId, projectId);
-    }
+    // leave for next iteration
+//    @GetMapping("alias")
+//    public List<Member>  getMembersAndAliases(@RequestParam @NotBlank String userId,
+//                                              @RequestParam @NotNull Integer projectId){
+//
+//        return memberService.getMembersAndAliases(userId, projectId);
+//    }
 }
 

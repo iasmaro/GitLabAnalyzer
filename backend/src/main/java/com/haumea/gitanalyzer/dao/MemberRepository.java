@@ -42,20 +42,21 @@ public class MemberRepository {
         }
     }
 
-    public List<Member> getMembersAndAliases(List<String> memberIds) throws ResourceNotFoundException {
-
-        List<Member> members = new ArrayList<>();
-
-        for(String memberId : memberIds){
-            if(findMemberByMemberId(memberId) == null){
-                throw new ResourceNotFoundException("Member not found!");
-            } else {
-                Member member = findMemberByMemberId(memberId);
-                members.add(member);
-            }
-        }
-        return members;
-    }
+    // leave for next iteration
+//    public List<Member> getMembersAndAliases(List<String> memberIds) throws ResourceNotFoundException {
+//
+//        List<Member> members = new ArrayList<>();
+//
+//        for(String memberId : memberIds){
+//            if(findMemberByMemberId(memberId) == null){
+//                throw new ResourceNotFoundException("Member not found!");
+//            } else {
+//                Member member = findMemberByMemberId(memberId);
+//                members.add(member);
+//            }
+//        }
+//        return members;
+//    }
 
     // TODO: add member to database
 
