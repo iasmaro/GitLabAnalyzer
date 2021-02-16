@@ -28,7 +28,7 @@ function AnalyzerTabs() {
                             */}
                             Graphs
                         </Tab>
-                        <Tab eventKey={"merge-request"} title="Merge Requests">
+                        <Tab eventKey={"merge-requests"} title="Merge Requests">
                             {/* Add Link to the tab it belongs to 
                                 <LINK />
                             */}
