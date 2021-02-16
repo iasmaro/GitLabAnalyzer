@@ -5,12 +5,14 @@ import com.haumea.gitanalyzer.dto.MemberDTO;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
+import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,9 +50,17 @@ public class MemberService {
         }
     }
 
-    public List<MemberDTO> mapAliasToMember(List<MemberDTO> membersAndAliases){
+    public void mapAliasToMember(List<MemberDTO> membersAndAliases){
 
-        return memberRepository.mapAliasToMember(membersAndAliases);
+        memberRepository.mapAliasToMember(membersAndAliases);
+
+    }
+
+    public List<Member> getMembersAndAliases(String userId, Integer projectId) throws GitLabRuntimeException{
+
+        List<String> members = getMembers(userId, projectId);
+
+        return memberRepository.getMembersAndAliases(members);
 
     }
 
