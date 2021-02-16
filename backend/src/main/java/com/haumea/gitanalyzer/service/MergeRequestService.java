@@ -3,6 +3,7 @@ package com.haumea.gitanalyzer.service;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
+import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.model.MergeRequest;
 import com.haumea.gitanalyzer.model.User;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
@@ -34,28 +35,6 @@ public class MergeRequestService {
     public MergeRequestService(UserService userService) {
         this.userService = userService;
         memberScore = 0;
-    }
-
-    private List<org.gitlab4j.api.models.MergeRequest> filterMergedMRsForDate(GitlabService gitlabService, Project project, Date start, Date end) throws GitLabApiException {
-
-        MergeRequestApi mergeRequestApi = gitlabService.getMergeRequestApi();
-        List<org.gitlab4j.api.models.MergeRequest> mergeRequestsList = mergeRequestApi.getMergeRequests(project);
-
-        List<org.gitlab4j.api.models.MergeRequest> filteredMrs = new ArrayList<>();
-
-        for(int i = 0; i < mergeRequestsList.size(); i++){
-
-            org.gitlab4j.api.models.MergeRequest mergeRequest = mergeRequestsList.get(i);
-            Date mergedDate = mergeRequest.getMergedAt();
-            if(mergedDate == null || mergedDate.before(start) || mergedDate.after(end) || !mergeRequest.getState().equals("merged")){
-
-                continue;
-            }
-
-            filteredMrs.add(mergeRequest);
-        }
-
-        return filteredMrs;
     }
 
     private double getMRDiffScoreAndMemberScore(List<CommitWrapper> commits, String memberID) throws GitLabRuntimeException {
@@ -103,12 +82,12 @@ public class MergeRequestService {
         Project project = null;
         project = gitlabService.getSelectedProject(projectID);
 
-        List<org.gitlab4j.api.models.MergeRequest> mergeRequestsList = filterMergedMRsForDate(gitlabService, project, start, end);
+        List<MergeRequestWrapper> mergeRequestsList = gitlabService.filterMergeRequestByDate(projectID, project.getName(), start, end);
 
         List<MergeRequest> normalizedMergeRequestList = new ArrayList<>();
 
         for(int i = 0; i < mergeRequestsList.size(); i++){
-            org.gitlab4j.api.models.MergeRequest mergeRequest = mergeRequestsList.get(i);
+            org.gitlab4j.api.models.MergeRequest mergeRequest = mergeRequestsList.get(i).getMergeRequestData();
 
             int mergeRequestIiD = mergeRequest.getIid();
             int mergeID = mergeRequest.getId();
