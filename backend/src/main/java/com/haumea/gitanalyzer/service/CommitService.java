@@ -11,6 +11,7 @@ import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.haumea.gitanalyzer.model.Member;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +20,12 @@ import java.util.List;
 public class CommitService {
 
     private final UserService userService;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public CommitService(UserService userService) {
+    public CommitService(UserService userService, MemberRepository memberRepository) {
         this.userService = userService;
+        this.memberRepository = memberRepository;
     }
 
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
@@ -32,6 +35,8 @@ public class CommitService {
 
         GitlabService gitLabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
-        return gitLabService.getMergeRequestCommitsForMember(projectId, mergeRequestId, memberId);
+        Member member = memberRepository.findMemberByMemberId(memberId);
+
+        return gitLabService.getMergeRequestCommitsForMember(projectId, mergeRequestId, member);
     }
 }
