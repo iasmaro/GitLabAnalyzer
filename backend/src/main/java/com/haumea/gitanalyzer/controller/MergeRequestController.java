@@ -29,11 +29,11 @@ public class MergeRequestController {
 
     @GetMapping
     public List<MergeRequestDTO> getAllMergeRequests(@NotBlank @RequestParam String userID,
-                                                     @NotNull @RequestParam int projectID,
-                                                     @NotBlank @RequestParam String memberID,
+                                                     @NotNull @RequestParam int projectId,
+                                                     @NotBlank @RequestParam String memberId,
                                                      @NotNull @RequestParam Date start,
                                                      @NotNull @RequestParam Date end){
 
-        return mergeRequestService.getAllMergeRequests(userID, projectID, memberID, start, end);
+        return mergeRequestService.getAllMergeRequests(userID, projectId, memberId, start, end);
     }
 }

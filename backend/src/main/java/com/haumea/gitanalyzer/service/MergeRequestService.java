@@ -28,9 +28,9 @@ public class MergeRequestService {
 
 
     //TODO: Update the comparison with data from alias
-    private boolean filterMemberID(String authorName, String authorEmail, String memberID){
+    private boolean filterMemberId(String authorName, String authorEmail, String memberId){
 
-        if(authorName.equals(memberID) || authorEmail.equals(memberID + "@sfu.ca")){
+        if(authorName.equals(memberId) || authorEmail.equals(memberId + "@sfu.ca")){
 
             return true;
         }
@@ -38,7 +38,7 @@ public class MergeRequestService {
         return false;
     }
 
-    private double getMRDiffScoreAndMemberScore(List<CommitWrapper> commits, String memberID){
+    private double getMRDiffScoreAndMemberScore(List<CommitWrapper> commits, String memberId){
 
         double MRDifScore = 0;
         int insertions = 0;
@@ -59,7 +59,7 @@ public class MergeRequestService {
                 insertions = insertions + newInsertions;
                 deletions = deletions + newDeletions;
 
-                if(filterMemberID(commit.getCommitData().getAuthorName(), commit.getCommitData().getAuthorEmail(), memberID)){
+                if(filterMemberId(commit.getCommitData().getAuthorName(), commit.getCommitData().getAuthorEmail(), memberId)){
 
                     memberScore = memberScore + newInsertions + newDeletions*0.2;
                 }
@@ -86,9 +86,9 @@ public class MergeRequestService {
         return calendar.getTime();
     }
 
-    public List<MergeRequestDTO> getAllMergeRequests(String userID, int projectID, String memberID, Date start, Date end) throws GitLabRuntimeException{
+    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, String memberId, Date start, Date end) throws GitLabRuntimeException{
 
-        String accessToken = userService.getPersonalAccessToken(userID);
+        String accessToken = userService.getPersonalAccessToken(userId);
 
         GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, accessToken);
 
@@ -96,12 +96,12 @@ public class MergeRequestService {
         List<MergeRequestWrapper> mergeRequestsList = null;
 
         try {
-            project = gitlabService.getSelectedProject(projectID);
+            project = gitlabService.getSelectedProject(projectId);
 
             Date convertedStartDate = convertPSTtoUTC(start);
             Date convertedEndDate = convertPSTtoUTC(end);
 
-            mergeRequestsList = gitlabService.filterMergeRequestByDate(projectID, project.getName(), convertedStartDate, convertedEndDate);
+            mergeRequestsList = gitlabService.filterMergeRequestByDate(projectId, project.getName(), convertedStartDate, convertedEndDate);
 
         } catch (GitLabApiException e) {
 
@@ -121,13 +121,13 @@ public class MergeRequestService {
 
             List<CommitWrapper> commits = null;
             try {
-                commits = gitlabService.getMergeRequestCommits(projectID, mergeRequestIiD);
+                commits = gitlabService.getMergeRequestCommits(projectId, mergeRequestIiD);
             } catch (GitLabApiException e) {
                 throw new GitLabRuntimeException(e.getLocalizedMessage());
             }
 
             double memberScore = 0;
-            double MRScore = Math.round(getMRDiffScoreAndMemberScore(commits, memberID)*10)/10.0;
+            double MRScore = Math.round(getMRDiffScoreAndMemberScore(commits, memberId)*10)/10.0;
             memberScore = Math.round(memberScore*10)/10.0;
 
             MergeRequestDTO normalizedMR = new MergeRequestDTO(mergeIiD, mergedDate, createdDate, updatedDate, MRScore, memberScore);

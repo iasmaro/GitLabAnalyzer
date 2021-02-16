@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MergeRequestDTO {
 
-    private int mergeID;
+    private int mergeId;
     private Date mergedDate;
 
     private Date createdDate;
@@ -16,8 +16,8 @@ public class MergeRequestDTO {
     private double memberScore;
 
 
-    public MergeRequestDTO(int mergeID, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double memberScore) {
-        this.mergeID = mergeID;
+    public MergeRequestDTO(int mergeId, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double memberScore) {
+        this.mergeId = mergeId;
         this.mergedDate = mergedDate;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
@@ -25,8 +25,8 @@ public class MergeRequestDTO {
         this.memberScore = memberScore;
     }
 
-    public int getMergeID() {
-        return mergeID;
+    public int getMergeId() {
+        return mergeId;
     }
 
     public Date getMergedDate() {
@@ -47,10 +47,5 @@ public class MergeRequestDTO {
 
     public double getMemberScore() {
         return memberScore;
-    }
-
-    public int getSumOfCommitScore(String userID){
-
-        return 0;
     }
 }
