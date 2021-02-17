@@ -94,11 +94,11 @@ public class MergeRequestService {
         return MRDifScore;
     }
 
-    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, String memberId, String start, String end) throws GitLabRuntimeException{
+    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, String memberId, String start, String end, boolean memberFilter) throws GitLabRuntimeException{
 
-        String accessToken = userService.getPersonalAccessToken(userId);
+        //String accessToken = userService.getPersonalAccessToken(userId);
 
-        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, accessToken);
+        GitlabService gitlabService = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "thDxkfQVmkRUJP9mKGsm");
 
         Project project = null;
         List<MergeRequestWrapper> mergeRequestsList = null;
@@ -129,7 +129,6 @@ public class MergeRequestService {
             Date mergedDate = mergeRequest.getMergedAt();
             Date createdDate = mergeRequest.getCreatedAt();
             Date updatedDate = mergeRequest.getUpdatedAt();
-            System.out.println(mergeIiD);
 
             List<CommitWrapper> commits = null;
             try {
@@ -141,6 +140,10 @@ public class MergeRequestService {
             memberScore = 0;
             double MRScore = Math.round(getMRDiffScoreAndMemberScore(commits, memberId)*10)/10.0;
             memberScore = Math.round(memberScore*10)/10.0;
+
+            if(memberFilter && memberScore == 0.0){
+                continue;
+            }
 
             MergeRequestDTO normalizedMR = new MergeRequestDTO(mergeIiD, mergedDate, createdDate, updatedDate, MRScore, memberScore);
             normalizedMergeRequestDTOList.add(normalizedMR);
