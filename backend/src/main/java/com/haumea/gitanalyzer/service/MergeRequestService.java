@@ -38,7 +38,7 @@ public class MergeRequestService {
     private Date convertPSTtoUTC(Date date){
 
         int convertedYear = date.getYear() + 1900;
-        int convertMonth = date.getMonth() - 1;
+        int convertMonth = date.getMonth();
         int convertedDate = date.getDate();
 
         Calendar calendar = new GregorianCalendar(convertedYear, convertMonth, convertedDate);
@@ -129,6 +129,7 @@ public class MergeRequestService {
             Date mergedDate = mergeRequest.getMergedAt();
             Date createdDate = mergeRequest.getCreatedAt();
             Date updatedDate = mergeRequest.getUpdatedAt();
+            System.out.println(mergeIiD);
 
             List<CommitWrapper> commits = null;
             try {
@@ -137,7 +138,7 @@ public class MergeRequestService {
                 throw new GitLabRuntimeException(e.getLocalizedMessage());
             }
 
-            double memberScore = 0;
+            memberScore = 0;
             double MRScore = Math.round(getMRDiffScoreAndMemberScore(commits, memberId)*10)/10.0;
             memberScore = Math.round(memberScore*10)/10.0;
 
