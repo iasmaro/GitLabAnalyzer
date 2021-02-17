@@ -37,6 +37,10 @@ public class GitlabService {
         return gitLabApi;
     }
 
+    public MergeRequestApi getMergeRequestApi(){
+        return mergeRequestApi;
+    }
+
     public String getHostUrl() {
         return hostUrl;
     }
@@ -77,6 +81,21 @@ public class GitlabService {
 
     }
 
+    public Project getSelectedProject(int projectID) throws GitLabApiException {
+        List<ProjectWrapper> projects = null;
+        projects = getProjects();
+        Project selectedProject = null;
+
+        for (ProjectWrapper project : projects) {
+            if (project.getProject().getId() == projectID) {
+                selectedProject = project.getProject();
+            }
+        }
+
+        return selectedProject;
+    }
+
+
     /* TODO: Filter via the contributions a member has made to a merge request regardless of whether the member is the author */
     // Warning: Make sure to pass dates in the UTC time format. Not doing so may give unexpected results
     public List<MergeRequestWrapper> filterMergeRequestByDate(int projectId, String name, Date start, Date end) throws GitLabApiException {
@@ -90,6 +109,10 @@ public class GitlabService {
         List<MergeRequestWrapper> result = new ArrayList<>();
 
         for(MergeRequest current : mergeRequestApi.getMergeRequests(filter)) {
+
+            if(!current.getState().equals("merged")){
+                continue;
+            }
 
             MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, current);
 
