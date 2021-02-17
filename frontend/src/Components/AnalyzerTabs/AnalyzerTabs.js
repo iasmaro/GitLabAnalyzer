@@ -4,8 +4,12 @@ import Tab from 'react-bootstrap/Tab';
 import {Col, Row} from 'react-bootstrap';
 import './AnalyzerTabs.css';
 
-function AnalyzerTabs() {
+const AnalyzerTabs = () => {
     const [key, setKey] = useState('home');
+
+    const changeTab = (k) => {
+        setKey(k);
+    }
 
     return (
         <Tab.Container fluid>
@@ -14,7 +18,7 @@ function AnalyzerTabs() {
                     <Tabs
                         id="controlled-tab-example"
                         activeKey={key}
-                        onSelect={(k) => setKey(k)}
+                        onSelect={(k) => changeTab(k)}
                     >
                         <Tab eventKey={"scores"} title="Scores" >
                             {/* Add Link to the tab it belongs to 
@@ -45,6 +49,13 @@ function AnalyzerTabs() {
             </Row>
         </Tab.Container>
     );
+}
+
+export const TABS = {
+    SCORES: 'scores',
+    GRAPHS: 'graphs',
+    MERGE_REQUESTS: 'merge-requests',
+    COMMITS: 'commits'
 }
 
 export default AnalyzerTabs 
