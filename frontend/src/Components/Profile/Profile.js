@@ -27,11 +27,6 @@ const Profile = (props) => {
         setToken(event.target.value)
     }
 
-    const handleDelete = () => {
-        updateToken(username, '');
-        setSavedToken('');
-    }
-
     return (
         <>
             <Row>
@@ -52,9 +47,6 @@ const Profile = (props) => {
             {savedToken && <Row className="token">
                 <Col sm="9">
                     {savedToken}
-                </Col>
-                <Col sm="3">
-                    <Button variant="danger" type="submit" onClick={handleDelete}>Delete</Button>
                 </Col>
             </Row>}
         </>
