@@ -1,12 +1,13 @@
 import React from 'react';
 
 const Commit = (props) => {
+    const { commit } = props || {};
     return (
         <tr>
-            <td>{props.commit.id}</td>
-            <td>{props.commit.date}</td>
-            <td>{props.commit.author}</td>
-            <td>{props.commit.message}</td>
+            <td>{commit?.id}</td>
+            <td>{commit?.date}</td>
+            <td>{commit?.author}</td>
+            <td>{commit?.message}</td>
         </tr>
     );
 };

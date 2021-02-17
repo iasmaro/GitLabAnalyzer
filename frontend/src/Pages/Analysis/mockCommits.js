@@ -1,3 +1,4 @@
+export const commitsEmpty = [];
 export const commits = [
     {
         id: 'sdf31sc',

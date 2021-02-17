@@ -2,12 +2,12 @@ import React from 'react';
 
 import CommitsList from 'Components/CommitsList/CommitsList';
 
-import{commits} from './mockCommits';
+import{commitsEmpty} from './mockCommits';
 
 const Analysis = (props) => {
     return (
         <div>
-            <CommitsList commits={commits}/>
+            <CommitsList commits={commitsEmpty}/>
         </div>
     )
 }
