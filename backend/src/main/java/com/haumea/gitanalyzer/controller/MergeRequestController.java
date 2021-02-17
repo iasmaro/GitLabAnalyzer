@@ -31,8 +31,8 @@ public class MergeRequestController {
     public List<MergeRequestDTO> getAllMergeRequests(@NotBlank @RequestParam String userID,
                                                      @NotNull @RequestParam int projectId,
                                                      @NotBlank @RequestParam String memberId,
-                                                     @NotNull @RequestParam Date start,
-                                                     @NotNull @RequestParam Date end){
+                                                     @NotBlank @RequestParam String start,
+                                                     @NotBlank @RequestParam String end){
 
         return mergeRequestService.getAllMergeRequests(userID, projectId, memberId, start, end);
     }
