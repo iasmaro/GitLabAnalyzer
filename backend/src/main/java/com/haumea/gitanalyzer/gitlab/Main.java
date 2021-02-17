@@ -5,6 +5,8 @@ import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Main {
@@ -151,14 +153,36 @@ public class Main {
     }
 
 
-    public static void main(String[] args) throws GitLabApiException {
-        GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
-        GitlabService haumeaTeamGitlabService = new GitlabService("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
+    public static void main(String[] args) throws GitLabApiException, ParseException {
+//        GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
+//        GitlabService haumeaTeamGitlabService = new GitlabService("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 
 
-        printAllProjectData(csil, 5);
-
+//        printAllProjectData(csil, 5);
 //        printCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
+
+        String test = "19/4/2000";
+        Date startDate = new SimpleDateFormat("dd/MM/yyyy").parse(test);
+
+        Date newDate;
+
+        try {
+            newDate = new SimpleDateFormat("dd/MM/yyyy", Locale.CANADA).parse(test);
+        }
+        catch (ParseException e) {
+            throw new ParseException(e.getLocalizedMessage(), e.getErrorOffset());
+        }
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(newDate);
+        calendar.setTimeZone(utc);
+
+        Date d = calendar.getTime();
+
+
+        System.out.println("date is " + newDate);
+
     }
 }
 
