@@ -19,8 +19,7 @@ public class Member {
     }
 
     @PersistenceConstructor
-    public Member(String id, String memberId, List<String> alias) {
-        this.id = id;
+    public Member(String memberId, List<String> alias) {
         this.memberId = memberId;
         this.alias = alias;
     }
