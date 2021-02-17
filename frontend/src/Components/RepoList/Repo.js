@@ -7,7 +7,7 @@ const Repo = (props) => {
             <td>{props.repo.name}</td>
             <td>{props.repo.date}</td>
             <td>
-                <Button variant="light" className= 'Analyze' >Analyze</Button>{' '}
+                <Button variant="light" className= 'Analyze' >Analyze</Button>
             </td>
         </tr>
     );
