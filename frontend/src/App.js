@@ -9,8 +9,7 @@ import getUserData from 'Utils/getUserData';
 
 import { useUserDispatch } from './UserContext';
 import ProtectedRoute from './ProtectedRoute';
-import LogoutPage from './LogoutPage';
-import AnalyzerTabs from 'Components/AnalyzerTabs/AnalyzerTabs';
+import LogoutPage from './Pages/Logout/LogoutPage';
 
 
 function App() {
@@ -32,7 +31,6 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <AnalyzerTabs />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/about" component={About} />
