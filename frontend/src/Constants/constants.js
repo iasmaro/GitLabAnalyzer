@@ -1,3 +1,6 @@
+import AnalyzerTabs from 'Components/AnalyzerTabs/AnalyzerTabs';
+
+
 const dev = {
     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://localhost:3000/',
     SFU_AUTHENTICATION_URL: 'https://cas.sfu.ca/cas/serviceValidate?service=http://localhost:3000/'
