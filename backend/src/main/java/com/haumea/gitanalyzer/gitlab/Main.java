@@ -59,52 +59,52 @@ public class Main {
 
         for(MemberWrapper current : memberWrappers) {
             System.out.println("Author is: " + current.getName() + " " + current.getMemberId());
-//            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
+            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
         }
 
-        System.out.println();
-
-        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
-        for(MergeRequest current : mergeRequests) {
-            System.out.println("Merge request: " + current);
-
-            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
-
-            for(CommitWrapper commit : commitList) {
-                System.out.println("MR Commit: " + commit.getCommitData());
-            }
-        }
-
-        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
-        for(MergeRequestWrapper current : mergeRequestWrappers) {
-            System.out.println("Merge request: " + current.getMergeRequestData());
-
-            System.out.println();
-
-            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
-
-            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
-
-                System.out.println("change is: " + change.getDiffs());
-
-            }
-
-            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
-
-            for(CommitWrapper commit : commitList) {
-                System.out.println("MR Commit: " + commit.getCommitData());
-            }
-        }
-
-        System.out.println();
-        for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
-            System.out.println("current commit: " + current.getCommitData());
-
-        }
-
-        testCommitFiltering(projects, projectNum, app);
-
-        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
+//        System.out.println();
+//
+//        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
+//        for(MergeRequest current : mergeRequests) {
+//            System.out.println("Merge request: " + current);
+//
+//            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
+//
+//            for(CommitWrapper commit : commitList) {
+//                System.out.println("MR Commit: " + commit.getCommitData());
+//            }
+//        }
+//
+//        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
+//        for(MergeRequestWrapper current : mergeRequestWrappers) {
+//            System.out.println("Merge request: " + current.getMergeRequestData());
+//
+//            System.out.println();
+//
+//            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
+//
+//            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
+//
+//                System.out.println("change is: " + change.getDiffs());
+//
+//            }
+//
+//            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
+//
+//            for(CommitWrapper commit : commitList) {
+//                System.out.println("MR Commit: " + commit.getCommitData());
+//            }
+//        }
+//
+//        System.out.println();
+//        for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
+//            System.out.println("current commit: " + current.getCommitData());
+//
+//        }
+//
+//        testCommitFiltering(projects, projectNum, app);
+//
+//        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
 
     }
 
@@ -140,7 +140,7 @@ public class Main {
 
         Date start = calender.getTime();
 
-        calender.set(2021, Calendar.FEBRUARY, 26);
+        calender.set(2021, Calendar.FEBRUARY, 15);
         calender.setTimeZone(utc);
         Date end = calender.getTime();
 
@@ -161,28 +161,35 @@ public class Main {
 //        printAllProjectData(csil, 5);
 //        printCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
 
-        String test = "19/4/2000";
-        Date startDate = new SimpleDateFormat("dd/MM/yyyy").parse(test);
+//        String date = "2000-4-19 00:00:01";
+//
+//        Date newDate;
+//
+//        try {
+//            newDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CANADA).parse(date);
+//        }
+//        catch (ParseException e) {
+//            throw new ParseException(e.getLocalizedMessage(), e.getErrorOffset());
+//        }
+//
+//        int convertedYear = newDate.getYear() + 1900;
+//        int convertMonth = newDate.getMonth() - 1;
+//        int convertedDate = newDate.getDate();
+//
+//        Calendar calendar = new GregorianCalendar(convertedYear, convertMonth, convertedDate);
+//        TimeZone utc = TimeZone.getTimeZone("UTC");
+//        calendar.setTimeZone(utc);
+//
+//        System.out.println(calendar.getTime());
 
-        Date newDate;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        try {
-            newDate = new SimpleDateFormat("dd/MM/yyyy", Locale.CANADA).parse(test);
-        }
-        catch (ParseException e) {
-            throw new ParseException(e.getLocalizedMessage(), e.getErrorOffset());
-        }
-        TimeZone utc = TimeZone.getTimeZone("UTC");
+        Date date = formatter.parse("22-09-2018 08:23:43");
+        String formattedDate = formatter.format(date);
 
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(newDate);
-        calendar.setTimeZone(utc);
-
-        Date d = calendar.getTime();
-
-
-        System.out.println("date is " + newDate);
-
+        System.out.println(date);
+        System.out.println(formattedDate);
     }
 }
 
