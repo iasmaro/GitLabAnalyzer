@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -26,6 +28,25 @@ public class MergeRequestService {
         memberScore = 0;
     }
 
+    private Date convertStringToDate(String date) throws ParseException {
+
+        Date convertedDate = new SimpleDateFormat("yyyy/MM/dd").parse(date);
+
+        return convertedDate;
+    }
+
+    private Date convertPSTtoUTC(Date date){
+
+        int convertedYear = date.getYear() + 1900;
+        int convertMonth = date.getMonth() - 1;
+        int convertedDate = date.getDate();
+
+        Calendar calendar = new GregorianCalendar(convertedYear, convertMonth, convertedDate);
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        calendar.setTimeZone(utc);
+
+        return calendar.getTime();
+    }
 
     //TODO: Update the comparison with data from alias
     private boolean filterMemberId(String authorName, String authorEmail, String memberId){
@@ -73,20 +94,7 @@ public class MergeRequestService {
         return MRDifScore;
     }
 
-    private Date convertPSTtoUTC(Date date){
-
-        int convertedYear = date.getYear() + 1900;
-        int convertMonth = date.getMonth() - 1;
-        int convertedDate = date.getDate();
-
-        Calendar calendar = new GregorianCalendar(convertedYear, convertMonth, convertedDate);
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-        calendar.setTimeZone(utc);
-
-        return calendar.getTime();
-    }
-
-    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, String memberId, Date start, Date end) throws GitLabRuntimeException{
+    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, String memberId, String start, String end) throws GitLabRuntimeException{
 
         String accessToken = userService.getPersonalAccessToken(userId);
 
@@ -98,12 +106,15 @@ public class MergeRequestService {
         try {
             project = gitlabService.getSelectedProject(projectId);
 
-            Date convertedStartDate = convertPSTtoUTC(start);
-            Date convertedEndDate = convertPSTtoUTC(end);
+            Date convertedStart = convertStringToDate(start);
+            Date convertedEnd = convertStringToDate(end);
+
+            Date convertedStartDate = convertPSTtoUTC(convertedStart);
+            Date convertedEndDate = convertPSTtoUTC(convertedEnd);
 
             mergeRequestsList = gitlabService.filterMergeRequestByDate(projectId, project.getName(), convertedStartDate, convertedEndDate);
 
-        } catch (GitLabApiException e) {
+        } catch (GitLabApiException | ParseException e) {
 
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
