@@ -1,13 +1,14 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 
+import { message } from 'Constants/constants';
+
 import Repo from './Repo';
 import './RepoList.css';
 
 const RepoList = (props) => {
     const { repos } = props || {};
-    const tokensNotSetMessage = 'Please set your gitlab token in the Profile page';
-    const noReposMessage = 'It seems that you do not have any repositories at this moment';
+
     return (
         <div className = 'list-container'>
             <Table striped bordered hover>
@@ -20,10 +21,10 @@ const RepoList = (props) => {
                 </thead>
                 <tbody>
                     {!repos ? (
-                        <td colSpan={3} >{tokensNotSetMessage}</td>
+                        <td colSpan={3} >{message.TOKEN_NOT_SET}</td>
                     )
                     : !repos.length ? (
-                        <td colSpan={3} >{noReposMessage}</td>
+                        <td colSpan={3} >{message.NO_REPOS}</td>
                     )
                     :
                     repos.map((repo) => (

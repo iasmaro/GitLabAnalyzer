@@ -16,4 +16,6 @@ export const config = process.env.NODE_ENV === 'development' ? dev : prod;
 
 export const message = {
     NO_COMMITS: 'No commits found for this user',
+    TOKEN_NOT_SET: 'Please set your gitlab token in the Profile page',
+    NO_REPOS: 'It seems that you do not have any repositories at this moment',
 };
