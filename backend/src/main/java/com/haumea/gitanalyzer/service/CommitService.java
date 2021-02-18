@@ -39,6 +39,8 @@ public class CommitService {
 
         return new GitlabService(GlobalConstants.gitlabURL, token);
 
+//        return new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
+
     }
 
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
@@ -82,19 +84,14 @@ public class CommitService {
     }
 
 
-    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) throws ParseException {
+    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) {
         GitlabService gitlabService = createGitlabService(userId);
 
         Member member = memberRepository.findMemberByMemberId(memberId);
         List<CommitWrapper> filteredCommits;
 
-//        Date startDate = convertStringToUTCDate(start);
-//        Date endDate = convertStringToUTCDate(end);
-
         try {
             filteredCommits = gitlabService.filterCommitsForDateAndAuthor(projectId, memberId, start, end);
-
-            System.out.println("size is " + filteredCommits.size());
         }
         catch (GitLabApiException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
@@ -107,8 +104,6 @@ public class CommitService {
                     currentCommit.getCommitData().getAuthorName(), 11);
 
             commitDtoList.add(newDto);
-
-            System.out.println("in dto loop");
         }
 
         return commitDtoList;

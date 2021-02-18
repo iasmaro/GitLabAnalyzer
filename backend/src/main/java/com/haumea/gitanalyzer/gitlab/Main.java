@@ -68,8 +68,9 @@ public class Main {
 
 
 //            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
+
+            testCommitFiltering(projects, projectNum, app);
         }
-        System.out.println("project is: " + projects.get(projectNum).getProject().getId());
 
 //
 //        System.out.println();
@@ -131,7 +132,7 @@ public class Main {
     }
 
     public static void testCommitFiltering(List<ProjectWrapper> projects, int projectNum, GitlabService app) throws GitLabApiException {
-        Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 20);
+        Calendar calender = new GregorianCalendar(2021, Calendar.FEBRUARY, 15);
         Date start = calender.getTime();
 
         calender.set(2021, Calendar.MAY, 10);
@@ -165,7 +166,7 @@ public class Main {
     }
 
 
-    public static void main(String[] args) throws GitLabApiException, ParseException {
+    public static void main(String[] args) throws GitLabApiException {
         GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
 //        GitlabService haumeaTeamGitlabService = new GitlabService("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 

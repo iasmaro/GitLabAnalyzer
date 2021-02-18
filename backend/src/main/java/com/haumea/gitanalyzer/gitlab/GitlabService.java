@@ -184,11 +184,11 @@ public class GitlabService {
         List<CommitWrapper> commitList = new ArrayList<>();
 
         for(Commit currentCommit : commitsApi.getCommits(projectId, "master", start, end)) {
-
             if(currentCommit.getAuthorName().equals(authorName) ) {
                 CommitWrapper newCommit = new CommitWrapper(gitLabApi, projectId, currentCommit);
 
                 commitList.add(newCommit);
+
             }
         }
 
