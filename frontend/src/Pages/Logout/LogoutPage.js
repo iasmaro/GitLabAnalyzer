@@ -1,9 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-
 import logout from 'Utils/logout';
-
-import { useUserDispatch } from '../../UserContext';
+import { useUserDispatch } from 'UserContext';
 
 
 const LogoutPage = () => {
