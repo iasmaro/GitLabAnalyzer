@@ -39,11 +39,20 @@ public class CommitController {
                                                       @RequestParam @NotBlank String userId,
                                                       @RequestParam @NotNull int projectId,
                                                       @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
-                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) throws ParseException {
+                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
 
 
-        System.out.println("Info is: " + memberId +  " " + userId + " " + projectId + " " + " " + start + " " + end);
         return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, memberId, start, end);
+    }
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{mergeRequestId}")
+    public List<CommitDTO> getCommitsForSelectedMergeRequest(@PathVariable int mergeRequestId,
+                                                             @RequestParam @NotBlank String userId,
+                                                             @RequestParam @NotNull int projectId) {
+
+
+        System.out.println("in request ");
+        return commitService.getCommitsForSelectedMergeRequest(userId, projectId, mergeRequestId);
     }
 
 

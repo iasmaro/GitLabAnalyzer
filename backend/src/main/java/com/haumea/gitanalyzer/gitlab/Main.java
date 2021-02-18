@@ -67,55 +67,55 @@ public class Main {
             System.out.println("Author is: " + current.getName() + " " + current.getMemberId());
 
 
-//            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
+            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
 
             testCommitFiltering(projects, projectNum, app);
         }
 
+
+        System.out.println();
+
+        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
+        for(MergeRequest current : mergeRequests) {
+            System.out.println("Merge request: " + current);
+
+            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
+
+            for(CommitWrapper commit : commitList) {
+                System.out.println("MR Commit: " + commit.getCommitData());
+            }
+        }
 //
-//        System.out.println();
-//
-//        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
-//        for(MergeRequest current : mergeRequests) {
-//            System.out.println("Merge request: " + current);
-//
-//            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
-//
-//            for(CommitWrapper commit : commitList) {
-//                System.out.println("MR Commit: " + commit.getCommitData());
-//            }
-//        }
-//
-//        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
-//        for(MergeRequestWrapper current : mergeRequestWrappers) {
-//            System.out.println("Merge request: " + current.getMergeRequestData());
-//
-//            System.out.println();
-//
-//            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
-//
-//            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
-//
-//                System.out.println("change is: " + change.getDiffs());
-//
-//            }
-//
-//            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
-//
-//            for(CommitWrapper commit : commitList) {
-//                System.out.println("MR Commit: " + commit.getCommitData());
-//            }
-//        }
-//
-//        System.out.println();
-//        for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
-//            System.out.println("current commit: " + current.getCommitData());
-//
-//        }
-//
-//        testCommitFiltering(projects, projectNum, app);
-//
-//        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
+        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
+        for(MergeRequestWrapper current : mergeRequestWrappers) {
+            System.out.println("Merge request: " + current.getMergeRequestData());
+
+            System.out.println();
+
+            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
+
+            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
+
+                System.out.println("change is: " + change.getDiffs());
+
+            }
+
+            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
+
+            for(CommitWrapper commit : commitList) {
+                System.out.println("MR Commit: " + commit.getCommitData());
+            }
+        }
+
+        System.out.println();
+        for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
+            System.out.println("current commit: " + current.getCommitData());
+
+        }
+
+        testCommitFiltering(projects, projectNum, app);
+
+        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
 
     }
 
@@ -173,21 +173,6 @@ public class Main {
 
         printAllProjectData(csil, 5);
 //        printCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
-
-//        String date = "2021-2-1 08:00:00";
-//        Date pstDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
-//
-//        final Calendar calendar  = Calendar.getInstance();
-//        final int utcOffset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);
-//
-//        Date utcDate = new Date(pstDate.getTime() - utcOffset);
-//
-//
-//        System.out.println("pst date is: " + pstDate + " utc date is " + utcDate);
-
-
-
-
     }
 }
 

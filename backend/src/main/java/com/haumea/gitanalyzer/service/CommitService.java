@@ -38,9 +38,6 @@ public class CommitService {
         String token = userService.getPersonalAccessToken(userId);
 
         return new GitlabService(GlobalConstants.gitlabURL, token);
-
-//        return new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
-
     }
 
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
@@ -83,11 +80,22 @@ public class CommitService {
         return new Date(pstDate.getTime() - utcOffset);
     }
 
+    private List<CommitDTO> convertCommitWrappersToDtos(List<CommitWrapper> wrapperList) {
+        List<CommitDTO> commitDtoList = new ArrayList<>();
+
+        for(CommitWrapper currentCommit : wrapperList) {
+            CommitDTO newDto = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(),
+                    currentCommit.getCommitData().getAuthorName(), 11);
+
+            commitDtoList.add(newDto);
+        }
+
+        return commitDtoList;
+    }
+
 
     public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) {
         GitlabService gitlabService = createGitlabService(userId);
-
-        Member member = memberRepository.findMemberByMemberId(memberId);
         List<CommitWrapper> filteredCommits;
 
         try {
@@ -97,16 +105,22 @@ public class CommitService {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
 
-        List<CommitDTO> commitDtoList = new ArrayList<>();
+        return convertCommitWrappersToDtos(filteredCommits);
+    }
 
-        for(CommitWrapper currentCommit : filteredCommits) {
-            CommitDTO newDto = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(),
-                    currentCommit.getCommitData().getAuthorName(), 11);
+    public List<CommitDTO> getCommitsForSelectedMergeRequest(String userId, int projectId, int mergeRequestId) {
+        GitlabService gitlabService = createGitlabService(userId);
+        List<CommitWrapper> mergeRequestCommits;
 
-            commitDtoList.add(newDto);
+        try {
+            mergeRequestCommits = gitlabService.getMergeRequestCommits(projectId, mergeRequestId);
+        }
+        catch (GitLabRuntimeException | GitLabApiException e){
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
 
-        return commitDtoList;
+
+        return convertCommitWrappersToDtos(mergeRequestCommits);
     }
 
 
