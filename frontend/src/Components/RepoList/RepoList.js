@@ -7,7 +7,7 @@ import './RepoList.css';
 const RepoList = ({repos}) => {
         return (
             <div className = 'list-container'>
-                <Table striped bordered hover variant="dark">
+                <Table striped bordered hover>
                     <thead>
                         <tr>
                             <th>Repo Name</th>
