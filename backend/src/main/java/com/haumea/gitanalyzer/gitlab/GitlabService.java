@@ -1,7 +1,10 @@
 package com.haumea.gitanalyzer.gitlab;
 
+import com.haumea.gitanalyzer.dto.CommitDTO;
+import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import org.gitlab4j.api.*;
 import org.gitlab4j.api.models.*;
+import com.haumea.gitanalyzer.model.Member;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,7 +53,7 @@ public class GitlabService {
     public List<MemberWrapper> getMembers(int projectId) throws GitLabApiException {
         ProjectApi projectApi = new ProjectApi(gitLabApi);
 
-        List<Member> members = projectApi.getAllMembers(projectId);
+        List<org.gitlab4j.api.models.Member> members = projectApi.getAllMembers(projectId);
 
         List<MemberWrapper> allMembers = new ArrayList<>();
 
@@ -217,4 +220,5 @@ public class GitlabService {
 
         return commitList;
     }
+
 }

@@ -116,15 +116,42 @@ Please google how to install these tools on your OS.
       authSource=admin&replicaSet=atlas-tadx14-shard-0&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=true`
         - Local server: `mongodb://localhost:27017/`
         - Local container: `mongodb://localhost:27017/`
-        - Team VM: `mongodb://142.58.22.176:27017/`
+
+    - **[NEW - Feb 17]** Connect to TeamVM with authentification and SSL/TLS in MongoDB Compass:
+      - click `Fill in connection fields individually`
+      <img src="images/sc8.png" width="90%">
+      - password is: `NU%2B!n2ju%2BVFr!X*F`
+      <img src="images/sc9.png" width="90%">
+      - Load the `rootCA.pem` file is in `/backend/database/pem`, this file is used by Compass to verify the certificate of the mongdb server 
+      <img src="images/sc10.png" width="90%">
  
 ## 3. Build the project
 
 - Open `application.properties` and decide how to connect to the database server:
-    - Remote server: uncomment the line start with `spring.data.mongodb.uri` and comment out all other lines.
+    - Remote server: uncomment the line start with `spring.data.mongodb.uri` and comment out all other lines for mongodb configs.
     - Local or docker container, no change needed. Note, the config is for default settings of mongodb (port 27017 on 
   local machine, 
   authentication disabled)
+    - **[NEW - Feb 17]**: for team VM
+      - uncomment these 2 lines in `application.properties`, comment out the other lines for mongodb configs:
+      ```
+      spring.data.mongodb.database=testdb
+      spring.data.mongodb.uri=mongodb://admin:NU%2B!n2ju%2BVFr!X*F@cmpt373-1211-11.cmpt.sfu.ca:27017/?authSource=admin&ssl=true
+      ```
+      - add Certificate Authority to truststore ([source](https://stackoverflow.com/a/46195965/6241010)):
+      ```
+      cd gitlabanalyzer/backend
+      keytool -trustcacerts -keystore "$JAVA_HOME/lib/security/cacerts" -storepass changeit -importcert -alias mongodbTeamVM -file ./pem/rootCA.pem
+      # type yes when asked
+      # In case something goes wrong this will help you to remove certificate from the store:
+      keytool -delete -alias mongodbTeamVM -keystore "$JAVA_HOME/lib/security/cacerts" -storepass changeit
+      ``` 
+
+      - add these two lines in `gradle/wrapper/gradle-wrapper.properties` ([source](https://stackoverflow.com/a/43486698/6241010)):
+      ```
+      systemProp.javax.net.ssl.trustStore=cacerts
+      systemProp.javax.net.ssl.trustStorePassword=changeit
+      ```
 
 - Run `GitanalyzerApplication.java` to start up the server. You should see something similar to this:
 
