@@ -3,7 +3,7 @@ import React from 'react';
 import RepoList from 'Components/RepoList/RepoList';
 
 import './Dashboard.css';
-import{repos} from 'Mocks/mockRepos';
+import { repos } from 'Mocks/mockRepos';
 
 const Dashboard = (props) => {
     return (
