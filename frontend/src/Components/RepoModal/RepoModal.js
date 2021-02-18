@@ -5,6 +5,7 @@ import RepoModalDates from "./RepoModalDate"
 import RepoModalStudent from './RepoModalStudent';
 import RepoModalConfig from './RepoModalConfig';
 import { modal } from 'Constants/constants';
+import './RepoModal.css'
 
 const RepoModal = ({name, members, status, toggleModal}) => {
 
@@ -20,12 +21,12 @@ const RepoModal = ({name, members, status, toggleModal}) => {
             backdrop="static"
             keyboard={false}
             size="xl"
-            className="repo-modal"
+            className="custom-modal"
         >
             <Modal.Header closeButton>
                 <Modal.Title>{name}</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className="repo-modal-body">
                 <RepoModalConfig config={config} setConfig={setConfig}></RepoModalConfig>
                 <RepoModalStudent members={members} student={student} setStudent={setStudent}></RepoModalStudent>
 

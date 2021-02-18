@@ -5,20 +5,17 @@ const RepoModalDates = ({name, date, setDate}) => {
 
     const handleChange = (e) => {
         e.preventDefault();
-        let name= e.target.name;
-        let value= e.target.value;
         const newDate = {
             ...date,
-            [name]: value
+            [e.target.name]: e.target.value
         }
         setDate(newDate)
-        console.log(date)
     }
 
     return (
         <Form>
-            <Row>
-                <Col>
+            <Row className="dates">
+                <Col sm="2">
                     {name}
                 </Col>
                 <Col>

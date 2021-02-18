@@ -14,8 +14,8 @@ const RepoModalStudent = ({members, student, setStudent}) => {
             <Col sm='2'>
                 {modal.STUDENT}
             </Col>
-            <Col sm='10'>
-                <DropdownButton id="dropdown-basic-button" title={student}>
+            <Col sm='8'>
+                <DropdownButton variant="secondary" id="dropdown-basic-button" title={student}>
                 {members.map((member) => (
                     <Dropdown.Item key={member} as="button" onClick={() => selectStudent(member)}>{member}</Dropdown.Item>
                 ))}

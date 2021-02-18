@@ -1,3 +1,47 @@
-.repo-modal {
-    width: 90%;
+
+.custom-modal {
+    font-family: 'Roboto', sans-serif;
+}
+
+.modal-content {
+    background-color: #acbed8;
+}
+
+.modal-header{
+    margin: 10px 30px;
+}
+.repo-modal-body {
+    font-size: 18px;
+}
+
+.configuration {
+    align-items: center;
+    margin: 20px;
+}
+
+.students {
+    align-items: center;
+    margin: 20px;
+}
+
+.dates {
+    align-items: center;
+    margin: 20px;
+}
+
+.dropdown-toggle {
+    background-color: #747474;
+    border-color: white;
+    
+}
+
+.dropdown-toggle:focus {
+    background-color: #747474;
+    border-color: white;
+    box-shadow: none;
+}
+
+.dropdown-toggle:hover {
+    background-color: #636363;
+    border-color: white;
 }
