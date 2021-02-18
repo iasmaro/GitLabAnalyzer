@@ -1,0 +1,16 @@
+.justify-content-md-center {
+    text-align: center;
+    background-color: #acbed8;
+    font-family: 'Roboto', sans-serif;
+    padding: 50px 50px;
+}
+
+.nav-tabs .nav-link.active {
+    color: white;
+    background-color: #454d55;
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+
+.nav-link:hover {
+    color: rgb(9, 133, 40);
+}
