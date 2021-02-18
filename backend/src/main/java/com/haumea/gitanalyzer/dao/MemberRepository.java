@@ -25,7 +25,7 @@ public class MemberRepository {
         this.mongoTemplate = mongoTemplate;
     }
 
-    private Member findMemberByMemberId(String memberId){
+    public Member findMemberByMemberId(String memberId){
         Query query = new Query();
         query.addCriteria(Criteria.where("memberId").is(memberId));
         return mongoTemplate.findOne(query, Member.class);
