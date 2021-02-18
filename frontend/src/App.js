@@ -4,12 +4,13 @@ import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import About from 'Pages/About/About';
 import Home from 'Pages/Home/Home';
 import Profile from 'Pages/Profile/Profile';
+import LogoutPage from 'Pages/Logout/LogoutPage';
 import Navbar from 'Components/Navbar/Navbar';
 import getUserData from 'Utils/getUserData';
 
 import { useUserDispatch } from './UserContext';
 import ProtectedRoute from './ProtectedRoute';
-import LogoutPage from './Pages/Logout/LogoutPage';
+
 
 
 function App() {
