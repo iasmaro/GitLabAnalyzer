@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
+import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.User;
@@ -41,12 +42,35 @@ public class CommitService {
     }
 
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
-                                                           Integer mergeRequestId, String memberId) {
-        GitlabService gitLabService = createGitlabService(userId);
+                                                           Integer mergeRequestId, String memberId) throws GitLabRuntimeException {
+
+        String token = userService.getPersonalAccessToken(userId);
+
+        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+
+        List<CommitDTO> memberCommits= new ArrayList<>();
 
         Member member = memberRepository.findMemberByMemberId(memberId);
 
-        return gitLabService.getMergeRequestCommitsForMember(projectId, mergeRequestId, member);
+        if(member == null){
+            throw new ResourceNotFoundException("Member not found!");
+        }
+
+        try {
+            List<CommitWrapper> mergeRequestCommits = gitlabService.getMergeRequestCommits(projectId, mergeRequestId);
+
+            for(CommitWrapper currentCommit : mergeRequestCommits) {
+                if(member.getAlias().contains(currentCommit.getCommitData().getAuthorName())){
+                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
+                    memberCommits.add(commit);
+                }
+            }
+            return memberCommits;
+
+        }
+        catch (GitLabApiException e){
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
     }
     private Date convertStringToUTCDate(String date) throws ParseException {
 
