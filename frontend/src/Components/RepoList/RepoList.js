@@ -6,33 +6,6 @@ import { message } from 'Constants/constants';
 import Repo from './Repo';
 import './RepoList.css';
 
-<<<<<<< HEAD
-const RepoList = ({repos}) => {
-        return (
-            <div className = 'list-container'>
-                <Table striped bordered hover variant="dark">
-                    <thead>
-                        <tr>
-                            <th colSpan='3'>Repositories</th>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Last Modified</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {repos.map((repo) => (
-                            <Repo key={repo.id} repo={repo}/>
-                        ))}
-                    </tbody>
-                </Table>
-            </div>
-        );
-    };
-=======
 const RepoList = (props) => {
     const { repos } = props || {};
 
@@ -41,7 +14,12 @@ const RepoList = (props) => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>Repo Name</th>
+                    <th colSpan='3'>Repositories</th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <th>Name</th>
                         <th>Last Modified</th>
                         <th></th>
                     </tr>
@@ -62,6 +40,5 @@ const RepoList = (props) => {
         </div>
     );
 };
->>>>>>> master
 
 export default RepoList
