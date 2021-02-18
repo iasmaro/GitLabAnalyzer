@@ -1,59 +1,43 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Row, Col, Form } from 'react-bootstrap'
 
-import { modal } from "Constants/constants"
+const RepoModalDates = ({name, date, setDate}) => {
 
-const RepoModalDates = (props) => {
-    const [startDate, setStartDate] = useState({})
-    const [endDate, setEndDate] = useState({})
+    const handleChange = (e) => {
+        e.preventDefault();
+        let name= e.target.name;
+        let value= e.target.value;
+        const newDate = {
+            ...date,
+            [name]: value
+        }
+        setDate(newDate)
+        console.log(date)
+    }
 
     return (
         <Form>
             <Row>
                 <Col>
-                    {modal.START_DATE}
+                    {name}
                 </Col>
                 <Col>
-                    <Form.Control placeholder="Year"></Form.Control>
+                    <Form.Control name="Year" placeholder="Year" onChange={handleChange}></Form.Control>
                 </Col>
                 <Col>
-                    <Form.Control placeholder="Month"></Form.Control>
+                    <Form.Control name="Month" placeholder="Month" onChange={handleChange}></Form.Control>
                 </Col>
                 <Col>
-                    <Form.Control placeholder="Day"></Form.Control>
+                    <Form.Control name="Day" placeholder="Day" onChange={handleChange}></Form.Control>
                 </Col>
                 <Col>
-                    <Form.Control placeholder="Hours"></Form.Control>
+                    <Form.Control name="Hours" placeholder="Hours" onChange={handleChange}></Form.Control>
                 </Col>
                 <Col>
-                    <Form.Control placeholder="Minutes"></Form.Control>
+                    <Form.Control name="Minutes" placeholder="Minutes" onChange={handleChange}></Form.Control>
                 </Col>
                 <Col>
-                    <Form.Control placeholder="Seconds"></Form.Control>
-                </Col>
-            </Row>
-
-            <Row>
-                <Col>
-                    {modal.END_DATE}
-                </Col>
-                <Col>
-                    <Form.Control placeholder="Year"></Form.Control>
-                </Col>
-                <Col>
-                    <Form.Control placeholder="Month"></Form.Control>
-                </Col>
-                <Col>
-                    <Form.Control placeholder="Day"></Form.Control>
-                </Col>
-                <Col>
-                    <Form.Control placeholder="Hours"></Form.Control>
-                </Col>
-                <Col>
-                    <Form.Control placeholder="Minutes"></Form.Control>
-                </Col>
-                <Col>
-                    <Form.Control placeholder="Seconds"></Form.Control>
+                    <Form.Control name="Seconds" placeholder="Seconds" onChange={handleChange}></Form.Control>
                 </Col>
             </Row>
         </Form>

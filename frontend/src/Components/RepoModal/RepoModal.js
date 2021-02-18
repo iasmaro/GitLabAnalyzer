@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
-import { Modal, Dropdown, DropdownButton, Button, Row, Col, Form } from 'react-bootstrap'
+import { Modal, Button} from 'react-bootstrap'
 
-import { modal } from "Constants/constants"
 import RepoModalDates from "./RepoModalDate"
+import RepoModalStudent from './RepoModalStudent';
+import RepoModalConfig from './RepoModalConfig';
+import { modal } from 'Constants/constants';
 
 const RepoModal = ({name, members, status, toggleModal}) => {
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
-
-    const selectConfig = (config) => {
-        setConfig(config)
-    }
-
-    const selectStudent = (student) => {
-        setStudent(student)
-    }
+    const [startDate, setStartDate] = useState({Year:'', Month:'', Day:'', Hours:'0', Minutes:'0', Seconds:'0'})
+    const [endDate, setEndDate] = useState({Year:'', Month:'', Day:'', Hours:'0', Minutes:'0', Seconds:'0'})
 
     return (
         <Modal
@@ -23,42 +19,25 @@ const RepoModal = ({name, members, status, toggleModal}) => {
             onHide={toggleModal}
             backdrop="static"
             keyboard={false}
-            size="lg"
+            size="xl"
+            className="repo-modal"
         >
             <Modal.Header closeButton>
                 <Modal.Title>{name}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Row className='configuration'>
-                    <Col sm='2'>
-                        {modal.CONFIG}
-                    </Col>
-                    <Col sm='10'>
-                        <DropdownButton id="dropdown-basic-button" title={config}>
-                            <Dropdown.Item onClick={() => selectConfig(modal.CONFIG_OPTION)}>{modal.CONFIG_OPTION}</Dropdown.Item>
-                        </DropdownButton>
-                    </Col>
-                </Row>
+                <RepoModalConfig config={config} setConfig={setConfig}></RepoModalConfig>
+                <RepoModalStudent members={members} student={student} setStudent={setStudent}></RepoModalStudent>
 
-                <Row className='students'>
-                    <Col sm='2'>
-                        {modal.STUDENT}
-                    </Col>
-                    <Col sm='10'>
-                        <DropdownButton id="dropdown-basic-button" title={student}>
-                        {members.map((member) => (
-                            <Dropdown.Item as="button" onClick={() => selectStudent(member)}>{member}</Dropdown.Item>
-                        ))}
-                        </DropdownButton>
-                    </Col>
-                </Row>
+                <RepoModalDates name={modal.START_DATE} date={startDate} setDate={setStartDate}></RepoModalDates>
+                <RepoModalDates name={modal.END_DATE} date={endDate} setDate ={setEndDate}></RepoModalDates>
 
-                <RepoModalDates></RepoModalDates>
             </Modal.Body>
 
             <Modal.Footer>
                 <Button onClick={toggleModal} variant="secondary">Cancel</Button>
-                <Button variant="success">Analyze</Button>
+                {/* TODO: Hookup the analyze button to send this data and begin analysis */}
+                <Button variant="success" onClick={console.log(startDate, endDate, student, config)}>Analyze</Button>
             </Modal.Footer>
 
         </Modal>
