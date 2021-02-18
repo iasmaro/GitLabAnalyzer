@@ -30,11 +30,13 @@ public class CommitService {
     }
 
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
-                                                           Integer mergeRequestId, String memberId) {
+                                                           Integer mergeRequestId, String memberId) throws GitLabRuntimeException {
 
         String token = userService.getPersonalAccessToken(userId);
 
-        GitlabService gitLabService = new GitlabService(GlobalConstants.gitlabURL, token);
+        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+
+        List<CommitDTO> memberCommits= new ArrayList<>();
 
         Member member = memberRepository.findMemberByMemberId(memberId);
 
@@ -42,6 +44,20 @@ public class CommitService {
             throw new ResourceNotFoundException("Member not found!");
         }
 
-        return gitLabService.getMergeRequestCommitsForMember(projectId, mergeRequestId, member);
+        try {
+            List<CommitWrapper> mergeRequestCommits = gitlabService.getMergeRequestCommits(projectId, mergeRequestId);
+
+            for(CommitWrapper currentCommit : mergeRequestCommits) {
+                if(member.getAlias().contains(currentCommit.getCommitData().getAuthorName())){
+                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
+                    memberCommits.add(commit);
+                }
+            }
+            return memberCommits;
+
+        }
+        catch (GitLabApiException e){
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
     }
 }

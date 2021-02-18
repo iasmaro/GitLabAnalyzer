@@ -221,26 +221,4 @@ public class GitlabService {
         return commitList;
     }
 
-    public List<CommitDTO> getMergeRequestCommitsForMember(Integer projectId, Integer mergeRequestId,
-                                                           Member member) throws GitLabRuntimeException {
-
-        try {
-            List<CommitWrapper> mergeRequestCommits = getMergeRequestCommits(projectId, mergeRequestId);
-            List<CommitDTO> memberCommits= new ArrayList<>();
-
-            for(CommitWrapper currentCommit : mergeRequestCommits) {
-                if(member.getAlias().contains(currentCommit.getCommitData().getAuthorName())){
-                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
-                    memberCommits.add(commit);
-                }
-            }
-            return memberCommits;
-
-        }
-        catch (GitLabApiException e){
-            throw new GitLabRuntimeException(e.getLocalizedMessage());
-        }
-
-    }
-
 }
