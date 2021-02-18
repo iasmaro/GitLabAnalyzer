@@ -1,5 +1,6 @@
 .dashboard {
     text-align: center;
+<<<<<<< HEAD
     font-family: 'Roboto', sans-serif;
     height: 100vh;
     background-color: #acbed8;
@@ -7,4 +8,11 @@
     padding: 75px 350px;
     margin: 0;
     overflow: auto;
+=======
+}
+
+.spinner {
+    position: absolute;
+    top: 50%;
+>>>>>>> master
 }
