@@ -1,16 +1,12 @@
 package com.haumea.gitanalyzer.controller;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
-import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.service.CommitService;
-import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 
 import javax.validation.constraints.NotBlank;
@@ -36,15 +32,17 @@ public class CommitController {
 
         return commitService.getMergeRequestCommitsForMember(userId, projectId, mergeRequestId, memberId);
     }
-
-    @GetMapping
-    public List<CommitDTO> getCommitsForMemberAndDate(@RequestParam @NotBlank String userId,
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/members/{memberId}")
+    public List<CommitDTO> getCommitsForMemberAndDate(@PathVariable String memberId,
+                                                      @RequestParam @NotBlank String userId,
                                                       @RequestParam @NotNull Integer projectId,
-                                                      @RequestParam @NotNull String commitAuthor,
-                                                      @RequestParam @NotNull Date start,
-                                                      @RequestParam @NotNull Date end) throws ParseException {
+                                                      @RequestParam @NotNull String start,
+                                                      @RequestParam @NotNull String end) throws ParseException {
 
-        return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, commitAuthor, start, end);
+
+        System.out.println("Info is: " + memberId +  " " + userId + " " + projectId + " " + " " + start + " " + end);
+        return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, memberId, start, end);
     }
 
 

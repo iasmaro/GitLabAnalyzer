@@ -73,22 +73,28 @@ public class CommitService {
         }
     }
     private Date convertStringToUTCDate(String date) throws ParseException {
+        Date pstDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
 
-        return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(date);
+        final Calendar calendar  = Calendar.getInstance();
+        final int utcOffset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);
+
+        return new Date(pstDate.getTime() - utcOffset);
     }
 
 
-    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) throws ParseException {
+    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, String start, String end) throws ParseException {
         GitlabService gitlabService = createGitlabService(userId);
 
         Member member = memberRepository.findMemberByMemberId(memberId);
         List<CommitWrapper> filteredCommits;
 
-//        Date startDate = convertStringToUTCDate(start);
-//        Date endDate = convertStringToUTCDate(end);
+        Date startDate = convertStringToUTCDate(start);
+        Date endDate = convertStringToUTCDate(end);
 
         try {
-            filteredCommits = gitlabService.filterCommitsForDateAndAuthor(projectId, memberId, start, end);
+            filteredCommits = gitlabService.filterCommitsForDateAndAuthor(projectId, memberId, startDate, endDate);
+
+            System.out.println("size is " + filteredCommits.size());
         }
         catch (GitLabApiException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
@@ -101,6 +107,8 @@ public class CommitService {
                     currentCommit.getCommitData().getAuthorName(), 11);
 
             commitDtoList.add(newDto);
+
+            System.out.println("in dto loop");
         }
 
         return commitDtoList;
