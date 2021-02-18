@@ -1,4 +1,5 @@
 import React from 'react';
+import {Button} from 'react-bootstrap'
 
 const Repo = (props) => {
     const { repo } = props || {};
@@ -6,7 +7,9 @@ const Repo = (props) => {
         <tr>
             <td>{repo?.projectName}</td>
             <td>{repo?.updatedAt}</td>
-            <td><button>Analyze</button></td>
+            <td>
+                <Button variant="light"> Analyze </Button>
+            </td>
         </tr>
     );
 };

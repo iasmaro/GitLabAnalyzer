@@ -14,7 +14,12 @@ const RepoList = (props) => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>Repo Name</th>
+                    <th colSpan='3'>Repositories</th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <th>Name</th>
                         <th>Last Modified</th>
                         <th></th>
                     </tr>
