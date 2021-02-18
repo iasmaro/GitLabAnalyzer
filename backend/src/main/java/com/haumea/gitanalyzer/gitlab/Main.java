@@ -65,8 +65,12 @@ public class Main {
 
         for(MemberWrapper current : memberWrappers) {
             System.out.println("Author is: " + current.getName() + " " + current.getMemberId());
-            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
+
+
+//            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
         }
+        System.out.println("project is: " + projects.get(projectNum).getProject().getId());
+
 //
 //        System.out.println();
 //

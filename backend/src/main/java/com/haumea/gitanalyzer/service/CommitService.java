@@ -82,17 +82,17 @@ public class CommitService {
     }
 
 
-    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, String start, String end) throws ParseException {
+    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) throws ParseException {
         GitlabService gitlabService = createGitlabService(userId);
 
         Member member = memberRepository.findMemberByMemberId(memberId);
         List<CommitWrapper> filteredCommits;
 
-        Date startDate = convertStringToUTCDate(start);
-        Date endDate = convertStringToUTCDate(end);
+//        Date startDate = convertStringToUTCDate(start);
+//        Date endDate = convertStringToUTCDate(end);
 
         try {
-            filteredCommits = gitlabService.filterCommitsForDateAndAuthor(projectId, memberId, startDate, endDate);
+            filteredCommits = gitlabService.filterCommitsForDateAndAuthor(projectId, memberId, start, end);
 
             System.out.println("size is " + filteredCommits.size());
         }
