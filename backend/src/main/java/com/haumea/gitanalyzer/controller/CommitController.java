@@ -37,30 +37,17 @@ public class CommitController {
         return commitService.getMergeRequestCommitsForMember(userId, projectId, mergeRequestId, memberId);
     }
 
-//    @GetMapping
-//    public List<CommitDTO> getCommitsForMemberAndDate(@RequestParam @NotBlank String userId,
-//                                                      @RequestParam @NotNull Integer projectId,
-//                                                      @RequestParam @NotNull String commitAuthor,
-//                                                      @RequestParam @NotNull String start,
-//                                                      @RequestParam @NotNull String end) throws ParseException {
-//
-//
-//
-//    }
+    @GetMapping
+    public List<CommitDTO> getCommitsForMemberAndDate(@RequestParam @NotBlank String userId,
+                                                      @RequestParam @NotNull Integer projectId,
+                                                      @RequestParam @NotNull String commitAuthor,
+                                                      @RequestParam @NotNull Date start,
+                                                      @RequestParam @NotNull Date end) throws ParseException {
 
-//    private Date convertStringToUTCDate(String date) throws ParseException {
-//        Date newDate;
-//
-//        try {
-//            newDate = new SimpleDateFormat("dd/MM/yyyy", Locale.CANADA).parse(date);
-//        }
-//        catch (ParseException e) {
-//            throw new ParseException(e.getLocalizedMessage(), e.getErrorOffset());
-//        }
-//
-//        return newDate;
-//
-//    }
+        return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, commitAuthor, start, end);
+    }
+
+
 
 }
 

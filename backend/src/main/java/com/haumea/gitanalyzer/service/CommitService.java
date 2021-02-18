@@ -13,8 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.haumea.gitanalyzer.model.Member;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -46,37 +50,21 @@ public class CommitService {
     }
     private Date convertStringToUTCDate(String date) throws ParseException {
 
-        Date newDate;
-
-        try {
-            newDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CANADA).parse(date);
-        }
-        catch (ParseException e) {
-            throw new ParseException(e.getLocalizedMessage(), e.getErrorOffset());
-        }
-
-        int convertedYear = newDate.getYear() + 1900;
-        int convertMonth = newDate.getMonth() - 1;
-        int convertedDate = newDate.getDate();
-
-        Calendar calendar = new GregorianCalendar(convertedYear, convertMonth, convertedDate);
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-        calendar.setTimeZone(utc);
-
-        return calendar.getTime();
+        return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(date);
     }
 
-    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, String start, String end) throws ParseException {
+
+    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) throws ParseException {
         GitlabService gitlabService = createGitlabService(userId);
 
         Member member = memberRepository.findMemberByMemberId(memberId);
         List<CommitWrapper> filteredCommits;
 
-        Date startDate = convertStringToUTCDate(start);
-        Date endDate = convertStringToUTCDate(end);
+//        Date startDate = convertStringToUTCDate(start);
+//        Date endDate = convertStringToUTCDate(end);
 
         try {
-            filteredCommits = gitlabService.filterCommitsForDateAndAuthor(projectId, memberId, startDate, endDate);
+            filteredCommits = gitlabService.filterCommitsForDateAndAuthor(projectId, memberId, start, end);
         }
         catch (GitLabApiException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());

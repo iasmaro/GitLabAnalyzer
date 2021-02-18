@@ -5,8 +5,14 @@ import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.*;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Main {
@@ -62,49 +68,49 @@ public class Main {
             newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
         }
 
-//        System.out.println();
-//
-//        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
-//        for(MergeRequest current : mergeRequests) {
-//            System.out.println("Merge request: " + current);
-//
-//            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
-//
-//            for(CommitWrapper commit : commitList) {
-//                System.out.println("MR Commit: " + commit.getCommitData());
-//            }
-//        }
-//
-//        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
-//        for(MergeRequestWrapper current : mergeRequestWrappers) {
-//            System.out.println("Merge request: " + current.getMergeRequestData());
-//
-//            System.out.println();
-//
-//            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
-//
-//            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
-//
-//                System.out.println("change is: " + change.getDiffs());
-//
-//            }
-//
-//            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
-//
-//            for(CommitWrapper commit : commitList) {
-//                System.out.println("MR Commit: " + commit.getCommitData());
-//            }
-//        }
-//
-//        System.out.println();
-//        for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
-//            System.out.println("current commit: " + current.getCommitData());
-//
-//        }
-//
-//        testCommitFiltering(projects, projectNum, app);
-//
-//        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
+        System.out.println();
+
+        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
+        for(MergeRequest current : mergeRequests) {
+            System.out.println("Merge request: " + current);
+
+            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
+
+            for(CommitWrapper commit : commitList) {
+                System.out.println("MR Commit: " + commit.getCommitData());
+            }
+        }
+
+        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
+        for(MergeRequestWrapper current : mergeRequestWrappers) {
+            System.out.println("Merge request: " + current.getMergeRequestData());
+
+            System.out.println();
+
+            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
+
+            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
+
+                System.out.println("change is: " + change.getDiffs());
+
+            }
+
+            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
+
+            for(CommitWrapper commit : commitList) {
+                System.out.println("MR Commit: " + commit.getCommitData());
+            }
+        }
+
+        System.out.println();
+        for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
+            System.out.println("current commit: " + current.getCommitData());
+
+        }
+
+        testCommitFiltering(projects, projectNum, app);
+
+        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
 
     }
 
@@ -161,35 +167,7 @@ public class Main {
 //        printAllProjectData(csil, 5);
 //        printCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
 
-//        String date = "2000-4-19 00:00:01";
-//
-//        Date newDate;
-//
-//        try {
-//            newDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CANADA).parse(date);
-//        }
-//        catch (ParseException e) {
-//            throw new ParseException(e.getLocalizedMessage(), e.getErrorOffset());
-//        }
-//
-//        int convertedYear = newDate.getYear() + 1900;
-//        int convertMonth = newDate.getMonth() - 1;
-//        int convertedDate = newDate.getDate();
-//
-//        Calendar calendar = new GregorianCalendar(convertedYear, convertMonth, convertedDate);
-//        TimeZone utc = TimeZone.getTimeZone("UTC");
-//        calendar.setTimeZone(utc);
-//
-//        System.out.println(calendar.getTime());
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-        Date date = formatter.parse("22-09-2018 08:23:43");
-        String formattedDate = formatter.format(date);
-
-        System.out.println(date);
-        System.out.println(formattedDate);
     }
 }
 
