@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
+import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.User;
@@ -36,6 +37,10 @@ public class CommitService {
         GitlabService gitLabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
         Member member = memberRepository.findMemberByMemberId(memberId);
+
+        if(member == null){
+            throw new ResourceNotFoundException("Member not found!");
+        }
 
         return gitLabService.getMergeRequestCommitsForMember(projectId, mergeRequestId, member);
     }
