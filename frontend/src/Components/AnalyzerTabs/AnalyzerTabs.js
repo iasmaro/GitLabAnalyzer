@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
-import {Col, Row} from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Col, Row, Tabs, Tab } from 'react-bootstrap';
+import { TABS } from 'Constants/constants';
 import './AnalyzerTabs.css';
 
 const AnalyzerTabs = () => {
@@ -20,42 +19,35 @@ const AnalyzerTabs = () => {
                         activeKey={key}
                         onSelect={(k) => changeTab(k)}
                     >
-                        <Tab eventKey={"scores"} title="Scores" >
+                        <Tab eventKey={"scores"} title={TABS.SCORES} >
                             {/* Add Link to the tab it belongs to 
                                 <LINK />
                             */}
-                            Scores
+                            {TABS.SCORES}
                         </Tab>
-                        <Tab eventKey={"graphs"} title="Graphs">
+                        <Tab eventKey={"graphs"} title={TABS.GRAPHS}>
                             {/* Add Link to the tab it belongs to 
                                 <LINK />
                             */}
-                            Graphs
+                            {TABS.GRAPHS}
                         </Tab>
-                        <Tab eventKey={"merge-requests"} title="Merge Requests">
+                        <Tab eventKey={"merge-requests"} title={TABS.MERGE_REQUESTS}>
                             {/* Add Link to the tab it belongs to 
                                 <LINK />
                             */}
-                            Merge Requests
+                            {TABS.MERGE_REQUESTS}
                         </Tab>
-                        <Tab eventKey={"commits"} title="Commits">
+                        <Tab eventKey={"commits"} title={TABS.COMMITS}>
                             {/* Add Link to the tab it belongs to 
                                 <LINK />
                             */}
-                            Commits
+                            {TABS.COMMITS}
                         </Tab>
                     </Tabs>
                 </Col>
             </Row>
         </Tab.Container>
     );
-}
-
-export const TABS = {
-    SCORES: 'scores',
-    GRAPHS: 'graphs',
-    MERGE_REQUESTS: 'merge-requests',
-    COMMITS: 'commits'
 }
 
 export default AnalyzerTabs 
