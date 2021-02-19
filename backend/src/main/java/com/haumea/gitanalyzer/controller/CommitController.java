@@ -33,9 +33,9 @@ public class CommitController {
 
         return commitService.getMergeRequestCommitsForMember(userId, projectId, mergeRequestId, memberId);
     }
-    @ResponseStatus(HttpStatus.OK)
+
     @GetMapping("/members/{memberId}")
-    public List<CommitDTO> getCommitsForMemberAndDate(@PathVariable String memberId,
+    public List<CommitDTO> getCommitsForMemberAndDate(@PathVariable @NotBlank String memberId,
                                                       @RequestParam @NotBlank String userId,
                                                       @RequestParam @NotNull int projectId,
                                                       @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
@@ -44,14 +44,13 @@ public class CommitController {
 
         return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, memberId, start, end);
     }
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{mergeRequestId}")
-    public List<CommitDTO> getCommitsForSelectedMergeRequest(@PathVariable int mergeRequestId,
+
+    @GetMapping("/mrs/{mergeRequestId}")
+    public List<CommitDTO> getCommitsForSelectedMergeRequest(@PathVariable @NotNull int mergeRequestId,
                                                              @RequestParam @NotBlank String userId,
                                                              @RequestParam @NotNull int projectId) {
 
 
-        System.out.println("in request ");
         return commitService.getCommitsForSelectedMergeRequest(userId, projectId, mergeRequestId);
     }
 
