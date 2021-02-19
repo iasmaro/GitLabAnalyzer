@@ -5,6 +5,8 @@ import com.haumea.gitanalyzer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -40,12 +42,14 @@ public class UserService {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(new URL(finalURL).openStream());
+            Document xmlDocument = builder.parse(new URL(finalURL).openStream());
 
-            doc.getDocumentElement().normalize();
-            int numberOfUsers = doc.getDocumentElement().getElementsByTagName("cas:user").getLength();
-            if (numberOfUsers >= 1) {
-                return doc.getDocumentElement().getElementsByTagName("cas:user").item(0).getTextContent();
+            xmlDocument.getDocumentElement().normalize();
+            NodeList users = xmlDocument.getDocumentElement().getElementsByTagName("cas:user");
+            int numberOfUsers = users.getLength();
+            if (numberOfUsers == 1) {
+                Node firstUser = users.item(0);
+                return firstUser.getTextContent();
             }
             return "";
         }
