@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Button} from 'react-bootstrap'
-import RepoModal from '../RepoModal/RepoModal';
+import RepoModal from 'Components/RepoModal/RepoModal';
 
 const Repo = (props) => {
     const { repo } = props || {};
