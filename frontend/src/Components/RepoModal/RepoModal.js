@@ -7,7 +7,9 @@ import RepoModalConfig from './RepoModalConfig';
 import { modal } from 'Constants/constants';
 import './RepoModal.css';
 
-const RepoModal = ({name, members, status, toggleModal}) => {
+const RepoModal = (props) => {
+    
+    const {name, members, status, toggleModal} = props;
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");

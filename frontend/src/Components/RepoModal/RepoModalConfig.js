@@ -3,7 +3,9 @@ import {Dropdown, DropdownButton, Row, Col} from 'react-bootstrap';
 
 import { modal } from "Constants/constants";
 
-const RepoModalConfig = ({config, setConfig}) => {
+const RepoModalConfig = (props) => {
+    
+    const {config, setConfig} = props;
 
     const selectConfig = (config) => {
         setConfig(config);

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Row, Col, Form } from 'react-bootstrap';
 
-const RepoModalDates = ({name, date, setDate}) => {
-
+const RepoModalDates = (props) => {
+    
+    const {name, date, setDate} = props;
+    
     const handleChange = (e) => {
         e.preventDefault();
         const newDate = {
