@@ -45,7 +45,7 @@ public class CommitController {
         return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, memberId, start, end);
     }
 
-    @GetMapping("/mrs/{mergeRequestId}")
+    @GetMapping("/mergeRequests/{mergeRequestId}")
     public List<CommitDTO> getCommitsForSelectedMergeRequest(@PathVariable @NotNull int mergeRequestId,
                                                              @RequestParam @NotBlank String userId,
                                                              @RequestParam @NotNull int projectId) {
