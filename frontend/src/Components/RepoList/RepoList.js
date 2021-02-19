@@ -11,7 +11,7 @@ const RepoList = (props) => {
 
     return (
         <div className = 'list-container'>
-            <Table striped bordered hover>
+            <Table striped bordered hover variant="dark">
                 <thead>
                     <tr>
                     <th colSpan='3'>Repositories</th>
