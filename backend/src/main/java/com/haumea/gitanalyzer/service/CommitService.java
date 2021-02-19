@@ -14,8 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.haumea.gitanalyzer.model.Member;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class CommitService {
@@ -27,6 +32,12 @@ public class CommitService {
     public CommitService(UserService userService, MemberRepository memberRepository) {
         this.userService = userService;
         this.memberRepository = memberRepository;
+    }
+
+    private GitlabService createGitlabService(String userId) {
+        String token = userService.getPersonalAccessToken(userId);
+
+        return new GitlabService(GlobalConstants.gitlabURL, token);
     }
 
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
@@ -60,4 +71,57 @@ public class CommitService {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
     }
+    private Date convertStringToUTCDate(String date) throws ParseException {
+        Date pstDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+
+        final Calendar calendar  = Calendar.getInstance();
+        final int utcOffset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);
+
+        return new Date(pstDate.getTime() - utcOffset);
+    }
+
+    private List<CommitDTO> convertCommitWrappersToDtos(List<CommitWrapper> wrapperList) {
+        List<CommitDTO> commitDtoList = new ArrayList<>();
+
+        for(CommitWrapper currentCommit : wrapperList) {
+            CommitDTO newDto = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(),
+                    currentCommit.getCommitData().getAuthorName(), 11);
+
+            commitDtoList.add(newDto);
+        }
+
+        return commitDtoList;
+    }
+
+
+    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) {
+        GitlabService gitlabService = createGitlabService(userId);
+        List<CommitWrapper> filteredCommits;
+
+        try {
+            filteredCommits = gitlabService.filterCommitsForDateAndAuthor(projectId, memberId, start, end);
+        }
+        catch (GitLabApiException e) {
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
+
+        return convertCommitWrappersToDtos(filteredCommits);
+    }
+
+    public List<CommitDTO> getCommitsForSelectedMergeRequest(String userId, int projectId, int mergeRequestId) {
+        GitlabService gitlabService = createGitlabService(userId);
+        List<CommitWrapper> mergeRequestCommits;
+
+        try {
+            mergeRequestCommits = gitlabService.getMergeRequestCommits(projectId, mergeRequestId);
+        }
+        catch (GitLabRuntimeException | GitLabApiException e){
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
+
+
+        return convertCommitWrappersToDtos(mergeRequestCommits);
+    }
+
+
 }

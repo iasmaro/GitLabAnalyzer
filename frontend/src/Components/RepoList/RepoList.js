@@ -11,7 +11,7 @@ const RepoList = (props) => {
 
     return (
         <div className = 'list-container'>
-            <Table striped bordered hover>
+            <Table striped bordered hover variant="dark">
                 <thead>
                     <tr>
                     <th colSpan='3'>Repositories</th>
@@ -26,10 +26,14 @@ const RepoList = (props) => {
                 </thead>
                 <tbody>
                     {!repos ? (
-                        <td colSpan={3} >{message.TOKEN_NOT_SET}</td>
+                        <tr>
+                            <td colSpan={3} >{message.TOKEN_NOT_SET}</td>
+                        </tr>
                     )
                     : !repos.length ? (
-                        <td colSpan={3} >{message.NO_REPOS}</td>
+                        <tr>
+                            <td colSpan={3} >{message.NO_REPOS}</td>
+                        </tr>
                     )
                     :
                     repos.map((repo) => (

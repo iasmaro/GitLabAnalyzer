@@ -2,16 +2,17 @@ package com.haumea.gitanalyzer.controller;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.service.CommitService;
-import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.text.ParseException;
 
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "/api/v1/commits")
@@ -32,5 +33,28 @@ public class CommitController {
 
         return commitService.getMergeRequestCommitsForMember(userId, projectId, mergeRequestId, memberId);
     }
+
+    @GetMapping("/members/{memberId}")
+    public List<CommitDTO> getCommitsForMemberAndDate(@PathVariable @NotBlank String memberId,
+                                                      @RequestParam @NotBlank String userId,
+                                                      @RequestParam @NotNull int projectId,
+                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
+                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
+
+
+        return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, memberId, start, end);
+    }
+
+    @GetMapping("/mergeRequests/{mergeRequestId}")
+    public List<CommitDTO> getCommitsForSelectedMergeRequest(@PathVariable @NotNull int mergeRequestId,
+                                                             @RequestParam @NotBlank String userId,
+                                                             @RequestParam @NotNull int projectId) {
+
+
+        return commitService.getCommitsForSelectedMergeRequest(userId, projectId, mergeRequestId);
+    }
+
+
+
 }
 
