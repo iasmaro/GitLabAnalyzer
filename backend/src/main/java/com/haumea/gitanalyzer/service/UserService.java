@@ -37,7 +37,7 @@ public class UserService {
         return userRepository.getPersonalAccessToken(userId);
     }
 
-    public String getUserName(String url, String ticket) {
+    public String getUserId(String url, String ticket) {
         String finalURL = SFU_API_URL + url + "&ticket=" + ticket;
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

@@ -8,7 +8,7 @@ const dev = {
 
 const prod = {
     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://cmpt373-1211-11.cmpt.sfu.ca/',
-    AUTHENTICATION_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca/api/v1/users/user?url=http://cmpt373-1211-11.cmpt.sfu.ca/',
+    AUTHENTICATION_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca/api/v1/users/userId?url=http://cmpt373-1211-11.cmpt.sfu.ca/',
     REPOS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca/api/v1/projects',
     USERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca/api/v1/users',
     PROJECT_MEMBERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca/api/v1/members',

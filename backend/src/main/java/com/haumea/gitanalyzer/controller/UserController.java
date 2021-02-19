@@ -47,8 +47,8 @@ public class UserController {
     }
 
 
-    @GetMapping("/user")
-    public String getUserName(@RequestParam @NotBlank String url, @RequestParam @NotBlank String ticket) {
+    @GetMapping("/userId")
+    public String getUserId(@RequestParam @NotBlank String url, @RequestParam @NotBlank String ticket) {
         return userService.getUserName(url, ticket);
     }
 }
