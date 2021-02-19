@@ -1,6 +1,6 @@
 const dev = {
     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://localhost:3000/',
-    AUTHENTICATION_API_URL: 'http://localhost:8080/api/v1/users/user?url=http://localhost:3000/',
+    AUTHENTICATION_API_URL: 'http://localhost:8080/api/v1/users/userId?url=http://localhost:3000/',
     REPOS_API_URL: 'http://localhost:8080/api/v1/projects',
     USERS_API_URL: 'http://localhost:8080/api/v1/users',
     PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
