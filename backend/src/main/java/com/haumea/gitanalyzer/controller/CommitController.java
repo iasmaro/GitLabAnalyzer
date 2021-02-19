@@ -24,11 +24,11 @@ public class CommitController {
         this.commitService = commitService;
     }
 
-    @GetMapping
+    @GetMapping("mergeRequests/{mergeRequestId}/members/{memberId}")
     public List<CommitDTO> getMergeRequestCommitsForMember(@RequestParam @NotBlank String userId,
                                                            @RequestParam @NotNull Integer projectId,
-                                                           @RequestParam @NotNull Integer mergeRequestId,
-                                                           @RequestParam @NotBlank String memberId) {
+                                                           @PathVariable @NotNull Integer mergeRequestId,
+                                                           @PathVariable @NotBlank String memberId) {
 
         return commitService.getMergeRequestCommitsForMember(userId, projectId, mergeRequestId, memberId);
     }
