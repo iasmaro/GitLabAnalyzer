@@ -1,13 +1,13 @@
 import React from 'react';
-import {Dropdown, DropdownButton, Row, Col} from 'react-bootstrap'
+import {Dropdown, DropdownButton, Row, Col} from 'react-bootstrap';
 
-import { modal } from "Constants/constants"
+import { modal } from "Constants/constants";
 
 const RepoModalStudent = ({members, student, setStudent}) => {
 
     const selectStudent = (student) => {
-        setStudent(student)
-    }
+        setStudent(student);
+    };
 
     return (
         <Row className='students'>
@@ -22,7 +22,7 @@ const RepoModalStudent = ({members, student, setStudent}) => {
                 </DropdownButton>
             </Col>
         </Row>
-    )
-}
+    );
+};
 
-export default RepoModalStudent
+export default RepoModalStudent;

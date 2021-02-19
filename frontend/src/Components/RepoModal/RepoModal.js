@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { Modal, Button} from 'react-bootstrap'
+import { Modal, Button} from 'react-bootstrap';
 
-import RepoModalDates from "./RepoModalDate"
+import RepoModalDates from "./RepoModalDate";
 import RepoModalStudent from './RepoModalStudent';
 import RepoModalConfig from './RepoModalConfig';
 import { modal } from 'Constants/constants';
-import './RepoModal.css'
+import './RepoModal.css';
 
 const RepoModal = ({name, members, status, toggleModal}) => {
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
-    const [startDate, setStartDate] = useState({Year:'', Month:'', Day:'', Hours:'0', Minutes:'0', Seconds:'0'})
-    const [endDate, setEndDate] = useState({Year:'', Month:'', Day:'', Hours:'0', Minutes:'0', Seconds:'0'})
+    const [startDate, setStartDate] = useState({Year:'', Month:'', Day:'', Hours:'0', Minutes:'0', Seconds:'0'});
+    const [endDate, setEndDate] = useState({Year:'', Month:'', Day:'', Hours:'0', Minutes:'0', Seconds:'0'});
 
     return (
         <Modal
@@ -42,7 +42,7 @@ const RepoModal = ({name, members, status, toggleModal}) => {
             </Modal.Footer>
 
         </Modal>
-    )
-}
+    );
+};
 
 export default RepoModal

@@ -1,13 +1,13 @@
 import React from 'react';
-import {Dropdown, DropdownButton, Row, Col} from 'react-bootstrap'
+import {Dropdown, DropdownButton, Row, Col} from 'react-bootstrap';
 
-import { modal } from "Constants/constants"
+import { modal } from "Constants/constants";
 
 const RepoModalConfig = ({config, setConfig}) => {
 
     const selectConfig = (config) => {
-        setConfig(config)
-    }
+        setConfig(config);
+    };
 
     return (
     <Row className='configuration'>
@@ -20,7 +20,7 @@ const RepoModalConfig = ({config, setConfig}) => {
             </DropdownButton>
         </Col>
     </Row>
-    )
-}
+    );
+};
 
-export default RepoModalConfig
+export default RepoModalConfig;

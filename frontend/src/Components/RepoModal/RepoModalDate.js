@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Form } from 'react-bootstrap'
+import { Row, Col, Form } from 'react-bootstrap';
 
 const RepoModalDates = ({name, date, setDate}) => {
 
@@ -8,9 +8,9 @@ const RepoModalDates = ({name, date, setDate}) => {
         const newDate = {
             ...date,
             [e.target.name]: e.target.value
-        }
-        setDate(newDate)
-    }
+        };
+        setDate(newDate);
+    };
 
     return (
         <Form>
@@ -38,7 +38,7 @@ const RepoModalDates = ({name, date, setDate}) => {
                 </Col>
             </Row>
         </Form>
-    )
-}
+    );
+};
 
 export default RepoModalDates;
