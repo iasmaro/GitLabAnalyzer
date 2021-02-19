@@ -3,6 +3,7 @@ package com.haumea.gitanalyzer.controller;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
 import com.haumea.gitanalyzer.service.MergeRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +29,13 @@ public class MergeRequestController {
     }
 
     @GetMapping
-    public List<MergeRequestDTO> getAllMergeRequests(@NotBlank @RequestParam String userID,
+    public List<MergeRequestDTO> getAllMergeRequests(@NotBlank @RequestParam String userId,
                                                      @NotNull @RequestParam int projectId,
                                                      @NotBlank @RequestParam String memberId,
-                                                     @NotBlank @RequestParam String start,
-                                                     @NotBlank @RequestParam String end){
+                                                     @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
+                                                     @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end,
+                                                     @RequestParam (required = false, defaultValue = "false") boolean memberFilter){
 
-        return mergeRequestService.getAllMergeRequests(userID, projectId, memberId, start, end);
+        return mergeRequestService.getAllMergeRequests(userId, projectId, memberId, start, end, memberFilter);
     }
 }
