@@ -46,4 +46,9 @@ public class UserController {
       return userService.getPersonalAccessToken(userId);
     }
 
+
+    @GetMapping("/userId")
+    public String getUserId(@RequestParam @NotBlank String url, @RequestParam @NotBlank String ticket) {
+        return userService.getUserName(url, ticket);
+    }
 }
