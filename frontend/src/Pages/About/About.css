@@ -1,4 +1,21 @@
 .about-page {
     color: #000000;
-    text-align: center;
+    background-color: #acbed8;
+    height: 100vh;
+    overflow: auto;
 }
+
+.main-header {
+    color: #000000;
+    text-align: center;
+    font-style: italic;
+    padding-top: 15px;
+    width: 60%;
+    margin: auto;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 40px;
+  }

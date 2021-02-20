@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 
-import About from 'Pages/About/About';
 import Home from 'Pages/Home/Home';
 import Profile from 'Pages/Profile/Profile';
 import LogoutPage from 'Pages/Logout/LogoutPage';
@@ -35,7 +34,6 @@ function App() {
       <Navbar />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/about" component={About} />
         <Route exact path="/Analysis" component={Analysis} />
         <ProtectedRoute exact path="/Configurations" Component={Home} />
         <ProtectedRoute exact path="/Reports" Component={Home} />
