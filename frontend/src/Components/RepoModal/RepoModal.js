@@ -12,10 +12,8 @@ const RepoModal = (props) => {
     const {name, members, status, toggleModal} = props;
 
     /*Default times are the beginning of unix time to the current date and time*/
-    const currentDate = new Date();
-    const defaultStartDate = {Year:'', Month:'', Day:'', Hours:'', Minutes:'', Seconds:''}
-    const defaultEndDate = {Year:currentDate.getFullYear().toString(), Month:currentDate.getMonth().toString(), Day:currentDate.getDate().toString(), 
-                            Hours:currentDate.getHours().toString(), Minutes:currentDate.getMinutes().toString(), Seconds:currentDate.getSeconds().toString()}
+    const defaultStartDate = createStartDate();
+    const defaultEndDate = createEndDate();
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
@@ -46,11 +44,22 @@ const RepoModal = (props) => {
             <Modal.Footer>
                 <Button onClick={toggleModal} variant="secondary">Cancel</Button>
                 {/* TODO: Hookup the analyze button to send this data and begin analysis */}
-                <Button variant="success" onClick={console.log(startDate, endDate, student, config)}>Analyze</Button>
+                <Button variant="success">Analyze</Button>
             </Modal.Footer>
 
         </Modal>
     );
 };
+
+function createStartDate(){
+    return {Year:'', Month:'', Day:'', Hours:'', Minutes:'', Seconds:''}
+}
+
+function createEndDate() {
+    let currentDate = new Date();
+    return {Year:currentDate.getFullYear().toString(), Month:currentDate.getMonth().toString(), Day:currentDate.getDate().toString(), 
+        Hours:currentDate.getHours().toString(), Minutes:currentDate.getMinutes().toString(), Seconds:currentDate.getSeconds().toString()
+    };
+}
 
 export default RepoModal
