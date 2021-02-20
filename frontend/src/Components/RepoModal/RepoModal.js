@@ -8,13 +8,19 @@ import { modal } from 'Constants/constants';
 import './RepoModal.css';
 
 const RepoModal = (props) => {
-    
+
     const {name, members, status, toggleModal} = props;
+
+    /*Default times are the beginning of unix time to the current date and time*/
+    const currentDate = new Date();
+    const defaultStartDate = {Year:'1970', Month:'1', Day:'1', Hours:'0', Minutes:'0', Seconds:'0'}
+    const defaultEndDate = {Year:currentDate.getFullYear().toString(), Month:currentDate.getMonth().toString(), Day:currentDate.getDate().toString(), 
+                            Hours:currentDate.getHours().toString(), Minutes:currentDate.getMinutes().toString(), Seconds:currentDate.getSeconds().toString()}
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
-    const [startDate, setStartDate] = useState({Year:'', Month:'', Day:'', Hours:'0', Minutes:'0', Seconds:'0'});
-    const [endDate, setEndDate] = useState({Year:'', Month:'', Day:'', Hours:'0', Minutes:'0', Seconds:'0'});
+    const [startDate, setStartDate] = useState(defaultStartDate);
+    const [endDate, setEndDate] = useState(defaultEndDate);
 
     return (
         <Modal
