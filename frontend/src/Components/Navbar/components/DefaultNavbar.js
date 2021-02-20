@@ -3,7 +3,7 @@ import { Nav, Navbar } from 'react-bootstrap';
 
 import { config } from 'Constants/constants';
 
-const DefaultNavbar = ()=> {
+const DefaultNavbar = () => {
 
     return (
         <Navbar variant='primary' expand="sm">
