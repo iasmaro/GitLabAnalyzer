@@ -24,7 +24,14 @@ const Home = () => {
             <div className='column'>
                 <h3>The Team</h3>
                 <p>
-                    We are a diverse group of 8 CS students studying at Simon Fraser University and together we are team Haumea.  
+                    GitLab Analyzer is brought to you by a diverse group of eight CS students studying at 
+                    Simon Fraser University and together we are team Haumea.
+                </p>
+                <p>
+                    <strong>Backend Team:</strong> Andrew, Austin, Minh, Viet
+                </p>
+                <p>
+                    <strong>Frontend Team:</strong> Doris, Ivan, Neil, Sterling
                 </p>
             </div>
             <div className='column'>
