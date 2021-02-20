@@ -1,0 +1,25 @@
+version: '3'
+services:
+
+  backend:
+    # specify the directory of the Dockerfile
+    build: ./backend
+    image: gitlabanalyzer_backend:latest
+    container_name: gitanalyzer-backend
+    ports:
+      - 8080:8080
+
+  frontend:
+    build: ./frontend
+    container_name: gitanalyzer-frontend
+    ports:
+      - 80:80
+    links:
+      - backend
+    depends_on:
+      - backend  
+
+# https://wkrzywiec.medium.com/how-to-run-database-backend-and-frontend-in-a-single-click-with-docker-compose-4bcda66f6de
+# https://turkogluc.com/run-react-and-spring-docker-compose/
+# docker-compose up --build -d
+# docker-compose down --rmi all

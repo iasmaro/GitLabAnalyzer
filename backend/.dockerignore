@@ -1,0 +1,5 @@
+.idea
+.gradle
+database
+build
+.gitignore
