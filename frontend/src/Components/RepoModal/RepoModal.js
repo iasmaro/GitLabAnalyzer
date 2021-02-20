@@ -6,6 +6,8 @@ import RepoModalStudent from './RepoModalStudent';
 import RepoModalConfig from './RepoModalConfig';
 import { modal } from 'Constants/constants';
 import './RepoModal.css';
+import { createStartDate } from './getDates'
+import { createEndDate } from './getDates'
 
 const RepoModal = (props) => {
 
@@ -50,16 +52,5 @@ const RepoModal = (props) => {
         </Modal>
     );
 };
-
-function createStartDate(){
-    return {Year:'', Month:'', Day:'', Hours:'', Minutes:'', Seconds:''}
-}
-
-function createEndDate() {
-    let currentDate = new Date();
-    return {Year:currentDate.getFullYear().toString(), Month:currentDate.getMonth().toString(), Day:currentDate.getDate().toString(), 
-        Hours:currentDate.getHours().toString(), Minutes:currentDate.getMinutes().toString(), Seconds:currentDate.getSeconds().toString()
-    };
-}
 
 export default RepoModal
