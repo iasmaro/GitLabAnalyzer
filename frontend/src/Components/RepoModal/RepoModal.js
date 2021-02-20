@@ -35,11 +35,11 @@ const RepoModal = (props) => {
                 <Modal.Title>{name}</Modal.Title>
             </Modal.Header>
             <Modal.Body className="repo-modal-body">
-                <RepoModalConfig config={config} setConfig={setConfig}></RepoModalConfig>
-                <RepoModalStudent members={members} student={student} setStudent={setStudent}></RepoModalStudent>
+                <RepoModalConfig config={config} setConfig={setConfig} />
+                <RepoModalStudent members={members} student={student} setStudent={setStudent} />
 
-                <RepoModalDates name={modal.START_DATE} date={startDate} setDate={setStartDate}></RepoModalDates>
-                <RepoModalDates name={modal.END_DATE} date={endDate} setDate ={setEndDate}></RepoModalDates>
+                <RepoModalDates name={modal.START_DATE} date={startDate} setDate={setStartDate} />
+                <RepoModalDates name={modal.END_DATE} date={endDate} setDate ={setEndDate} />
 
             </Modal.Body>
 
