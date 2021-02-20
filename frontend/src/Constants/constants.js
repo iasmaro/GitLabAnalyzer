@@ -14,6 +14,14 @@ const prod = {
     PROJECT_MEMBERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca/api/v1/members',
 }
 
+// const prod = {
+//     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://localhost:3000/',
+//     AUTHENTICATION_API_URL: 'http://localhost:8080/api/v1/users/userId?url=http://localhost:3000/',
+//     REPOS_API_URL: 'http://localhost:8080/api/v1/projects',
+//     USERS_API_URL: 'http://localhost:8080/api/v1/users',
+//     PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
+// }
+
 export const config = process.env.NODE_ENV === 'development' ? dev : prod;
 
 export const TABS = {
