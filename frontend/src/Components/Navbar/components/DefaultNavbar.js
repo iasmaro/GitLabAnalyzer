@@ -12,7 +12,6 @@ const DefaultNavbar = () => {
             <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
                 <Nav className="nav">
                     <Nav.Link href={config.SFU_LOGIN_URL}>Sign In</Nav.Link>
-                    <Nav.Link href="/About/">About</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
