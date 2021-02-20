@@ -13,7 +13,7 @@ const RepoModal = (props) => {
 
     /*Default times are the beginning of unix time to the current date and time*/
     const currentDate = new Date();
-    const defaultStartDate = {Year:'1970', Month:'1', Day:'1', Hours:'0', Minutes:'0', Seconds:'0'}
+    const defaultStartDate = {Year:'', Month:'', Day:'', Hours:'', Minutes:'', Seconds:''}
     const defaultEndDate = {Year:currentDate.getFullYear().toString(), Month:currentDate.getMonth().toString(), Day:currentDate.getDate().toString(), 
                             Hours:currentDate.getHours().toString(), Minutes:currentDate.getMinutes().toString(), Seconds:currentDate.getSeconds().toString()}
 

@@ -4,12 +4,13 @@ import {Dropdown, DropdownButton, Row, Col} from 'react-bootstrap';
 import { modal } from "Constants/constants";
 
 const RepoModalStudent = (props) => {
-    
+
     const {members, student, setStudent} = props
 
     const selectStudent = (student) => {
         setStudent(student);
     };
+
 
     return (
         <Row className='students'>
