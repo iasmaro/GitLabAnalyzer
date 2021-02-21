@@ -11,10 +11,10 @@ const RepoList = (props) => {
 
     return (
         <div className = 'list-container'>
-            <Table striped bordered hover variant="dark">
+            <Table striped bordered hover variant="light">
                 <thead>
                     <tr>
-                    <th colSpan='3'>Repositories</th>
+                    <th colSpan='3' className='repoTitle'>Repositories</th>
                     </tr>
                 </thead>
                 <thead>

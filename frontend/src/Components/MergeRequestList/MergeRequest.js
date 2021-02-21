@@ -10,7 +10,7 @@ const MergeRequest = (props) => {
             <td>{mergerequest?.updatedDate}</td>
             <td>{mergerequest?.mergedDate}</td>
             <td>
-                <Button variant="light" onClick={() => {handleClick(mergerequest?.mergeId)}}>View</Button>
+                <Button variant="dark" onClick={() => {handleClick(mergerequest?.mergeId)}}>View</Button>
             </td>
         </tr>
     );

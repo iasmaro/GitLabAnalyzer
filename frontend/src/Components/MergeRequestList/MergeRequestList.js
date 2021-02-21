@@ -18,10 +18,10 @@ const MergeRequestList = (props) => {
     return (
         <div className="merge-request-list-container">
             <div className="left">
-                <Table striped bordered hover variant="dark">
+                <Table striped bordered hover variant="light">
                     <thead>
                         <tr>
-                        <th colSpan='8'>Merge Requests</th>
+                            <th colSpan='8'className='mrTitle'>Merge Requests</th>
                         </tr>
                     </thead>
                     <thead>

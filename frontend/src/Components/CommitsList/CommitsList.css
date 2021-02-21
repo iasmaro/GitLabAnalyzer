@@ -3,8 +3,15 @@
   position: relative;
   overflow-y: scroll;
   overflow-x: scroll;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
 }
 
 .commits-list-container::-webkit-scrollbar { 
   display: none;
+}
+
+.commitTitle{
+  background-color: rgb(227, 226, 226);
+  text-align: center;
 }
