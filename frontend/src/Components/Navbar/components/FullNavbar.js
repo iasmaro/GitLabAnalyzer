@@ -5,7 +5,15 @@ const FullNavbar = ()=> {
 
     return (
         <Navbar variant='primary' expand="sm">
-            <Navbar.Brand href="/">GitLab Analyzer</Navbar.Brand>
+            <Navbar.Brand href="/">
+                <img
+                    alt=""
+                    src="/HaumeaNav.JPG"
+                    width="50"
+                    height="30"
+                />
+                GitLab Analyzer
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
                 <Nav className="nav">
