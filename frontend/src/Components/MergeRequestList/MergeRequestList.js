@@ -1,53 +1,54 @@
 import React, { useState } from 'react';
-import { Col, Row, Table, Container } from 'react-bootstrap';
-import './MergeRequestList.css';
-import { message } from 'Constants/constants';
+import { Table } from 'react-bootstrap';
 
-import CommitsList from 'Components/CommitsList/CommitsList';
-import MergeRequest from './MergeRequestList';
+import { message } from 'Constants/constants';
 import { commits } from 'Mocks/mockCommits';
+import CommitsList from 'Components/CommitsList/CommitsList';
+
+import './MergeRequestList.css';
+import MergeRequest from './MergeRequest';
 
 
 const MergeRequestList = (props) => {
     const { mergerequests } = props || {};
+    const [selectedMR, setSelectedMR] = useState();
+    const handleClick = (id) => {
+        setSelectedMR(id);
+    }
     return (
-        <Container>
-            <Row>
-                <Col>
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                            <th colSpan='8'>Merge Requests</th>
-                            </tr>
-                        </thead>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Create Date</th>
-                                <th>Member Name</th>
-                                <th>Member Score</th>
-                                <th>Merge Date</th>
-                                <th>Update Date</th>
-                                <th>Merege Request Score</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        {/*CHANGE THIS */}
-                        <tbody>
-                            {!mergerequests?.length ? (
-                                <td colSpan={8} >{message.NO_MERGE_REQUEST}</td>
-                            )
-                            :
-                            mergerequests.map((mergerequest) => (
-                                <MergeRequest key={mergerequest?.projectId} mergerequest={mergerequest}/>
-                            ))}
+        <div className="merge-request-list-container">
+            <div className="left">
+                <Table striped bordered hover variant="dark">
+                    <thead>
+                        <tr>
+                        <th colSpan='8'>Merge Requests</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th>Merge #</th>
+                            <th>Create Date</th>
+                            <th>Merge Date</th>
+                            <th>Update Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {!mergerequests?.length ? (
+                            <td colSpan={8} >{message.NO_MERGE_REQUEST}</td>
+                        )
+                        :
+                        mergerequests.map((mergerequest) => (
+                            <MergeRequest key={mergerequest?.projectId} mergerequest={mergerequest} handleClick={handleClick} />
+                        ))}
 
-                        </tbody>
-                    </Table>
-                </Col>
-                <Col><CommitsList commits={commits}/></Col>
-        </Row>
-        </Container>
+                    </tbody>
+                </Table>
+            </div>
+            <div className="right">
+                {selectedMR && <CommitsList commits={commits} />}
+            </div>
+        </div>
     )
 }
 

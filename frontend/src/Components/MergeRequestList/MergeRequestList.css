@@ -1,0 +1,29 @@
+.left {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    max-height: 800px;
+    overflow-y: scroll;
+    overflow-x: scroll;
+}
+
+.left::-webkit-scrollbar { 
+    display: none;
+}
+
+.right {
+    float: right;
+    width: 50%;
+    padding: 10px;
+}
+
+.merge-request-list-container {
+    background-color: #acbed8;
+    height: 100vh;
+}
+
+.merge-request-list-container:after {
+    content: "";
+    display: table;
+    clear: both;
+}

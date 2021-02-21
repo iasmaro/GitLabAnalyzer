@@ -1,11 +1,10 @@
 .commits-list-container {
-    max-height: 80%;
-    width: 40%;
-    position: absolute;
-    top: 15%;
-    left: 2%;
-    overflow-y: scroll;
-    overflow-x: scroll;
-  }
+  max-height: 800px;
+  position: relative;
+  overflow-y: scroll;
+  overflow-x: scroll;
+}
 
-  
+.commits-list-container::-webkit-scrollbar { 
+  display: none;
+}
