@@ -6,15 +6,15 @@ import RepoModalStudent from './RepoModalStudent';
 import RepoModalConfig from './RepoModalConfig';
 import { modal } from 'Constants/constants';
 import './RepoModal.css';
-import { createStartDate } from './getDates'
-import { createEndDate } from './getDates'
+import { createStartDate } from './Utils/getDates';
+import { createEndDate } from './Utils/getDates';
 
 const RepoModal = (props) => {
 
-    const {name, members, status, toggleModal} = props;
+    const {name, createdAt, members, status, toggleModal} = props;
 
     /*Default times are the beginning of unix time to the current date and time*/
-    const defaultStartDate = createStartDate();
+    const defaultStartDate = createStartDate(createdAt);
     const defaultEndDate = createEndDate();
 
     const [config, setConfig] = useState("Select a configuration");
