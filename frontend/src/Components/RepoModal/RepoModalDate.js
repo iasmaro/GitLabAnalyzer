@@ -1,6 +1,5 @@
 import React from 'react';
 import { Row, Col, Form } from 'react-bootstrap';
-import { localToUtc } from './Utils/getDates';
 
 const RepoModalDates = (props) => {
     
