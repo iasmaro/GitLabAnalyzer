@@ -29,7 +29,7 @@ const Repo = (props) => {
             <td>
                 <Button variant="dark" onClick={handleShow}> Analyze </Button>
             </td>
-            {show && <RepoModal name={repo?.projectName} createdAt={repo?.createdAt} members={members} status={show} toggleModal={handleClose}/>}
+            {show && <RepoModal name={repo?.projectName} id={repo?.projectId} createdAt={repo?.createdAt} members={members} status={show} toggleModal={handleClose}/>}
         </tr>
     );
 };
