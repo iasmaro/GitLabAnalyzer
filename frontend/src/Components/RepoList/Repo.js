@@ -4,6 +4,7 @@ import {Button} from 'react-bootstrap'
 import RepoModal from 'Components/RepoModal/RepoModal';
 import getProjectMembers from 'Utils/getProjectMembers';
 import { useUserState } from 'UserContext';
+import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
 
 
 const Repo = (props) => {
@@ -24,11 +25,11 @@ const Repo = (props) => {
     return (
         <tr>
             <td>{repo?.projectName}</td>
-            <td>{repo?.updatedAt}</td>
+            <td>{utcToLocal(repo?.updatedAt).toString()}</td>
             <td>
                 <Button variant="light" onClick={handleShow}>Analyze</Button>
             </td>
-            {show && <RepoModal name={repo?.projectName} members={members} status={show} toggleModal={handleClose}/>}
+            {show && <RepoModal name={repo?.projectName} createdAt={repo?.createdAt} members={members} status={show} toggleModal={handleClose}/>}
         </tr>
     );
 };

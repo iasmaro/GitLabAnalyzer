@@ -21,22 +21,22 @@ const RepoModalDates = (props) => {
                     {name}
                 </Col>
                 <Col>
-                    <Form.Control name="Year" placeholder="Year" onChange={handleChange}/>
+                    <Form.Control name="Year" placeholder={date?.Year} onChange={handleChange}/>
                 </Col>
                 <Col>
-                    <Form.Control name="Month" placeholder="Month" onChange={handleChange}/>
+                    <Form.Control name="Month" placeholder={date?.Month} onChange={handleChange}/>
                 </Col>
                 <Col>
-                    <Form.Control name="Day" placeholder="Day" onChange={handleChange}/>
+                    <Form.Control name="Day" placeholder={date?.Day} onChange={handleChange}/>
                 </Col>
                 <Col>
-                    <Form.Control name="Hours" placeholder="Hours" onChange={handleChange}/>
+                    <Form.Control name="Hours" placeholder={date?.Hours} onChange={handleChange}/>
                 </Col>
                 <Col>
-                    <Form.Control name="Minutes" placeholder="Minutes" onChange={handleChange}/>
+                    <Form.Control name="Minutes" placeholder={date?.Minutes} onChange={handleChange}/>
                 </Col>
                 <Col>
-                    <Form.Control name="Seconds" placeholder="Seconds" onChange={handleChange}/>
+                    <Form.Control name="Seconds" placeholder={date?.Seconds} onChange={handleChange}/>
                 </Col>
             </Row>
         </Form>
