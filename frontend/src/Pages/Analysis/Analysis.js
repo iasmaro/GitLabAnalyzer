@@ -3,8 +3,11 @@ import { Redirect } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
 
 import { useUserState } from 'UserContext';
+import AnalyzerTabs from 'Components/AnalyzerTabs/AnalyzerTabs';
 import getMergeRequests from 'Utils/getMergeRequests';
-import MergeRequestList from 'Components/MergeRequestList/MergeRequestList';
+import getAllCommits from 'Utils/getAllCommits';
+
+import './Analysis.css'
 
 const Analysis = (props) => {
     const { location } = props || {};
@@ -12,11 +15,15 @@ const Analysis = (props) => {
     const { data } = state || {};
     const [isLoading, setIsLoading] = useState(true);
     const [mergeRequests, setMergeRequests] = useState();
+    const [commits, setCommits] = useState();
     const username = useUserState();
     useEffect(() => {
         getMergeRequests(username, data.memberId, data.start, data.end, data.projectId).then((data) => {
             setMergeRequests(data);
             setIsLoading(false);
+        });
+        getAllCommits(username, data.memberId, data.start, data.end, data.projectId).then((data) => {
+            setCommits(data);
         });
     }, [username, data]);
     
@@ -25,8 +32,8 @@ const Analysis = (props) => {
     }
 
     return (
-        <div>
-            {isLoading ? <Spinner animation="border" className="spinner" /> : <MergeRequestList mergerequests={mergeRequests} projectId={data.projectId} />}
+        <div className="analysis-page">
+            {isLoading ? <Spinner animation="border" className="spinner" /> : <AnalyzerTabs mergerequests={mergeRequests} projectId={data.projectId} commits={commits} />}
         </div>
     )
 }

@@ -55,7 +55,7 @@ const MergeRequestList = (props) => {
                 </Table>
             </div>
             <div className="right">
-                {selectedMR && isLoading && <Spinner animation="border" className="spinner" />}
+                {selectedMR && isLoading && <Spinner animation="border" className="right-spinner" />}
                 {selectedMR && !isLoading && <CommitsList commits={commits} />}
             </div>
         </div>

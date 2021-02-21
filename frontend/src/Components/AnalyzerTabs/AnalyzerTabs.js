@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Col, Row, Tabs, Tab } from 'react-bootstrap';
+
 import { TABS } from 'Constants/constants';
+import MergeRequestList from 'Components/MergeRequestList/MergeRequestList';
+import CommitsList from 'Components/CommitsList/CommitsList';
+
 import './AnalyzerTabs.css';
 
-const AnalyzerTabs = () => {
-    const [key, setKey] = useState('home');
+const AnalyzerTabs = (props) => {
+    const [key, setKey] = useState('merge-requests');
 
     const changeTab = (k) => {
         setKey(k);
@@ -19,29 +23,11 @@ const AnalyzerTabs = () => {
                         activeKey={key}
                         onSelect={(k) => changeTab(k)}
                     >
-                        <Tab eventKey={"scores"} title={TABS.SCORES} >
-                            {/* Add Link to the tab it belongs to 
-                                <LINK />
-                            */}
-                            {TABS.SCORES}
-                        </Tab>
-                        <Tab eventKey={"graphs"} title={TABS.GRAPHS}>
-                            {/* Add Link to the tab it belongs to 
-                                <LINK />
-                            */}
-                            {TABS.GRAPHS}
-                        </Tab>
                         <Tab eventKey={"merge-requests"} title={TABS.MERGE_REQUESTS}>
-                            {/* Add Link to the tab it belongs to 
-                                <LINK />
-                            */}
-                            {TABS.MERGE_REQUESTS}
+                            <MergeRequestList {...props} />
                         </Tab>
                         <Tab eventKey={"commits"} title={TABS.COMMITS}>
-                            {/* Add Link to the tab it belongs to 
-                                <LINK />
-                            */}
-                            {TABS.COMMITS}
+                            <CommitsList {...props} />
                         </Tab>
                     </Tabs>
                 </Col>
