@@ -24,7 +24,7 @@ To run the program on the team VM, please follow the instruction below.
 
 ### Dependencies
 
-The following dependencies are already install on the team VM, no further actions required. 
+The following dependencies are already installed on the team VM, no further actions required. 
 
 - `Docker` 
 - `Docker-compose` 
