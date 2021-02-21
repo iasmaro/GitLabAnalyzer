@@ -27,9 +27,9 @@ const Repo = (props) => {
             <td>{repo?.projectName}</td>
             <td>{utcToLocal(repo?.updatedAt).toString()}</td>
             <td>
-                <Button variant="light" onClick={handleShow}>Analyze</Button>
+                <Button variant="dark" onClick={handleShow}> Analyze </Button>
             </td>
-            {show && <RepoModal name={repo?.projectName} createdAt={repo?.createdAt} members={members} status={show} toggleModal={handleClose}/>}
+            {show && <RepoModal name={repo?.projectName} id={repo?.projectId} createdAt={repo?.createdAt} members={members} status={show} toggleModal={handleClose}/>}
         </tr>
     );
 };

@@ -8,19 +8,24 @@ import './CommitsList.css';
 
 const CommitsList = (props) => {
     const { commits } = props || {};
+
     return (
         <div className = 'commits-list-container'>
-            <Table striped bordered hover>
+            <Table striped bordered hover variant="light">
+                <thead>
+                        <tr>
+                            <th colSpan='4'className='commitTitle'>Commits</th>
+                        </tr>
+                </thead>
                 <thead>
                     <tr>
                         <th>Commit ID</th>
                         <th>Date</th>
                         <th>Author</th>
-                        <th>Message</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {!commits.length ? (
+                    {!commits?.length ? (
                         <td colSpan={4} >{message.NO_COMMITS}</td>
                     )
                     :

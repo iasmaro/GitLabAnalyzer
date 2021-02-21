@@ -4,10 +4,9 @@ const Commit = (props) => {
     const { commit } = props || {};
     return (
         <tr>
-            <td>{commit?.id}</td>
-            <td>{commit?.date}</td>
-            <td>{commit?.author}</td>
-            <td>{commit?.message}</td>
+            <td>{commit?.commitId}</td>
+            <td>{commit?.commitDate}</td>
+            <td>{commit?.commitAuthor}</td>
         </tr>
     );
 };
