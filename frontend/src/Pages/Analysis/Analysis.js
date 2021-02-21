@@ -18,7 +18,7 @@ const Analysis = (props) => {
             setMergeRequests(data);
             setIsLoading(false);
         });
-    }, [username]);
+    }, [username, data]);
     
     if (!data) {
         return(<Redirect to={{ pathname: '/' }} />);
@@ -26,7 +26,7 @@ const Analysis = (props) => {
 
     return (
         <div>
-            {isLoading ? <Spinner animation="border" className="spinner" /> : <MergeRequestList mergerequests={mergeRequests}/>}
+            {isLoading ? <Spinner animation="border" className="spinner" /> : <MergeRequestList mergerequests={mergeRequests} projectId={data.projectId} />}
         </div>
     )
 }

@@ -22,7 +22,6 @@ const CommitsList = (props) => {
                         <th>Commit ID</th>
                         <th>Date</th>
                         <th>Author</th>
-                        <th>Message</th>
                     </tr>
                 </thead>
                 <tbody>

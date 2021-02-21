@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
 import { Table } from 'react-bootstrap';
+import Spinner from 'react-bootstrap/Spinner';
 
+import { useUserState } from 'UserContext';
 import { message } from 'Constants/constants';
-import { commits } from 'Mocks/mockCommits';
 import CommitsList from 'Components/CommitsList/CommitsList';
+import getCommitsInMR from 'Utils/getCommitsInMR';
 
 import './MergeRequestList.css';
 import MergeRequest from './MergeRequest';
 
 
 const MergeRequestList = (props) => {
-    const { mergerequests } = props || {};
+    const { mergerequests, projectId } = props || {};
     const [selectedMR, setSelectedMR] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+    const [commits, setCommits] = useState();
+    const username = useUserState();
     const handleClick = (id) => {
         setSelectedMR(id);
+        getCommitsInMR(username, projectId, id).then((data) => {
+            setCommits(data);
+            setIsLoading(false);
+        });
     }
     return (
         <div className="merge-request-list-container">
@@ -39,14 +48,15 @@ const MergeRequestList = (props) => {
                         )
                         :
                         mergerequests.map((mergerequest) => (
-                            <MergeRequest key={mergerequest?.projectId} mergerequest={mergerequest} handleClick={handleClick} />
+                            <MergeRequest key={mergerequest?.mergeId} mergerequest={mergerequest} handleClick={handleClick} />
                         ))}
 
                     </tbody>
                 </Table>
             </div>
             <div className="right">
-                {selectedMR && <CommitsList commits={commits} />}
+                {selectedMR && isLoading && <Spinner animation="border" className="spinner" />}
+                {selectedMR && !isLoading && <CommitsList commits={commits} />}
             </div>
         </div>
     )
