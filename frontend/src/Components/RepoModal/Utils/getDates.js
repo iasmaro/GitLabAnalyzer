@@ -14,11 +14,15 @@ export function createEndDate() {
 
 export function utcToLocal(utcString){
     var localDate = new Date(utcString);
-    return localDate;
+    if(!isNaN(localDate.getTime())){
+        return localDate;
+    }
 }
 
 export function localToUtc(date){
     var localDate = new Date(parseInt(date.Year), parseInt(date.Month-1), parseInt(date.Day), 
         parseInt(date.Hours), parseInt(date.Minutes), parseInt(date.Seconds));
-    return localDate.toISOString();
+    if(!isNaN(localDate.getTime())){
+        return localDate.toISOString();
+    }
 }
