@@ -28,6 +28,7 @@ The following dependencies are already installed on the team VM, no further acti
 
 - `Docker` 
 - `Docker-compose` 
+- `nginx`
 
 ### Build & Run 
 
