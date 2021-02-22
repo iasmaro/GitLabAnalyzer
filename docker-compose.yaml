@@ -13,7 +13,7 @@ services:
     build: ./frontend
     container_name: gitanalyzer-frontend
     ports:
-      - 80:80
+      - 8181:80
     links:
       - backend
     depends_on:
