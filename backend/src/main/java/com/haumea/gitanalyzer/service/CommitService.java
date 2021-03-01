@@ -60,7 +60,8 @@ public class CommitService {
 
             for(CommitWrapper currentCommit : mergeRequestCommits) {
                 if(member.getAlias().contains(currentCommit.getCommitData().getAuthorName())){
-                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
+                    Commit commitData = currentCommit.getCommitData();
+                    CommitDTO commit = new CommitDTO(commitData.getId(), commitData.getCommittedDate(), commitData.getAuthorName(), 0, commitData.getStats().getAdditions(), commitData.getStats().getDeletions());
                     memberCommits.add(commit);
                 }
             }
@@ -85,7 +86,8 @@ public class CommitService {
 
         for(CommitWrapper currentCommit : wrapperList) {
             CommitDTO newDto = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(),
-                    currentCommit.getCommitData().getAuthorName(), 11);
+                    currentCommit.getCommitData().getAuthorName(), 11, currentCommit.getCommitData().getStats().getAdditions(),
+                    currentCommit.getCommitData().getStats().getDeletions());
 
             commitDtoList.add(newDto);
         }
