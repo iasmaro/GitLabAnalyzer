@@ -8,6 +8,7 @@ import RepoModalConfig from './RepoModalConfig';
 import { modal } from 'Constants/constants';
 import './RepoModal.css';
 import { createStartDate, createEndDate, localToUtc } from './Utils/getDates';
+import BasicDateTimePicker from "Components/BasicDateTimePicker";
 
 const RepoModal = (props) => {
 
@@ -57,6 +58,8 @@ const RepoModal = (props) => {
 
                 <RepoModalDates name={modal.START_DATE} date={startDate} setDate={setStartDate} />
                 <RepoModalDates name={modal.END_DATE} date={endDate} setDate={setEndDate} />
+
+                <BasicDateTimePicker/>
 
             </Modal.Body>
 
