@@ -1,7 +1,10 @@
 package com.haumea.gitanalyzer.gitlab;
 
+import com.haumea.gitanalyzer.dto.CommitDTO;
+import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import org.gitlab4j.api.*;
 import org.gitlab4j.api.models.*;
+import com.haumea.gitanalyzer.model.Member;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +37,10 @@ public class GitlabService {
         return gitLabApi;
     }
 
+    public MergeRequestApi getMergeRequestApi(){
+        return mergeRequestApi;
+    }
+
     public String getHostUrl() {
         return hostUrl;
     }
@@ -46,7 +53,7 @@ public class GitlabService {
     public List<MemberWrapper> getMembers(int projectId) throws GitLabApiException {
         ProjectApi projectApi = new ProjectApi(gitLabApi);
 
-        List<Member> members = projectApi.getAllMembers(projectId);
+        List<org.gitlab4j.api.models.Member> members = projectApi.getAllMembers(projectId);
 
         List<MemberWrapper> allMembers = new ArrayList<>();
 
@@ -74,6 +81,21 @@ public class GitlabService {
 
     }
 
+    public Project getSelectedProject(int projectID) throws GitLabApiException {
+        List<ProjectWrapper> projects = null;
+        projects = getProjects();
+        Project selectedProject = null;
+
+        for (ProjectWrapper project : projects) {
+            if (project.getProject().getId() == projectID) {
+                selectedProject = project.getProject();
+            }
+        }
+
+        return selectedProject;
+    }
+
+
     /* TODO: Filter via the contributions a member has made to a merge request regardless of whether the member is the author */
     // Warning: Make sure to pass dates in the UTC time format. Not doing so may give unexpected results
     public List<MergeRequestWrapper> filterMergeRequestByDate(int projectId, String name, Date start, Date end) throws GitLabApiException {
@@ -87,6 +109,10 @@ public class GitlabService {
         List<MergeRequestWrapper> result = new ArrayList<>();
 
         for(MergeRequest current : mergeRequestApi.getMergeRequests(filter)) {
+
+            if(!current.getState().equals("merged")){
+                continue;
+            }
 
             MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, current);
 
@@ -158,11 +184,11 @@ public class GitlabService {
         List<CommitWrapper> commitList = new ArrayList<>();
 
         for(Commit currentCommit : commitsApi.getCommits(projectId, "master", start, end)) {
-
             if(currentCommit.getAuthorName().equals(authorName) ) {
                 CommitWrapper newCommit = new CommitWrapper(gitLabApi, projectId, currentCommit);
 
                 commitList.add(newCommit);
+
             }
         }
 
@@ -194,4 +220,5 @@ public class GitlabService {
 
         return commitList;
     }
+
 }

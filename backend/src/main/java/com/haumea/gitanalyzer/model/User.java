@@ -16,6 +16,10 @@ public class User {
     private String userId;
     private String personalAccessToken;
 
+    public User() {
+        super();
+    }
+
     @PersistenceConstructor
     public User(String userId, String personalAccessToken) {
         this.userId = userId;

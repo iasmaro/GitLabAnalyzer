@@ -23,7 +23,6 @@ public class MemberController {
 
     @Autowired
     public MemberController(MemberService memberService) {
-
         this.memberService = memberService;
     }
 
@@ -47,5 +46,6 @@ public class MemberController {
 
         return memberService.getMembersAndAliases(userId, projectId);
     }
+
 }
 
