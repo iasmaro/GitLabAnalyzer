@@ -55,7 +55,7 @@ public class MemberService {
         memberRepository.mapAliasToMember(membersAndAliases);
 
     }
-    
+
     public List<Member> getMembersAndAliases(String userId, Integer projectId) throws GitLabRuntimeException{
 
         List<String> members = getMembers(userId, projectId);
