@@ -1,12 +1,26 @@
-import React from 'react';
-import { Table } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Table, Spinner } from 'react-bootstrap';
 
 import Config from 'Components/Configurations/Config';
+import ConfigDetails from 'Components/Configurations/ConfigDetails';
 import { message } from 'Constants/constants';
 import { configs } from './mockConfigs'
 
 const ConfigurationPage = () => {
 
+    const [selectedConfig, setSelectedConfig] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+    const [configInfo, setConfigInfo] = useState();
+
+    const handleClick = (configName) => {
+        setSelectedConfig(configName);
+        setIsLoading(false);
+
+        var filterObj = configs.filter(function(e) {
+            return e.configName === configName;
+          });
+        setConfigInfo(filterObj)
+    }
 
     return (
     <div className = 'configs-list-container'>
@@ -23,13 +37,16 @@ const ConfigurationPage = () => {
                     )
                     :
                     configs.map((config) => (
-                        <Config key={config?.configName} config={config}/>
+                        <Config key={config?.configName} config={config} handleClick={handleClick}/>
                     ))}
 
                 </tbody>
             </Table>
         </div>
-
+        <div className="right">
+            {selectedConfig && isLoading && <Spinner animation="border" className="right-spinner" />}
+            {selectedConfig && !isLoading && <ConfigDetails configInfo={configInfo} />}
+        </div>
     </div>
     )
 }
