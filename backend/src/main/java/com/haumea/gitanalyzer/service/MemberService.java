@@ -3,6 +3,7 @@ package com.haumea.gitanalyzer.service;
 import com.haumea.gitanalyzer.dao.MemberRepository;
 import com.haumea.gitanalyzer.dto.MemberDTO;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
+import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
 import com.haumea.gitanalyzer.model.Member;
@@ -56,6 +57,30 @@ public class MemberService {
 
     }
 
+
+    public List<String> getAliases(String userId, Integer projectId) throws GitLabRuntimeException {
+
+        String token = userService.getPersonalAccessToken(userId);
+
+        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+
+        List<String> aliases = new ArrayList<>();
+
+        try {
+            List<CommitWrapper> allCommits = gitlabService.getAllCommits(projectId);
+
+            for(CommitWrapper currentCommit : allCommits){
+                if(!aliases.contains(currentCommit.getCommitData().getAuthorName())){
+                    aliases.add(currentCommit.getCommitData().getAuthorName());
+                }
+            }
+
+            return aliases;
+        }
+        catch(GitLabApiException e){
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
+    }
     public List<Member> getMembersAndAliases(String userId, Integer projectId) throws GitLabRuntimeException{
 
         List<String> members = getMembers(userId, projectId);
