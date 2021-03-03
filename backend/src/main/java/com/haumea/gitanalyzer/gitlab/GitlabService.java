@@ -154,8 +154,7 @@ public class GitlabService {
             newMergeRequest.addMergeRequestChange(diff);
 
 
-            mergeRequestList.add(newMergeRequest);
-
+            mergeRequestList.add(0, newMergeRequest);
         }
         return mergeRequestList;
     }

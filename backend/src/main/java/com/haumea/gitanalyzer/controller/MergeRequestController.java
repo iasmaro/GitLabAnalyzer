@@ -5,10 +5,7 @@ import com.haumea.gitanalyzer.service.MergeRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/v1/mrs")
+@RequestMapping(path = "/projects/{projectId}/merge_requests")
 @Validated
 public class MergeRequestController {
 
@@ -30,7 +27,7 @@ public class MergeRequestController {
 
     @GetMapping
     public List<MergeRequestDTO> getAllMergeRequests(@NotBlank @RequestParam String userId,
-                                                     @NotNull @RequestParam int projectId,
+                                                     @PathVariable int projectId,
                                                      @NotBlank @RequestParam String memberId,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end,

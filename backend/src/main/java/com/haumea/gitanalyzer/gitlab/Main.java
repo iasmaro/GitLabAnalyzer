@@ -3,6 +3,7 @@ package com.haumea.gitanalyzer.gitlab;
 import org.gitlab4j.api.CommitsApi;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.MergeRequestApi;
 import org.gitlab4j.api.models.*;
 
 import java.text.DateFormat;
@@ -165,13 +166,29 @@ public class Main {
 
     }
 
+    public static void printMergeRequestDif(GitlabService gitLabApi, int ProjectID, int mergeID) throws GitLabApiException {
+
+        List<MergeRequestWrapper> mergeRequestWrappers = gitLabApi.getAllMergeRequests(ProjectID);
+
+        MergeRequestWrapper current = mergeRequestWrappers.get(34);
+        System.out.println(current.getMergeRequestData().getAuthor());
+
+        for (MergeRequestDiff change : current.getMergeRequestChanges()) {
+            for(Diff diff:change.getDiffs()){
+                System.out.println(diff.getDiff());
+            }
+
+        }
+
+        return;
+    }
 
     public static void main(String[] args) throws GitLabApiException {
         GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
 //        GitlabService haumeaTeamGitlabService = new GitlabService("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 
-
-        printAllProjectData(csil, 5);
+        printMergeRequestDif(csil, 25516, 35);
+        //printAllProjectData(csil, 8);
 //        printCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
     }
 }
