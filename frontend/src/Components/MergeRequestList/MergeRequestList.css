@@ -1,0 +1,42 @@
+.left {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    max-height: 800px;
+    overflow-y: scroll;
+    overflow-x: scroll;
+}
+
+.left::-webkit-scrollbar { 
+    display: none;
+}
+
+.right {
+    float: right;
+    width: 50%;
+    padding: 10px;
+}
+
+.merge-request-list-container {
+    font-family: 'Roboto', sans-serif;
+    background-color: #acbed8;
+    color: #ffffff;
+    height: 100vh;
+    text-align: center;
+}
+
+.merge-request-list-container:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.mrTitle {
+    background-color: rgb(227, 226, 226);
+    text-align: center;
+}
+
+.right-spinner {
+    position: absolute;
+    top: 50%;
+}

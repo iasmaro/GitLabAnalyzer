@@ -119,10 +119,15 @@ Please google how to install these tools on your OS.
 
     - **[NEW - Feb 17]** Connect to TeamVM with authentification and SSL/TLS in MongoDB Compass:
       - click `Fill in connection fields individually`
+
       <img src="images/sc8.png" width="90%">
+
       - password is: `NU%2B!n2ju%2BVFr!X*F`
+
       <img src="images/sc9.png" width="90%">
+
       - Load the `rootCA.pem` file is in `/backend/database/pem`, this file is used by Compass to verify the certificate of the mongdb server 
+      
       <img src="images/sc10.png" width="90%">
  
 ## 3. Build the project
