@@ -63,59 +63,68 @@ public class Main {
 
         System.out.println();
 
-        for(MemberWrapper current : memberWrappers) {
-            System.out.println("Author is: " + current.getName() + " " + current.getMemberId());
-
-
-            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
-
-            testCommitFiltering(projects, projectNum, app);
-        }
-
-
-        System.out.println();
-
-        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
-        for(MergeRequest current : mergeRequests) {
-            System.out.println("Merge request: " + current);
-
-            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
-
-            for(CommitWrapper commit : commitList) {
-                System.out.println("MR Commit: " + commit.getCommitData());
-            }
-        }
+//        for(MemberWrapper current : memberWrappers) {
+//            System.out.println("Author is: " + current.getName() + " " + current.getMemberId());
 //
-        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
-        for(MergeRequestWrapper current : mergeRequestWrappers) {
-            System.out.println("Merge request: " + current.getMergeRequestData());
+//
+//            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
+//
+//            testCommitFiltering(projects, projectNum, app);
+//        }
 
-            System.out.println();
 
-            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
-
-            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
-
-                System.out.println("change is: " + change.getDiffs());
-
-            }
-
-            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
-
-            for(CommitWrapper commit : commitList) {
-                System.out.println("MR Commit: " + commit.getCommitData());
-            }
-        }
+//        System.out.println();
+//
+//        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
+//        for(MergeRequest current : mergeRequests) {
+//            System.out.println("Merge request: " + current);
+//
+//            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
+//
+//            for(CommitWrapper commit : commitList) {
+//                System.out.println("MR Commit: " + commit.getCommitData());
+//            }
+//        }
+//
+//        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
+//        for(MergeRequestWrapper current : mergeRequestWrappers) {
+//            System.out.println("Merge request: " + current.getMergeRequestData());
+//
+//            System.out.println();
+//
+//            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
+//
+//            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
+//
+//                System.out.println("change is: " + change.getDiffs());
+//
+//            }
+//
+//            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
+//
+//            for(CommitWrapper commit : commitList) {
+//                System.out.println("MR Commit: " + commit.getCommitData());
+//            }
+//        }
 
         System.out.println();
         for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
             System.out.println("current commit: " + current.getCommitData());
+            for(Diff currentDiff : current.getNewCode()) {
+                System.out.println("  current commit changes: " + currentDiff.getDiff());
+                IndividualDiffScoreCalculator calculator = new IndividualDiffScoreCalculator();
+
+                calculator.calculateDiffScore(currentDiff.getDiff(), currentDiff.getDeletedFile());
+
+                System.out.println("file path is: " + currentDiff.getNewPath());
+
+            }
 
         }
 
-        testCommitFiltering(projects, projectNum, app);
-
-        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
+//        testCommitFiltering(projects, projectNum, app);
+//
+//        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
 
     }
 
