@@ -107,14 +107,20 @@ public class Main {
 //            }
 //        }
 
+        List<CommentType> commentTypes = new ArrayList<>();
         System.out.println();
+        CommentType singleJavaComment = new CommentType("//", "");
+
+        commentTypes.add(singleJavaComment);
+
         for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
             System.out.println("current commit: " + current.getCommitData());
             for(Diff currentDiff : current.getNewCode()) {
                 System.out.println("  current commit changes: " + currentDiff.getDiff());
                 IndividualDiffScoreCalculator calculator = new IndividualDiffScoreCalculator();
 
-                calculator.calculateDiffScore(currentDiff.getDiff(), currentDiff.getDeletedFile());
+
+                calculator.calculateDiffScore(currentDiff.getDiff(), currentDiff.getDeletedFile(), 1.0, 0.2, 0.2, commentTypes);
 
                 System.out.println("file path is: " + currentDiff.getNewPath());
 
@@ -125,6 +131,7 @@ public class Main {
 //        testCommitFiltering(projects, projectNum, app);
 //
 //        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
+
 
     }
 
@@ -180,7 +187,7 @@ public class Main {
 //        GitlabService haumeaTeamGitlabService = new GitlabService("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 
 
-        printAllProjectData(csil, 5);
+        printAllProjectData(csil, 0);
 //        printCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
     }
 }
