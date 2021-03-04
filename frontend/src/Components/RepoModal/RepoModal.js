@@ -2,26 +2,22 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 
-import RepoModalDates from "./RepoModalDate";
 import RepoModalStudent from './RepoModalStudent';
 import RepoModalConfig from './RepoModalConfig';
 import { modal } from 'Constants/constants';
 import './RepoModal.css';
-import { createStartDate, createEndDate, localToUtc } from './Utils/getDates';
-import BasicDateTimePicker from "Components/BasicDateTimePicker";
+import FormattedDateTimePicker from "Components/FormattedDateTimePicker";
 
 const RepoModal = (props) => {
 
-    const {name, id, createdAt, members, status, toggleModal} = props;
-
-    /*Default times are the beginning of unix time to the current date and time*/
-    const defaultStartDate = createStartDate(createdAt);
-    const defaultEndDate = createEndDate();
+    const {name, id, members, status, toggleModal} = props;
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
-    const [startDate, setStartDate] = useState(defaultStartDate);
-    const [endDate, setEndDate] = useState(defaultEndDate);
+    
+    /*Default times are the beginning of unix time to the current date and time*/
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
     const [redirect, setRedirect] = useState(false);
 
     const handleClick = () => {
@@ -33,10 +29,12 @@ const RepoModal = (props) => {
     if (redirect) {
         const data = {
             memberId: student,
-            start: localToUtc(startDate),
-            end: localToUtc(endDate),
+            start: startDate.toISOString(),
+            end: endDate.toISOString(),
             projectId: id,
         }
+        console.log(startDate);
+        console.log(endDate);
         return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
     }
 
@@ -56,10 +54,8 @@ const RepoModal = (props) => {
                 <RepoModalConfig config={config} setConfig={setConfig} />
                 <RepoModalStudent members={members} student={student} setStudent={setStudent} />
 
-                <RepoModalDates name={modal.START_DATE} date={startDate} setDate={setStartDate} />
-                <RepoModalDates name={modal.END_DATE} date={endDate} setDate={setEndDate} />
-
-                <BasicDateTimePicker/>
+                <FormattedDateTimePicker name={modal.START_DATE} setDate={setStartDate}/>
+                <FormattedDateTimePicker name={modal.END_DATE} setDate={setEndDate}/>
 
             </Modal.Body>
 
