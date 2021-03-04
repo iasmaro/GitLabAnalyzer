@@ -116,7 +116,7 @@ public class Main {
         for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
             System.out.println("current commit: " + current.getCommitData());
             for(Diff currentDiff : current.getNewCode()) {
-                System.out.println("  current commit changes: " + currentDiff.getDiff());
+                System.out.println("  current commit diff: " + currentDiff.getDiff());
                 IndividualDiffScoreCalculator calculator = new IndividualDiffScoreCalculator();
 
 
