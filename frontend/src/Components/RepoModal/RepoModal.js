@@ -10,12 +10,12 @@ import FormattedDateTimePicker from "Components/FormattedDateTimePicker";
 
 const RepoModal = (props) => {
 
-    const {name, id, members, status, toggleModal} = props;
+    const {name, id, members, status, toggleModal} = props || {};
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
     
-    /*Default times are the beginning of unix time to the current date and time*/
+    /*Default times are both at the current date and time*/
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [redirect, setRedirect] = useState(false);
@@ -33,8 +33,6 @@ const RepoModal = (props) => {
             end: endDate.toISOString(),
             projectId: id,
         }
-        console.log(startDate);
-        console.log(endDate);
         return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
     }
 
@@ -54,8 +52,7 @@ const RepoModal = (props) => {
                 <RepoModalConfig config={config} setConfig={setConfig} />
                 <RepoModalStudent members={members} student={student} setStudent={setStudent} />
 
-                <FormattedDateTimePicker name={modal.START_DATE} setDate={setStartDate}/>
-                <FormattedDateTimePicker name={modal.END_DATE} setDate={setEndDate}/>
+                <FormattedDateTimePicker startName={modal.START_DATE} endName={modal.END_DATE} setStartDate={setStartDate} setEndDate={setEndDate}/>
 
             </Modal.Body>
 
