@@ -10,6 +10,7 @@ import com.haumea.gitanalyzer.gitlab.MemberWrapper;
 import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,8 +74,13 @@ public class MemberService {
             List<CommitWrapper> allCommits = gitlabService.getAllCommits(projectId);
 
             for(CommitWrapper currentCommit : allCommits){
-                if(!aliases.contains(currentCommit.getCommitData().getAuthorName())){
-                    aliases.add(currentCommit.getCommitData().getAuthorName());
+
+                Commit commitData = currentCommit.getCommitData();
+
+                String alias = commitData.getAuthorName();
+
+                if(!aliases.contains(alias)){
+                    aliases.add(alias);
                 }
             }
 
