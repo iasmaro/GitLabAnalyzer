@@ -10,6 +10,7 @@ import com.haumea.gitanalyzer.dao.MemberRepository;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Commit;
+import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.haumea.gitanalyzer.model.Member;
@@ -40,6 +41,18 @@ public class CommitService {
         return new GitlabService(GlobalConstants.gitlabURL, token);
     }
 
+    private List<String> getCommitDiffs(List<Diff> codeDiffs){
+        List<String> commitDiffs = new ArrayList<String>();
+
+        for(Diff diff : codeDiffs){
+
+            System.out.println(diff.getDiff());
+            commitDiffs.add(diff.getDiff());
+        }
+
+        return commitDiffs;
+    }
+
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
                                                            Integer mergeRequestId, String memberId) throws GitLabRuntimeException {
 
@@ -60,7 +73,9 @@ public class CommitService {
 
             for(CommitWrapper currentCommit : mergeRequestCommits) {
                 if(member.getAlias().contains(currentCommit.getCommitData().getAuthorName())){
-                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
+                    List<String> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
+
+                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0, commitDiffs);
                     memberCommits.add(commit);
                 }
             }
@@ -84,8 +99,12 @@ public class CommitService {
         List<CommitDTO> commitDtoList = new ArrayList<>();
 
         for(CommitWrapper currentCommit : wrapperList) {
-            CommitDTO newDto = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(),
-                    currentCommit.getCommitData().getAuthorName(), 11);
+
+            Commit commit = currentCommit.getCommitData();
+
+            List<String> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
+
+            CommitDTO newDto = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), 11, commitDiffs);
 
             commitDtoList.add(newDto);
         }
@@ -122,6 +141,5 @@ public class CommitService {
 
         return convertCommitWrappersToDtos(mergeRequestCommits);
     }
-
 
 }

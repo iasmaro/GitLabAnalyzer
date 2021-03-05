@@ -32,9 +32,9 @@ public class MergeRequestService {
 
     private GitlabService getGitLabService(String userId){
 
-        //String accessToken = userService.getPersonalAccessToken(userId);
+        String accessToken = userService.getPersonalAccessToken(userId);
 
-        return new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
+        return new GitlabService(GlobalConstants.gitlabURL, accessToken);
     }
 
     private Project getProject(GitlabService gitlabService, int projectId) throws GitLabRuntimeException {

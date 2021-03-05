@@ -187,8 +187,7 @@ public class Main {
         GitlabService csil = new GitlabService("https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
 //        GitlabService haumeaTeamGitlabService = new GitlabService("http://cmpt373-1211-11.cmpt.sfu.ca/gitlab", "R-qyMoy2MxVPyj7Ezq_V");
 
-        printMergeRequestDif(csil, 25516, 35);
-        //printAllProjectData(csil, 8);
+        printAllProjectData(csil, 8);
 //        printCommits("GitLabAnalyzer", "https://csil-git1.cs.surrey.sfu.ca/", "gYLtys_E24PNBWmG_i86");
     }
 }
