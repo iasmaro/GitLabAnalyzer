@@ -46,7 +46,6 @@ public class CommitService {
 
         for(Diff diff : codeDiffs){
 
-            System.out.println(diff.getDiff());
             commitDiffs.add(diff.getDiff());
         }
 
