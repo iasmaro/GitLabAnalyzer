@@ -5,6 +5,7 @@ import Config from 'Components/Configurations/Config';
 import ConfigDetails from 'Components/Configurations/ConfigDetails';
 import { message } from 'Constants/constants';
 import { configs } from './mockConfigs'
+import './Configuration.css';
 
 const ConfigurationPage = () => {
 
@@ -28,7 +29,7 @@ const ConfigurationPage = () => {
             <Table striped bordered hover variant="light">
                 <thead>
                     <tr>
-                        <th colSpan='8'className='configTitle'>Configuartion Titles</th>
+                        <th colSpan='4' className='configTitle'>Configuration Titles</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,7 +40,6 @@ const ConfigurationPage = () => {
                     configs.map((config) => (
                         <Config key={config?.configName} config={config} handleClick={handleClick}/>
                     ))}
-
                 </tbody>
             </Table>
         </div>

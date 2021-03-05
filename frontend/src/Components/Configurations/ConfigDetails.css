@@ -1,0 +1,10 @@
+.config-details-container {
+    font-family: 'Roboto', sans-serif;
+}
+
+.file-weightings {
+    border: 1px solid black;
+    margin: 10px;
+    float:left;
+    width: 20%;
+}

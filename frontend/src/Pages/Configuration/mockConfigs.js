@@ -15,10 +15,26 @@ export const configs = [
         ],
         fileWeightings: [
             {
-                java: 1.0,
-                html: 0.3,
-                css: 0.2,
-                js: 0.5
+                java: {
+                    weight: 1.0,
+                    startComment: '/*',
+                    endComment: '*/'
+                },
+                html: {
+                    weight: 1.0,
+                    startComment: '<!--',
+                    endComment: '-->'
+                },
+                css: {
+                    weight: 1.0,
+                    startComment: '/*',
+                    endComment: '*/'
+                },
+                js: {
+                    weight: 1.0,
+                    startComment: '/*',
+                    endComment: '*/'
+                },
             }
         ]
     },
@@ -37,12 +53,31 @@ export const configs = [
         ],
         fileWeightings: [
             {
-                java: 1.0,
-                python: 0.75,
-                html: 0.25,
-                css: 0.1,
-                js: 0.75,
-                xml: 0.1
+                java: {
+                    weight: 1.0,
+                    startComment: '/*',
+                    endComment: '*/'
+                },
+                html: {
+                    weight: 1.0,
+                    startComment: '<!--',
+                    endComment: '-->'
+                },
+                css: {
+                    weight: 1.0,
+                    startComment: '/*',
+                    endComment: '*/'
+                },
+                js: {
+                    weight: 1.0,
+                    startComment: '/*',
+                    endComment: '*/'
+                },
+                python: {
+                    weight: 1.0,
+                    startComment: '"""',
+                    endComment: '"""'
+                }
             }
         ]
     },
