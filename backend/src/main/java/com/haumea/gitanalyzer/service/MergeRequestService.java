@@ -140,7 +140,7 @@ public class MergeRequestService {
 
         for (MergeRequestDiff change : mergeRequestDiffList) {
 
-            for(Diff diff:change.getDiffs()){
+            for(Diff diff : change.getDiffs()){
 
                 mergeRequestDiffs.add(diff.getDiff());
 

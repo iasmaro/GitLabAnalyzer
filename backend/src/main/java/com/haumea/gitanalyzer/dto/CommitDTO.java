@@ -18,7 +18,7 @@ public class CommitDTO {
         this.commitDiffs = commitDiffs;
     }
 
-    public String getCommitId() {
+    public String getCommitMessage() {
         return commitMessage;
     }
 
