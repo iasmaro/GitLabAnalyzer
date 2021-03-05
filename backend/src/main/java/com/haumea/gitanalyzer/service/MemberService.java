@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.MemberRepository;
 import com.haumea.gitanalyzer.dto.MemberDTO;
+import com.haumea.gitanalyzer.dto.MemberRRDTO;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
@@ -58,11 +59,13 @@ public class MemberService {
     }
 
 
-    public List<String> getAliases(String userId, Integer projectId) throws GitLabRuntimeException {
+    public MemberRRDTO getMembersAndAliases(String userId, Integer projectId) throws GitLabRuntimeException {
 
         String token = userService.getPersonalAccessToken(userId);
 
         GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+
+        List<String> members = getMembers(userId, projectId);
 
         List<String> aliases = new ArrayList<>();
 
@@ -75,18 +78,15 @@ public class MemberService {
                 }
             }
 
-            return aliases;
         }
         catch(GitLabApiException e){
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
+
+        MemberRRDTO memberRRDTO = new MemberRRDTO(members, aliases);
+
+        return memberRRDTO;
     }
-    public List<Member> getMembersAndAliases(String userId, Integer projectId) throws GitLabRuntimeException{
 
-        List<String> members = getMembers(userId, projectId);
-
-        return memberRepository.getMembersAndAliases(members);
-
-    }
 
 }
