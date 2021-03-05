@@ -110,8 +110,10 @@ public class Main {
         List<CommentType> commentTypes = new ArrayList<>();
         System.out.println();
         CommentType singleJavaComment = new CommentType("//", "");
+        CommentType longJavaComment = new CommentType("/*", "*/");
 
         commentTypes.add(singleJavaComment);
+        commentTypes.add(longJavaComment);
 
         for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
             System.out.println("current commit: " + current.getCommitData());

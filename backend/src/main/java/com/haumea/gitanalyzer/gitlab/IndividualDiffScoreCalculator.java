@@ -9,18 +9,19 @@ import java.util.List;
 
 public class IndividualDiffScoreCalculator {
 
-    private double addLineMultiplier;
-    private double deleteLineMultiplier;
-    private double syntaxLineMultiplier;
+    private double addLineWeight;
+    private double deleteLineWeight;
+    private double syntaxLineWeight;
     private List<CommentType> commentTypes;
 
-    private boolean hasStartAndEndBracesComment; /* need to save state between line calls as a comment could go
+    private boolean isLongComment; /* need to save state between line calls as a comment could go
                                                    over multiple lines like this comment*/
+    private String longCommentEndBrace;
 
 
     public IndividualDiffScoreCalculator() {
 
-        hasStartAndEndBracesComment = false;
+        isLongComment = false;
     }
 
     private double analyzeLine(String line) {
@@ -38,20 +39,49 @@ public class IndividualDiffScoreCalculator {
             line = line.trim();
 
             if(isSyntax(line)) {
-
+                lineScore = syntaxLineWeight;
             }
             else if(isComment(line)) {
-                System.out.println("line is a short comment");
+//                System.out.println("line is a comment");
                 lineScore = 0.0;
             }
-            else {
 
+            if(isLongComment == true) {
+                checkForEndBrace(line);
+
+                System.out.println("checking for end of comment");
             }
 
 
         }
 
         return lineScore;
+    }
+
+    private void checkForEndBrace(String line) {
+        String potentialEndOfComment = "";
+
+        if(line.length() > longCommentEndBrace.length()) {
+
+            potentialEndOfComment = line.substring(line.length()-longCommentEndBrace.length(), line.length());
+
+            System.out.println("substring is: " + potentialEndOfComment);
+
+
+        }
+        else if(line.length() == longCommentEndBrace.length()) {
+            System.out.println("equal");
+            potentialEndOfComment = line;
+
+        }
+
+        if(potentialEndOfComment.equals(longCommentEndBrace)) {
+            isLongComment = false;
+
+            System.out.println("comment is over");
+        }
+
+
     }
 
     private boolean isComment(String line) {
@@ -68,8 +98,30 @@ public class IndividualDiffScoreCalculator {
 
           }
           else {
-              System.out.println("long comment");
+
+              result = isStartAndEndComment(line, commentType);
           }
+        }
+
+        return result;
+    }
+
+    private boolean isStartAndEndComment(String line, CommentType commentType) {
+        boolean result = true;
+
+        for(int i=0; i<commentType.getStartType().length(); i++) {
+            if (line.charAt(i) != commentType.getStartType().charAt(i)) {
+                result = false;
+                break;
+            }
+        }
+
+        if(result == true) {
+            isLongComment = true;
+            longCommentEndBrace = commentType.getEndType();
+
+            System.out.println("Long comment");
+
         }
 
         return result;
@@ -84,6 +136,10 @@ public class IndividualDiffScoreCalculator {
             }
         }
 
+        if(result == true) {
+            System.out.println("short comment");
+        }
+
         return result;
     }
 
@@ -92,14 +148,11 @@ public class IndividualDiffScoreCalculator {
         return line.equals("{") || line.equals("}");
     }
 
-
-
-
     private void setTypes( Double addLineMultiplier, Double deleteLineMultiplier, Double syntaxLineMultiplier,
                       List<CommentType> commentTypes) {
-        this.addLineMultiplier = addLineMultiplier;
-        this.deleteLineMultiplier = deleteLineMultiplier;
-        this.syntaxLineMultiplier = syntaxLineMultiplier;
+        this.addLineWeight = addLineMultiplier;
+        this.deleteLineWeight = deleteLineMultiplier;
+        this.syntaxLineWeight = syntaxLineMultiplier;
         this.commentTypes = commentTypes;
     }
 
@@ -118,7 +171,7 @@ public class IndividualDiffScoreCalculator {
                 diffScore = analyzeLine(line);
             }
             else if(line.charAt(0) == '-') {
-                diffScore = deleteLineMultiplier;
+                diffScore = deleteLineWeight;
             }
         }
 
@@ -127,10 +180,10 @@ public class IndividualDiffScoreCalculator {
 
 
     // check file type and configs in calling code
-    public double calculateDiffScore(String diff, boolean isFileDeleted, double addLineMultiplier, double deleteLineMultiplier, double syntaxLineMultiplier,
+    public double calculateDiffScore(String diff, boolean isFileDeleted, double addLineWeight, double deleteLineWeight, double syntaxLineWeight,
                                      List<CommentType> commentTypes) {
 
-        setTypes(addLineMultiplier, deleteLineMultiplier, syntaxLineMultiplier, commentTypes);
+        setTypes(addLineWeight, deleteLineWeight, syntaxLineWeight, commentTypes);
 
         if(isFileDeleted) {
             return 0.0;
