@@ -52,7 +52,6 @@ const ConfigDetails = (props) => {
                     <div className='file-weightings'>
                         <thead>
                             <tr>
-                                {console.log(fileWeighting[1])}
                                 <th>{fileWeighting[0]}</th>
                                 
                             </tr>

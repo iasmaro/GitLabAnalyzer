@@ -1,8 +1,9 @@
 .configs-list-container {
-    width: 100%;
+    max-width: 100%;
 }
 .left {
-    width: 30%;
+    max-width: 30%;
+    height: 100%;
     overflow-y: scroll;
     overflow-x: scroll;
 }
@@ -12,11 +13,12 @@
 }
 
 .right {
-    width: 70%;
+    min-width: 70%;
     height: 100%;
     max-height: 800px;
     padding: 10px;
     overflow-y: scroll;
+    overflow-x: scroll;
 }
 
 .right::-webkit-scrollbar { 
