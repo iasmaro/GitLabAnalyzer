@@ -166,11 +166,11 @@ public class Main {
 
     }
 
-    public static void printMergeRequestDif(GitlabService gitLabApi, int ProjectID, int mergeID) throws GitLabApiException {
+    public static void printMergeRequestDif(GitlabService gitLabApi, int ProjectID, int mergeIiD) throws GitLabApiException {
 
         List<MergeRequestWrapper> mergeRequestWrappers = gitLabApi.getAllMergeRequests(ProjectID);
 
-        MergeRequestWrapper current = mergeRequestWrappers.get(34);
+        MergeRequestWrapper current = mergeRequestWrappers.get(mergeIiD - 1);
         System.out.println(current.getMergeRequestData().getAuthor());
 
         for (MergeRequestDiff change : current.getMergeRequestChanges()) {

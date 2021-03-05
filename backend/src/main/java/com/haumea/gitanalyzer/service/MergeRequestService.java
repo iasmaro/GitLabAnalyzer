@@ -8,6 +8,8 @@ import com.haumea.gitanalyzer.dto.MergeRequestDTO;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Diff;
+import org.gitlab4j.api.models.MergeRequest;
+import org.gitlab4j.api.models.MergeRequestDiff;
 import org.gitlab4j.api.models.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -132,6 +134,24 @@ public class MergeRequestService {
         return Math.round(score*10)/10.0;
     }
 
+    public List<String> getMergeRequestDiffs(List<MergeRequestDiff> mergeRequestDiffList){
+
+        List<String> mergeRequestDiffs = new ArrayList<String>();
+
+        for (MergeRequestDiff change : mergeRequestDiffList) {
+
+            for(Diff diff:change.getDiffs()){
+
+                System.out.println(diff.getDiff());
+                mergeRequestDiffs.add(diff.getDiff());
+
+            }
+
+        }
+
+        return mergeRequestDiffs;
+    }
+
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, String memberId, Date start, Date end, boolean memberFilter){
 
         GitlabService gitlabService = getGitLabService(userId);
@@ -143,7 +163,8 @@ public class MergeRequestService {
         List<MergeRequestDTO> normalizedMergeRequestDTOList = new ArrayList<>();
 
         for(int i = 0; i < mergeRequestsList.size(); i++){
-            org.gitlab4j.api.models.MergeRequest mergeRequest = mergeRequestsList.get(i).getMergeRequestData();
+            MergeRequestWrapper mergeRequestWrapper = mergeRequestsList.get(i);
+            MergeRequest mergeRequest = mergeRequestWrapper.getMergeRequestData();
 
             int mergeRequestIiD = mergeRequest.getIid();
             int mergeIiD = mergeRequest.getIid();
@@ -161,7 +182,9 @@ public class MergeRequestService {
                 continue;
             }
 
-            MergeRequestDTO normalizedMR = new MergeRequestDTO(mergeIiD, mergedDate, createdDate, updatedDate, MRScore, memberScore);
+            List<String> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestChanges());
+
+            MergeRequestDTO normalizedMR = new MergeRequestDTO(mergeIiD, mergedDate, createdDate, updatedDate, MRScore, memberScore, mergeRequestDiffs);
             normalizedMergeRequestDTOList.add(normalizedMR);
         }
 
