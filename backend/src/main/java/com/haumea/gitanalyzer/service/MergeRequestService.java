@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -35,35 +33,14 @@ public class MergeRequestService {
         return new GitlabService(GlobalConstants.gitlabURL, accessToken);
     }
 
-    private Project getProject(GitlabService gitlabService, int projectId) throws GitLabRuntimeException {
+    private Project getProject(GitlabService gitlabService, int projectId) {
 
-        Project project = null;
-
-        try {
-
-            project = gitlabService.getSelectedProject(projectId);
-        } catch (GitLabApiException e) {
-
-            throw new GitLabRuntimeException(e.getLocalizedMessage());
-        }
-
-        return project;
+        return gitlabService.getSelectedProject(projectId);
     }
 
-    private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, Project project, Date start, Date end) throws GitLabRuntimeException{
+    private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, Project project, Date start, Date end) {
 
-        List<MergeRequestWrapper> mergeRequestsList = null;
-
-        try {
-
-            mergeRequestsList = gitlabService.filterMergeRequestByDate(projectId, project.getName(), start, end);
-
-        } catch (GitLabApiException e) {
-
-            throw new GitLabRuntimeException(e.getLocalizedMessage());
-        }
-
-        return mergeRequestsList;
+        return gitlabService.getFilteredMergeRequests(projectId, "master", start, end);
     }
 
     private List<CommitWrapper> getCommitWrapper(GitlabService gitlabService, int projectId, int mergeRequestIiD) throws GitLabRuntimeException{

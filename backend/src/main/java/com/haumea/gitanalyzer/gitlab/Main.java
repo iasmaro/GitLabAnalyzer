@@ -5,14 +5,6 @@ import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.*;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Main {
@@ -56,7 +48,7 @@ public class Main {
 
         for(ProjectWrapper currentProject : projects) {
 
-            System.out.println(currentProject.getProjectName() + " " + currentProject.getProject().getId());
+            System.out.println(currentProject.getProject().getName() + " " + currentProject.getProject().getId());
         }
 
         List<MemberWrapper> memberWrappers = app.getMembers(projects.get(projectNum).getProject().getId());
@@ -89,16 +81,8 @@ public class Main {
         List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
         for(MergeRequestWrapper current : mergeRequestWrappers) {
             System.out.println("Merge request: " + current.getMergeRequestData());
-
             System.out.println();
-
-            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
-
-            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
-
-                System.out.println("change is: " + change.getDiffs());
-
-            }
+            System.out.println("change is: " + current.getMergeRequestDiff());
 
             List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
 
@@ -157,7 +141,7 @@ public class Main {
 
 
 
-        List<MergeRequestWrapper> mergeRequestWrappers = app.filterMergeRequestByDate(projectId, name, start, end);
+        List<MergeRequestWrapper> mergeRequestWrappers = app.getFilteredMergeRequests(projectId, name, start, end);
 
         for(MergeRequestWrapper current : mergeRequestWrappers) {
             System.out.println("data is " + current.getMergeRequestData());
