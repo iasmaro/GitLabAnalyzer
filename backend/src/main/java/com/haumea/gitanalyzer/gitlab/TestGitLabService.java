@@ -1,9 +1,6 @@
 package com.haumea.gitanalyzer.gitlab;
 
-import org.gitlab4j.api.models.Commit;
-import org.gitlab4j.api.models.Diff;
-import org.gitlab4j.api.models.MergeRequest;
-import org.gitlab4j.api.models.Project;
+import org.gitlab4j.api.models.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -288,11 +285,11 @@ public class TestGitLabService {
 
     public void testGetMergeRequestDiffs(Integer projectId, Integer mergeRequestIid){
         System.out.println("\n---Testing getMergeRequestDiffs---");
-        MergeRequestWrapper mergeRequestWrapper = gitlabService.getMergeRequestDiffs(projectId, mergeRequestIid);
+        MergeRequestDiff mergeRequest = gitlabService.getMergeRequestDiffs(projectId, mergeRequestIid);
 
         System.out.println(
-                        "# commits: " + mergeRequestWrapper.getMergeRequestDiff().getCommits().size() +
-                        ", # diffs: " + mergeRequestWrapper.getMergeRequestDiff().getDiffs().size());
+                        "# commits: " + mergeRequest.getCommits().size() +
+                        ", # diffs: " + mergeRequest.getDiffs().size());
     }
 
 

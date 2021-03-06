@@ -398,16 +398,14 @@ public class GitlabService {
     }
 
     // get diffs of a merge request
-    public MergeRequestWrapper getMergeRequestDiffs(Integer projectId, Integer mergeRequestIid){
+    public MergeRequestDiff getMergeRequestDiffs(Integer projectId, Integer mergeRequestIid){
 
-        MergeRequest mergeRequest;
         try {
-            mergeRequest = mergeRequestApi.getMergeRequest(projectId, mergeRequestIid);
+            Integer latestVersion = mergeRequestApi.getMergeRequestDiffs(projectId, mergeRequestIid).get(0).getId();
+            return mergeRequestApi.getMergeRequestDiff(projectId, mergeRequestIid, latestVersion);
         } catch (GitLabApiException e){
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
-
-        return new MergeRequestWrapper(mergeRequestApi, projectId, mergeRequest);
 
     }
 
