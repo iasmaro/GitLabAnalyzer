@@ -5,6 +5,9 @@ import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 public class IndividualDiffScoreCalculator {
@@ -18,12 +21,84 @@ public class IndividualDiffScoreCalculator {
                                                    over multiple lines like this comment*/
     private String longCommentEndBrace;
 
+    private List<String> removedLines;
+    private List<String> addedLines;
+
 
     public IndividualDiffScoreCalculator() {
 
         isLongComment = false;
+
+        removedLines = new ArrayList<>();
+        addedLines = new ArrayList<>();
     }
 
+
+    private void setTypes( Double addLineMultiplier, Double deleteLineMultiplier, Double syntaxLineMultiplier,
+                      List<CommentType> commentTypes) {
+        this.addLineWeight = addLineMultiplier;
+        this.deleteLineWeight = deleteLineMultiplier;
+        this.syntaxLineWeight = syntaxLineMultiplier;
+        this.commentTypes = commentTypes;
+    }
+
+    // check file type and configs in calling code
+    public double calculateDiffScore(String diff, boolean isFileDeleted, double addLineWeight, double deleteLineWeight, double syntaxLineWeight,
+                                     List<CommentType> commentTypes) {
+
+        setTypes(addLineWeight, deleteLineWeight, syntaxLineWeight, commentTypes);
+
+        if(isFileDeleted) {
+            return 0.0;
+        }
+        else {
+            double score;
+            try {
+                score = analyzeDiff(diff);
+            }
+            catch (IOException e) {
+                throw new GitLabRuntimeException("input error");
+            }
+
+            BigDecimal roundedScore = new BigDecimal(Double.toString(score));
+            roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
+
+            return roundedScore.doubleValue();
+        }
+    }
+
+
+    private double analyzeDiff(String diff) throws IOException {
+
+        double diffScore = 0.0;
+
+        // https://stackoverflow.com/questions/9259411/what-is-the-best-way-to-iterate-over-the-lines-of-a-java-string
+        BufferedReader bufReader = new BufferedReader(new StringReader(diff));
+        String line;
+        while((line=bufReader.readLine()) != null )
+        {
+            if(line.charAt(0) == '+') {
+                System.out.println("line is: " + line);
+                diffScore = diffScore + analyzeLine(line);
+            }
+            else if(line.charAt(0) == '-' && lineWasAdded(line) == false && (line.trim().length() > 0)) {
+                diffScore = diffScore + deleteLineWeight;
+
+                String originalLine = line;
+
+                line = line.substring(1); // cutting out the +
+                line = line.trim();
+
+                removedLines.add(line);
+
+                System.out.println("original line removed: " + originalLine + "size is " + originalLine.length());
+                System.out.println("trim line removed: " + line + "size is " + line.length());
+                System.out.println();
+            }
+        }
+
+        return diffScore;
+    }
     private double analyzeLine(String line) {
         double lineScore = 0.0;
 
@@ -33,17 +108,23 @@ public class IndividualDiffScoreCalculator {
             System.out.println("line is a space");
         }
 
-
         else if(line.length() > 1) {
             line = line.substring(1); // cutting out the +
             line = line.trim();
 
             if(isSyntax(line)) {
                 lineScore = syntaxLineWeight;
+
+                System.out.println("syntax line");
             }
             else if(isComment(line)) {
-//                System.out.println("line is a comment");
                 lineScore = 0.0;
+            }
+            else if(isLongComment == false && lineWasRemoved(line) == false) {
+                lineScore = addLineWeight;
+
+                System.out.println("normal line of code");
+                addedLines.add(line);
             }
 
             if(isLongComment == true) {
@@ -56,6 +137,13 @@ public class IndividualDiffScoreCalculator {
         }
 
         return lineScore;
+    }
+
+    private boolean lineWasRemoved(String line) {
+        return removedLines.contains(line);
+    }
+    private boolean lineWasAdded(String line) {
+        return removedLines.contains(line);
     }
 
     private void checkForEndBrace(String line) {
@@ -84,6 +172,10 @@ public class IndividualDiffScoreCalculator {
 
     }
 
+
+    private boolean isSyntax(String line) {
+        return line.equals("{") || line.equals("}");
+    }
     private boolean isComment(String line) {
 
         boolean result = true;
@@ -93,14 +185,14 @@ public class IndividualDiffScoreCalculator {
            List passed in will be based on file type
          */
         for(CommentType commentType : commentTypes) {
-          if(commentType.getEndType().equals("")) {
-              result = isStartOnlyComment(line, commentType);
+            if(commentType.getEndType().equals("")) {
+                result = isStartOnlyComment(line, commentType);
 
-          }
-          else {
+            }
+            else {
 
-              result = isStartAndEndComment(line, commentType);
-          }
+                result = isStartAndEndComment(line, commentType);
+            }
         }
 
         return result;
@@ -141,63 +233,5 @@ public class IndividualDiffScoreCalculator {
         }
 
         return result;
-    }
-
-
-    private boolean isSyntax(String line) {
-        return line.equals("{") || line.equals("}");
-    }
-
-    private void setTypes( Double addLineMultiplier, Double deleteLineMultiplier, Double syntaxLineMultiplier,
-                      List<CommentType> commentTypes) {
-        this.addLineWeight = addLineMultiplier;
-        this.deleteLineWeight = deleteLineMultiplier;
-        this.syntaxLineWeight = syntaxLineMultiplier;
-        this.commentTypes = commentTypes;
-    }
-
-
-    private double analyzeDiff(String diff) throws IOException {
-
-        double diffScore = 0.0;
-
-        // https://stackoverflow.com/questions/9259411/what-is-the-best-way-to-iterate-over-the-lines-of-a-java-string
-        BufferedReader bufReader = new BufferedReader(new StringReader(diff));
-        String line;
-        while((line=bufReader.readLine()) != null )
-        {
-            if(line.charAt(0) == '+') {
-                System.out.println("line is: " + line);
-                diffScore = analyzeLine(line);
-            }
-            else if(line.charAt(0) == '-') {
-                diffScore = deleteLineWeight;
-            }
-        }
-
-        return diffScore;
-    }
-
-
-    // check file type and configs in calling code
-    public double calculateDiffScore(String diff, boolean isFileDeleted, double addLineWeight, double deleteLineWeight, double syntaxLineWeight,
-                                     List<CommentType> commentTypes) {
-
-        setTypes(addLineWeight, deleteLineWeight, syntaxLineWeight, commentTypes);
-
-        if(isFileDeleted) {
-            return 0.0;
-        }
-        else {
-            double score;
-            try {
-                score = analyzeDiff(diff);
-            }
-            catch (IOException e) {
-                throw new GitLabRuntimeException("input error");
-            }
-
-            return score;
-        }
     }
 }
