@@ -77,17 +77,21 @@ public class IndividualDiffScoreCalculator {
         String line;
         while((line=bufReader.readLine()) != null )
         {
+            String originalLine = line;
+
+
+//            line = line.substring(1); // cutting out the spaces
+//            line = line.trim();
             if(line.charAt(0) == '+') {
                 System.out.println("line is: " + line);
                 diffScore = diffScore + analyzeLine(line);
             }
-            else if(line.charAt(0) == '-' && lineWasAdded(line) == false && (line.trim().length() > 0)) {
+            else if(line.charAt(0) == '-' && lineWasAdded(line) == false && (line.trim().length() > 0) && !line.trim().equals("-")) {
                 diffScore = diffScore + deleteLineWeight;
 
-                String originalLine = line;
-
-                line = line.substring(1); // cutting out the +
+                line = line.substring(1); // cutting out the -
                 line = line.trim();
+
 
                 removedLines.add(line);
 
