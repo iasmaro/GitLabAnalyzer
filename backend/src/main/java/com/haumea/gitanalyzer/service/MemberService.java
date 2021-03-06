@@ -2,9 +2,12 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.MemberRepository;
 import com.haumea.gitanalyzer.dto.MemberDTO;
+import com.haumea.gitanalyzer.dto.MemberRRDTO;
+import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
+import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +47,34 @@ public class MemberService {
 
         memberRepository.mapAliasToMember(membersAndAliases);
 
+    }
+
+    public MemberRRDTO getMembersAndAliases(String userId, Integer projectId) {
+
+        String token = userService.getPersonalAccessToken(userId);
+
+        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+
+        List<String> members = getMembers(userId, projectId);
+
+        List<String> aliases = new ArrayList<>();
+
+        List<CommitWrapper> allCommits = gitlabService.getAllCommits(projectId);
+
+        for(CommitWrapper currentCommit : allCommits){
+
+            Commit commitData = currentCommit.getCommitData();
+
+            String alias = commitData.getAuthorName();
+
+            if(!aliases.contains(alias)){
+                aliases.add(alias);
+            }
+        }
+
+        MemberRRDTO memberRRDTO = new MemberRRDTO(members, aliases);
+
+        return memberRRDTO;
     }
 
 
