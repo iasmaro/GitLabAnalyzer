@@ -63,57 +63,59 @@ public class Main {
 
         System.out.println();
 
-//        for(MemberWrapper current : memberWrappers) {
-//            System.out.println("Author is: " + current.getName() + " " + current.getMemberId());
-//
-//
-//            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
-//
-//            testCommitFiltering(projects, projectNum, app);
-//        }
+        for(MemberWrapper current : memberWrappers) {
+            System.out.println("Author is: " + current.getName() + " " + current.getMemberId());
 
 
-//        System.out.println();
-//
-//        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
-//        for(MergeRequest current : mergeRequests) {
-//            System.out.println("Merge request: " + current);
-//
-//            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
-//
-//            for(CommitWrapper commit : commitList) {
-//                System.out.println("MR Commit: " + commit.getCommitData());
-//            }
-//        }
-//
-//        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
-//        for(MergeRequestWrapper current : mergeRequestWrappers) {
-//            System.out.println("Merge request: " + current.getMergeRequestData());
-//
-//            System.out.println();
-//
-//            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
-//
-//            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
-//
-//                System.out.println("change is: " + change.getDiffs());
-//
-//            }
-//
-//            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
-//
-//            for(CommitWrapper commit : commitList) {
-//                System.out.println("MR Commit: " + commit.getCommitData());
-//            }
-//        }
+            newMRFilterTest(projects.get(projectNum).getProject().getId(), current.getName(), app);
+
+            testCommitFiltering(projects, projectNum, app);
+        }
+
+
+        System.out.println();
+
+        List<MergeRequest> mergeRequests = app.getAllMergeRequestData(projects.get(projectNum).getProject().getId());
+        for(MergeRequest current : mergeRequests) {
+            System.out.println("Merge request: " + current);
+
+            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getIid());
+
+            for(CommitWrapper commit : commitList) {
+                System.out.println("MR Commit: " + commit.getCommitData());
+            }
+        }
+
+        List<MergeRequestWrapper> mergeRequestWrappers = app.getAllMergeRequests(projects.get(projectNum).getProject().getId());
+        for(MergeRequestWrapper current : mergeRequestWrappers) {
+            System.out.println("Merge request: " + current.getMergeRequestData());
+
+            System.out.println();
+
+            System.out.println("Size of diff list is: " + current.getMergeRequestVersion().size());
+
+            for(MergeRequestDiff change : current.getMergeRequestChanges()) {
+
+                System.out.println("change is: " + change.getDiffs());
+
+            }
+
+            List<CommitWrapper> commitList = app.getMergeRequestCommits(projects.get(projectNum).getProject().getId(), current.getMergeRequestData().getIid());
+
+            for(CommitWrapper commit : commitList) {
+                System.out.println("MR Commit: " + commit.getCommitData());
+            }
+        }
 
         List<CommentType> commentTypes = new ArrayList<>();
         System.out.println();
         CommentType singleJavaComment = new CommentType("//", "");
         CommentType longJavaComment = new CommentType("/*", "*/");
+        CommentType shortReactComment = new CommentType("#", "");
 
         commentTypes.add(singleJavaComment);
         commentTypes.add(longJavaComment);
+        commentTypes.add(shortReactComment);
 
         for(CommitWrapper current : app.getAllCommits(projects.get(projectNum).getProject().getId())) {
             System.out.println("current commit: " + current.getCommitData());
@@ -131,10 +133,9 @@ public class Main {
 
         }
 
-//        testCommitFiltering(projects, projectNum, app);
-//
-//        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
+        testCommitFiltering(projects, projectNum, app);
 
+        testMergeRequestFiltering(projects.get(projectNum).getProject().getId(), "aursu", app);
 
     }
 

@@ -79,11 +79,7 @@ public class IndividualDiffScoreCalculator {
         {
             String originalLine = line;
 
-
-//            line = line.substring(1); // cutting out the spaces
-//            line = line.trim();
             if(line.charAt(0) == '+') {
-                System.out.println("line is: " + line);
                 diffScore = diffScore + analyzeLine(line);
             }
             else if(line.charAt(0) == '-' && lineWasAdded(line) == false && (line.trim().length() > 0) && !line.trim().equals("-")) {
@@ -95,11 +91,9 @@ public class IndividualDiffScoreCalculator {
 
                 removedLines.add(line);
 
-                System.out.println("original line removed: " + originalLine + "size is " + originalLine.length());
-                System.out.println("trim line removed: " + line + "size is " + line.length());
-                System.out.println();
             }
         }
+
 
         return diffScore;
     }
@@ -109,17 +103,14 @@ public class IndividualDiffScoreCalculator {
         line = line.trim();
 
         if(line.equals("+")) {
-            System.out.println("line is a space");
-        }
 
+        }
         else if(line.length() > 1) {
             line = line.substring(1); // cutting out the +
             line = line.trim();
 
             if(isSyntax(line)) {
                 lineScore = syntaxLineWeight;
-
-                System.out.println("syntax line");
             }
             else if(isComment(line)) {
                 lineScore = 0.0;
@@ -127,14 +118,12 @@ public class IndividualDiffScoreCalculator {
             else if(isLongComment == false && lineWasRemoved(line) == false) {
                 lineScore = addLineWeight;
 
-                System.out.println("normal line of code");
                 addedLines.add(line);
             }
 
             if(isLongComment == true) {
                 checkForEndBrace(line);
 
-                System.out.println("checking for end of comment");
             }
 
 
@@ -156,13 +145,8 @@ public class IndividualDiffScoreCalculator {
         if(line.length() > longCommentEndBrace.length()) {
 
             potentialEndOfComment = line.substring(line.length()-longCommentEndBrace.length(), line.length());
-
-            System.out.println("substring is: " + potentialEndOfComment);
-
-
         }
         else if(line.length() == longCommentEndBrace.length()) {
-            System.out.println("equal");
             potentialEndOfComment = line;
 
         }
@@ -170,7 +154,6 @@ public class IndividualDiffScoreCalculator {
         if(potentialEndOfComment.equals(longCommentEndBrace)) {
             isLongComment = false;
 
-            System.out.println("comment is over");
         }
 
 
@@ -180,29 +163,30 @@ public class IndividualDiffScoreCalculator {
     private boolean isSyntax(String line) {
         return line.equals("{") || line.equals("}");
     }
+
     private boolean isComment(String line) {
 
         boolean result = true;
 
 
         /* dont worry about efficiency as there are likely to be at most 2 types of comments in this list.
-           List passed in will be based on file type
+           The list passed in will be based on file type
          */
         for(CommentType commentType : commentTypes) {
             if(commentType.getEndType().equals("")) {
-                result = isStartOnlyComment(line, commentType);
+                result = isShortComment(line, commentType);
 
             }
             else {
 
-                result = isStartAndEndComment(line, commentType);
+                result = isLongComment(line, commentType);
             }
         }
 
         return result;
     }
 
-    private boolean isStartAndEndComment(String line, CommentType commentType) {
+    private boolean isLongComment(String line, CommentType commentType) {
         boolean result = true;
 
         for(int i=0; i<commentType.getStartType().length(); i++) {
@@ -215,25 +199,18 @@ public class IndividualDiffScoreCalculator {
         if(result == true) {
             isLongComment = true;
             longCommentEndBrace = commentType.getEndType();
-
-            System.out.println("Long comment");
-
         }
 
         return result;
     }
 
-    private boolean isStartOnlyComment(String line, CommentType commentType) {
+    private boolean isShortComment(String line, CommentType commentType) {
         boolean result = true;
         for(int i=0; i<commentType.getStartType().length(); i++) {
             if (line.charAt(i) != commentType.getStartType().charAt(i)) {
                 result = false;
                 break;
             }
-        }
-
-        if(result == true) {
-            System.out.println("short comment");
         }
 
         return result;
