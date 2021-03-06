@@ -40,7 +40,7 @@ public class MergeRequestService {
 
     private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, Project project, Date start, Date end) {
 
-        return gitlabService.getFilteredMergeRequests(projectId, "master", start, end);
+        return gitlabService.getFilteredMergeRequestsWithDiffs(projectId, "master", start, end);
     }
 
     private List<CommitWrapper> getCommitWrapper(GitlabService gitlabService, int projectId, int mergeRequestIiD) throws GitLabRuntimeException{

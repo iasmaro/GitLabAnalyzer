@@ -1,7 +1,6 @@
 package com.haumea.gitanalyzer.gitlab;
 
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
-import io.swagger.models.auth.In;
 import org.gitlab4j.api.*;
 import org.gitlab4j.api.models.*;
 
@@ -55,6 +54,10 @@ public class GitlabService {
 
     public String getPersonalAccessToken() {
         return personalAccessToken;
+    }
+
+    private boolean hasItem(List<String> items, String checkItem){
+        return items.stream().anyMatch(item -> item.equals(checkItem));
     }
 
     public List<ProjectWrapper> getProjects() {
@@ -111,11 +114,10 @@ public class GitlabService {
         return allMembers;
     }
 
-    // get all MRs of a repo, keep only MRs that is merged into target branch within start and end Date
-    public List<MergeRequestWrapper> getFilteredMergeRequests(Integer projectId,
+    public List<MergeRequest> getFilteredMergeRequestsNoDiffs(Integer projectId,
                                                               String targetBranch,
                                                               Date start,
-                                                              Date end) {
+                                                              Date end){
 
         MergeRequestFilter filter = new MergeRequestFilter();
         filter.setProjectId(projectId);
@@ -124,14 +126,14 @@ public class GitlabService {
         filter.setCreatedBefore(end);
 
         List<MergeRequest> mergeRequests;
+
         try{
             mergeRequests = mergeRequestApi.getMergeRequests(filter);
         } catch (GitLabApiException e){
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
 
-        List<MergeRequestWrapper> result = new ArrayList<>();
-
+        List<MergeRequest> filteredMergeRequests = new ArrayList<>();
         /*
          * have to filter for start time by merged_at, neither created_at or updated_at works
          * if we filter by created_at or updated_at directly, we risk excluding MRs that should included because
@@ -141,28 +143,67 @@ public class GitlabService {
          * */
         for(MergeRequest current : mergeRequests) {
 
-            if(current.getMergedAt().after(start)){
+            if(current.getMergedAt().after(start) && current.getMergedAt().before(end)){
 
-                // the constructor of CommitWrapper incurs 2 API calls
-                // to get the latest MR version then get the MR diff
-                // which include list of commits (with metadata only, no diffs) and list of MR diffs
-                MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, current);
-
-                result.add(newMergeRequest);
+                filteredMergeRequests.add(current);
             }
         }
 
-        return result;
+        return filteredMergeRequests;
 
     }
 
-    public List<MergeRequestWrapper> getFilteredMergeRequestsByAuthor(Integer projectId,
+    // we can't filter MRs by commit author without incur the cost of retrieving all commits of each MRs
+    // this is why getFilteredMergeRequestsNoDiffsByAuthor calls getFilteredMergeRequestsWithDiffsByAuthor
+    public List<MergeRequest> getFilteredMergeRequestsNoDiffsByAuthor(Integer projectId,
                                                                       String targetBranch,
                                                                       Date start,
                                                                       Date end,
                                                                       List<String> alias){
 
-        List<MergeRequestWrapper> mergeRequests = getFilteredMergeRequests(projectId, targetBranch, start, end);
+        List<MergeRequestWrapper> mergeRequests = getFilteredMergeRequestsWithDiffsByAuthor(
+                projectId,
+                targetBranch,
+                start,
+                end, alias);
+        List<MergeRequest> filteredMergeRequests = new ArrayList<>();
+
+        for(MergeRequestWrapper current : mergeRequests) {
+
+            filteredMergeRequests.add(current.getMergeRequestData());
+
+        }
+
+        return filteredMergeRequests;
+
+    }
+
+    // get all MRs of a repo, keep only MRs that is merged into target branch within start and end Date
+    public List<MergeRequestWrapper> getFilteredMergeRequestsWithDiffs(Integer projectId,
+                                                                       String targetBranch,
+                                                                       Date start,
+                                                                       Date end) {
+
+        List<MergeRequest> mergeRequests = getFilteredMergeRequestsNoDiffs(projectId, targetBranch, start, end);
+
+        List<MergeRequestWrapper> filteredMergeRequests = new ArrayList<>();
+
+        for(MergeRequest current : mergeRequests) {
+            MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, current);
+            filteredMergeRequests.add(newMergeRequest);
+        }
+
+        return filteredMergeRequests;
+
+    }
+
+    public List<MergeRequestWrapper> getFilteredMergeRequestsWithDiffsByAuthor(Integer projectId,
+                                                                               String targetBranch,
+                                                                               Date start,
+                                                                               Date end,
+                                                                               List<String> alias){
+
+        List<MergeRequestWrapper> mergeRequests = getFilteredMergeRequestsWithDiffs(projectId, targetBranch, start, end);
 
         List<MergeRequestWrapper> filteredMergeRequests = new ArrayList<>();
 
@@ -179,11 +220,12 @@ public class GitlabService {
 
     }
 
-    private List<Commit> getMergeRequestCommits(Integer projectId, Integer mergeRequestId){
+    private List<Commit> getMergeRequestCommits(Integer projectId,
+                                                Integer mergeRequestIid){
         List<Commit> commits;
 
         try{
-            commits = mergeRequestApi.getCommits(projectId, mergeRequestId);
+            commits = mergeRequestApi.getCommits(projectId, mergeRequestIid);
         } catch (GitLabApiException e){
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
@@ -191,9 +233,10 @@ public class GitlabService {
         return commits;
     }
 
-    // get commits associated with a MR
-    public List<CommitWrapper> getMergeRequestCommitsWithDiffs(Integer projectId, Integer mergeRequestId){
-        List<Commit> commits = getMergeRequestCommits(projectId, mergeRequestId);
+    // get commits (metadata + diffs) associated with a MR
+    public List<CommitWrapper> getMergeRequestCommitsWithDiffs(Integer projectId,
+                                                               Integer mergeRequestIid){
+        List<Commit> commits = getMergeRequestCommits(projectId, mergeRequestIid);
 
         List<CommitWrapper> commitsWithDiff = new ArrayList<>();
         for (Commit commit: commits){
@@ -204,12 +247,12 @@ public class GitlabService {
         return commitsWithDiff;
     }
 
-    // get commits associated with a MR then filter by commit author
+    // get commits (metadata + diffs) associated with a MR then filter by commit author
     public List<CommitWrapper> getMergeRequestCommitsWithDiffsByAuthor(Integer projectId,
-                                                              Integer mergeRequestId,
-                                                              List<String> alias){
+                                                                       Integer mergeRequestIid,
+                                                                       List<String> alias){
 
-        List<Commit> commits = getMergeRequestCommits(projectId, mergeRequestId);
+        List<Commit> commits = getMergeRequestCommits(projectId, mergeRequestIid);
 
         List<CommitWrapper> commitsWithDiff = new ArrayList<>();
         for (Commit commit: commits){
@@ -227,17 +270,68 @@ public class GitlabService {
 
     }
 
-    // get all commits of a repo, filtered by target branch, start and end Date
-    public List<CommitWrapper> getFilterdCommits(Integer projectId,
+    // get commits (metadata) associated with a MR
+    public List<Commit> getMergeRequestCommitsNoDiffs(Integer projectId,
+                                                      Integer mergeRequestIid){
+
+        return getMergeRequestCommits(projectId, mergeRequestIid);
+
+    }
+
+    // get commits (metadata) associated with a MR then filter by commit author
+    public List<Commit> getMergeRequestCommitsNoDiffsByAuthor(Integer projectId,
+                                                              Integer mergeRequestIid,
+                                                              List<String> alias){
+
+        List<Commit> commits = getMergeRequestCommits(projectId, mergeRequestIid);
+        List<Commit> filterdCommits = new ArrayList<>();
+
+        for(Commit current: commits){
+            if(hasItem(alias, current.getAuthorName())){
+                filterdCommits.add(current);
+            }
+        }
+
+        return filterdCommits;
+
+    }
+
+    public List<Commit> getFilterdCommitsNoDiff(Integer projectId,
                                                  String targetBranch,
                                                  Date start,
                                                  Date end){
-        List<Commit> commits;
         try{
-            commits = commitsApi.getCommits(projectId, targetBranch, start, end);
+            return commitsApi.getCommits(projectId, targetBranch, start, end);
         } catch (GitLabApiException e){
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
+
+    }
+
+    public List<Commit> getFilterdCommitsNoDiffByAuthor(Integer projectId,
+                                                        String targetBranch,
+                                                        Date start,
+                                                        Date end,
+                                                        List<String> alias){
+        List<Commit> commits = getFilterdCommitsNoDiff(projectId, targetBranch, start, end);
+
+        List<Commit> filteredCommits = new ArrayList<>();
+        for(Commit current: commits){
+            if(hasItem(alias, current.getAuthorName())){
+                filteredCommits.add(current);
+            }
+        }
+
+        return filteredCommits;
+
+    }
+
+    // get all commits of a repo, filtered by target branch, start and end Date
+    public List<CommitWrapper> getFilterdCommitsWithDiffs(Integer projectId,
+                                                          String targetBranch,
+                                                          Date start,
+                                                          Date end){
+        List<Commit> commits = getFilterdCommitsNoDiff(projectId, targetBranch, start, end);
 
         List<CommitWrapper> filteredCommits = new ArrayList<>();
         for(Commit current: commits){
@@ -250,27 +344,60 @@ public class GitlabService {
     }
 
     // get all commits of a repo, filtered by target branch, start and end Date, and author
-    public List<CommitWrapper> getFilterdCommitByAuthor(Integer projectId,
-                                                        String targetBranch,
-                                                        Date start,
-                                                        Date end,
-                                                        String authorName){
+    public List<CommitWrapper> getFilterdCommitsWithDiffsByAuthor(Integer projectId,
+                                                                  String targetBranch,
+                                                                  Date start,
+                                                                  Date end,
+                                                                  List<String> alias){
 
-        List<CommitWrapper> commits = getFilterdCommits(projectId, targetBranch, start, end);
+        List<Commit> commits = getFilterdCommitsNoDiffByAuthor(projectId, targetBranch, start, end, alias);
         List<CommitWrapper> filteredCommits = new ArrayList<>();
 
-        for(CommitWrapper current: commits){
-            if(current.getCommitData().getAuthorName().equals(authorName)){
-                CommitWrapper commit = new CommitWrapper(projectId, commitsApi, current.getCommitData());
-                filteredCommits.add(commit);
-            }
+        for(Commit current: commits){
+            CommitWrapper commit = new CommitWrapper(projectId, commitsApi, current);
+            filteredCommits.add(commit);
         }
 
         return filteredCommits;
 
     }
 
-    // get all commits from a repo
+    // get all commits (metadata) from a repo
+    // use this function for alias filtering
+    public List<Commit> getAllCommitsNoDiff(Integer projectId){
+        try {
+            return commitsApi.getCommits(projectId);
+        }catch (GitLabApiException e){
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
+    }
+
+    // get all commits (metadata + diffs) from a repo
+    public List<CommitWrapper> getAllCommitsWithDiff(Integer projectId){
+        List<Commit> commits = getAllCommitsNoDiff(projectId);
+
+        List<CommitWrapper> commitList = new ArrayList<>();
+
+        for(Commit current : commits) {
+            CommitWrapper newCommit = new CommitWrapper(projectId, commitsApi ,current);
+
+            commitList.add(newCommit);
+        }
+
+        return commitList;
+    }
+
+    // get diffs of a commit
+    public List<Diff> getCommitDiffs(Integer projectId, String commitId){
+
+        try {
+            return commitsApi.getDiff(projectId, commitId);
+        }catch (GitLabApiException e){
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
+    }
+
+    @Deprecated
     public List<CommitWrapper> getAllCommits(Integer projectId) {
         List<Commit> commits;
         try{
@@ -288,26 +415,6 @@ public class GitlabService {
         }
 
         return commitList;
-    }
-
-    private boolean hasItem(List<String> items, String checkItem){
-        return items.stream().anyMatch(item -> item.equals(checkItem));
-    }
-
-    public List<String> getAlias(Integer projectId){
-
-        List<CommitWrapper> commits = getAllCommits(projectId);
-        List<String> alias = new ArrayList<>();
-
-        for(CommitWrapper current: commits){
-            String name = current.getCommitData().getAuthorName();
-            if(!hasItem(alias, name)){
-                alias.add(name);
-            }
-        }
-
-        return alias;
-
     }
 
     @Deprecated
