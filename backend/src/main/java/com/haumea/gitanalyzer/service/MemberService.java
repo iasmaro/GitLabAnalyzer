@@ -59,14 +59,10 @@ public class MemberService {
 
         List<String> aliases = new ArrayList<>();
 
-        List<CommitWrapper> allCommits = gitlabService.getAllCommits(projectId);
+        List<Commit> commits = gitlabService.getAllCommitsNoDiff(projectId);
 
-        for(CommitWrapper currentCommit : allCommits){
-
-            Commit commitData = currentCommit.getCommitData();
-
-            String alias = commitData.getAuthorName();
-
+        for (Commit commit: commits){
+            String alias = commit.getAuthorName();
             if(!aliases.contains(alias)){
                 aliases.add(alias);
             }
