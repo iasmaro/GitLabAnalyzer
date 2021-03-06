@@ -397,6 +397,20 @@ public class GitlabService {
         }
     }
 
+    // get diffs of a merge request
+    public MergeRequestWrapper getMergeRequestDiffs(Integer projectId, Integer mergeRequestIid){
+
+        MergeRequest mergeRequest;
+        try {
+            mergeRequest = mergeRequestApi.getMergeRequest(projectId, mergeRequestIid);
+        } catch (GitLabApiException e){
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
+
+        return new MergeRequestWrapper(mergeRequestApi, projectId, mergeRequest);
+
+    }
+
     @Deprecated
     public List<CommitWrapper> getAllCommits(Integer projectId) {
         List<Commit> commits;

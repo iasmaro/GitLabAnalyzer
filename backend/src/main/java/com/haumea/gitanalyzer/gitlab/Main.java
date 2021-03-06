@@ -98,6 +98,8 @@ public class Main {
 
         test.testGetCommitDiffs(25516, "166db39fc209f76d0be475cfc0b0be3d021e9070");
 
+        test.testGetMergeRequestDiffs(25516, 52);
+
     }
 
 }

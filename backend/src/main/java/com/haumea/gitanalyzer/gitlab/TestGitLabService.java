@@ -286,5 +286,14 @@ public class TestGitLabService {
         }
     }
 
+    public void testGetMergeRequestDiffs(Integer projectId, Integer mergeRequestIid){
+        System.out.println("\n---Testing getMergeRequestDiffs---");
+        MergeRequestWrapper mergeRequestWrapper = gitlabService.getMergeRequestDiffs(projectId, mergeRequestIid);
+
+        System.out.println(
+                        "# commits: " + mergeRequestWrapper.getMergeRequestDiff().getCommits().size() +
+                        ", # diffs: " + mergeRequestWrapper.getMergeRequestDiff().getDiffs().size());
+    }
+
 
 }
