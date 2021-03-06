@@ -284,19 +284,19 @@ public class GitlabService {
                                                              List<String> alias){
 
         List<Commit> commits = getMergeRequestCommits(projectId, mergeRequestIid);
-        List<Commit> filterdCommits = new ArrayList<>();
+        List<Commit> filteredCommits = new ArrayList<>();
 
         for(Commit current: commits){
             if(hasItem(alias, current.getAuthorName())){
-                filterdCommits.add(current);
+                filteredCommits.add(current);
             }
         }
 
-        return filterdCommits;
+        return filteredCommits;
 
     }
 
-    public List<Commit> getFilterdCommitsNoDiff(Integer projectId,
+    public List<Commit> getFilteredCommitsNoDiff(Integer projectId,
                                                  String targetBranch,
                                                  Date start,
                                                  Date end){
@@ -308,12 +308,12 @@ public class GitlabService {
 
     }
 
-    public List<Commit> getFilterdCommitsNoDiffByAuthor(Integer projectId,
-                                                        String targetBranch,
-                                                        Date start,
-                                                        Date end,
-                                                        List<String> alias){
-        List<Commit> commits = getFilterdCommitsNoDiff(projectId, targetBranch, start, end);
+    public List<Commit> getFilteredCommitsNoDiffByAuthor(Integer projectId,
+                                                         String targetBranch,
+                                                         Date start,
+                                                         Date end,
+                                                         List<String> alias){
+        List<Commit> commits = getFilteredCommitsNoDiff(projectId, targetBranch, start, end);
 
         List<Commit> filteredCommits = new ArrayList<>();
         for(Commit current: commits){
@@ -327,11 +327,11 @@ public class GitlabService {
     }
 
     // get all commits of a repo, filtered by target branch, start and end Date
-    public List<CommitWrapper> getFilterdCommitsWithDiff(Integer projectId,
-                                                         String targetBranch,
-                                                         Date start,
-                                                         Date end){
-        List<Commit> commits = getFilterdCommitsNoDiff(projectId, targetBranch, start, end);
+    public List<CommitWrapper> getFilteredCommitsWithDiff(Integer projectId,
+                                                          String targetBranch,
+                                                          Date start,
+                                                          Date end){
+        List<Commit> commits = getFilteredCommitsNoDiff(projectId, targetBranch, start, end);
 
         List<CommitWrapper> filteredCommits = new ArrayList<>();
         for(Commit current: commits){
@@ -344,13 +344,13 @@ public class GitlabService {
     }
 
     // get all commits of a repo, filtered by target branch, start and end Date, and author
-    public List<CommitWrapper> getFilterdCommitsWithDiffByAuthor(Integer projectId,
-                                                                 String targetBranch,
-                                                                 Date start,
-                                                                 Date end,
-                                                                 List<String> alias){
+    public List<CommitWrapper> getFilteredCommitsWithDiffByAuthor(Integer projectId,
+                                                                  String targetBranch,
+                                                                  Date start,
+                                                                  Date end,
+                                                                  List<String> alias){
 
-        List<Commit> commits = getFilterdCommitsNoDiffByAuthor(projectId, targetBranch, start, end, alias);
+        List<Commit> commits = getFilteredCommitsNoDiffByAuthor(projectId, targetBranch, start, end, alias);
         List<CommitWrapper> filteredCommits = new ArrayList<>();
 
         for(Commit current: commits){

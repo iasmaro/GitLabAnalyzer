@@ -66,26 +66,26 @@ public class Main {
                 52,
                 new ArrayList<String>(Arrays.asList("tmbui")));
 
-        test.testGetFilterdCommitsNoDiff(
+        test.testGetFilteredCommitsNoDiff(
                 25516,
                 "master",
                 createDateFromString("2021-01-07T00:00:00-08:00"),
                 createDateFromString("2021-02-22T02:30:00-08:00"));
 
-        test.testGetFilterdCommitsNoDiffByAuthor(
+        test.testGetFilteredCommitsNoDiffByAuthor(
                 25516,
                 "master",
                 createDateFromString("2021-01-07T00:00:00-08:00"),
                 createDateFromString("2021-02-22T02:30:00-08:00"),
                 new ArrayList<String>(Arrays.asList("tmbui")));
 
-        test.testGetFilterdCommitsWithDiff(
+        test.testGetFilteredCommitsWithDiff(
                 25516,
                 "master",
                 createDateFromString("2021-01-07T00:00:00-08:00"),
                 createDateFromString("2021-02-22T02:30:00-08:00"));
 
-        test.testGetFilterdCommitsWithDiffByAuthor(
+        test.testGetFilteredCommitsWithDiffByAuthor(
                 25516,
                 "master",
                 createDateFromString("2021-01-07T00:00:00-08:00"),

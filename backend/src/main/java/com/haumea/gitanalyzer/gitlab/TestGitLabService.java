@@ -196,12 +196,12 @@ public class TestGitLabService {
         printCommits(commits);
     }
 
-    public void testGetFilterdCommitsNoDiff(Integer projectId,
-                                                      String targetBranch,
-                                                      Date start,
-                                                      Date end){
-        System.out.println("\n---Testing getFilterdCommitsNoDiff---");
-        List<Commit> commits = gitlabService.getFilterdCommitsNoDiff(
+    public void testGetFilteredCommitsNoDiff(Integer projectId,
+                                             String targetBranch,
+                                             Date start,
+                                             Date end){
+        System.out.println("\n---Testing getFilteredCommitsNoDiff---");
+        List<Commit> commits = gitlabService.getFilteredCommitsNoDiff(
                 projectId,
                 targetBranch,
                 start,
@@ -211,13 +211,13 @@ public class TestGitLabService {
         printCommits(commits);
     }
 
-    public void testGetFilterdCommitsNoDiffByAuthor(Integer projectId,
-                                                   String targetBranch,
-                                                   Date start,
-                                                   Date end,
-                                                   List<String> alias){
-        System.out.println("\n---Testing getFilterdCommitsNoDiffByAuthor---");
-        List<Commit> commits = gitlabService.getFilterdCommitsNoDiffByAuthor(
+    public void testGetFilteredCommitsNoDiffByAuthor(Integer projectId,
+                                                     String targetBranch,
+                                                     Date start,
+                                                     Date end,
+                                                     List<String> alias){
+        System.out.println("\n---Testing getFilteredCommitsNoDiffByAuthor---");
+        List<Commit> commits = gitlabService.getFilteredCommitsNoDiffByAuthor(
                 projectId,
                 targetBranch,
                 start,
@@ -228,12 +228,12 @@ public class TestGitLabService {
         printCommits(commits);
     }
 
-    public void testGetFilterdCommitsWithDiff(Integer projectId,
-                                              String targetBranch,
-                                              Date start,
-                                              Date end){
-        System.out.println("\n---Testing getFilterdCommitsWithDiff---");
-        List<CommitWrapper> commits = gitlabService.getFilterdCommitsWithDiff(
+    public void testGetFilteredCommitsWithDiff(Integer projectId,
+                                               String targetBranch,
+                                               Date start,
+                                               Date end){
+        System.out.println("\n---Testing getFilteredCommitsWithDiff---");
+        List<CommitWrapper> commits = gitlabService.getFilteredCommitsWithDiff(
                 projectId,
                 targetBranch,
                 start,
@@ -243,13 +243,13 @@ public class TestGitLabService {
 
     }
 
-    public void testGetFilterdCommitsWithDiffByAuthor(Integer projectId,
-                                                      String targetBranch,
-                                                      Date start,
-                                                      Date end,
-                                                      List<String> alias){
-        System.out.println("\n---Testing getFilterdCommitsWithDiffByAuthor---");
-        List<CommitWrapper> commits = gitlabService.getFilterdCommitsWithDiffByAuthor(
+    public void testGetFilteredCommitsWithDiffByAuthor(Integer projectId,
+                                                       String targetBranch,
+                                                       Date start,
+                                                       Date end,
+                                                       List<String> alias){
+        System.out.println("\n---Testing getFilteredCommitsWithDiffByAuthor---");
+        List<CommitWrapper> commits = gitlabService.getFilteredCommitsWithDiffByAuthor(
                 projectId,
                 targetBranch,
                 start,
