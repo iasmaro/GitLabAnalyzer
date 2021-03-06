@@ -56,10 +56,6 @@ public class GitlabService {
         return personalAccessToken;
     }
 
-    private boolean hasItem(List<String> items, String checkItem){
-        return items.stream().anyMatch(item -> item.equals(checkItem));
-    }
-
     public List<ProjectWrapper> getProjects() {
         List<Project> projectList;
 
@@ -209,7 +205,7 @@ public class GitlabService {
 
         for (MergeRequestWrapper currentMR: mergeRequests){
             for(Commit currentCommit: currentMR.getMergeRequestDiff().getCommits()){
-                if(hasItem(alias, currentCommit.getAuthorName())){
+                if(alias.contains(currentCommit.getAuthorName())){
                     filteredMergeRequests.add(currentMR);
                     break;
                 }
@@ -260,7 +256,7 @@ public class GitlabService {
             // the constructor of CommitWrapper incurs 1 API to get the commit diffs, thus,
             // we won't create a CommitWrapper object unless it pass the filter condition
             // which is also why we don't call getMergeRequestCommits directly then filter
-            if(hasItem(alias, commit.getAuthorName())){
+            if(alias.contains(commit.getAuthorName())){
                 CommitWrapper newCommit = new CommitWrapper(projectId, commitsApi, commit);
                 commitsWithDiff.add(newCommit);
             }
@@ -287,7 +283,7 @@ public class GitlabService {
         List<Commit> filteredCommits = new ArrayList<>();
 
         for(Commit current: commits){
-            if(hasItem(alias, current.getAuthorName())){
+            if(alias.contains(current.getAuthorName())){
                 filteredCommits.add(current);
             }
         }
@@ -317,7 +313,7 @@ public class GitlabService {
 
         List<Commit> filteredCommits = new ArrayList<>();
         for(Commit current: commits){
-            if(hasItem(alias, current.getAuthorName())){
+            if(alias.contains(current.getAuthorName())){
                 filteredCommits.add(current);
             }
         }
