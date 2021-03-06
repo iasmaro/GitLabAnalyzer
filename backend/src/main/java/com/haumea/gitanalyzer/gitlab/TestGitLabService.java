@@ -101,13 +101,13 @@ public class TestGitLabService {
         }
     }
 
-    public void testGetFilteredMergeRequestsNoDiffs(Integer projectId,
-                                                    String targetBranch,
-                                                    Date start,
-                                                    Date end){
+    public void testGetFilteredMergeRequestsNoDiff(Integer projectId,
+                                                   String targetBranch,
+                                                   Date start,
+                                                   Date end){
 
-        System.out.println("\n---Testing getFilteredMergeRequestsNoDiffs---");
-        List<MergeRequest> MRs = gitlabService.getFilteredMergeRequestsNoDiffs(
+        System.out.println("\n---Testing getFilteredMergeRequestsNoDiff---");
+        List<MergeRequest> MRs = gitlabService.getFilteredMergeRequestsNoDiff(
                 projectId,
                 targetBranch,
                 start,
@@ -117,14 +117,14 @@ public class TestGitLabService {
 
     }
 
-    public void testGetFilteredMergeRequestsNoDiffsByAuthor(Integer projectId,
+    public void testGetFilteredMergeRequestsNoDiffByAuthor(Integer projectId,
                                                             String targetBranch,
                                                             Date start,
                                                             Date end,
                                                             List<String> alias){
 
-        System.out.println("\n---Testing getFilteredMergeRequestsNoDiffsByAuthor---");
-        List<MergeRequest> MRs = gitlabService.getFilteredMergeRequestsNoDiffsByAuthor(
+        System.out.println("\n---Testing getFilteredMergeRequestsNoDiffByAuthor---");
+        List<MergeRequest> MRs = gitlabService.getFilteredMergeRequestsNoDiffByAuthor(
                 projectId,
                 targetBranch,
                 start,
@@ -135,23 +135,23 @@ public class TestGitLabService {
 
     }
 
-    public void testGetFilteredMergeRequestsWithDiffs(Integer projectID,
-                                                      String targetBranch,
-                                                      Date start,
-                                                      Date end){
-        System.out.println("\n---Testing getFilteredMergeRequestsWithDiffs---");
-        List<MergeRequestWrapper> MRs = gitlabService.getFilteredMergeRequestsWithDiffs(projectID, targetBranch, start, end);
+    public void testGetFilteredMergeRequestsWithDiff(Integer projectID,
+                                                     String targetBranch,
+                                                     Date start,
+                                                     Date end){
+        System.out.println("\n---Testing getFilteredMergeRequestsWithDiff---");
+        List<MergeRequestWrapper> MRs = gitlabService.getFilteredMergeRequestsWithDiff(projectID, targetBranch, start, end);
 
         printMergeRequestWrappers(MRs);
     }
 
-    public void testGetFilteredMergeRequestsWithDiffsByAuthor(Integer projectID,
-                                                              String targetBranch,
-                                                              Date start,
-                                                              Date end,
-                                                              List<String> alias){
-        System.out.println("\n---Testing getFilteredMergeRequestsWithDiffsByAuthor---");
-        List<MergeRequestWrapper> MRs = gitlabService.getFilteredMergeRequestsWithDiffsByAuthor(
+    public void testGetFilteredMergeRequestsWithDiffByAuthor(Integer projectID,
+                                                             String targetBranch,
+                                                             Date start,
+                                                             Date end,
+                                                             List<String> alias){
+        System.out.println("\n---Testing getFilteredMergeRequestsWithDiffByAuthor---");
+        List<MergeRequestWrapper> MRs = gitlabService.getFilteredMergeRequestsWithDiffByAuthor(
                 projectID,
                 targetBranch,
                 start,
@@ -161,18 +161,18 @@ public class TestGitLabService {
         printMergeRequestWrappers(MRs);
     }
 
-    public void testGetMergeRequestCommitsWithDiffs(Integer projectId, Integer mergeRequestIid){
-        System.out.println("\n---Testing getMergeRequestCommitsWithDiffs---");
-        List<CommitWrapper> commits = gitlabService.getMergeRequestCommitsWithDiffs(projectId, mergeRequestIid);
+    public void testGetMergeRequestCommitsWithDiff(Integer projectId, Integer mergeRequestIid){
+        System.out.println("\n---Testing getMergeRequestCommitsWithDiff---");
+        List<CommitWrapper> commits = gitlabService.getMergeRequestCommitsWithDiff(projectId, mergeRequestIid);
 
         printCommitWrappers(commits);
     }
 
-    public void testGetMergeRequestCommitsWithDiffsByAuthor(Integer projectId,
-                                                                   Integer mergeRequestIid,
-                                                                   List<String> alias){
-        System.out.println("\n---Testing getMergeRequestCommitsWithDiffsByAuthor---");
-        List<CommitWrapper> commits = gitlabService.getMergeRequestCommitsWithDiffsByAuthor(
+    public void testGetMergeRequestCommitsWithDiffByAuthor(Integer projectId,
+                                                           Integer mergeRequestIid,
+                                                           List<String> alias){
+        System.out.println("\n---Testing getMergeRequestCommitsWithDiffByAuthor---");
+        List<CommitWrapper> commits = gitlabService.getMergeRequestCommitsWithDiffByAuthor(
                 projectId,
                 mergeRequestIid,
                 alias);
@@ -180,18 +180,18 @@ public class TestGitLabService {
         printCommitWrappers(commits);
     }
 
-    public void testGetMergeRequestCommitsNoDiffs(Integer projectId, Integer mergeRequestIid){
-        System.out.println("\n---Testing getMergeRequestCommitsNoDiffs---");
-        List<Commit> commits = gitlabService.getMergeRequestCommitsNoDiffs(projectId, mergeRequestIid);
+    public void testGetMergeRequestCommitsNoDiff(Integer projectId, Integer mergeRequestIid){
+        System.out.println("\n---Testing getMergeRequestCommitsNoDiff---");
+        List<Commit> commits = gitlabService.getMergeRequestCommitsNoDiff(projectId, mergeRequestIid);
 
         printCommits(commits);
     }
 
-    public void testGetMergeRequestCommitsNoDiffsByAuthor(Integer projectId,
-                                                                 Integer mergeRequestIid,
-                                                                 List<String> alias){
-        System.out.println("\n---Testing getMergeRequestCommitsNoDiffsByAuthor---");
-        List<Commit> commits = gitlabService.getMergeRequestCommitsNoDiffsByAuthor(
+    public void testGetMergeRequestCommitsNoDiffByAuthor(Integer projectId,
+                                                         Integer mergeRequestIid,
+                                                         List<String> alias){
+        System.out.println("\n---Testing getMergeRequestCommitsNoDiffByAuthor---");
+        List<Commit> commits = gitlabService.getMergeRequestCommitsNoDiffByAuthor(
                 projectId,
                 mergeRequestIid,
                 alias);
@@ -231,12 +231,12 @@ public class TestGitLabService {
         printCommits(commits);
     }
 
-    public void testGetFilterdCommitsWithDiffs(Integer projectId,
-                                             String targetBranch,
-                                             Date start,
-                                             Date end){
-        System.out.println("\n---Testing getFilterdCommitsWithDiffs---");
-        List<CommitWrapper> commits = gitlabService.getFilterdCommitsWithDiffs(
+    public void testGetFilterdCommitsWithDiff(Integer projectId,
+                                              String targetBranch,
+                                              Date start,
+                                              Date end){
+        System.out.println("\n---Testing getFilterdCommitsWithDiff---");
+        List<CommitWrapper> commits = gitlabService.getFilterdCommitsWithDiff(
                 projectId,
                 targetBranch,
                 start,
@@ -246,13 +246,13 @@ public class TestGitLabService {
 
     }
 
-    public void testGetFilterdCommitsWithDiffsByAuthor(Integer projectId,
-                                                              String targetBranch,
-                                                              Date start,
-                                                              Date end,
-                                                              List<String> alias){
-        System.out.println("\n---Testing getFilterdCommitsWithDiffsByAuthor---");
-        List<CommitWrapper> commits = gitlabService.getFilterdCommitsWithDiffsByAuthor(
+    public void testGetFilterdCommitsWithDiffByAuthor(Integer projectId,
+                                                      String targetBranch,
+                                                      Date start,
+                                                      Date end,
+                                                      List<String> alias){
+        System.out.println("\n---Testing getFilterdCommitsWithDiffByAuthor---");
+        List<CommitWrapper> commits = gitlabService.getFilterdCommitsWithDiffByAuthor(
                 projectId,
                 targetBranch,
                 start,

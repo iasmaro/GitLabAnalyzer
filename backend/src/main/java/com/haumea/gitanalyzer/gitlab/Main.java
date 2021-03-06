@@ -26,42 +26,42 @@ public class Main {
 
         test.testGetMembers(25516);
 
-        test.testGetFilteredMergeRequestsNoDiffs(
+        test.testGetFilteredMergeRequestsNoDiff(
                 25516,
                 "master",
                 createDateFromString("2021-01-07T00:00:00-08:00"),
                 createDateFromString("2021-02-22T02:30:00-08:00"));
 
-        test.testGetFilteredMergeRequestsWithDiffs(
+        test.testGetFilteredMergeRequestsWithDiff(
                 25516,
                 "master",
                 createDateFromString("2021-01-07T00:00:00-08:00"),
                 createDateFromString("2021-02-22T02:30:00-08:00"));
 
-        test.testGetFilteredMergeRequestsNoDiffsByAuthor(
+        test.testGetFilteredMergeRequestsNoDiffByAuthor(
                 25516,
                 "master",
                 createDateFromString("2021-01-07T00:00:00-08:00"),
                 createDateFromString("2021-02-22T02:30:00-08:00"),
                 new ArrayList<String>(Arrays.asList("tmbui")));
 
-        test.testGetFilteredMergeRequestsWithDiffsByAuthor(
+        test.testGetFilteredMergeRequestsWithDiffByAuthor(
                 25516,
                 "master",
                 createDateFromString("2021-01-07T00:00:00-08:00"),
                 createDateFromString("2021-02-22T02:30:00-08:00"),
                 new ArrayList<String>(Arrays.asList("tmbui")));
 
-        test.testGetMergeRequestCommitsWithDiffs(25516, 52);
+        test.testGetMergeRequestCommitsWithDiff(25516, 52);
 
-        test.testGetMergeRequestCommitsWithDiffsByAuthor(
+        test.testGetMergeRequestCommitsWithDiffByAuthor(
                 25516,
                 52,
                 new ArrayList<String>(Arrays.asList("tmbui")));
 
-        test.testGetMergeRequestCommitsNoDiffs(25516, 52);
+        test.testGetMergeRequestCommitsNoDiff(25516, 52);
 
-        test.testGetMergeRequestCommitsNoDiffsByAuthor(
+        test.testGetMergeRequestCommitsNoDiffByAuthor(
                 25516,
                 52,
                 new ArrayList<String>(Arrays.asList("tmbui")));
@@ -79,13 +79,13 @@ public class Main {
                 createDateFromString("2021-02-22T02:30:00-08:00"),
                 new ArrayList<String>(Arrays.asList("tmbui")));
 
-        test.testGetFilterdCommitsWithDiffs(
+        test.testGetFilterdCommitsWithDiff(
                 25516,
                 "master",
                 createDateFromString("2021-01-07T00:00:00-08:00"),
                 createDateFromString("2021-02-22T02:30:00-08:00"));
 
-        test.testGetFilterdCommitsWithDiffsByAuthor(
+        test.testGetFilterdCommitsWithDiffByAuthor(
                 25516,
                 "master",
                 createDateFromString("2021-01-07T00:00:00-08:00"),

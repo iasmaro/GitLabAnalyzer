@@ -114,10 +114,10 @@ public class GitlabService {
         return allMembers;
     }
 
-    public List<MergeRequest> getFilteredMergeRequestsNoDiffs(Integer projectId,
-                                                              String targetBranch,
-                                                              Date start,
-                                                              Date end){
+    public List<MergeRequest> getFilteredMergeRequestsNoDiff(Integer projectId,
+                                                             String targetBranch,
+                                                             Date start,
+                                                             Date end){
 
         MergeRequestFilter filter = new MergeRequestFilter();
         filter.setProjectId(projectId);
@@ -154,14 +154,14 @@ public class GitlabService {
     }
 
     // we can't filter MRs by commit author without incur the cost of retrieving all commits of each MRs
-    // this is why getFilteredMergeRequestsNoDiffsByAuthor calls getFilteredMergeRequestsWithDiffsByAuthor
-    public List<MergeRequest> getFilteredMergeRequestsNoDiffsByAuthor(Integer projectId,
-                                                                      String targetBranch,
-                                                                      Date start,
-                                                                      Date end,
-                                                                      List<String> alias){
+    // this is why getFilteredMergeRequestsNoDiffByAuthor calls getFilteredMergeRequestsWithDiffByAuthor
+    public List<MergeRequest> getFilteredMergeRequestsNoDiffByAuthor(Integer projectId,
+                                                                     String targetBranch,
+                                                                     Date start,
+                                                                     Date end,
+                                                                     List<String> alias){
 
-        List<MergeRequestWrapper> mergeRequests = getFilteredMergeRequestsWithDiffsByAuthor(
+        List<MergeRequestWrapper> mergeRequests = getFilteredMergeRequestsWithDiffByAuthor(
                 projectId,
                 targetBranch,
                 start,
@@ -179,12 +179,12 @@ public class GitlabService {
     }
 
     // get all MRs of a repo, keep only MRs that is merged into target branch within start and end Date
-    public List<MergeRequestWrapper> getFilteredMergeRequestsWithDiffs(Integer projectId,
-                                                                       String targetBranch,
-                                                                       Date start,
-                                                                       Date end) {
+    public List<MergeRequestWrapper> getFilteredMergeRequestsWithDiff(Integer projectId,
+                                                                      String targetBranch,
+                                                                      Date start,
+                                                                      Date end) {
 
-        List<MergeRequest> mergeRequests = getFilteredMergeRequestsNoDiffs(projectId, targetBranch, start, end);
+        List<MergeRequest> mergeRequests = getFilteredMergeRequestsNoDiff(projectId, targetBranch, start, end);
 
         List<MergeRequestWrapper> filteredMergeRequests = new ArrayList<>();
 
@@ -197,13 +197,13 @@ public class GitlabService {
 
     }
 
-    public List<MergeRequestWrapper> getFilteredMergeRequestsWithDiffsByAuthor(Integer projectId,
-                                                                               String targetBranch,
-                                                                               Date start,
-                                                                               Date end,
-                                                                               List<String> alias){
+    public List<MergeRequestWrapper> getFilteredMergeRequestsWithDiffByAuthor(Integer projectId,
+                                                                              String targetBranch,
+                                                                              Date start,
+                                                                              Date end,
+                                                                              List<String> alias){
 
-        List<MergeRequestWrapper> mergeRequests = getFilteredMergeRequestsWithDiffs(projectId, targetBranch, start, end);
+        List<MergeRequestWrapper> mergeRequests = getFilteredMergeRequestsWithDiff(projectId, targetBranch, start, end);
 
         List<MergeRequestWrapper> filteredMergeRequests = new ArrayList<>();
 
@@ -234,8 +234,8 @@ public class GitlabService {
     }
 
     // get commits (metadata + diffs) associated with a MR
-    public List<CommitWrapper> getMergeRequestCommitsWithDiffs(Integer projectId,
-                                                               Integer mergeRequestIid){
+    public List<CommitWrapper> getMergeRequestCommitsWithDiff(Integer projectId,
+                                                              Integer mergeRequestIid){
         List<Commit> commits = getMergeRequestCommits(projectId, mergeRequestIid);
 
         List<CommitWrapper> commitsWithDiff = new ArrayList<>();
@@ -248,9 +248,9 @@ public class GitlabService {
     }
 
     // get commits (metadata + diffs) associated with a MR then filter by commit author
-    public List<CommitWrapper> getMergeRequestCommitsWithDiffsByAuthor(Integer projectId,
-                                                                       Integer mergeRequestIid,
-                                                                       List<String> alias){
+    public List<CommitWrapper> getMergeRequestCommitsWithDiffByAuthor(Integer projectId,
+                                                                      Integer mergeRequestIid,
+                                                                      List<String> alias){
 
         List<Commit> commits = getMergeRequestCommits(projectId, mergeRequestIid);
 
@@ -271,17 +271,17 @@ public class GitlabService {
     }
 
     // get commits (metadata) associated with a MR
-    public List<Commit> getMergeRequestCommitsNoDiffs(Integer projectId,
-                                                      Integer mergeRequestIid){
+    public List<Commit> getMergeRequestCommitsNoDiff(Integer projectId,
+                                                     Integer mergeRequestIid){
 
         return getMergeRequestCommits(projectId, mergeRequestIid);
 
     }
 
     // get commits (metadata) associated with a MR then filter by commit author
-    public List<Commit> getMergeRequestCommitsNoDiffsByAuthor(Integer projectId,
-                                                              Integer mergeRequestIid,
-                                                              List<String> alias){
+    public List<Commit> getMergeRequestCommitsNoDiffByAuthor(Integer projectId,
+                                                             Integer mergeRequestIid,
+                                                             List<String> alias){
 
         List<Commit> commits = getMergeRequestCommits(projectId, mergeRequestIid);
         List<Commit> filterdCommits = new ArrayList<>();
@@ -327,10 +327,10 @@ public class GitlabService {
     }
 
     // get all commits of a repo, filtered by target branch, start and end Date
-    public List<CommitWrapper> getFilterdCommitsWithDiffs(Integer projectId,
-                                                          String targetBranch,
-                                                          Date start,
-                                                          Date end){
+    public List<CommitWrapper> getFilterdCommitsWithDiff(Integer projectId,
+                                                         String targetBranch,
+                                                         Date start,
+                                                         Date end){
         List<Commit> commits = getFilterdCommitsNoDiff(projectId, targetBranch, start, end);
 
         List<CommitWrapper> filteredCommits = new ArrayList<>();
@@ -344,11 +344,11 @@ public class GitlabService {
     }
 
     // get all commits of a repo, filtered by target branch, start and end Date, and author
-    public List<CommitWrapper> getFilterdCommitsWithDiffsByAuthor(Integer projectId,
-                                                                  String targetBranch,
-                                                                  Date start,
-                                                                  Date end,
-                                                                  List<String> alias){
+    public List<CommitWrapper> getFilterdCommitsWithDiffByAuthor(Integer projectId,
+                                                                 String targetBranch,
+                                                                 Date start,
+                                                                 Date end,
+                                                                 List<String> alias){
 
         List<Commit> commits = getFilterdCommitsNoDiffByAuthor(projectId, targetBranch, start, end, alias);
         List<CommitWrapper> filteredCommits = new ArrayList<>();
