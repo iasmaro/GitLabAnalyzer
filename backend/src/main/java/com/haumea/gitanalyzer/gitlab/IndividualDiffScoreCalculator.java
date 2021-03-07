@@ -83,10 +83,14 @@ public class IndividualDiffScoreCalculator {
                 diffScore = diffScore + analyzeLine(line);
             }
             else if(line.charAt(0) == '-' && lineWasAdded(line) == false && (line.trim().length() > 0) && !line.trim().equals("-")) {
-                diffScore = diffScore + deleteLineWeight;
 
                 line = line.substring(1); // cutting out the -
                 line = line.trim();
+
+                if(isComment(line) == false) {
+                    diffScore = diffScore + deleteLineWeight;
+                }
+
 
                 removedLines.add(line);
 
@@ -102,7 +106,7 @@ public class IndividualDiffScoreCalculator {
         line = line.trim();
 
         if(line.length() > 1) {
-            line = line.substring(1); // cutting out the +
+            line = line.substring(1); // cutting out the + or -
             line = line.trim();
 
             if(isSyntax(line)) {
@@ -121,7 +125,6 @@ public class IndividualDiffScoreCalculator {
                 checkForEndBrace(line);
 
             }
-
 
         }
 
@@ -174,11 +177,15 @@ public class IndividualDiffScoreCalculator {
         for(CommentType commentType : commentTypes) {
             if(commentType.getEndType().equals("")) {
                 result = isShortComment(line, commentType);
-
             }
             else {
 
                 result = isLongComment(line, commentType);
+            }
+
+
+            if(result == true) {
+                break;
             }
         }
 
