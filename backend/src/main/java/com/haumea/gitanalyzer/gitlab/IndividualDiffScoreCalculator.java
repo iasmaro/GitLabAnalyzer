@@ -88,7 +88,6 @@ public class IndividualDiffScoreCalculator {
                 line = line.substring(1); // cutting out the -
                 line = line.trim();
 
-
                 removedLines.add(line);
 
             }
@@ -102,10 +101,7 @@ public class IndividualDiffScoreCalculator {
 
         line = line.trim();
 
-        if(line.equals("+")) {
-
-        }
-        else if(line.length() > 1) {
+        if(line.length() > 1) {
             line = line.substring(1); // cutting out the +
             line = line.trim();
 
@@ -151,12 +147,15 @@ public class IndividualDiffScoreCalculator {
 
         }
 
+        endOfLongComment(potentialEndOfComment);
+
+    }
+
+    private void endOfLongComment(String potentialEndOfComment) {
+
         if(potentialEndOfComment.equals(longCommentEndBrace)) {
             isLongComment = false;
-
         }
-
-
     }
 
 
@@ -190,6 +189,7 @@ public class IndividualDiffScoreCalculator {
         boolean result = true;
 
         for(int i=0; i<commentType.getStartType().length(); i++) {
+
             if (line.charAt(i) != commentType.getStartType().charAt(i)) {
                 result = false;
                 break;
