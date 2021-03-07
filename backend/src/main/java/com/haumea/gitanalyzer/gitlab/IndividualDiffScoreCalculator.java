@@ -77,8 +77,6 @@ public class IndividualDiffScoreCalculator {
         String line;
         while((line=bufReader.readLine()) != null )
         {
-            String originalLine = line;
-
             if(line.charAt(0) == '+') {
                 diffScore = diffScore + analyzeLine(line);
             }
@@ -87,12 +85,26 @@ public class IndividualDiffScoreCalculator {
                 line = line.substring(1); // cutting out the -
                 line = line.trim();
 
-                if(isComment(line) == false) {
+                if(isComment(line) == false && isLongComment == false) {
                     diffScore = diffScore + deleteLineWeight;
                 }
 
 
                 removedLines.add(line);
+
+            }
+            else { // still need to process unchanged line to check whether a long comment was changed
+
+                line = line.trim();
+
+
+                if(line.length() > 0) {
+                    isComment(line);
+                }
+
+                if(isLongComment == true) {
+                    checkForEndBrace(line);
+                }
 
             }
         }
@@ -106,7 +118,7 @@ public class IndividualDiffScoreCalculator {
         line = line.trim();
 
         if(line.length() > 1) {
-            line = line.substring(1); // cutting out the + or -
+            line = line.substring(1); // cutting out the +
             line = line.trim();
 
             if(isSyntax(line)) {
@@ -195,6 +207,7 @@ public class IndividualDiffScoreCalculator {
     private boolean isLongComment(String line, CommentType commentType) {
         boolean result = true;
 
+
         for(int i=0; i<commentType.getStartType().length(); i++) {
 
             if (line.charAt(i) != commentType.getStartType().charAt(i)) {
@@ -206,6 +219,7 @@ public class IndividualDiffScoreCalculator {
         if(result == true) {
             isLongComment = true;
             longCommentEndBrace = commentType.getEndType();
+
         }
 
         return result;
