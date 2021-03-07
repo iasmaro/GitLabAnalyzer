@@ -77,11 +77,11 @@ public class GitlabService {
 
     }
 
-    public Project getSelectedProject(Integer projectID) {
+    public Project getSelectedProject(Integer projectId) {
         Project selectedProject;
 
         try{
-            selectedProject = projectApi.getProject(projectID);
+            selectedProject = projectApi.getProject(projectId);
         } catch (GitLabApiException e){
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
@@ -375,7 +375,7 @@ public class GitlabService {
         List<CommitWrapper> commitList = new ArrayList<>();
 
         for(Commit current : commits) {
-            CommitWrapper newCommit = new CommitWrapper(projectId, commitsApi ,current);
+            CommitWrapper newCommit = new CommitWrapper(projectId, commitsApi, current);
 
             commitList.add(newCommit);
         }
@@ -417,7 +417,7 @@ public class GitlabService {
         List<CommitWrapper> commitList = new ArrayList<>();
 
         for(Commit current : commits) {
-            CommitWrapper newCommit = new CommitWrapper(projectId, commitsApi ,current);
+            CommitWrapper newCommit = new CommitWrapper(projectId, commitsApi, current);
 
             commitList.add(newCommit);
         }
