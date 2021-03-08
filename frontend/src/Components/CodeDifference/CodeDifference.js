@@ -13,7 +13,7 @@ import './prism.css';
 
 
 const CodeDifference = (props) => {
-    const { diff } = props || {};
+    const { diff, view } = props || {};
     const [isOpen, setIsOpen] = useState(true);
 
     if (!diff || !diff["new_path"] || !diff["diff"]) {
@@ -21,8 +21,8 @@ const CodeDifference = (props) => {
     }
     const diffText = `--- ${diff["old_path"]}\n+++ ${diff["new_path"]}\n${diff["diff"]}`;
 
-    const linesAdded = diff["diff"].match(/\n\+/g).length;
-    const linesRemoved = diff["diff"].match(/\n-/g).length;
+    const linesAdded = diff["diff"].match(/\n\+/g)?.length || 0;
+    const linesRemoved = diff["diff"].match(/\n-/g)?.length || 0;
     const fileName = diff["new_path"];
 
     const language = getLanguageFromFile(fileName);
@@ -48,7 +48,7 @@ const CodeDifference = (props) => {
                 </Card.Header>
                 <Accordion.Collapse eventKey="1">
                     <Card.Body>
-                        {files.map(({hunks, type}, i) => <Diff key={i} hunks={hunks || []} diffType={type} viewType="unified" tokens={tokenize(hunks, options)} />)}
+                        {files.map(({hunks, type}, i) => <Diff key={i} hunks={hunks || []} diffType={type} viewType={view || 'unified'} tokens={tokenize(hunks, options)} />)}
                     </Card.Body>
                 </Accordion.Collapse>
             </Card>

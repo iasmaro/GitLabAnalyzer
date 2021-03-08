@@ -37,12 +37,12 @@
     cursor: pointer;
 }
 
-.chevron.right:before {
+.chevron.chevron-right:before {
 	left: 0;
 	transform: rotate(45deg);
 }
 
-.chevron.bottom:before {
+.chevron.chevron-bottom:before {
 	top: 0;
 	transform: rotate(135deg);
 }
