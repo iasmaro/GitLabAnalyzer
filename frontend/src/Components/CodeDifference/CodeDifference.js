@@ -5,13 +5,15 @@ import { parseDiff, Diff, tokenize } from 'react-diff-view';
 import 'react-diff-view/style/index.css';
 import refractor from 'refractor';
 
+import getLanguageFromFile from 'Utils/getLanguageFromFile';
+
 import FileHeader from './components/FileHeader';
 import './CodeDifference.css';
 import './prism.css';
 
 
 const CodeDifference = (props) => {
-    const { diff } = props;
+    const { diff } = props || {};
     const [isOpen, setIsOpen] = useState(true);
 
     if (!diff || !diff["new_path"] || !diff["diff"]) {
@@ -22,13 +24,14 @@ const CodeDifference = (props) => {
     const linesAdded = diff["diff"].match(/\n\+/g).length;
     const linesRemoved = diff["diff"].match(/\n-/g).length;
     const fileName = diff["new_path"];
-    const fileExtension =  fileName.split('.').pop();
+
+    const language = getLanguageFromFile(fileName);
 
     const files = parseDiff(diffText, {nearbySequences: 'zip'});
     const options = {
         highlight: true,
         refractor: refractor,
-        language: 'javascript'
+        language
     };
 
     const handleClick = () => {
