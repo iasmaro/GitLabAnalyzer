@@ -14,15 +14,17 @@ public class MergeRequestDTO {
     private Date updatedDate;
     private double MRScore;
     private double memberScore;
+    private List<String> mergeRequestDiffs;
 
 
-    public MergeRequestDTO(int mergeId, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double memberScore) {
+    public MergeRequestDTO(int mergeId, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double memberScore, List<String> mergeRequestDiffs) {
         this.mergeId = mergeId;
         this.mergedDate = mergedDate;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.MRScore = MRScore;
         this.memberScore = memberScore;
+        this.mergeRequestDiffs = mergeRequestDiffs;
     }
 
     public int getMergeId() {
@@ -47,5 +49,9 @@ public class MergeRequestDTO {
 
     public double getMemberScore() {
         return memberScore;
+    }
+
+    public List<String> getMergeRequestDiffs() {
+        return mergeRequestDiffs;
     }
 }
