@@ -3,6 +3,7 @@ package com.haumea.gitanalyzer.service;
 import com.haumea.gitanalyzer.dao.MemberRepository;
 import com.haumea.gitanalyzer.dto.MemberDTO;
 import com.haumea.gitanalyzer.dto.MemberRRDTO;
+import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
@@ -77,6 +78,10 @@ public class MemberService {
     public List<String> getAliasesForSelectedMember(String memberId){
 
         Member member = memberRepository.findMemberByMemberId(memberId);
+
+        if(member == null){
+            throw new ResourceNotFoundException("Member not found!");
+        }
 
         return member.getAlias();
     }

@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/v1/mergeRequest")
+@RequestMapping(path = "/api/v1/mergeRequests")
 @Validated
 public class MergeRequestController {
 
