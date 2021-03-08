@@ -27,17 +27,17 @@ public class MergeRequestController {
 
     @GetMapping
     public List<MergeRequestDTO> getAllMergeRequests(@NotBlank @RequestParam String userId,
-                                                     @PathVariable int projectId,
+                                                     @NotNull @RequestParam int projectId,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end){
 
         return mergeRequestService.getAllRequiredMergeRequests(userId, projectId, "", start, end, false);
     }
 
-    @GetMapping(path = "/member/:memberId")
+    @GetMapping(path = "/member/{memberId}")
     public List<MergeRequestDTO> getAllMergeRequests(@NotBlank @RequestParam String userId,
                                                      @PathVariable int projectId,
-                                                     @NotBlank @RequestParam String memberId,
+                                                     @NotNull @RequestParam String memberId,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end){
 
