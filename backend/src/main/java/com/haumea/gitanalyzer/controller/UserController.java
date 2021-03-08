@@ -65,4 +65,9 @@ public class UserController {
     public List<Configuration> getConfigurations(@RequestParam @NotBlank String userId){
         return userService.getConfigurations(userId);
     }
+
+    @PutMapping("/configuration")
+    public void updateConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration){
+        userService.updateConfiguration(userId, configuration);
+    }
 }

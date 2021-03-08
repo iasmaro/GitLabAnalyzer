@@ -67,4 +67,8 @@ public class UserService {
     public List<Configuration> getConfigurations(String userId){
         return userRepository.getConfigurations(userId);
     }
+
+    public User updateConfiguration(String userId, Configuration configuration){
+        return userRepository.updateConfiguration(userId, configuration);
+    }
 }

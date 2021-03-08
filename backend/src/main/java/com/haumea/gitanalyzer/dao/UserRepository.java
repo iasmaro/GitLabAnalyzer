@@ -88,9 +88,10 @@ public class UserRepository {
 
         if(!filenames.contains(configuration.getFileName())){
             Query query = new Query();
-            query.addCriteria(Criteria.where("userId").is(user.getUserId()));
+            query.addCriteria(Criteria.where("userId").is(user.getUserId())
+                                        .and("configurations.fileName").is(configuration.getFileName()));
             Update update = new Update();
-            update.push("configurations", configuration);
+            update.set("configurations.$", configuration);
             mongoTemplate.updateFirst(query, update, User.class);
         } else {
             throw new ResourceAlredyExistException("Configuration with this name already exist!");
@@ -99,7 +100,7 @@ public class UserRepository {
         return user;
     }
 
-    public List<Configuration> getConfigurations(String userId){
+    public List<Configuration> getConfigurations(String userId) throws ResourceNotFoundException{
 
         User user = findUserByUserId(userId);
 
@@ -112,4 +113,32 @@ public class UserRepository {
         return configurations;
     }
 
+    public User updateConfiguration(String userId, Configuration configuration){
+
+        User user = findUserByUserId(userId);
+
+        if(user == null){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        List<Configuration> userConfigurations = user.getConfigurations();
+        List<String> filenames = new ArrayList<>();
+        for(Configuration userConfiguration : userConfigurations) {
+            String filename = userConfiguration.getFileName();
+            filenames.add(filename);
+        }
+
+        if(filenames.contains(configuration.getFileName())){
+            Query query = new Query();
+            query.addCriteria(Criteria.where("userId").is(user.getUserId()));
+            Update update = new Update();
+            update.push("configurations", configuration);
+            mongoTemplate.updateFirst(query, update, User.class);
+        } else {
+            throw new ResourceAlredyExistException("Configuration with this name does not exist!");
+        }
+
+        return user;
+
+    }
 }
