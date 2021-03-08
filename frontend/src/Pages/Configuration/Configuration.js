@@ -4,7 +4,7 @@ import { Table, Spinner } from 'react-bootstrap';
 import Config from 'Components/Configurations/Config';
 import ConfigDetails from 'Components/Configurations/ConfigDetails';
 import { message } from 'Constants/constants';
-import { configs } from './mockConfigs'
+import { configs } from '../../Mocks/mockConfigs'
 import './Configuration.css';
 
 const ConfigurationPage = () => {
