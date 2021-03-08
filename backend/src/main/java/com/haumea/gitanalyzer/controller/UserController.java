@@ -12,6 +12,9 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/v1/users")
 @Validated
@@ -56,5 +59,10 @@ public class UserController {
     @PostMapping("/configuration")
     public void saveConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration){
         userService.saveConfiguration(userId, configuration);
+    }
+
+    @GetMapping("/configuration")
+    public List<Configuration> getConfigurations(@RequestParam @NotBlank String userId){
+        return userService.getConfigurations(userId);
     }
 }

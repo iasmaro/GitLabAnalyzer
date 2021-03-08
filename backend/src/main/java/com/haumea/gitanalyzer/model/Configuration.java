@@ -9,8 +9,7 @@ import java.util.HashMap;
 
 public class Configuration {
 
-    @Id
-    private String id;
+    private String fileName;
     private Date start;
     private Date end;
     private String gitlabServer;
@@ -29,11 +28,12 @@ public class Configuration {
     }
 
     @PersistenceConstructor
-    public Configuration(Date start, Date end, String gitlabServer,
+    public Configuration(String fileName, Date start, Date end, String gitlabServer,
                          String targetBranch, HashMap<String, Float> editFactor,
                          HashMap<String, Float> fileFactor, List<String> ignoreFileExtension,
                          String startType, String endType) {
 
+        this.fileName = fileName;
         this.start = start;
         this.end = end;
         this.gitlabServer = gitlabServer;

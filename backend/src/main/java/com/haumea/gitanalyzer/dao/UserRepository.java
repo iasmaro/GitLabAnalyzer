@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UserRepository {
 
@@ -76,15 +78,26 @@ public class UserRepository {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        System.out.println(user.getConfigurations().size());
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(user.getUserId()));
         Update update = new Update();
         update.push("configurations", configuration);
         mongoTemplate.updateFirst(query, update, User.class);
-        System.out.println(user.getConfigurations().size());
 
         return user;
+    }
+
+    public List<Configuration> getConfigurations(String userId){
+
+        User user = findUserByUserId(userId);
+
+        if(user == null){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        List<Configuration> configurations = user.getConfigurations();
+
+        return configurations;
     }
 
 }
