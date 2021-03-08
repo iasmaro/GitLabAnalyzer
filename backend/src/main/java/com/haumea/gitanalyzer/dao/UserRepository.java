@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -70,7 +71,7 @@ public class UserRepository {
         return token;
     }
 
-    public User saveConfiguration(String userId, Configuration configuration) throws ResourceNotFoundException {
+    public User saveConfiguration(String userId, Configuration configuration) throws ResourceNotFoundException, ResourceAlredyExistException {
 
         User user = findUserByUserId(userId);
 
@@ -78,11 +79,22 @@ public class UserRepository {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        Query query = new Query();
-        query.addCriteria(Criteria.where("userId").is(user.getUserId()));
-        Update update = new Update();
-        update.push("configurations", configuration);
-        mongoTemplate.updateFirst(query, update, User.class);
+        List<Configuration> userConfigurations = user.getConfigurations();
+        List<String> filenames = new ArrayList<>();
+        for(Configuration userConfiguration : userConfigurations) {
+            String filename = userConfiguration.getFileName();
+            filenames.add(filename);
+        }
+
+        if(!filenames.contains(configuration.getFileName())){
+            Query query = new Query();
+            query.addCriteria(Criteria.where("userId").is(user.getUserId()));
+            Update update = new Update();
+            update.push("configurations", configuration);
+            mongoTemplate.updateFirst(query, update, User.class);
+        } else {
+            throw new ResourceAlredyExistException("Configuration with this name already exist!");
+        }
 
         return user;
     }

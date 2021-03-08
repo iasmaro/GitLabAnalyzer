@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.HashMap;
 
 public class Configuration {
-
+    private ObjectId _id;
     private String fileName;
     private Date start;
     private Date end;
@@ -32,7 +33,7 @@ public class Configuration {
                          String targetBranch, HashMap<String, Float> editFactor,
                          HashMap<String, Float> fileFactor, List<String> ignoreFileExtension,
                          String startType, String endType) {
-
+        this._id = new ObjectId();
         this.fileName = fileName;
         this.start = start;
         this.end = end;
@@ -43,6 +44,10 @@ public class Configuration {
         this.ignoreFileExtension = ignoreFileExtension;
         this.startType = startType;
         this.endType = endType;
+    }
+
+    public String getFileName(){
+        return fileName;
     }
 
     public Date getStart() {
