@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.controller;
 
+import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.model.User;
 import com.haumea.gitanalyzer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,10 @@ public class UserController {
     @GetMapping("/userId")
     public String getUserId(@RequestParam @NotBlank String url, @RequestParam @NotBlank String ticket) {
         return userService.getUserId(url, ticket);
+    }
+
+    @PostMapping("/configuration")
+    public void saveConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration){
+        userService.saveConfiguration(userId, configuration);
     }
 }

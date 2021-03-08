@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.dao;
 
 import com.haumea.gitanalyzer.exception.ResourceAlredyExistException;
 import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
+import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -65,6 +66,19 @@ public class UserRepository {
         }
 
         return token;
+    }
+
+    public User saveConfiguration(String userId, Configuration configuration) throws ResourceNotFoundException {
+
+        User user = findUserByUserId(userId);
+
+        if(user == null){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        user.addConfigurations(configuration);
+
+        return user;
     }
 
 }

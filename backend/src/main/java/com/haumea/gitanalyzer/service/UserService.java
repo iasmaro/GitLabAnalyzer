@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.UserRepository;
+import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +57,10 @@ public class UserService {
         catch (Exception e)  {
             return "";
         }
+    }
+
+    public User saveConfiguration(String userId, Configuration configuration){
+
+        return userRepository.saveConfiguration(userId, configuration);
     }
 }

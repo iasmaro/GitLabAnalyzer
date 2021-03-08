@@ -37,6 +37,7 @@ public class Configuration {
         this.start = start;
         this.end = end;
         this.gitlabServer = gitlabServer;
+        this.targetBranch = targetBranch;
         this.editFactor = editFactor;
         this.fileFactor = fileFactor;
         this.ignoreFileExtension = ignoreFileExtension;

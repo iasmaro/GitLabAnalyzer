@@ -7,6 +7,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 @Document(collection = "user")
 public class User {
     @Id
@@ -15,6 +19,7 @@ public class User {
     @NotBlank
     private String userId;
     private String personalAccessToken;
+    private List<Configuration> configurations = new ArrayList<>();
 
     public User() {
         super();
@@ -32,5 +37,13 @@ public class User {
 
     public String getPersonalAccessToken() {
         return personalAccessToken;
+    }
+
+    public void addConfigurations(Configuration configuration){
+        configurations.add(configuration);
+    }
+
+    public List<Configuration> getConfigurations() {
+        return configurations;
     }
 }
