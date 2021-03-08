@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class IndividualDiffScoreCalculator {
@@ -15,6 +16,7 @@ public class IndividualDiffScoreCalculator {
     private double addLineWeight;
     private double deleteLineWeight;
     private double syntaxLineWeight;
+    private double movedLineWeight;
     private List<CommentType> commentTypes;
 
     private boolean isLongComment; /* need to save state between line calls as a comment could go
@@ -34,19 +36,20 @@ public class IndividualDiffScoreCalculator {
     }
 
 
-    private void setTypes( Double addLineMultiplier, Double deleteLineMultiplier, Double syntaxLineMultiplier,
-                      List<CommentType> commentTypes) {
+    private void setTypes( double addLineMultiplier, double deleteLineMultiplier, double syntaxLineMultiplier,
+                           double movedLineWeight, List<CommentType> commentTypes) {
         this.addLineWeight = addLineMultiplier;
         this.deleteLineWeight = deleteLineMultiplier;
         this.syntaxLineWeight = syntaxLineMultiplier;
+        this.movedLineWeight = movedLineWeight;
         this.commentTypes = commentTypes;
     }
 
     // check file type and configs in calling code
-    public double calculateDiffScore(String diff, boolean isFileDeleted, double addLineWeight, double deleteLineWeight, double syntaxLineWeight,
-                                     List<CommentType> commentTypes) {
+    public double calculateDiffScore(String diff, boolean isFileDeleted, double addLineWeight, double deleteLineWeight,
+                                     double syntaxLineWeight, double movedLineWeight, List<CommentType> commentTypes) {
 
-        setTypes(addLineWeight, deleteLineWeight, syntaxLineWeight, commentTypes);
+        setTypes(addLineWeight, deleteLineWeight, syntaxLineWeight, movedLineWeight, commentTypes);
 
         if(isFileDeleted) {
             return 0.0;
@@ -78,17 +81,14 @@ public class IndividualDiffScoreCalculator {
         while((line=bufReader.readLine()) != null )
         {
             if(line.charAt(0) == '+') {
-                diffScore = diffScore + analyzeLine(line);
+                diffScore = diffScore + analyzeAddedLine(line);
             }
-            else if(line.charAt(0) == '-' && lineWasAdded(line) == false && (line.trim().length() > 0) && !line.trim().equals("-")) {
+            else if(line.charAt(0) == '-' && (line.trim().length() > 0) && !line.trim().equals("-")) {
 
                 line = line.substring(1); // cutting out the -
                 line = line.trim();
 
-                if(isComment(line) == false && isLongComment == false) {
-                    diffScore = diffScore + deleteLineWeight;
-                }
-
+                diffScore = diffScore + analyzeRemovedLine(line);
 
                 removedLines.add(line);
 
@@ -112,7 +112,39 @@ public class IndividualDiffScoreCalculator {
 
         return diffScore;
     }
-    private double analyzeLine(String line) {
+    private double analyzeRemovedLine(String line) {
+        double lineScore = 0.0;
+
+        if(isComment(line) == false && isLongComment == false) {
+
+            if(lineWasAdded(line) == true) { // line was added earlier and removed in this position
+                lineScore = calculatePointsForLineMovedUpOrDown(addLineWeight);
+                addedLines.remove(line);
+            }
+            else {
+                lineScore = deleteLineWeight;
+            }
+        }
+
+
+        return lineScore;
+    }
+
+
+    private double calculatePointsForLineMovedUpOrDown(double weightFromPrevOccurance) {
+        double score = 0.0;
+
+        if(weightFromPrevOccurance > movedLineWeight) {
+            score = movedLineWeight - weightFromPrevOccurance; // taking back points
+        }
+        else if(movedLineWeight >  weightFromPrevOccurance) {
+            score = movedLineWeight - weightFromPrevOccurance;
+        }
+
+        return score;
+    }
+
+    private double analyzeAddedLine(String line) {
         double lineScore = 0.0;
 
         line = line.trim();
@@ -132,22 +164,35 @@ public class IndividualDiffScoreCalculator {
 
                 addedLines.add(line);
             }
+            else if(isLongComment == false && lineWasRemoved(line) == true) { // case where line is moved from one area
+                // to another
+
+                // Making sure that points are not givin out for deletion and moving
+
+                lineScore = calculatePointsForLineMovedUpOrDown(deleteLineWeight);
+
+                addedLines.add(line);
+                removedLines.remove(line);
+            }
 
             if(isLongComment == true) {
                 checkForEndBrace(line);
-
             }
 
         }
+
+
 
         return lineScore;
     }
 
     private boolean lineWasRemoved(String line) {
-        return removedLines.contains(line);
+
+        return removedLines.contains(line) && (Collections.frequency(removedLines,line) >= 1); // making sure a simple moving of line doesnt get points
     }
     private boolean lineWasAdded(String line) {
-        return removedLines.contains(line);
+
+        return addedLines.contains(line) && (Collections.frequency(addedLines,line) >= 1); // making sure a simple moving of line doesnt get points
     }
 
     private void checkForEndBrace(String line) {
@@ -175,7 +220,7 @@ public class IndividualDiffScoreCalculator {
 
 
     private boolean isSyntax(String line) {
-        return line.equals("{") || line.equals("}");
+        return line.equals("{") || line.equals("}") || line.equals("(") || line.equals(")") || line.equals(";");
     }
 
     private boolean isComment(String line) {

@@ -124,7 +124,7 @@ public class Main {
                 IndividualDiffScoreCalculator calculator = new IndividualDiffScoreCalculator();
 
 
-                double score = calculator.calculateDiffScore(currentDiff.getDiff(), currentDiff.getDeletedFile(), 1.0, 0.2, 0.2, commentTypes);
+                double score = calculator.calculateDiffScore(currentDiff.getDiff(), currentDiff.getDeletedFile(), 1.0, 0.2, 0.2, 0.5, commentTypes);
                 System.out.println("score is: " + score);
 
                 System.out.println("file path is: " + currentDiff.getNewPath());
