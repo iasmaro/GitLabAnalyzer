@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.controller;
 
 import com.haumea.gitanalyzer.dto.MemberDTO;
+import com.haumea.gitanalyzer.dto.MemberRRDTO;
 import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,13 @@ public class MemberController {
     public void mapAliasToMember(@Valid @RequestBody List<MemberDTO> membersAndAliases) {
 
         memberService.mapAliasToMember(membersAndAliases);
+    }
+
+    @GetMapping("alias")
+    public MemberRRDTO getMembersAndAliases(@RequestParam @NotBlank String userId,
+                                            @RequestParam @NotNull Integer projectId){
+
+        return memberService.getMembersAndAliases(userId, projectId);
     }
 
 }
