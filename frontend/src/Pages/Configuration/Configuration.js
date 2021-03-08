@@ -17,7 +17,7 @@ const ConfigurationPage = () => {
         setSelectedConfig(configName);
         setIsLoading(false);
 
-        var filterObj = configs.filter(function(e) {
+        let filterObj = configs.filter(function(e) {
             return e.configName === configName;
           });
         setConfigInfo(filterObj)
