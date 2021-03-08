@@ -76,7 +76,13 @@ public class UserRepository {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        user.addConfigurations(configuration);
+        System.out.println(user.getConfigurations().size());
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(user.getUserId()));
+        Update update = new Update();
+        update.push("configurations", configuration);
+        mongoTemplate.updateFirst(query, update, User.class);
+        System.out.println(user.getConfigurations().size());
 
         return user;
     }

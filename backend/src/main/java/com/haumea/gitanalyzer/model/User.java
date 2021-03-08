@@ -19,7 +19,7 @@ public class User {
     @NotBlank
     private String userId;
     private String personalAccessToken;
-    private List<Configuration> configurations = new ArrayList<>();
+    private List<Configuration> configurations;
 
     public User() {
         super();
@@ -29,6 +29,7 @@ public class User {
     public User(String userId, String personalAccessToken) {
         this.userId = userId;
         this.personalAccessToken = personalAccessToken;
+        this.configurations = new ArrayList<>();
     }
 
     public String getUserId() {
@@ -37,10 +38,6 @@ public class User {
 
     public String getPersonalAccessToken() {
         return personalAccessToken;
-    }
-
-    public void addConfigurations(Configuration configuration){
-        configurations.add(configuration);
     }
 
     public List<Configuration> getConfigurations() {
