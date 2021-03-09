@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.service;
 
+import com.haumea.gitanalyzer.dto.DiffDTO;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
@@ -46,21 +47,23 @@ public class MergeRequestService {
         return gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, "master", start, end, alias);
     }
 
-    public List<String> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff) {
+    public List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff){
 
-        List<String> mergeRequestDiffs = new ArrayList<>();
+        List<DiffDTO> mergeRequestDiffs = new ArrayList<>();
 
         List<Diff> codeDiffs = mergeRequestDiff.getDiffs();
 
         for(Diff diff : codeDiffs){
 
-            mergeRequestDiffs.add(diff.getDiff());
+            DiffDTO diffDTO = new DiffDTO(diff.getDiff(), diff.getNewPath(), diff.getDiff());
+
+            mergeRequestDiffs.add(diffDTO);
         }
 
         return mergeRequestDiffs;
     }
 
-    public MergeRequestDTO getMergeRequestDTOFromMergeRequestWrapper(MergeRequestWrapper mergeRequestWrapper) {
+    public MergeRequestDTO getMergeRequestDTO(MergeRequestWrapper mergeRequestWrapper){
 
         MergeRequest mergeRequest = mergeRequestWrapper.getMergeRequestData();
 
@@ -73,7 +76,7 @@ public class MergeRequestService {
         double MRScore = 0.0;
         double memberScore = 0.0;
 
-        List<String> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestDiff());
+        List<DiffDTO> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestDiff());
 
         int linesAdded = 0;
         int linesRemoved = 0;
@@ -81,27 +84,35 @@ public class MergeRequestService {
         return new MergeRequestDTO(mergeRequestIiD, mergedDate, createdDate, updatedDate, MRScore, memberScore, mergeRequestDiffs, linesAdded, linesRemoved);
     }
 
-    public List<MergeRequestDTO> getAllRequiredMergeRequests(String userId, int projectId, String memberId, Date start, Date end, boolean filterByMember) {
+    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, Date start, Date end){
 
         GitlabService gitlabService = getGitLabService(userId);
 
-        List<MergeRequestWrapper> mergeRequestsList;
-
-        if(!filterByMember){
-
-            mergeRequestsList = getMergeRequestWrapper(gitlabService, projectId, start, end);
-        }
-        else{
-
-            List<String> alias = getAliasForMember(memberId);
-            mergeRequestsList = getMergeRequestWrapperForMember(gitlabService, projectId, start, end, alias);
-        }
+        List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapper(gitlabService, projectId, start, end);
 
         List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
 
         for(MergeRequestWrapper mergeRequestWrapper : mergeRequestsList){
 
-            MergeRequestDTO mergeRequestDTO = getMergeRequestDTOFromMergeRequestWrapper(mergeRequestWrapper);
+            MergeRequestDTO mergeRequestDTO = getMergeRequestDTO(mergeRequestWrapper);
+            mergeRequestDTOList.add(mergeRequestDTO);
+        }
+
+        return mergeRequestDTOList;
+    }
+
+    public List<MergeRequestDTO> getAllMergeRequestsForMember(String userId, int projectId, String memberId, Date start, Date end){
+
+        GitlabService gitlabService = getGitLabService(userId);
+
+        List<String> alias = getAliasForMember(memberId);
+        List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapperForMember(gitlabService, projectId, start, end, alias);
+
+        List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
+
+        for(MergeRequestWrapper mergeRequestWrapper : mergeRequestsList){
+
+            MergeRequestDTO mergeRequestDTO = getMergeRequestDTO(mergeRequestWrapper);
             mergeRequestDTOList.add(mergeRequestDTO);
         }
 

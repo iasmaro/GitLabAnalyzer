@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
+import com.haumea.gitanalyzer.dto.DiffDTO;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
@@ -38,35 +39,39 @@ public class CommitService {
         return new GitlabService(GlobalConstants.gitlabURL, token);
     }
 
-    private List<String> getCommitDiffs(List<Diff> codeDiffs) {
-        List<String> commitDiffs = new ArrayList<>();
+    private List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs) {
+        List<DiffDTO> commitDiffs = new ArrayList<>();
 
-        for(Diff diff : codeDiffs){
+        for(Diff diff : codeDiffs) {
 
-            commitDiffs.add(diff.getDiff());
+            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diff.getDiff());
+
+            commitDiffs.add(diffDTO);
         }
 
         return commitDiffs;
     }
 
-    private List<CommitDTO> getCommitDTOsFromCommitWrapper(List<CommitWrapper> wrapperList) {
+    private List<CommitDTO> convertCommitWrappersToDTOs(List<CommitWrapper> wrapperList) {
 
-        List<CommitDTO> commitDtoList = new ArrayList<>();
+        List<CommitDTO> commitDTOList = new ArrayList<>();
 
         for(CommitWrapper currentCommit : wrapperList) {
 
             Commit commit = currentCommit.getCommitData();
 
+            List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
             CommitStats commitStats = commit.getStats();
 
             List<String> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
 
+            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), 11, commitDiffs);
             CommitDTO newDto = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), 11, commitDiffs, commitStats.getAdditions(), commitStats.getDeletions());
 
-            commitDtoList.add(newDto);
+            commitDTOList.add(newDTO);
         }
 
-        return commitDtoList;
+        return commitDTOList;
     }
 
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
@@ -79,9 +84,9 @@ public class CommitService {
         try {
             List<CommitWrapper> mergeRequestCommits = gitlabService.getMergeRequestCommitsWithDiffByAuthor(projectId, mergeRequestId, alias);
 
-            return getCommitDTOsFromCommitWrapper(mergeRequestCommits);
+            return convertCommitWrappersToDTOs(mergeRequestCommits);
         }
-        catch (GitLabRuntimeException e){
+        catch (GitLabRuntimeException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
     }
@@ -95,7 +100,7 @@ public class CommitService {
 
         filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId, "master", start, end, alias);
 
-        return getCommitDTOsFromCommitWrapper(filteredCommits);
+        return convertCommitWrappersToDTOs(filteredCommits);
     }
 
     public List<CommitDTO> getCommitsForSelectedMergeRequest(String userId, int projectId, int mergeRequestId) {
@@ -106,12 +111,12 @@ public class CommitService {
         try {
             mergeRequestCommits = gitlabService.getMergeRequestCommitsWithDiff(projectId, mergeRequestId);
         }
-        catch (GitLabRuntimeException e){
+        catch (GitLabRuntimeException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
 
 
-        return getCommitDTOsFromCommitWrapper(mergeRequestCommits);
+        return convertCommitWrappersToDTOs(mergeRequestCommits);
     }
 
 }

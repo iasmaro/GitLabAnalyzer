@@ -20,7 +20,7 @@ public class MergeRequestController {
     private final MergeRequestService mergeRequestService;
 
     @Autowired
-    public MergeRequestController(MergeRequestService mergeRequestService){
+    public MergeRequestController(MergeRequestService mergeRequestService) {
 
         this.mergeRequestService = mergeRequestService;
     }
@@ -29,9 +29,9 @@ public class MergeRequestController {
     public List<MergeRequestDTO> getAllMergeRequests(@NotBlank @RequestParam String userId,
                                                      @NotNull @RequestParam int projectId,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
-                                                     @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end){
+                                                     @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
 
-        return mergeRequestService.getAllRequiredMergeRequests(userId, projectId, "", start, end, false);
+        return mergeRequestService.getAllMergeRequests(userId, projectId, start, end);
     }
 
     @GetMapping(path = "/member/{memberId}")
@@ -39,8 +39,8 @@ public class MergeRequestController {
                                                      @PathVariable int projectId,
                                                      @NotNull @RequestParam String memberId,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
-                                                     @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end){
+                                                     @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
 
-        return mergeRequestService.getAllRequiredMergeRequests(userId, projectId, memberId, start, end, true);
+        return mergeRequestService.getAllMergeRequestsForMember(userId, projectId, memberId, start, end);
     }
 }

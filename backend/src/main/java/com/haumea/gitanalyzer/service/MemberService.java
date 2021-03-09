@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -75,13 +76,9 @@ public class MemberService {
         return memberRRDTO;
     }
 
-    public List<String> getAliasesForSelectedMember(String memberId){
+    public List<String> getAliasesForSelectedMember(String memberId) {
 
-        Member member = memberRepository.findMemberByMemberId(memberId);
-
-        if(member == null){
-            throw new ResourceNotFoundException("Member not found!");
-        }
+        Member member = memberRepository.findMemberByMemberId(memberId).get();
 
         return member.getAlias();
     }
