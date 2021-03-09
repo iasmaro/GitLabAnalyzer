@@ -9,7 +9,7 @@ const ConfigDetails = (props) => {
             <Table striped bordered hover variant="light">
                 <thead>
                     <tr>
-                        <th colSpan='4'>{configInfo[0]?.configName}</th>
+                        <th colSpan='4'>{configInfo?.configName}</th>
                     </tr>
                 </thead>
                 <thead>
@@ -20,8 +20,8 @@ const ConfigDetails = (props) => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{configInfo[0]?.startDate}</td>
-                        <td>{configInfo[0]?.endDate}</td>
+                        <td>{configInfo?.startDate}</td>
+                        <td>{configInfo?.endDate}</td>
                     </tr>
                 </tbody>
 
@@ -32,7 +32,7 @@ const ConfigDetails = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Object.entries(configInfo[0]?.codeWeightings[0]).map(([key, value]) => 
+                    {Object.entries(configInfo?.codeWeightings[0]).map(([key, value]) => 
                     <tr>
                         <td>{key}</td>
                         <td>{value}</td>
@@ -48,7 +48,7 @@ const ConfigDetails = (props) => {
                         <th colSpan='4'>File Weightings</th>
                     </tr>
                 </thead>
-                {Object.entries(configInfo[0]?.fileWeightings[0]).map((fileWeighting) => 
+                {Object.entries(configInfo?.fileWeightings[0]).map((fileWeighting) => 
                     <div className='file-weightings'>
                         <thead>
                             <tr>

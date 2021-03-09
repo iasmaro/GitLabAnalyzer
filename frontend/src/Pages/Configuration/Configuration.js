@@ -3,7 +3,6 @@ import { Table, Spinner } from 'react-bootstrap';
 
 import Config from 'Components/Configurations/Config';
 import ConfigDetails from 'Components/Configurations/ConfigDetails';
-import { message } from 'Constants/constants';
 import { configs } from '../../Mocks/mockConfigs'
 import './Configuration.css';
 
@@ -13,14 +12,10 @@ const ConfigurationPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [configInfo, setConfigInfo] = useState();
 
-    const handleClick = (configName) => {
-        setSelectedConfig(configName);
+    const handleClick = (config) => {
+        setSelectedConfig(config?.configName);
         setIsLoading(false);
-
-        let filterObj = configs.filter(function(e) {
-            return e.configName === configName;
-          });
-        setConfigInfo(filterObj)
+        setConfigInfo(config)
     }
 
     return (
@@ -33,11 +28,7 @@ const ConfigurationPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {!configs?.length ? (
-                        <td colSpan={4} >{message.NO_CONFIGS}</td>
-                    )
-                    :
-                    configs.map((config) => (
+                    {configs.map((config) => (
                         <Config key={config?.configName} config={config} handleClick={handleClick}/>
                     ))}
                 </tbody>
