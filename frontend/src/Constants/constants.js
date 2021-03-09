@@ -101,6 +101,7 @@ export const PROGRAMMING_LANGUAGES = {
     rs: 'rust',
     sc: 'scala',
     scala: 'scala',
+    sh: 'bash',
     svg: 'markup',
     swift: 'swift',
     ts: 'typescript',

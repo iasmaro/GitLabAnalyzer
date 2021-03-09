@@ -9,7 +9,7 @@ const FileHeader = (props) => {
 
     return (
         <>
-            {isOpen? <span className="chevron chevron-bottom" /> : <span class="chevron chevron-right" />}
+            {isOpen ? <span className="chevron chevron-bottom" /> : <span class="chevron chevron-right" />}
             <Button variant="link" className="file-title">
                 <b>{fileName}</b>
             </Button>
