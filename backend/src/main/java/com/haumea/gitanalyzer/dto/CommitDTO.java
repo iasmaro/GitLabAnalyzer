@@ -8,9 +8,9 @@ public class CommitDTO {
     private Date commitDate;
     private String commitAuthor;
     private Integer commitScore;
-    private List<String> commitDiffs;
+    private List<DiffDTO> commitDiffs;
 
-    public CommitDTO(String commitMessage, Date commitDate, String commitAuthor, Integer commitScore, List<String> commitDiffs) {
+    public CommitDTO(String commitMessage, Date commitDate, String commitAuthor, Integer commitScore, List<DiffDTO> commitDiffs) {
         this.commitMessage = commitMessage;
         this.commitDate = commitDate;
         this.commitAuthor = commitAuthor;
@@ -34,7 +34,7 @@ public class CommitDTO {
         return commitScore;
     }
 
-    public List<String> getCommitDiffs() {
+    public List<DiffDTO> getCommitDiffs() {
         return commitDiffs;
     }
 }

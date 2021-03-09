@@ -31,7 +31,7 @@ public class MergeRequestController {
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
 
-        return mergeRequestService.getAllRequiredMergeRequests(userId, projectId, "", start, end, false);
+        return mergeRequestService.getAllMergeRequests(userId, projectId, start, end);
     }
 
     @GetMapping(path = "/member/{memberId}")
@@ -41,6 +41,6 @@ public class MergeRequestController {
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
 
-        return mergeRequestService.getAllRequiredMergeRequests(userId, projectId, memberId, start, end, true);
+        return mergeRequestService.getAllMergeRequestsForMember(userId, projectId, memberId, start, end);
     }
 }

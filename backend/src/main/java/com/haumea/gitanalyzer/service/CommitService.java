@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
+import com.haumea.gitanalyzer.dto.DiffDTO;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
@@ -37,12 +38,14 @@ public class CommitService {
         return new GitlabService(GlobalConstants.gitlabURL, token);
     }
 
-    private List<String> getCommitDiffs(List<Diff> codeDiffs) {
-        List<String> commitDiffs = new ArrayList<>();
+    private List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs) {
+        List<DiffDTO> commitDiffs = new ArrayList<>();
 
         for(Diff diff : codeDiffs) {
 
-            commitDiffs.add(diff.getDiff());
+            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diff.getDiff());
+
+            commitDiffs.add(diffDTO);
         }
 
         return commitDiffs;
@@ -56,7 +59,7 @@ public class CommitService {
 
             Commit commit = currentCommit.getCommitData();
 
-            List<String> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
+            List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
 
             CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), 11, commitDiffs);
 
