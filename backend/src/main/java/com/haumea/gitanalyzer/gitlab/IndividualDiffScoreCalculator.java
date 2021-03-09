@@ -1,6 +1,5 @@
 package com.haumea.gitanalyzer.gitlab;
 
-import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,10 +28,10 @@ public class IndividualDiffScoreCalculator {
 
     public IndividualDiffScoreCalculator() {
 
-        isLongComment = false;
+        this.isLongComment = false;
 
-        removedLines = new ArrayList<>();
-        addedLines = new ArrayList<>();
+        this.removedLines = new ArrayList<>(); // reset when finished
+        this.addedLines = new ArrayList<>();
     }
 
 
@@ -46,8 +45,14 @@ public class IndividualDiffScoreCalculator {
     }
 
     // check file type and configs in calling code
-    public double calculateDiffScore(String diff, boolean isFileDeleted, double addLineWeight, double deleteLineWeight,
-                                     double syntaxLineWeight, double movedLineWeight, List<CommentType> commentTypes) {
+    public double calculateDiffScore(String diff,
+                                     boolean isFileDeleted,
+                                     double addLineWeight,
+                                     double deleteLineWeight,
+                                     double syntaxLineWeight,
+                                     double movedLineWeight,
+                                     double fileTypeMultiplier,
+                                     List<CommentType> commentTypes) {
 
         setTypes(addLineWeight, deleteLineWeight, syntaxLineWeight, movedLineWeight, commentTypes);
 
@@ -60,13 +65,16 @@ public class IndividualDiffScoreCalculator {
                 score = analyzeDiff(diff);
             }
             catch (IOException e) {
-                throw new GitLabRuntimeException("input error");
+                throw new IllegalArgumentException("input error"); // change to illegal argument
             }
+
+            this.removedLines.clear();
+            this.addedLines.clear();
 
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            return roundedScore.doubleValue();
+            return fileTypeMultiplier * roundedScore.doubleValue();
         }
     }
 
@@ -97,7 +105,6 @@ public class IndividualDiffScoreCalculator {
 
                 line = line.trim();
 
-
                 if(line.length() > 0) {
                     isComment(line);
                 }
@@ -108,7 +115,6 @@ public class IndividualDiffScoreCalculator {
 
             }
         }
-
 
         return diffScore;
     }
@@ -125,7 +131,6 @@ public class IndividualDiffScoreCalculator {
                 lineScore = deleteLineWeight;
             }
         }
-
 
         return lineScore;
     }
@@ -181,8 +186,6 @@ public class IndividualDiffScoreCalculator {
 
         }
 
-
-
         return lineScore;
     }
 
@@ -190,6 +193,7 @@ public class IndividualDiffScoreCalculator {
 
         return removedLines.contains(line) && (Collections.frequency(removedLines,line) >= 1); // making sure a simple moving of line doesnt get points
     }
+
     private boolean lineWasAdded(String line) {
 
         return addedLines.contains(line) && (Collections.frequency(addedLines,line) >= 1); // making sure a simple moving of line doesnt get points
@@ -236,10 +240,8 @@ public class IndividualDiffScoreCalculator {
                 result = isShortComment(line, commentType);
             }
             else {
-
                 result = isLongComment(line, commentType);
             }
-
 
             if(result == true) {
                 break;
@@ -252,9 +254,7 @@ public class IndividualDiffScoreCalculator {
     private boolean isLongComment(String line, CommentType commentType) {
         boolean result = true;
 
-
-        for(int i=0; i<commentType.getStartType().length(); i++) {
-
+        for(int i=0; i < commentType.getStartType().length(); i++) {
             if (line.charAt(i) != commentType.getStartType().charAt(i)) {
                 result = false;
                 break;
@@ -264,7 +264,6 @@ public class IndividualDiffScoreCalculator {
         if(result == true) {
             isLongComment = true;
             longCommentEndBrace = commentType.getEndType();
-
         }
 
         return result;
@@ -272,7 +271,7 @@ public class IndividualDiffScoreCalculator {
 
     private boolean isShortComment(String line, CommentType commentType) {
         boolean result = true;
-        for(int i=0; i<commentType.getStartType().length(); i++) {
+        for(int i=0; i < commentType.getStartType().length(); i++) {
             if (line.charAt(i) != commentType.getStartType().charAt(i)) {
                 result = false;
                 break;
