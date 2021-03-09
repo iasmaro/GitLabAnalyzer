@@ -24,14 +24,14 @@ public class MergeRequestService {
         this.memberService = memberService;
     }
 
-    private GitlabService getGitLabService(String userId){
+    private GitlabService getGitLabService(String userId) {
 
         String accessToken = userService.getPersonalAccessToken(userId);
 
         return new GitlabService(GlobalConstants.gitlabURL, accessToken);
     }
 
-    private List<String> getAliasForMember(String memberId){
+    private List<String> getAliasForMember(String memberId) {
 
         return memberService.getAliasesForSelectedMember(memberId);
     }
@@ -46,7 +46,7 @@ public class MergeRequestService {
         return gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, "master", start, end, alias);
     }
 
-    public List<String> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff){
+    public List<String> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff) {
 
         List<String> mergeRequestDiffs = new ArrayList<>();
 
@@ -60,7 +60,7 @@ public class MergeRequestService {
         return mergeRequestDiffs;
     }
 
-    public MergeRequestDTO getMergeRequestDTOFromMergeRequestWrapper(MergeRequestWrapper mergeRequestWrapper){
+    public MergeRequestDTO getMergeRequestDTOFromMergeRequestWrapper(MergeRequestWrapper mergeRequestWrapper) {
 
         MergeRequest mergeRequest = mergeRequestWrapper.getMergeRequestData();
 
@@ -75,10 +75,13 @@ public class MergeRequestService {
 
         List<String> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestDiff());
 
-        return new MergeRequestDTO(mergeRequestIiD, mergedDate, createdDate, updatedDate, MRScore, memberScore, mergeRequestDiffs);
+        int linesAdded = 0;
+        int linesRemoved = 0;
+
+        return new MergeRequestDTO(mergeRequestIiD, mergedDate, createdDate, updatedDate, MRScore, memberScore, mergeRequestDiffs, linesAdded, linesRemoved);
     }
 
-    public List<MergeRequestDTO> getAllRequiredMergeRequests(String userId, int projectId, String memberId, Date start, Date end, boolean filterByMember){
+    public List<MergeRequestDTO> getAllRequiredMergeRequests(String userId, int projectId, String memberId, Date start, Date end, boolean filterByMember) {
 
         GitlabService gitlabService = getGitLabService(userId);
 
