@@ -24,7 +24,7 @@ public class UserRepository {
         this.mongoTemplate = mongoTemplate;
     }
 
-    private User findUserByUserId(String userId){
+    private User findUserByUserId(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
         return mongoTemplate.findOne(query, User.class);
@@ -32,22 +32,23 @@ public class UserRepository {
 
     public User saveUser(User user) throws ResourceAlredyExistException {
 
-        if(findUserByUserId(user.getUserId()) == null){
+        if(findUserByUserId(user.getUserId()) == null) {
             mongoTemplate.save(user);
-        } else {
+        }
+        else {
             throw new ResourceAlredyExistException("User already exist!");
         }
 
         return user;
     }
 
-    public User updateUser(User user) throws ResourceNotFoundException{
+    public User updateUser(User user) throws ResourceNotFoundException {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(user.getUserId()));
         Update update = new Update();
         update.set("personalAccessToken", user.getPersonalAccessToken());
-        if(mongoTemplate.findAndModify(query, update, User.class) == null){
+        if(mongoTemplate.findAndModify(query, update, User.class) == null) {
             throw new ResourceNotFoundException("User not found!");
         }
 
@@ -58,13 +59,13 @@ public class UserRepository {
 
         User user = findUserByUserId(userId);
 
-        if(user == null){
+        if(user == null) {
             throw new ResourceNotFoundException("User not found!");
         }
 
         String token = user.getPersonalAccessToken();
 
-        if(token == null){
+        if(token == null) {
             throw new ResourceNotFoundException("Token not found!");
         }
 
@@ -75,7 +76,7 @@ public class UserRepository {
 
         User user = findUserByUserId(userId);
 
-        if(user == null){
+        if(user == null) {
             throw new ResourceNotFoundException("User not found!");
         }
 
@@ -86,25 +87,26 @@ public class UserRepository {
             filenames.add(filename);
         }
 
-        if(!filenames.contains(configuration.getFileName())){
+        if(!filenames.contains(configuration.getFileName())) {
             Query query = new Query();
             query.addCriteria(Criteria.where("userId").is(user.getUserId())
                                         .and("configurations.fileName").is(configuration.getFileName()));
             Update update = new Update();
             update.set("configurations.$", configuration);
             mongoTemplate.updateFirst(query, update, User.class);
-        } else {
+        }
+        else {
             throw new ResourceAlredyExistException("Configuration with this name already exist!");
         }
 
         return user;
     }
 
-    public List<Configuration> getConfigurations(String userId) throws ResourceNotFoundException{
+    public List<Configuration> getConfigurations(String userId) throws ResourceNotFoundException  {
 
         User user = findUserByUserId(userId);
 
-        if(user == null){
+        if(user == null) {
             throw new ResourceNotFoundException("User not found!");
         }
 
@@ -113,11 +115,11 @@ public class UserRepository {
         return configurations;
     }
 
-    public User updateConfiguration(String userId, Configuration configuration){
+    public User updateConfiguration(String userId, Configuration configuration) {
 
         User user = findUserByUserId(userId);
 
-        if(user == null){
+        if(user == null) {
             throw new ResourceNotFoundException("User not found!");
         }
 
@@ -128,13 +130,14 @@ public class UserRepository {
             filenames.add(filename);
         }
 
-        if(filenames.contains(configuration.getFileName())){
+        if(filenames.contains(configuration.getFileName())) {
             Query query = new Query();
             query.addCriteria(Criteria.where("userId").is(user.getUserId()));
             Update update = new Update();
             update.push("configurations", configuration);
             mongoTemplate.updateFirst(query, update, User.class);
-        } else {
+        }
+        else {
             throw new ResourceAlredyExistException("Configuration with this name does not exist!");
         }
 

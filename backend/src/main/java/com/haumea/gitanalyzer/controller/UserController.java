@@ -36,7 +36,7 @@ public class UserController {
     @PutMapping
     public void updateUser(@Valid @RequestBody User user){
 
-        if(user.getPersonalAccessToken() == null || user.getPersonalAccessToken().trim().isEmpty()){
+        if(user.getPersonalAccessToken() == null || user.getPersonalAccessToken().trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "getPersonalAccessToken cannot be null, empty or blank.");
         }
@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/token")
-    public String getPersonalAccessToken(@RequestParam @NotBlank String userId){
+    public String getPersonalAccessToken(@RequestParam @NotBlank String userId) {
       return userService.getPersonalAccessToken(userId);
     }
 
@@ -57,17 +57,17 @@ public class UserController {
     }
 
     @PostMapping("/configuration")
-    public void saveConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration){
+    public void saveConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration) {
         userService.saveConfiguration(userId, configuration);
     }
 
     @GetMapping("/configuration")
-    public List<Configuration> getConfigurations(@RequestParam @NotBlank String userId){
+    public List<Configuration> getConfigurations(@RequestParam @NotBlank String userId) {
         return userService.getConfigurations(userId);
     }
 
     @PutMapping("/configuration")
-    public void updateConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration){
+    public void updateConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration) {
         userService.updateConfiguration(userId, configuration);
     }
 }

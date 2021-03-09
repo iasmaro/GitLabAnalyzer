@@ -24,12 +24,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User saveUser(User user){
+    public User saveUser(User user) {
 
         return userRepository.saveUser(user);
     }
 
-    public User updateUser(User user){
+    public User updateUser(User user) {
 
         return userRepository.updateUser(user);
     }
@@ -60,7 +60,7 @@ public class UserService {
         }
     }
 
-    public User saveConfiguration(String userId, Configuration configuration){
+    public User saveConfiguration(String userId, Configuration configuration) {
         return userRepository.saveConfiguration(userId, configuration);
     }
 
@@ -68,7 +68,7 @@ public class UserService {
         return userRepository.getConfigurations(userId);
     }
 
-    public User updateConfiguration(String userId, Configuration configuration){
+    public User updateConfiguration(String userId, Configuration configuration) {
         return userRepository.updateConfiguration(userId, configuration);
     }
 }
