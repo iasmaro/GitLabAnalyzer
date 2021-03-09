@@ -1,17 +1,13 @@
 import React from 'react';
-import {  Button } from 'react-bootstrap';
 
 const MergeRequest = (props) => {
     const { mergerequest, handleClick } = props || {};
     return (
-        <tr>
+        <tr className="merge-request" onClick={() => {handleClick(mergerequest?.mergeId, mergerequest?.diffs)}} >
             <td>{mergerequest?.mergeId}</td>
             <td>{mergerequest?.createdDate}</td>
             <td>{mergerequest?.updatedDate}</td>
             <td>{mergerequest?.mergedDate}</td>
-            <td>
-                <Button variant="dark" onClick={() => {handleClick(mergerequest?.mergeId)}}>View</Button>
-            </td>
         </tr>
     );
 };

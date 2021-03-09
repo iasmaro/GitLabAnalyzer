@@ -7,7 +7,13 @@ import Commit from './Commit';
 import './CommitsList.css';
 
 const CommitsList = (props) => {
-    const { commits } = props || {};
+    const { commits, setCodeDiffs } = props || {};
+
+    const handleClick = (diffs) => {
+        if(setCodeDiffs) {
+            setCodeDiffs(diffs);
+        }
+    }
 
     return (
         <div className = 'commits-list-container'>
@@ -30,7 +36,7 @@ const CommitsList = (props) => {
                     )
                     :
                     commits.map((commit) => (
-                        <Commit key={commit?.projectId} commit={commit}/>
+                        <Commit key={commit?.commitId} commit={commit} handleClick={handleClick} />
                     ))}
 
                 </tbody>
