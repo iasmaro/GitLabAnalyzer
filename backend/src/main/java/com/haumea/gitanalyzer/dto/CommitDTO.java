@@ -34,7 +34,7 @@ public class CommitDTO {
         return commitScore;
     }
 
-    public List<String> getCommitDiffs(){
+    public List<String> getCommitDiffs() {
         return commitDiffs;
     }
 }

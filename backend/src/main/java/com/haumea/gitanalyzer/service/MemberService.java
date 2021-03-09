@@ -75,7 +75,7 @@ public class MemberService {
         return memberRRDTO;
     }
 
-    public List<String> getAliasesForSelectedMember(String memberId){
+    public List<String> getAliasesForSelectedMember(String memberId) {
 
         Member member = memberRepository.findMemberByMemberId(memberId);
 
