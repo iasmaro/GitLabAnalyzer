@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.model;
 
+import com.haumea.gitanalyzer.gitlab.CommentType;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
@@ -18,11 +19,7 @@ public class Configuration {
     private HashMap<String, Float> editFactor;
     private HashMap<String, Float> fileFactor;
     private List<String> ignoreFileExtension;
-
-    // replace with commentType after it's merged
-    private String startType;
-    private String endType;
-
+    private HashMap<String, List<CommentType>> commentTypes;
 
     public Configuration() {
         super();
@@ -32,7 +29,7 @@ public class Configuration {
     public Configuration(String fileName, Date start, Date end, String gitlabServer,
                          String targetBranch, HashMap<String, Float> editFactor,
                          HashMap<String, Float> fileFactor, List<String> ignoreFileExtension,
-                         String startType, String endType) {
+                         HashMap<String, List<CommentType>> commentTypes) {
         this._id = new ObjectId();
         this.fileName = fileName;
         this.start = start;
@@ -42,8 +39,7 @@ public class Configuration {
         this.editFactor = editFactor;
         this.fileFactor = fileFactor;
         this.ignoreFileExtension = ignoreFileExtension;
-        this.startType = startType;
-        this.endType = endType;
+        this.commentTypes = commentTypes;
     }
 
     public String getFileName(){
@@ -78,11 +74,8 @@ public class Configuration {
         return ignoreFileExtension;
     }
 
-    public String getStartType() {
-        return startType;
+    public HashMap<String, List<CommentType>> getCommentTypes() {
+        return commentTypes;
     }
 
-    public String getEndType() {
-        return endType;
-    }
 }
