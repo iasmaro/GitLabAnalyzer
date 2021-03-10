@@ -14,7 +14,6 @@ public class Configuration {
     private String fileName;
     private Date start;
     private Date end;
-    private String gitlabServer;
     private String targetBranch;
     private HashMap<String, Float> editFactor;
     private HashMap<String, Float> fileFactor;
@@ -26,7 +25,7 @@ public class Configuration {
     }
 
     @PersistenceConstructor
-    public Configuration(String fileName, Date start, Date end, String gitlabServer,
+    public Configuration(String fileName, Date start, Date end,
                          String targetBranch, HashMap<String, Float> editFactor,
                          HashMap<String, Float> fileFactor, List<String> ignoreFileExtension,
                          HashMap<String, List<CommentType>> commentTypes) {
@@ -34,7 +33,6 @@ public class Configuration {
         this.fileName = fileName;
         this.start = start;
         this.end = end;
-        this.gitlabServer = gitlabServer;
         this.targetBranch = targetBranch;
         this.editFactor = editFactor;
         this.fileFactor = fileFactor;
@@ -52,10 +50,6 @@ public class Configuration {
 
     public Date getEnd() {
         return end;
-    }
-
-    public String getGitlabServer() {
-        return gitlabServer;
     }
 
     public String getTargetBranch() {
