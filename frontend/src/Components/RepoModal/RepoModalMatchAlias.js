@@ -6,9 +6,10 @@ import RepoModalAliasRow from './RepoModalAliasRow';
 
 const RepoModalMatchAlias = (props) => {
 
-    const {aliases, memberIds} = props || {};
+    const {aliases, memberIds, mapping } = props || {};
+
     const aliasHeadings = aliases.map((alias) =>
-        <th>{alias}</th>
+        <th key={alias}>{alias}</th>
     );
 
     return (
@@ -43,8 +44,8 @@ const RepoModalMatchAlias = (props) => {
                         </tr>
                     )
                     :
-                    memberIds.map((member) => (
-                        <RepoModalAliasRow key={member} member={member} aliases={aliases}/>
+                    memberIds.map((member, index) => (
+                        <RepoModalAliasRow key={member} member={member} aliases={aliases} mapping={mapping} memberIndex={index}/>
                     ))
                     }
                 </tbody>

@@ -5,7 +5,6 @@ import { Redirect } from "react-router-dom";
 import RepoModalStudent from './RepoModalStudent';
 import RepoModalConfig from './RepoModalConfig';
 import RepoModalMatchAlias from './RepoModalMatchAlias';
-import { modal } from 'Constants/constants';
 import './RepoModal.css';
 
 const RepoModal = (props) => {
@@ -15,10 +14,15 @@ const RepoModal = (props) => {
     // Temporary for testing:
     const {name, id, status, toggleModal} = props || {};
     const aliases = ['Batman', 'Superman', 'Cat Woman', 'Hulk', 'Iron Man', 'Aquaman', 'Vision'];
-    const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner']
+    const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner'];
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
+
+    const getMapObject = (member) => {
+        return {alias:[], memberId:member};
+    }
+    const [mapping, setMapping] = useState(members.map(getMapObject));
     
     /*Default times are both at the current date and time*/
     const [startDate, setStartDate] = useState(new Date());
@@ -57,8 +61,8 @@ const RepoModal = (props) => {
                 <RepoModalConfig config={config} setConfig={setConfig} />
                 <RepoModalStudent members={members} student={student} setStudent={setStudent} />
 
-                <RepoModalMatchAlias aliases={aliases} memberIds={members}/>
-
+                <RepoModalMatchAlias aliases={aliases} memberIds={members} mapping={mapping} setMapping={setMapping}/>
+                
             </Modal.Body>
 
             <Modal.Footer>
