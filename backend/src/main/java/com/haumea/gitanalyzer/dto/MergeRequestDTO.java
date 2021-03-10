@@ -6,6 +6,7 @@ import java.util.List;
 public class MergeRequestDTO {
 
     private int mergeId;
+    private String mergeRequestTitle;
     private Date mergedDate;
 
     private Date createdDate;
@@ -16,8 +17,9 @@ public class MergeRequestDTO {
     private int linesAdded;
     private int linesRemoved;
 
-    public MergeRequestDTO(int mergeId, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double sumOfCommitScore, List<DiffDTO> mergeRequestDiffs, int linesAdded, int linesRemoved) {
+    public MergeRequestDTO(int mergeId, String mergeRequestTitle, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double sumOfCommitScore, List<DiffDTO> mergeRequestDiffs, int linesAdded, int linesRemoved) {
         this.mergeId = mergeId;
+        this.mergeRequestTitle = mergeRequestTitle;
         this.mergedDate = mergedDate;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
@@ -30,6 +32,10 @@ public class MergeRequestDTO {
 
     public int getMergeId() {
         return mergeId;
+    }
+
+    public String getMergeRequestTitle() {
+        return mergeRequestTitle;
     }
 
     public Date getMergedDate() {

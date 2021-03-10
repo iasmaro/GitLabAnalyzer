@@ -1,6 +1,8 @@
 package com.haumea.gitanalyzer.gitlab;
 
 
+import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -24,6 +26,8 @@ public class IndividualDiffScoreCalculator {
 
     private List<String> removedLines;
     private List<String> addedLines;
+    private int numberOfLinesAdded;
+    private int numberOfLinesRemoved;
 
 
     public IndividualDiffScoreCalculator() {
@@ -45,19 +49,22 @@ public class IndividualDiffScoreCalculator {
     }
 
     // check file type and configs in calling code
-    public double calculateDiffScore(String diff,
-                                     boolean isFileDeleted,
-                                     double addLineWeight,
-                                     double deleteLineWeight,
-                                     double syntaxLineWeight,
-                                     double movedLineWeight,
-                                     double fileTypeMultiplier,
-                                     List<CommentType> commentTypes) {
+    public DiffScoreDTO calculateDiffScore(String diff,
+                                           boolean isFileDeleted,
+                                           double addLineWeight,
+                                           double deleteLineWeight,
+                                           double syntaxLineWeight,
+                                           double movedLineWeight,
+                                           double fileTypeMultiplier,
+                                           List<CommentType> commentTypes) {
 
         setTypes(addLineWeight, deleteLineWeight, syntaxLineWeight, movedLineWeight, commentTypes);
 
+        this.numberOfLinesAdded = 0;
+        this.numberOfLinesRemoved = 0;
+
         if(isFileDeleted) {
-            return 0.0;
+            return new DiffScoreDTO(0, 0, 0.0);
         }
         else {
             double score;
@@ -74,7 +81,7 @@ public class IndividualDiffScoreCalculator {
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            return fileTypeMultiplier * roundedScore.doubleValue();
+            return new DiffScoreDTO(numberOfLinesAdded, numberOfLinesRemoved,fileTypeMultiplier * roundedScore.doubleValue());
         }
     }
 
@@ -90,6 +97,7 @@ public class IndividualDiffScoreCalculator {
         {
             if(line.charAt(0) == '+') {
                 diffScore = diffScore + analyzeAddedLine(line);
+                this.numberOfLinesAdded++;
             }
             else if(line.charAt(0) == '-' && (line.trim().length() > 0) && !line.trim().equals("-")) {
 
@@ -97,6 +105,7 @@ public class IndividualDiffScoreCalculator {
                 line = line.trim();
 
                 diffScore = diffScore + analyzeRemovedLine(line);
+                this.numberOfLinesRemoved++;
 
                 removedLines.add(line);
 

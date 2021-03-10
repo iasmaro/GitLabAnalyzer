@@ -2,9 +2,12 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.DiffDTO;
+import com.haumea.gitanalyzer.dto.DiffScoreDTO;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
+import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
+import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.CommitStats;
@@ -19,11 +22,13 @@ public class CommitService {
 
     private final UserService userService;
     private final MemberService memberService;
+    private double commitScore;
 
     @Autowired
     public CommitService(UserService userService, MemberService memberService) {
         this.userService = userService;
         this.memberService = memberService;
+        this.commitScore = 0.0;
     }
 
     public List<String> getAliasForMember(String memberId) {
@@ -39,12 +44,34 @@ public class CommitService {
         return new GitlabService(GlobalConstants.gitlabURL, token);
     }
 
+    //TODO: Update passing configuration file to calculator
     private List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs) {
+
+        IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
+
+        this.commitScore = 0.0;
+
         List<DiffDTO> commitDiffs = new ArrayList<>();
+
+        List<CommentType> commentTypes = new ArrayList<>();
+
+        commentTypes.add(new CommentType("//", ""));
+        commentTypes.add(new CommentType("/*", "*/"));
 
         for(Diff diff : codeDiffs) {
 
-            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diff.getDiff());
+            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
+                                                                            diff.getDeletedFile(),
+                                                                            1,
+                                                                            0.2,
+                                                                            0,
+                                                                            0,
+                                                                            1,
+                                                                            commentTypes);
+
+            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diff.getDiff(), scoreDTO);
+
+            this.commitScore = this.commitScore + scoreDTO.getDiffScore();
 
             commitDiffs.add(diffDTO);
         }
@@ -59,14 +86,11 @@ public class CommitService {
         for(CommitWrapper currentCommit : wrapperList) {
 
             Commit commit = currentCommit.getCommitData();
-
-            List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
             CommitStats commitStats = commit.getStats();
 
-            List<String> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
+            List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
 
-            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), 11, commitDiffs);
-            CommitDTO newDto = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), 11, commitDiffs, commitStats.getAdditions(), commitStats.getDeletions());
+            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), this.commitScore, commitDiffs, commitStats.getAdditions(), commitStats.getDeletions());
 
             commitDTOList.add(newDTO);
         }

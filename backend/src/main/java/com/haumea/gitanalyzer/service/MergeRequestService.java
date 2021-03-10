@@ -1,7 +1,10 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.DiffDTO;
+import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
+import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
@@ -15,14 +18,22 @@ import java.util.*;
 
 @Service
 public class MergeRequestService {
+
     private final UserService userService;
     private final MemberService memberService;
+    private int linesAdded;
+    private int linesRemoved;
+    private double MRScore;
 
     @Autowired
     public MergeRequestService(UserService userService, MemberService memberService) {
 
         this.userService = userService;
         this.memberService = memberService;
+
+        this.linesAdded = 0;
+        this.linesRemoved = 0;
+        this.MRScore = 0.0;
     }
 
     private GitlabService getGitLabService(String userId) {
@@ -47,15 +58,39 @@ public class MergeRequestService {
         return gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, "master", start, end, alias);
     }
 
+    //TODO: Update passing configuration file to calculator
     public List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff){
+
+        IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
+
+        this.linesAdded = 0;
+        this.linesRemoved = 0;
+        this.MRScore = 0.0;
 
         List<DiffDTO> mergeRequestDiffs = new ArrayList<>();
 
+        List<CommentType> commentTypes = new ArrayList<>();
+        commentTypes.add(new CommentType("//", ""));
+        commentTypes.add(new CommentType("/*", "*/"));
+
         List<Diff> codeDiffs = mergeRequestDiff.getDiffs();
 
-        for(Diff diff : codeDiffs){
+        for(Diff diff : codeDiffs) {
 
-            DiffDTO diffDTO = new DiffDTO(diff.getDiff(), diff.getNewPath(), diff.getDiff());
+            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
+                                                                            diff.getDeletedFile(),
+                                                                            1,
+                                                                            0.2,
+                                                                            0,
+                                                                            0,
+                                                                            1,
+                                                                            commentTypes);
+
+            DiffDTO diffDTO = new DiffDTO(diff.getDiff(), diff.getNewPath(), diff.getDiff(), scoreDTO);
+
+            this.linesAdded = this.linesAdded + scoreDTO.getLinesAdded();
+            this.linesRemoved = this.linesRemoved + scoreDTO.getLinesRemoved();
+            this.MRScore = this.MRScore + scoreDTO.getDiffScore();
 
             mergeRequestDiffs.add(diffDTO);
         }
@@ -68,23 +103,20 @@ public class MergeRequestService {
         MergeRequest mergeRequest = mergeRequestWrapper.getMergeRequestData();
 
         int mergeRequestIiD = mergeRequest.getIid();
+        String mergeRequestTitle = mergeRequest.getTitle();
         Date mergedDate = mergeRequest.getMergedAt();
         Date createdDate = mergeRequest.getCreatedAt();
         Date updatedDate = mergeRequest.getUpdatedAt();
 
         //TODO: Update with method to calculate MR's score and member's score.
-        double MRScore = 0.0;
-        double memberScore = 0.0;
+        double sumOfCommitScore = 0.0;
 
         List<DiffDTO> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestDiff());
 
-        int linesAdded = 0;
-        int linesRemoved = 0;
-
-        return new MergeRequestDTO(mergeRequestIiD, mergedDate, createdDate, updatedDate, MRScore, memberScore, mergeRequestDiffs, linesAdded, linesRemoved);
+        return new MergeRequestDTO(mergeRequestIiD, mergeRequestTitle, mergedDate, createdDate, updatedDate, this.MRScore, sumOfCommitScore, mergeRequestDiffs, this.linesAdded, this.linesRemoved);
     }
 
-    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, Date start, Date end){
+    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, Date start, Date end) {
 
         GitlabService gitlabService = getGitLabService(userId);
 
@@ -92,7 +124,7 @@ public class MergeRequestService {
 
         List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
 
-        for(MergeRequestWrapper mergeRequestWrapper : mergeRequestsList){
+        for(MergeRequestWrapper mergeRequestWrapper : mergeRequestsList) {
 
             MergeRequestDTO mergeRequestDTO = getMergeRequestDTO(mergeRequestWrapper);
             mergeRequestDTOList.add(mergeRequestDTO);
@@ -101,7 +133,7 @@ public class MergeRequestService {
         return mergeRequestDTOList;
     }
 
-    public List<MergeRequestDTO> getAllMergeRequestsForMember(String userId, int projectId, String memberId, Date start, Date end){
+    public List<MergeRequestDTO> getAllMergeRequestsForMember(String userId, int projectId, String memberId, Date start, Date end) {
 
         GitlabService gitlabService = getGitLabService(userId);
 
@@ -110,7 +142,7 @@ public class MergeRequestService {
 
         List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
 
-        for(MergeRequestWrapper mergeRequestWrapper : mergeRequestsList){
+        for(MergeRequestWrapper mergeRequestWrapper : mergeRequestsList) {
 
             MergeRequestDTO mergeRequestDTO = getMergeRequestDTO(mergeRequestWrapper);
             mergeRequestDTOList.add(mergeRequestDTO);
