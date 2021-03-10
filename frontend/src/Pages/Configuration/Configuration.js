@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Spinner } from 'react-bootstrap';
 
 import Config from 'Components/Configurations/Config';
@@ -17,6 +17,14 @@ const ConfigurationPage = () => {
         setIsLoading(false);
         setConfigInfo(config)
     }
+
+    useEffect(() => {
+        if (configs.length > 0) {
+            setSelectedConfig(configs?.[0].configName);
+            setIsLoading(false);
+            setConfigInfo(configs[0]);
+        }
+      }, []);
 
     return (
     <div className = 'configs-list-container'>

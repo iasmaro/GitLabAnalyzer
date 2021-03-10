@@ -2,6 +2,7 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 import './ConfigDetails.css'
+import ConfigFileWeights from './ConfigFileWeights';
 const ConfigDetails = (props) => {
     const {configInfo} = props || {};
     return (
@@ -32,41 +33,16 @@ const ConfigDetails = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Object.entries(configInfo?.codeWeightings[0]).map(([key, value]) => 
-                    <tr>
-                        <td>{key}</td>
-                        <td>{value}</td>
-                    </tr>)}
+                    {configInfo?.codeWeightings.length > 0 && Object.entries(configInfo?.codeWeightings[0]).map(([key, value]) => 
+                        <tr key={key}>
+                            <td>{key}</td>
+                            <td>{value}</td>
+                        </tr>
+                    )}
                 </tbody>
-
             </Table>
 
-
-            <Table className='file-weightings-body'>             
-                <thead>
-                    <tr>
-                        <th colSpan='4'>File Weightings</th>
-                    </tr>
-                </thead>
-                {Object.entries(configInfo?.fileWeightings[0]).map((fileWeighting) => 
-                    <div className='file-weightings'>
-                        <thead>
-                            <tr>
-                                <th>{fileWeighting[0]}</th>
-                                
-                            </tr>
-                        </thead>
-                        {(Object.entries(fileWeighting[1]).map(([weighting, startComment]) =>
-                            <tbody>
-                                <tr>
-                                    <td>{weighting}</td>
-                                    <td>{startComment}</td>
-                                </tr>
-                            </tbody>
-                    ))}
-                    </div>
-                )} 
-            </Table>
+            <ConfigFileWeights fileWeightings={configInfo?.fileWeightings}/>
         </div>
 
     );

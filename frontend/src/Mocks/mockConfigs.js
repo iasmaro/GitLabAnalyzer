@@ -77,6 +77,31 @@ export const configs = [
                     weight: 1.0,
                     startComment: '"""',
                     endComment: '"""'
+                },
+                c: {
+                    weight: 1.0,
+                    startComment: '/*',
+                    endComment: '*/'
+                },
+                cpp: {
+                    weight: 1.0,
+                    startComment: '<!--',
+                    endComment: '-->'
+                },
+                hs: {
+                    weight: 1.0,
+                    startComment: '/*',
+                    endComment: '*/'
+                },
+                ruby: {
+                    weight: 1.0,
+                    startComment: '/*',
+                    endComment: '*/'
+                },
+                R: {
+                    weight: 1.0,
+                    startComment: '"""',
+                    endComment: '"""'
                 }
             }
         ]
