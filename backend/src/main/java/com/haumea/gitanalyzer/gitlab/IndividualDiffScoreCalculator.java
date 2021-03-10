@@ -17,7 +17,7 @@ public class IndividualDiffScoreCalculator {
     private double addLineWeight;
     private double deleteLineWeight;
     private double syntaxLineWeight;
-    private double movedLineWeight;
+    private double moveLineWeight;
     private List<CommentType> commentTypes;
 
     private boolean isLongComment; /* need to save state between line calls as a comment could go
@@ -39,12 +39,12 @@ public class IndividualDiffScoreCalculator {
     }
 
 
-    private void setTypes( double addLineMultiplier, double deleteLineMultiplier, double syntaxLineMultiplier,
+    private void setTypes(double addLineMultiplier, double deleteLineMultiplier, double syntaxLineMultiplier,
                            double movedLineWeight, List<CommentType> commentTypes) {
         this.addLineWeight = addLineMultiplier;
         this.deleteLineWeight = deleteLineMultiplier;
         this.syntaxLineWeight = syntaxLineMultiplier;
-        this.movedLineWeight = movedLineWeight;
+        this.moveLineWeight = movedLineWeight;
         this.commentTypes = commentTypes;
     }
 
@@ -72,7 +72,7 @@ public class IndividualDiffScoreCalculator {
                 score = analyzeDiff(diff);
             }
             catch (IOException e) {
-                throw new IllegalArgumentException("input error"); // change to illegal argument
+                throw new IllegalArgumentException("input error");
             }
 
             this.removedLines.clear();
@@ -81,7 +81,7 @@ public class IndividualDiffScoreCalculator {
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            return new DiffScoreDTO(numberOfLinesAdded, numberOfLinesRemoved,fileTypeMultiplier * roundedScore.doubleValue());
+            return new DiffScoreDTO(numberOfLinesAdded, numberOfLinesRemoved, fileTypeMultiplier * roundedScore.doubleValue());
         }
     }
 
@@ -148,11 +148,11 @@ public class IndividualDiffScoreCalculator {
     private double calculatePointsForLineMovedUpOrDown(double weightFromPrevOccurance) {
         double score = 0.0;
 
-        if(weightFromPrevOccurance > movedLineWeight) {
-            score = movedLineWeight - weightFromPrevOccurance; // taking back points
+        if(weightFromPrevOccurance > moveLineWeight) {
+            score = moveLineWeight - weightFromPrevOccurance; // taking back points
         }
-        else if(movedLineWeight >  weightFromPrevOccurance) {
-            score = movedLineWeight - weightFromPrevOccurance;
+        else if(moveLineWeight >  weightFromPrevOccurance) {
+            score = moveLineWeight - weightFromPrevOccurance;
         }
 
         return score;
