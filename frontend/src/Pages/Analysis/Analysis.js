@@ -4,6 +4,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import { useUserState } from 'UserContext';
 import AnalyzerTabs from 'Components/AnalyzerTabs/AnalyzerTabs';
+import AnalyzerInfo from 'Components/AnalyzerInfo/AnalyzerInfo';
 import getMergeRequests from 'Utils/getMergeRequests';
 import getAllCommits from 'Utils/getAllCommits';
 
@@ -33,6 +34,7 @@ const Analysis = (props) => {
 
     return (
         <div className="analysis-page">
+            <AnalyzerInfo memberId={data.memberId} projectId={data.projectId} startDate={data.start} endDate={data.end} configuration={data.configuration}/>
             {isLoading ? <Spinner animation="border" className="spinner" /> : <AnalyzerTabs mergerequests={mergeRequests} projectId={data.projectId} commits={commits} />}
         </div>
     )

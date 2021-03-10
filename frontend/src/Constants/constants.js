@@ -25,7 +25,6 @@ export const config = process.env.NODE_ENV === 'development' ? dev : prod;
 export const modal = {
     CONFIG : "Configuration:",
     CONFIG_OPTION : "Default Configuration",
-    STUDENT : "Student:",
     START_DATE : "Start Date:",
     END_DATE : "End Date:"
 };
