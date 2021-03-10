@@ -15,6 +15,8 @@ import org.gitlab4j.api.models.MergeRequestDiff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -62,7 +64,7 @@ public class MergeRequestService {
         return gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, "master", start, end, alias);
     }
 
-    public String getDiffExtension(String newPath){
+    private String getDiffExtension(String newPath) {
 
         int index = newPath.length() - 1;
 
@@ -78,7 +80,7 @@ public class MergeRequestService {
     }
 
     //TODO: Update passing configuration file to calculator
-    public List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff) {
+    private List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff) {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
@@ -119,7 +121,16 @@ public class MergeRequestService {
         return mergeRequestDiffs;
     }
 
-    public double getSumOfCommitsScore(List<CommitDTO> commitDTOList) {
+    //Source: Andrew's IndividualDiffScoreCalculator
+    private double roundScore(double score) {
+
+        BigDecimal roundedScore = new BigDecimal(Double.toString(score));
+        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
+
+        return roundedScore.doubleValue();
+    }
+
+    private double getSumOfCommitsScore(List<CommitDTO> commitDTOList) {
 
         double sumOfCommitsScore = 0.0;
 
@@ -129,10 +140,10 @@ public class MergeRequestService {
 
         }
 
-        return sumOfCommitsScore;
+        return roundScore(sumOfCommitsScore);
     }
 
-    public MergeRequestDTO getMergeRequestDTO(String userId, int projectId, MergeRequestWrapper mergeRequestWrapper) {
+    private MergeRequestDTO getMergeRequestDTO(String userId, int projectId, MergeRequestWrapper mergeRequestWrapper) {
 
         MergeRequest mergeRequest = mergeRequestWrapper.getMergeRequestData();
 
@@ -147,7 +158,7 @@ public class MergeRequestService {
 
         double sumOfCommitScore = getSumOfCommitsScore(commitDTOList);
 
-        return new MergeRequestDTO(mergeRequestIiD, mergeRequestTitle, mergedDate, createdDate, updatedDate, this.MRScore, sumOfCommitScore, mergeRequestDiffs, this.linesAdded, this.linesRemoved, commitDTOList);
+        return new MergeRequestDTO(mergeRequestIiD, mergeRequestTitle, mergedDate, createdDate, updatedDate, roundScore(this.MRScore), sumOfCommitScore, mergeRequestDiffs, this.linesAdded, this.linesRemoved, commitDTOList);
     }
 
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, Date start, Date end) {

@@ -15,6 +15,8 @@ import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -37,7 +39,7 @@ public class CommitService {
         this.commitScore = 0.0;
     }
 
-    public List<String> getAliasForMember(String memberId) {
+    private List<String> getAliasForMember(String memberId) {
 
         List<String> alias = memberService.getAliasesForSelectedMember(memberId);
 
@@ -50,7 +52,7 @@ public class CommitService {
         return new GitlabService(GlobalConstants.gitlabURL, token);
     }
 
-    public String getDiffExtension(String newPath){
+    private String getDiffExtension(String newPath){
 
         int index = newPath.length() - 1;
 
@@ -106,6 +108,15 @@ public class CommitService {
         return commitDiffs;
     }
 
+    //Source: Andrew's IndividualDiffScoreCalculator
+    private double roundScore(double commitScore) {
+
+        BigDecimal roundedScore = new BigDecimal(Double.toString(commitScore));
+        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
+
+        return roundedScore.doubleValue();
+    }
+
     private List<CommitDTO> convertCommitWrappersToDTOs(List<CommitWrapper> wrapperList) {
 
         List<CommitDTO> commitDTOList = new ArrayList<>();
@@ -116,7 +127,9 @@ public class CommitService {
 
             List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
 
-            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), this.commitScore, commitDiffs, this.linesAdded, this.linesRemoved);
+            double roundedCommitScore = roundScore(this.commitScore);
+
+            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), roundedCommitScore, commitDiffs, this.linesAdded, this.linesRemoved);
 
             commitDTOList.add(newDTO);
         }
