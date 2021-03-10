@@ -22,12 +22,18 @@ public class CommitService {
 
     private final UserService userService;
     private final MemberService memberService;
+
+    private int linesAdded;
+    private int linesRemoved;
     private double commitScore;
 
     @Autowired
     public CommitService(UserService userService, MemberService memberService) {
         this.userService = userService;
         this.memberService = memberService;
+
+        this.linesAdded = 0;
+         this.linesRemoved = 0;
         this.commitScore = 0.0;
     }
 
@@ -44,11 +50,28 @@ public class CommitService {
         return new GitlabService(GlobalConstants.gitlabURL, token);
     }
 
+    public String getDiffExtension(String newPath){
+
+        int index = newPath.length() - 1;
+
+        for(; index >= 0; index--) {
+
+            if(newPath.charAt(index) == '.') {
+                return newPath.substring(index);
+            }
+
+        }
+
+        return "No extension";
+    }
+
     //TODO: Update passing configuration file to calculator
     private List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs) {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
+        this.linesAdded = 0;
+        this.linesRemoved = 0;
         this.commitScore = 0.0;
 
         List<DiffDTO> commitDiffs = new ArrayList<>();
@@ -69,8 +92,12 @@ public class CommitService {
                                                                             1,
                                                                             commentTypes);
 
-            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diff.getDiff(), scoreDTO);
+            String diffExtension = getDiffExtension(diff.getNewPath());
 
+            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diffExtension, diff.getDiff(), scoreDTO);
+
+            this.linesAdded = this.linesAdded + scoreDTO.getLinesAdded();
+            this.linesRemoved = this.linesRemoved + scoreDTO.getLinesRemoved();
             this.commitScore = this.commitScore + scoreDTO.getDiffScore();
 
             commitDiffs.add(diffDTO);
@@ -86,11 +113,10 @@ public class CommitService {
         for(CommitWrapper currentCommit : wrapperList) {
 
             Commit commit = currentCommit.getCommitData();
-            CommitStats commitStats = commit.getStats();
 
             List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
 
-            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), this.commitScore, commitDiffs, commitStats.getAdditions(), commitStats.getDeletions());
+            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), this.commitScore, commitDiffs, this.linesAdded, this.linesRemoved);
 
             commitDTOList.add(newDTO);
         }
@@ -138,7 +164,6 @@ public class CommitService {
         catch (GitLabRuntimeException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
-
 
         return convertCommitWrappersToDTOs(mergeRequestCommits);
     }

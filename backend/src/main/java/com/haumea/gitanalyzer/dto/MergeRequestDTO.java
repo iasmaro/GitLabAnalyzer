@@ -16,8 +16,9 @@ public class MergeRequestDTO {
     private List<DiffDTO> mergeRequestDiffs;
     private int linesAdded;
     private int linesRemoved;
+    private List<CommitDTO> commitDTOList;
 
-    public MergeRequestDTO(int mergeId, String mergeRequestTitle, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double sumOfCommitScore, List<DiffDTO> mergeRequestDiffs, int linesAdded, int linesRemoved) {
+    public MergeRequestDTO(int mergeId, String mergeRequestTitle, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double sumOfCommitScore, List<DiffDTO> mergeRequestDiffs, int linesAdded, int linesRemoved, List<CommitDTO> commitDTOList) {
         this.mergeId = mergeId;
         this.mergeRequestTitle = mergeRequestTitle;
         this.mergedDate = mergedDate;
@@ -28,6 +29,7 @@ public class MergeRequestDTO {
         this.mergeRequestDiffs = mergeRequestDiffs;
         this.linesAdded = linesAdded;
         this.linesRemoved = linesRemoved;
+        this.commitDTOList = commitDTOList;
     }
 
     public int getMergeId() {
@@ -68,5 +70,9 @@ public class MergeRequestDTO {
 
     public int getLinesRemoved() {
         return linesRemoved;
+    }
+
+    public List<CommitDTO> getCommitDTOList() {
+        return commitDTOList;
     }
 }
