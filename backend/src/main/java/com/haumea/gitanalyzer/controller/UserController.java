@@ -70,4 +70,9 @@ public class UserController {
     public void updateConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration) {
         userService.updateConfiguration(userId, configuration);
     }
+
+    @DeleteMapping("/configuration")
+    public void deleteConfiguration(@RequestParam @NotBlank String userId, @RequestParam @NotBlank String fileName) {
+        userService.deleteConfiguration(userId, fileName);
+    }
 }

@@ -4,6 +4,7 @@ import com.haumea.gitanalyzer.exception.ResourceAlredyExistException;
 import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.model.User;
+import com.mongodb.BasicDBObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -89,10 +90,9 @@ public class UserRepository {
 
         if(!filenames.contains(configuration.getFileName())) {
             Query query = new Query();
-            query.addCriteria(Criteria.where("userId").is(user.getUserId())
-                                        .and("configurations.fileName").is(configuration.getFileName()));
+            query.addCriteria(Criteria.where("userId").is(user.getUserId()));
             Update update = new Update();
-            update.set("configurations.$", configuration);
+            update.push("configurations", configuration);
             mongoTemplate.updateFirst(query, update, User.class);
         }
         else {
@@ -102,7 +102,7 @@ public class UserRepository {
         return user;
     }
 
-    public List<Configuration> getConfigurations(String userId) throws ResourceNotFoundException  {
+    public List<Configuration> getConfigurations(String userId) throws ResourceNotFoundException {
 
         User user = findUserByUserId(userId);
 
@@ -115,7 +115,7 @@ public class UserRepository {
         return configurations;
     }
 
-    public User updateConfiguration(String userId, Configuration configuration) {
+    public User updateConfiguration(String userId, Configuration configuration) throws ResourceNotFoundException {
 
         User user = findUserByUserId(userId);
 
@@ -124,24 +124,55 @@ public class UserRepository {
         }
 
         List<Configuration> userConfigurations = user.getConfigurations();
-        List<String> filenames = new ArrayList<>();
+        List<String> fileNames = new ArrayList<>();
         for(Configuration userConfiguration : userConfigurations) {
-            String filename = userConfiguration.getFileName();
-            filenames.add(filename);
+            String fileName = userConfiguration.getFileName();
+            fileNames.add(fileName);
         }
 
-        if(filenames.contains(configuration.getFileName())) {
+        if(fileNames.contains(configuration.getFileName())) {
             Query query = new Query();
-            query.addCriteria(Criteria.where("userId").is(user.getUserId()));
+            query.addCriteria(Criteria.where("userId").is(user.getUserId())
+                                        .and("configurations.fileName").is(configuration.getFileName()));
             Update update = new Update();
-            update.push("configurations", configuration);
+            update.set("configurations.$", configuration);
             mongoTemplate.updateFirst(query, update, User.class);
         }
         else {
-            throw new ResourceAlredyExistException("Configuration with this name does not exist!");
+            throw new ResourceNotFoundException("Configuration with this name does not exist!");
         }
 
         return user;
 
+    }
+
+    public User deleteConfiguration(String userId, String fileName) throws ResourceNotFoundException {
+
+        User user = findUserByUserId(userId);
+
+        if(user == null) {
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        List<Configuration> userConfigurations = user.getConfigurations();
+        List<String> fileNames = new ArrayList<>();
+        for(Configuration userConfiguration : userConfigurations) {
+            String configFileName = userConfiguration.getFileName();
+            fileNames.add(configFileName);
+        }
+
+        if(fileNames.contains(fileName)) {
+            Query query = new Query();
+            query.addCriteria(Criteria.where("userId").is(user.getUserId())
+                    .and("configurations.fileName").is(fileName));
+            Update update = new Update();
+            update.pull("configurations.$", new BasicDBObject("fileName", fileName));
+            mongoTemplate.updateFirst(query, update, User.class);
+        }
+        else {
+            throw new ResourceNotFoundException("Configuration with this name does not exist!");
+        }
+
+        return user;
     }
 }

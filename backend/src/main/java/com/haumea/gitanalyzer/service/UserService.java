@@ -71,4 +71,8 @@ public class UserService {
     public User updateConfiguration(String userId, Configuration configuration) {
         return userRepository.updateConfiguration(userId, configuration);
     }
+
+    public User deleteConfiguration(String userId, String fileName) {
+        return userRepository.deleteConfiguration(userId, fileName);
+    }
 }
