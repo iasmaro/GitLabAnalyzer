@@ -66,9 +66,7 @@ public class MergeRequestService {
 
     private String getDiffExtension(String newPath) {
 
-        int index = newPath.length() - 1;
-
-        for(; index >= 0; index--) {
+        for(int index = newPath.length() - 1; index >= 0; index--) {
 
             if(newPath.charAt(index) == '.') {
                 return newPath.substring(index);
