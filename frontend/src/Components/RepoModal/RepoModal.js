@@ -13,8 +13,8 @@ const RepoModal = (props) => {
 
     // Temporary for testing:
     const {name, id, status, toggleModal} = props || {};
-    const aliases = ['Batman', 'Superman', 'Cat Woman', 'Hulk', 'Iron Man', 'Aquaman', 'Vision'];
-    const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner'];
+    const aliases = ['Batman', 'Superman', 'Catwoman', 'Hulk', 'Ironman', 'Aquaman', 'Vision'];
+    const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner', 'stevenrogers', 'peterparker', 'loganhowlett'];
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
@@ -59,7 +59,7 @@ const RepoModal = (props) => {
             </Modal.Header>
             <Modal.Body className="repo-modal-body">
                 <RepoModalConfig config={config} setConfig={setConfig} />
-                <RepoModalStudent members={members} student={student} setStudent={setStudent} />
+                {/* <RepoModalStudent members={members} student={student} setStudent={setStudent} /> */}
 
                 <RepoModalMatchAlias aliases={aliases} memberIds={members} mapping={mapping} setMapping={setMapping}/>
                 

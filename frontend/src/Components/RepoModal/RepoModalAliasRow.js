@@ -19,17 +19,19 @@ const RepoModalAliasRow = (props) => {
       };
 
     const aliasCheckboxes = aliases.map((alias) =>
-        <td key={alias}>
+        <td key={alias} align={'center'}>
             <Checkbox
+                color="default"
                 onChange={selectAlias}
                 name={alias}
+                disabled={false}
             />
         </td>
     );
 
     return (
         <tr>
-            <td>{member}</td>
+            <td className='sticky'>{member}</td>
             {aliasCheckboxes}
         </tr>   
     );
