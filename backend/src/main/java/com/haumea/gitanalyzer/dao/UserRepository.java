@@ -42,7 +42,13 @@ public class UserRepository {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(user.getUserId()));
         Update update = new Update();
-        update.set("personalAccessToken", user.getPersonalAccessToken());
+        if(!(user.getPersonalAccessToken() == null) && !user.getPersonalAccessToken().trim().isEmpty()){
+            update.set("personalAccessToken", user.getPersonalAccessToken());
+        }
+        if(!(user.getGitlabServer() == null) && !user.getGitlabServer().trim().isEmpty()){
+            update.set("gitlabServer", user.getGitlabServer());
+        }
+
         if(mongoTemplate.findAndModify(query, update, User.class) == null){
             throw new ResourceNotFoundException("User not found!");
         }
@@ -65,6 +71,23 @@ public class UserRepository {
         }
 
         return token;
+    }
+
+    public String getGitlabServer(String userId) throws ResourceNotFoundException {
+
+        User user = findUserByUserId(userId);
+
+        if(user == null){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        String gitlabServer = user.getGitlabServer();
+
+        if(gitlabServer == null){
+            throw new ResourceNotFoundException("Gitlab Server not found!");
+        }
+
+        return gitlabServer;
     }
 
 }
