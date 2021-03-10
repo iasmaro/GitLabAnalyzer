@@ -35,7 +35,8 @@ public class ProjectService {
                     current.getProject().getId(),
                     current.getProject().getWebUrl(),
                     current.getProject().getCreatedAt(),
-                    current.getProject().getLastActivityAt());
+                    current.getProject().getLastActivityAt(),
+                    current.getProject().getNamespace().getName());
             projects.add(project);
         }
 
