@@ -1,37 +1,35 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
+import com.haumea.gitanalyzer.dto.DiffDTO;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
-import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
-import com.haumea.gitanalyzer.model.User;
-import com.haumea.gitanalyzer.dao.MemberRepository;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
-import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Commit;
+import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.haumea.gitanalyzer.model.Member;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
 public class CommitService {
 
     private final UserService userService;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     @Autowired
-    public CommitService(UserService userService, MemberRepository memberRepository) {
+    public CommitService(UserService userService, MemberService memberService) {
         this.userService = userService;
-        this.memberRepository = memberRepository;
+        this.memberService = memberService;
+    }
+
+    public List<String> getAliasForMember(String memberId) {
+
+        List<String> alias = memberService.getAliasesForSelectedMember(memberId);
+
+        return alias;
     }
 
     private GitlabService createGitlabService(String userId) {
@@ -40,88 +38,80 @@ public class CommitService {
         return new GitlabService(GlobalConstants.gitlabURL, token);
     }
 
+    private List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs) {
+        List<DiffDTO> commitDiffs = new ArrayList<>();
+
+        for(Diff diff : codeDiffs) {
+
+            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diff.getDiff());
+
+            commitDiffs.add(diffDTO);
+        }
+
+        return commitDiffs;
+    }
+
+    private List<CommitDTO> convertCommitWrappersToDTOs(List<CommitWrapper> wrapperList) {
+
+        List<CommitDTO> commitDTOList = new ArrayList<>();
+
+        for(CommitWrapper currentCommit : wrapperList) {
+
+            Commit commit = currentCommit.getCommitData();
+
+            List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
+
+            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), 11, commitDiffs);
+
+            commitDTOList.add(newDTO);
+        }
+
+        return commitDTOList;
+    }
+
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
                                                            Integer mergeRequestId, String memberId) throws GitLabRuntimeException {
 
-        String token = userService.getPersonalAccessToken(userId);
+       GitlabService gitlabService = createGitlabService(userId);
 
-        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
-
-        List<CommitDTO> memberCommits= new ArrayList<>();
-
-        Member member = memberRepository.findMemberByMemberId(memberId);
-
-        if(member == null){
-            throw new ResourceNotFoundException("Member not found!");
-        }
+        List<String> alias = getAliasForMember(memberId);
 
         try {
-            List<CommitWrapper> mergeRequestCommits = gitlabService.getMergeRequestCommits(projectId, mergeRequestId);
+            List<CommitWrapper> mergeRequestCommits = gitlabService.getMergeRequestCommitsWithDiffByAuthor(projectId, mergeRequestId, alias);
 
-            for(CommitWrapper currentCommit : mergeRequestCommits) {
-                if(member.getAlias().contains(currentCommit.getCommitData().getAuthorName())){
-                    CommitDTO commit = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(), currentCommit.getCommitData().getAuthorName(), 0);
-                    memberCommits.add(commit);
-                }
-            }
-            return memberCommits;
-
+            return convertCommitWrappersToDTOs(mergeRequestCommits);
         }
-        catch (GitLabApiException e){
+        catch (GitLabRuntimeException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
     }
-    private Date convertStringToUTCDate(String date) throws ParseException {
-        Date pstDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
-
-        final Calendar calendar  = Calendar.getInstance();
-        final int utcOffset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);
-
-        return new Date(pstDate.getTime() - utcOffset);
-    }
-
-    private List<CommitDTO> convertCommitWrappersToDtos(List<CommitWrapper> wrapperList) {
-        List<CommitDTO> commitDtoList = new ArrayList<>();
-
-        for(CommitWrapper currentCommit : wrapperList) {
-            CommitDTO newDto = new CommitDTO(currentCommit.getCommitData().getId(), currentCommit.getCommitData().getCommittedDate(),
-                    currentCommit.getCommitData().getAuthorName(), 11);
-
-            commitDtoList.add(newDto);
-        }
-
-        return commitDtoList;
-    }
-
 
     public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) {
+
         GitlabService gitlabService = createGitlabService(userId);
         List<CommitWrapper> filteredCommits;
 
-        try {
-            filteredCommits = gitlabService.filterCommitsForDateAndAuthor(projectId, memberId, start, end);
-        }
-        catch (GitLabApiException e) {
-            throw new GitLabRuntimeException(e.getLocalizedMessage());
-        }
+        List<String> alias = getAliasForMember(memberId);
 
-        return convertCommitWrappersToDtos(filteredCommits);
+        filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId, "master", start, end, alias);
+
+        return convertCommitWrappersToDTOs(filteredCommits);
     }
 
     public List<CommitDTO> getCommitsForSelectedMergeRequest(String userId, int projectId, int mergeRequestId) {
+
         GitlabService gitlabService = createGitlabService(userId);
         List<CommitWrapper> mergeRequestCommits;
 
         try {
-            mergeRequestCommits = gitlabService.getMergeRequestCommits(projectId, mergeRequestId);
+            mergeRequestCommits = gitlabService.getMergeRequestCommitsWithDiff(projectId, mergeRequestId);
         }
-        catch (GitLabRuntimeException | GitLabApiException e){
+        catch (GitLabRuntimeException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
 
 
-        return convertCommitWrappersToDtos(mergeRequestCommits);
+        return convertCommitWrappersToDTOs(mergeRequestCommits);
     }
-
 
 }

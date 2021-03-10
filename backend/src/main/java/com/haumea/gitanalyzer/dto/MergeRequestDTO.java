@@ -1,7 +1,5 @@
 package com.haumea.gitanalyzer.dto;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
 import java.util.List;
 
@@ -13,16 +11,18 @@ public class MergeRequestDTO {
     private Date createdDate;
     private Date updatedDate;
     private double MRScore;
-    private double memberScore;
+    private double sumOfCommitScore;
+    private List<DiffDTO> mergeRequestDiffs;
 
 
-    public MergeRequestDTO(int mergeId, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double memberScore) {
+    public MergeRequestDTO(int mergeId, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double sumOfCommitScore, List<DiffDTO> mergeRequestDiffs) {
         this.mergeId = mergeId;
         this.mergedDate = mergedDate;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.MRScore = MRScore;
-        this.memberScore = memberScore;
+        this.sumOfCommitScore = sumOfCommitScore;
+        this.mergeRequestDiffs = mergeRequestDiffs;
     }
 
     public int getMergeId() {
@@ -45,7 +45,11 @@ public class MergeRequestDTO {
         return MRScore;
     }
 
-    public double getMemberScore() {
-        return memberScore;
+    public double getSumOfCommitScore() {
+        return sumOfCommitScore;
+    }
+
+    public List<DiffDTO> getMergeRequestDiffs() {
+        return mergeRequestDiffs;
     }
 }
