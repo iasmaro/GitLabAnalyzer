@@ -166,7 +166,7 @@ public class UserRepository {
             query.addCriteria(Criteria.where("userId").is(user.getUserId())
                     .and("configurations.fileName").is(fileName));
             Update update = new Update();
-            update.pull("configurations.$", new BasicDBObject("fileName", fileName));
+            update.pull("configurations", new BasicDBObject("fileName", fileName));
             mongoTemplate.updateFirst(query, update, User.class);
         }
         else {
