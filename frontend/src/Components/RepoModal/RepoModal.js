@@ -4,13 +4,18 @@ import { Redirect } from "react-router-dom";
 
 import RepoModalStudent from './RepoModalStudent';
 import RepoModalConfig from './RepoModalConfig';
+import RepoModalMatchAlias from './RepoModalMatchAlias';
 import { modal } from 'Constants/constants';
 import './RepoModal.css';
-import FormattedDateTimePicker from "Components/FormattedDateTimePicker";
 
 const RepoModal = (props) => {
 
-    const {name, id, members, status, toggleModal} = props || {};
+    // const {name, id, members, status, toggleModal} = props || {};
+
+    // Temporary for testing:
+    const {name, id, status, toggleModal} = props || {};
+    const aliases = ['Batman', 'Superman', 'Cat Woman', 'Hulk', 'Iron Man', 'Aquaman', 'Vision'];
+    const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner']
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
@@ -52,7 +57,7 @@ const RepoModal = (props) => {
                 <RepoModalConfig config={config} setConfig={setConfig} />
                 <RepoModalStudent members={members} student={student} setStudent={setStudent} />
 
-                <FormattedDateTimePicker startName={modal.START_DATE} endName={modal.END_DATE} setStartDate={setStartDate} setEndDate={setEndDate}/>
+                <RepoModalMatchAlias aliases={aliases} memberIds={members}/>
 
             </Modal.Body>
 
