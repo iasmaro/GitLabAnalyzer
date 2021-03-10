@@ -17,7 +17,9 @@ public class CommitWrapper {
     private final Commit commitData;
     private final List<Diff> codeChanges;
 
-    public List<Diff> getNewCode() { return codeChanges; }
+    public List<Diff> getNewCode() {
+        return codeChanges;
+    }
 
     public Commit getCommitData() {
         return commitData;
