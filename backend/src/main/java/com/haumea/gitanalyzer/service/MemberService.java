@@ -12,7 +12,10 @@ import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -83,7 +86,9 @@ public class MemberService {
         return member.getAlias();
     }
 
-    public List<Member> getMembersAndAliasesFromDB(List<String> memberIds) {
+    public List<Member> getMembersAndAliasesFromDB(String userId, Integer projectId) {
+
+        List<String> memberIds = getMembers(userId, projectId);
 
         return memberRepository.getMembersAndAliasesFromDB(memberIds);
     }

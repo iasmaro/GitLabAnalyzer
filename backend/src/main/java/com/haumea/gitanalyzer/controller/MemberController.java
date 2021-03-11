@@ -30,12 +30,12 @@ public class MemberController {
 
     @GetMapping
     public List<String> getMembers(@RequestParam @NotBlank String userId,
-                                   @RequestParam @NotNull Integer projectId){
+                                   @RequestParam @NotNull Integer projectId) {
 
         return memberService.getMembers(userId, projectId);
     }
 
-    @PostMapping("alias/DB")
+    @PostMapping("alias")
     public void mapAliasToMember(@Valid @RequestBody List<MemberDTO> membersAndAliases) {
 
         memberService.mapAliasToMember(membersAndAliases);
@@ -48,10 +48,11 @@ public class MemberController {
         return memberService.getMembersAndAliasesFromGit(userId, projectId);
     }
 
-    @GetMapping("alias/DB")
-    public List<Member> getMembersAndAliasesFromDB(@RequestParam @NotEmpty List<String> memberIds) {
+    @GetMapping("mapping")
+    public List<Member> getMembersAndAliasesFromDB(@RequestParam @NotBlank String userId,
+                                                   @RequestParam @NotNull Integer projectId) {
 
-        return memberService.getMembersAndAliasesFromDB(memberIds);
+        return memberService.getMembersAndAliasesFromDB(userId, projectId);
     }
 
 }
