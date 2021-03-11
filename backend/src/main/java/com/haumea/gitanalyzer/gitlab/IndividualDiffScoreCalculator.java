@@ -1,6 +1,8 @@
 package com.haumea.gitanalyzer.gitlab;
 
 
+import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -15,7 +17,7 @@ public class IndividualDiffScoreCalculator {
     private double addLineWeight;
     private double deleteLineWeight;
     private double syntaxLineWeight;
-    private double movedLineWeight;
+    private double moveLineWeight;
     private List<CommentType> commentTypes;
 
     private boolean isLongComment; /* need to save state between line calls as a comment could go
@@ -24,6 +26,8 @@ public class IndividualDiffScoreCalculator {
 
     private List<String> removedLines;
     private List<String> addedLines;
+    private int numberOfLinesAdded;
+    private int numberOfLinesRemoved;
 
 
     public IndividualDiffScoreCalculator() {
@@ -35,29 +39,32 @@ public class IndividualDiffScoreCalculator {
     }
 
 
-    private void setTypes( double addLineMultiplier, double deleteLineMultiplier, double syntaxLineMultiplier,
+    private void setTypes(double addLineMultiplier, double deleteLineMultiplier, double syntaxLineMultiplier,
                            double movedLineWeight, List<CommentType> commentTypes) {
         this.addLineWeight = addLineMultiplier;
         this.deleteLineWeight = deleteLineMultiplier;
         this.syntaxLineWeight = syntaxLineMultiplier;
-        this.movedLineWeight = movedLineWeight;
+        this.moveLineWeight = movedLineWeight;
         this.commentTypes = commentTypes;
     }
 
     // check file type and configs in calling code
-    public double calculateDiffScore(String diff,
-                                     boolean isFileDeleted,
-                                     double addLineWeight,
-                                     double deleteLineWeight,
-                                     double syntaxLineWeight,
-                                     double movedLineWeight,
-                                     double fileTypeMultiplier,
-                                     List<CommentType> commentTypes) {
+    public DiffScoreDTO calculateDiffScore(String diff,
+                                           boolean isFileDeleted,
+                                           double addLineWeight,
+                                           double deleteLineWeight,
+                                           double syntaxLineWeight,
+                                           double movedLineWeight,
+                                           double fileTypeMultiplier,
+                                           List<CommentType> commentTypes) {
 
         setTypes(addLineWeight, deleteLineWeight, syntaxLineWeight, movedLineWeight, commentTypes);
 
+        this.numberOfLinesAdded = 0;
+        this.numberOfLinesRemoved = 0;
+
         if(isFileDeleted) {
-            return 0.0;
+            return new DiffScoreDTO(0, 0, 0.0);
         }
         else {
             double score;
@@ -65,7 +72,7 @@ public class IndividualDiffScoreCalculator {
                 score = analyzeDiff(diff);
             }
             catch (IOException e) {
-                throw new IllegalArgumentException("input error"); // change to illegal argument
+                throw new IllegalArgumentException("input error");
             }
 
             this.removedLines.clear();
@@ -74,7 +81,7 @@ public class IndividualDiffScoreCalculator {
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            return fileTypeMultiplier * roundedScore.doubleValue();
+            return new DiffScoreDTO(numberOfLinesAdded, numberOfLinesRemoved, fileTypeMultiplier * roundedScore.doubleValue());
         }
     }
 
@@ -90,6 +97,7 @@ public class IndividualDiffScoreCalculator {
         {
             if(line.charAt(0) == '+') {
                 diffScore = diffScore + analyzeAddedLine(line);
+                this.numberOfLinesAdded++;
             }
             else if(line.charAt(0) == '-' && (line.trim().length() > 0) && !line.trim().equals("-")) {
 
@@ -97,6 +105,7 @@ public class IndividualDiffScoreCalculator {
                 line = line.trim();
 
                 diffScore = diffScore + analyzeRemovedLine(line);
+                this.numberOfLinesRemoved++;
 
                 removedLines.add(line);
 
@@ -139,11 +148,11 @@ public class IndividualDiffScoreCalculator {
     private double calculatePointsForLineMovedUpOrDown(double weightFromPrevOccurance) {
         double score = 0.0;
 
-        if(weightFromPrevOccurance > movedLineWeight) {
-            score = movedLineWeight - weightFromPrevOccurance; // taking back points
+        if(weightFromPrevOccurance > moveLineWeight) {
+            score = moveLineWeight - weightFromPrevOccurance; // taking back points
         }
-        else if(movedLineWeight >  weightFromPrevOccurance) {
-            score = movedLineWeight - weightFromPrevOccurance;
+        else if(moveLineWeight >  weightFromPrevOccurance) {
+            score = moveLineWeight - weightFromPrevOccurance;
         }
 
         return score;
