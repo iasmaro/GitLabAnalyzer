@@ -37,21 +37,23 @@ public class MemberRepository {
             Member member = new Member(memberDTO.getMemberId(), memberDTO.getAlias());
             if(!findMemberByMemberId(member.getMemberId()).isPresent()){
                 mongoTemplate.save(member);
-            } else {
+            }
+            else {
                 throw new ResourceAlredyExistException("Member " + memberDTO.getMemberId() + " already exists!");
             }
         }
     }
 
 
-    public List<Member> getMembersAndAliases(List<String> memberIds) throws ResourceNotFoundException {
+    public List<Member> getMembersAndAliasesFromDB(List<String> memberIds) throws ResourceNotFoundException {
 
         List<Member> members = new ArrayList<>();
 
         for(String memberId : memberIds){
             if(!findMemberByMemberId(memberId).isPresent()){
-                throw new ResourceNotFoundException("Member not found!");
-            } else {
+                throw new ResourceNotFoundException("Member " + memberId + " not found!");
+            }
+            else {
                 Member member = findMemberByMemberId(memberId).get();
                 members.add(member);
             }

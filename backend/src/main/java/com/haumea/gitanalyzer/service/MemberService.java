@@ -46,13 +46,13 @@ public class MemberService {
             return members;
     }
 
-    public void mapAliasToMember(List<MemberDTO> membersAndAliases){
+    public void mapAliasToMember(List<MemberDTO> membersAndAliases) {
 
         memberRepository.mapAliasToMember(membersAndAliases);
 
     }
 
-    public MemberRRDTO getMembersAndAliases(String userId, Integer projectId) {
+    public MemberRRDTO getMembersAndAliasesFromGit(String userId, Integer projectId) {
 
         String token = userService.getPersonalAccessToken(userId);
 
@@ -81,5 +81,10 @@ public class MemberService {
         Member member = memberRepository.findMemberByMemberId(memberId).get();
 
         return member.getAlias();
+    }
+
+    public List<Member> getMembersAndAliasesFromDB(List<String> memberIds) {
+
+        return memberRepository.getMembersAndAliasesFromDB(memberIds);
     }
 }
