@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Button} from 'react-bootstrap'
 
 import RepoModal from 'Components/RepoModal/RepoModal';
-import getProjectMembers from 'Utils/getProjectMembers';
+import getMembersAndAliases from 'Utils/getMembersAndAliases';
 import { useUserState } from 'UserContext';
 import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
 
@@ -10,12 +10,14 @@ import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
 const Repo = (props) => {
     const { repo } = props || {};
     const [members, setMembers] = useState([]);
+    const [aliases, setAliases] = useState([]);
     const [show, setShow] = useState(false);
     const username = useUserState();
     
     const handleShow = () => {
-        getProjectMembers(username, repo.projectId).then((data) => {
-            setMembers(data);
+        getMembersAndAliases(username, repo.projectId).then((data) => {
+            setMembers(data.members);
+            setAliases(data.aliases);
             setShow(true);
         });
     }
@@ -29,7 +31,7 @@ const Repo = (props) => {
             <td>
                 <Button variant="dark" onClick={handleShow}> Analyze </Button>
             </td>
-            {show && <RepoModal name={repo?.projectName} id={repo?.projectId} createdAt={repo?.createdAt} members={members} status={show} toggleModal={handleClose}/>}
+            {show && <RepoModal name={repo?.projectName} id={repo?.projectId} createdAt={repo?.createdAt} members={members} aliases={aliases} status={show} toggleModal={handleClose}/>}
         </tr>
     );
 };

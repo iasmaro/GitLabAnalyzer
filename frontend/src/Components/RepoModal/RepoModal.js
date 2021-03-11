@@ -9,20 +9,20 @@ import './RepoModal.css';
 
 const RepoModal = (props) => {
 
-    // const {name, id, members, status, toggleModal} = props || {};
+     const {name, id, members, aliases, status, toggleModal} = props || {};
 
     // Temporary for testing:
-    const {name, id, status, toggleModal} = props || {};
-    const aliases = ['Batman', 'Superman', 'Catwoman', 'Hulk', 'Ironman', 'Aquaman', 'Vision'];
-    const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner', 'stevenrogers', 'peterparker', 'loganhowlett'];
+    // const {name, id, status, toggleModal} = props || {};
+    // const aliases = ['Batman', 'Superman', 'Catwoman', 'Hulk', 'Ironman', 'Aquaman', 'Vision'];
+    // const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner', 'stevenrogers', 'peterparker', 'loganhowlett'];
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
 
-    const getMapObject = (member) => {
+    const createMapObject = (member) => {
         return {alias:[], memberId:member};
     }
-    const [mapping, setMapping] = useState(members.map(getMapObject));
+    const [mapping, setMapping] = useState(members.map(createMapObject));
     
     /*Default times are both at the current date and time*/
     const [startDate, setStartDate] = useState(new Date());
