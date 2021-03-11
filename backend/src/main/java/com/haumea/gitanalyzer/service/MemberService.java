@@ -12,7 +12,6 @@ import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
