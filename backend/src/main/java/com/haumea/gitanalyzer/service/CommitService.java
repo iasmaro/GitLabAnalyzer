@@ -2,15 +2,21 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.DiffDTO;
+import com.haumea.gitanalyzer.dto.DiffScoreDTO;
 import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
+import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
+import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Commit;
+import org.gitlab4j.api.models.CommitStats;
 import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -19,13 +25,21 @@ public class CommitService {
     private final UserService userService;
     private final MemberService memberService;
 
+    private int linesAdded;
+    private int linesRemoved;
+    private double commitScore;
+
     @Autowired
     public CommitService(UserService userService, MemberService memberService) {
         this.userService = userService;
         this.memberService = memberService;
+
+        this.linesAdded = 0;
+         this.linesRemoved = 0;
+        this.commitScore = 0.0;
     }
 
-    public List<String> getAliasForMember(String memberId) {
+    private List<String> getAliasForMember(String memberId) {
 
         List<String> alias = memberService.getAliasesForSelectedMember(memberId);
 
@@ -38,17 +52,67 @@ public class CommitService {
         return new GitlabService(GlobalConstants.gitlabURL, token);
     }
 
+    private String getDiffExtension(String newPath) {
+
+        for(int index = newPath.length() - 1; index >= 0; index--) {
+
+            if(newPath.charAt(index) == '.') {
+                return newPath.substring(index);
+            }
+
+        }
+
+        return "No extension";
+    }
+
+    //TODO: Update passing configuration file to calculator
     private List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs) {
+
+        IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
+
+        this.linesAdded = 0;
+        this.linesRemoved = 0;
+        this.commitScore = 0.0;
+
         List<DiffDTO> commitDiffs = new ArrayList<>();
+
+        List<CommentType> commentTypes = new ArrayList<>();
+
+        commentTypes.add(new CommentType("//", ""));
+        commentTypes.add(new CommentType("/*", "*/"));
 
         for(Diff diff : codeDiffs) {
 
-            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diff.getDiff());
+            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
+                                                                            diff.getDeletedFile(),
+                                                                            1,
+                                                                            0.2,
+                                                                            0,
+                                                                            0,
+                                                                            1,
+                                                                            commentTypes);
+
+            String diffExtension = getDiffExtension(diff.getNewPath());
+
+            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diffExtension, diff.getDiff(), scoreDTO);
+
+            this.linesAdded = this.linesAdded + scoreDTO.getLinesAdded();
+            this.linesRemoved = this.linesRemoved + scoreDTO.getLinesRemoved();
+            this.commitScore = this.commitScore + scoreDTO.getDiffScore();
 
             commitDiffs.add(diffDTO);
         }
 
         return commitDiffs;
+    }
+
+    //Source: Andrew's IndividualDiffScoreCalculator
+    private double roundScore(double commitScore) {
+
+        BigDecimal roundedScore = new BigDecimal(Double.toString(commitScore));
+        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
+
+        return roundedScore.doubleValue();
     }
 
     private List<CommitDTO> convertCommitWrappersToDTOs(List<CommitWrapper> wrapperList) {
@@ -61,7 +125,9 @@ public class CommitService {
 
             List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode());
 
-            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), 11, commitDiffs);
+            double roundedCommitScore = roundScore(this.commitScore);
+
+            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), roundedCommitScore, commitDiffs, this.linesAdded, this.linesRemoved);
 
             commitDTOList.add(newDTO);
         }
@@ -109,7 +175,6 @@ public class CommitService {
         catch (GitLabRuntimeException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
-
 
         return convertCommitWrappersToDTOs(mergeRequestCommits);
     }
