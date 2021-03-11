@@ -1,12 +1,15 @@
 import React from 'react';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
+import { Redirect } from "react-router-dom";
 
-const AnalyzerStudent = (props) => {
+const AnalysisDropDown = (props) => {
 
-    const {members, student, setStudent} = props
+    const { members, student, setStudent, data, setIsLoading } = props
 
     const selectStudent = (student) => {
         setStudent(student);
+        setIsLoading(true);
+        <Redirect to={{pathname: '/Analysis', state: { data }}} />;
     };
 
     return (
@@ -18,4 +21,4 @@ const AnalyzerStudent = (props) => {
     );
 };
 
-export default AnalyzerStudent;
+export default AnalysisDropDown;

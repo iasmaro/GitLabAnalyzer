@@ -4,9 +4,10 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import { useUserState } from 'UserContext';
 import AnalyzerTabs from 'Components/AnalyzerTabs/AnalyzerTabs';
-import AnalyzerInfo from 'Components/AnalyzerInfo/AnalyzerInfo';
+import AnalysisDropDown from 'Components/AnalyzerInfo/AnalysisDropDown';
 import getMergeRequests from 'Utils/getMergeRequests';
 import getAllCommits from 'Utils/getAllCommits';
+import getProjectMembers from 'Utils/getProjectMembers';
 
 import './Analysis.css'
 
@@ -17,16 +18,31 @@ const Analysis = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [mergeRequests, setMergeRequests] = useState();
     const [commits, setCommits] = useState();
+    const [members, setMembers] = useState([]);
+    const [student, setStudent] = useState();
     const username = useUserState();
+
     useEffect(() => {
-        getMergeRequests(username, data.memberId, data.start, data.end, data.projectId).then((data) => {
+        getProjectMembers(username, data.projectId).then((data) => {
+            setMembers(data);
+        });
+    }, [username, data.projectId]);
+
+    useEffect(() => {
+        if (members.length > 0) {
+            setStudent(members[0]);
+        }
+    }, [members]);
+
+    useEffect(() => {
+        getMergeRequests(username, student, data.start, data.end, data.projectId).then((data) => {
             setMergeRequests(data);
             setIsLoading(false);
         });
-        getAllCommits(username, data.memberId, data.start, data.end, data.projectId).then((data) => {
+        getAllCommits(username, student, data.start, data.end, data.projectId).then((data) => {
             setCommits(data);
         });
-    }, [username, data]);
+    }, [username, student, data]);
     
     if (!data) {
         return(<Redirect to={{ pathname: '/' }} />);
@@ -34,7 +50,8 @@ const Analysis = (props) => {
 
     return (
         <div className="analysis-page">
-            <AnalyzerInfo memberId={data.memberId} projectId={data.projectId} startDate={data.start} endDate={data.end} configuration={data.configuration}/>
+            <p>{data.configuration}, {data.start}, {data.end}</p>
+            <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
             {isLoading ? <Spinner animation="border" className="spinner" /> : <AnalyzerTabs mergerequests={mergeRequests} projectId={data.projectId} commits={commits} />}
         </div>
     )
