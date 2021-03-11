@@ -260,6 +260,21 @@ public class TestGitLabService {
 
     }
 
+    public void testGetOrphanFilteredCommitsNoDiff(Integer projectId,
+                                                   String targetBranch,
+                                                   Date start,
+                                                   Date end){
+        System.out.println("\n---Testing getOrphanFilteredCommitsNoDiff---");
+        List<Commit> commits = gitlabService.getOrphanFilteredCommitsNoDiff(
+                projectId,
+                targetBranch,
+                start,
+                end);
+
+        printCommits(commits);
+
+    }
+
     public void testGetAllCommitsNoDiff(Integer projectId){
         System.out.println("\n---Testing getAllCommitsNoDiff---");
         List<Commit> commits = gitlabService.getAllCommitsNoDiff(projectId);

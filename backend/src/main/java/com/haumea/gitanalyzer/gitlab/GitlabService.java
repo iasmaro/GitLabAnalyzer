@@ -351,6 +351,37 @@ public class GitlabService {
 
     }
 
+    /*
+    * There are 2 ways to get orphan commits
+    * methods 1: get all commits, for each commit, make 1 API to get its associated MRs,
+    * if the empty list, then the commit is an orphan commit -> O(N)
+    * method 2: get all commits, get all MR & their commits, extract commits that are not in any MR's commit list
+    * -> 1 API calls to all commits + 2M API calls to get MRs commit list -> 0(M)
+    * since the number of commits is typically much larger the number of MR (N >> 2M)
+    * methods should incur less API calls on average
+    * */
+    public List<Commit> getOrphanFilteredCommitsNoDiff(Integer projectId,
+                                                       String targetBranch,
+                                                       Date start,
+                                                       Date end){
+
+        List<Commit> commits = getFilteredCommitsNoDiff(projectId, targetBranch, start, end);
+        List<Commit> filteredCommits = new ArrayList<>();
+        for(Commit commit :  commits){
+            try{
+                if(commitsApi.getMergeRequests(projectId, commit.getId()).isEmpty()){
+                    filteredCommits.add(commit);
+                }
+            } catch (GitLabApiException e){
+                throw new GitLabRuntimeException(e.getLocalizedMessage());
+            }
+        }
+
+        return filteredCommits;
+
+    }
+
+
     public List<Commit> getAllCommitsNoDiff(Integer projectId){
         try {
             return commitsApi.getCommits(projectId);
