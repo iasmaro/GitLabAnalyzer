@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class MemberRepository {
@@ -25,16 +26,16 @@ public class MemberRepository {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public Member findMemberByMemberId(String memberId){
+    public Optional<Member> findMemberByMemberId(String memberId){
         Query query = new Query();
         query.addCriteria(Criteria.where("memberId").is(memberId));
-        return mongoTemplate.findOne(query, Member.class);
+        return Optional.ofNullable(mongoTemplate.findOne(query, Member.class));
     }
 
     public void mapAliasToMember(List<MemberDTO> membersAndAliases) throws ResourceAlredyExistException {
         for(MemberDTO memberDTO : membersAndAliases) {
             Member member = new Member(memberDTO.getMemberId(), memberDTO.getAlias());
-            if(findMemberByMemberId(member.getMemberId()) == null){
+            if(!findMemberByMemberId(member.getMemberId()).isPresent()){
                 mongoTemplate.save(member);
             } else {
                 throw new ResourceAlredyExistException("Member " + memberDTO.getMemberId() + " already exists!");
@@ -48,10 +49,10 @@ public class MemberRepository {
         List<Member> members = new ArrayList<>();
 
         for(String memberId : memberIds){
-            if(findMemberByMemberId(memberId) == null){
+            if(!findMemberByMemberId(memberId).isPresent()){
                 throw new ResourceNotFoundException("Member not found!");
             } else {
-                Member member = findMemberByMemberId(memberId);
+                Member member = findMemberByMemberId(memberId).get();
                 members.add(member);
             }
         }
