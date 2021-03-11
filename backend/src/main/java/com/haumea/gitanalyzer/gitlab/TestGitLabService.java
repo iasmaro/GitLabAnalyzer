@@ -275,6 +275,55 @@ public class TestGitLabService {
 
     }
 
+    public void testGetOrphanFilteredCommitsNoDiffByAuthor(Integer projectId,
+                                                           String targetBranch,
+                                                           Date start,
+                                                           Date end,
+                                                           List<String> alias){
+        System.out.println("\n---Testing getOrphanFilteredCommitsNoDiffByAuthor---");
+        List<Commit> commits = gitlabService.getOrphanFilteredCommitsNoDiffByAuthor(
+                projectId,
+                targetBranch,
+                start,
+                end,
+                alias);
+
+        printCommits(commits);
+
+    }
+
+    public void testGetOrphanFilteredCommitsWithDiff(Integer projectId,
+                                                           String targetBranch,
+                                                           Date start,
+                                                           Date end){
+        System.out.println("\n---Testing getOrphanFilteredCommitsWithDiff---");
+        List<CommitWrapper> commitWrappers = gitlabService.getOrphanFilteredCommitsWithDiff(
+                projectId,
+                targetBranch,
+                start,
+                end);
+
+        printCommitWrappers(commitWrappers);
+
+    }
+
+    public void testGetOrphanFilteredCommitsWithDiffByAuthor(Integer projectId,
+                                                             String targetBranch,
+                                                             Date start,
+                                                             Date end,
+                                                             List<String> alias){
+        System.out.println("\n---Testing getOrphanFilteredCommitsWithDiffByAuthor---");
+        List<CommitWrapper> commitWrappers = gitlabService.getOrphanFilteredCommitsWithDiffByAuthor(
+                projectId,
+                targetBranch,
+                start,
+                end,
+                alias);
+
+        printCommitWrappers(commitWrappers);
+
+    }
+
     public void testGetAllCommitsNoDiff(Integer projectId){
         System.out.println("\n---Testing getAllCommitsNoDiff---");
         List<Commit> commits = gitlabService.getAllCommitsNoDiff(projectId);

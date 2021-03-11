@@ -365,15 +365,20 @@ public class GitlabService {
                                                        Date start,
                                                        Date end){
 
+        List<MergeRequestWrapper> mergeRequestWrappers = getFilteredMergeRequestsWithDiff(
+                projectId,
+                targetBranch,
+                start,
+                end);
+
+        List<String> commitSHAs = getcommitSHAs(mergeRequestWrappers);
+
         List<Commit> commits = getFilteredCommitsNoDiff(projectId, targetBranch, start, end);
+
         List<Commit> filteredCommits = new ArrayList<>();
         for(Commit commit :  commits){
-            try{
-                if(commitsApi.getMergeRequests(projectId, commit.getId()).isEmpty()){
-                    filteredCommits.add(commit);
-                }
-            } catch (GitLabApiException e){
-                throw new GitLabRuntimeException(e.getLocalizedMessage());
+            if(!commitSHAs.contains(commit.getId())){
+                filteredCommits.add(commit);
             }
         }
 
@@ -381,6 +386,74 @@ public class GitlabService {
 
     }
 
+    public List<Commit> getOrphanFilteredCommitsNoDiffByAuthor(Integer projectId,
+                                                               String targetBranch,
+                                                               Date start,
+                                                               Date end,
+                                                               List<String> alias){
+        List<MergeRequestWrapper> mergeRequestWrappers = getFilteredMergeRequestsWithDiffByAuthor(
+                projectId,
+                targetBranch,
+                start,
+                end,
+                alias);
+
+        List<String> commitSHAs = getcommitSHAs(mergeRequestWrappers);
+
+        List<Commit> commits = getFilteredCommitsNoDiff(projectId, targetBranch, start, end);
+
+        List<Commit> filteredCommits = new ArrayList<>();
+        for(Commit commit :  commits){
+            if(!commitSHAs.contains(commit.getId()) && alias.contains(commit.getAuthorName())){
+                filteredCommits.add(commit);
+            }
+        }
+
+        return filteredCommits;
+
+    }
+
+    private List<String> getcommitSHAs(List<MergeRequestWrapper> mergeRequestWrappers){
+
+        List<String> commitSHAs = new ArrayList<>();
+        for(MergeRequestWrapper mergeRequestWrapper: mergeRequestWrappers){
+            for(Commit commit: mergeRequestWrapper.getMergeRequestDiff().getCommits()){
+                commitSHAs.add(commit.getId());
+            }
+        }
+
+        return commitSHAs;
+
+    }
+
+    public List<CommitWrapper> getOrphanFilteredCommitsWithDiff(Integer projectId,
+                                                                String targetBranch,
+                                                                Date start,
+                                                                Date end){
+        List<Commit> commits = getOrphanFilteredCommitsNoDiff(projectId, targetBranch, start, end);
+        List<CommitWrapper> filteredCommits = new ArrayList<>();
+
+        for(Commit commit : commits){
+            filteredCommits.add(new CommitWrapper(projectId, commitsApi, commit));
+        }
+
+        return filteredCommits;
+    }
+
+    public List<CommitWrapper> getOrphanFilteredCommitsWithDiffByAuthor(Integer projectId,
+                                                                String targetBranch,
+                                                                Date start,
+                                                                Date end,
+                                                                List<String> alias){
+        List<Commit> commits = getOrphanFilteredCommitsNoDiffByAuthor(projectId, targetBranch, start, end, alias);
+        List<CommitWrapper> filteredCommits = new ArrayList<>();
+
+        for(Commit commit : commits){
+            filteredCommits.add(new CommitWrapper(projectId, commitsApi, commit));
+        }
+
+        return filteredCommits;
+    }
 
     public List<Commit> getAllCommitsNoDiff(Integer projectId){
         try {
