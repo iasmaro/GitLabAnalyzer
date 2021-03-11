@@ -50,12 +50,12 @@ const Analysis = (props) => {
 
     return (
         <div className="analysis-page">
-            <p>{data.configuration}, {data.start}, {data.end}</p>
-            <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
+            <div className="analysis-header">
+                <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
+            </div>
             {isLoading ? <Spinner animation="border" className="spinner" /> : <AnalyzerTabs mergerequests={mergeRequests} projectId={data.projectId} commits={commits} />}
         </div>
     )
 }
 
 export default Analysis;
-
