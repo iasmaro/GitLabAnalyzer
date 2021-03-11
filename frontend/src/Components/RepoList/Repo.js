@@ -18,8 +18,9 @@ const Repo = (props) => {
         getMembersAndAliases(username, repo.projectId).then((data) => {
             setMembers(data.members);
             setAliases(data.aliases);
-            setShow(true);
         });
+        
+        setShow(true);
     }
 
     const handleClose = () => setShow(false);

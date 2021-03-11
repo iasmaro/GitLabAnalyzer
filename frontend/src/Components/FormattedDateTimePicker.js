@@ -5,7 +5,7 @@ import { Form } from 'react-bootstrap';
 
 const FormattedDateTimePicker = (props) => {
 
-    const {startName, endName, setStartDate, setEndDate} = props || {};
+    const {startName, endName, setStartDate, setEndDate, readOnly} = props || {};
 
     const [selectedStartDate, setSelectedStartDate] = useState(new Date());
     const [selectedEndDate, setSelectedEndDate] = useState(new Date());
@@ -29,6 +29,7 @@ const FormattedDateTimePicker = (props) => {
                     format="yyyy/MM/dd HH:mm"
                     value={selectedStartDate} 
                     maxDate={selectedEndDate}
+                    readOnly={readOnly}
                     onChange={handleStartDateChange} />
                 <DateTimePicker 
                     variant="inline"
@@ -36,6 +37,7 @@ const FormattedDateTimePicker = (props) => {
                     format="yyyy/MM/dd HH:mm"
                     minDate={selectedStartDate}
                     value={selectedEndDate} 
+                    readOnly={readOnly}
                     onChange={handleEndDateChange} />
             </MuiPickersUtilsProvider>
         </Form>

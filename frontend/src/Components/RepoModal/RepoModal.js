@@ -6,30 +6,54 @@ import RepoModalStudent from './RepoModalStudent';
 import RepoModalConfig from './RepoModalConfig';
 import RepoModalMatchAlias from './RepoModalMatchAlias';
 import './RepoModal.css';
+import mapAliasToMember from 'Utils/mapAliasToMember';
 
 const RepoModal = (props) => {
 
-     const {name, id, members, aliases, status, toggleModal} = props || {};
+    // const {name, id, members, aliases, status, toggleModal} = props || {};
 
     // Temporary for testing:
-    // const {name, id, status, toggleModal} = props || {};
-    // const aliases = ['Batman', 'Superman', 'Catwoman', 'Hulk', 'Ironman', 'Aquaman', 'Vision'];
-    // const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner', 'stevenrogers', 'peterparker', 'loganhowlett'];
+    const {name, id, status, toggleModal} = props || {};
+    const aliases = ['Batman', 'Superman', 'Catwoman', 'Hulk', 'Ironman', 'Aquaman' ];
+    const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner'];
 
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
 
-    const createMapObject = (member) => {
+    const createApiMapObject = (member) => {
         return {alias:[], memberId:member};
     }
-    const [mapping, setMapping] = useState(members.map(createMapObject));
+    const [mapping, setMapping] = useState(members.map(createApiMapObject));
+
+    const createAliasToMemberObject = (alias) => {
+            return {alias:alias, memberIndex: -1};
+        }
+    const [mappedAliases, setMappedAliases] = useState(aliases.map(createAliasToMemberObject));
     
     /*Default times are both at the current date and time*/
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [redirect, setRedirect] = useState(false);
 
+    const updateMappingForApi = () => {
+        for (var i = 0; i < mappedAliases.length; i ++) {
+            var memberIndex = mappedAliases[i].memberIndex;
+            if (memberIndex > -1) {
+                mapping[memberIndex].alias.push(mappedAliases[i].alias);
+            }
+        }
+        for (var i = 0; i < mapping.length; i ++) {
+            if (mapping[i].alias.length == 0) {
+                mapping.splice(i, 1);;
+            }
+        }
+    }
+
     const handleClick = () => {
+        updateMappingForApi();
+        //mapAliasToMember(mapping);
+        console.log(mappedAliases);
+        console.log(mapping);
         if (student !== "Select a student") {
             setRedirect(true);
         }
@@ -53,6 +77,7 @@ const RepoModal = (props) => {
             keyboard={false}
             size="xl"
             className="custom-modal"
+            scrollable={true}
         >
             <Modal.Header closeButton>
                 <Modal.Title>{name}</Modal.Title>
@@ -61,13 +86,12 @@ const RepoModal = (props) => {
                 <RepoModalConfig config={config} setConfig={setConfig} />
                 {/* <RepoModalStudent members={members} student={student} setStudent={setStudent} /> */}
 
-                <RepoModalMatchAlias aliases={aliases} memberIds={members} mapping={mapping} setMapping={setMapping}/>
+                <RepoModalMatchAlias aliases={aliases} memberIds={members} mappedAliases={mappedAliases} setMappedAliases={setMappedAliases}/>
                 
             </Modal.Body>
 
             <Modal.Footer>
                 <Button onClick={toggleModal} variant="secondary">Cancel</Button>
-                {/* TODO: Hookup the analyze button to send this data and begin analysis */}
                 <Button variant="success" onClick={handleClick}>Analyze</Button>
             </Modal.Footer>
 
@@ -75,4 +99,4 @@ const RepoModal = (props) => {
     );
 };
 
-export default RepoModal
+export default RepoModal;

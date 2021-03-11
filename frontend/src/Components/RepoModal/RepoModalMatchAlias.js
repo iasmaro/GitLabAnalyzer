@@ -2,15 +2,16 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 
 import { message } from 'Constants/constants';
-import RepoModalAliasRow from './RepoModalAliasRow';
+import RepoModalMemberIdRow from './RepoModalMemberIdRow';
 import './RepoModal.css';
 
 const RepoModalMatchAlias = (props) => {
 
-    const {aliases, memberIds, mapping } = props || {};
+    const {aliases, memberIds, mappedAliases, setMappedAliases} = props || {};
+    const tableWidth = memberIds.length + 1;
 
-    const aliasHeadings = aliases.map((alias) =>
-        <td key={alias} className='title'>{alias}</td>
+    const memberIdHeadings = memberIds.map((memberId) =>
+        <td key={memberId} className='sticky-title'>{memberId}</td>
     );
 
     return (
@@ -18,35 +19,29 @@ const RepoModalMatchAlias = (props) => {
             <Table striped bordered variant="light">
                 <thead>
                     <tr>
-                    <th colSpan={aliases.length + 1} className='title'>Match Aliases with Member IDs</th>
+                        <th className='sticky-title'></th>
+                        <th colSpan={tableWidth} className='sticky-title'>Member IDs</th>
                     </tr>
                 </thead>
                 <thead>
                     <tr>
-                        <th></th>
-                        <th colSpan={aliases.length + 1} className='title'>Aliases</th>
-                    </tr>
-                </thead>
-                <thead>
-                    <tr>
-                        <th className='sticky'>Member IDs</th>
-                        {aliasHeadings}
+                        <th className='sticky-column'>Aliases</th>
+                        {memberIdHeadings}
                     </tr>
                 </thead>
                 <tbody>
                     {!memberIds.length ? (
                         <tr>
-                            <td colSpan={aliases.length + 1}>{message.NO_MEMBERIDS}</td>
+                            <td colSpan={tableWidth}>{message.NO_MEMBERIDS}</td>
                         </tr>
                     )
                     : !aliases.length ? (
                         <tr>
-                            <td colSpan={aliases.length + 1}>{message.NO_ALIASES}</td>
+                            <td colSpan={tableWidth}>{message.NO_ALIASES}</td>
                         </tr>
                     )
-                    :
-                    memberIds.map((member, index) => (
-                        <RepoModalAliasRow key={member} member={member} aliases={aliases} mapping={mapping} memberIndex={index}/>
+                    : aliases.map((alias, index) => (
+                        <RepoModalMemberIdRow key={alias} alias={alias} memberIds={memberIds} aliasIndex={index} mappedAliases={mappedAliases} setMappedAliases={setMappedAliases}/>
                     ))
                     }
                 </tbody>
