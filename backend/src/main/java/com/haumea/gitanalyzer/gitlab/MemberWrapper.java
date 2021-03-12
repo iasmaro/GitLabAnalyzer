@@ -14,7 +14,6 @@ public class MemberWrapper {
     private String username;
     private int memberId;
 
-
     private int codeScore;
     private int codeReviewScore;
 

@@ -1,11 +1,9 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.ProjectDTO;
-import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.ProjectWrapper;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
-import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,31 +20,27 @@ public class ProjectService {
         this.userService = userService;
     }
 
-    public List<ProjectDTO> getProjects(String userId) throws GitLabRuntimeException {
+    public List<ProjectDTO> getProjects(String userId) {
 
         String token = userService.getPersonalAccessToken(userId);
 
         GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
 
-        try{
-            List<ProjectWrapper> gitlabProjects = gitlabService.getProjects();
-            List<ProjectDTO> projects = new ArrayList<>();
+        List<ProjectWrapper> gitlabProjects = gitlabService.getProjects();
+        List<ProjectDTO> projects = new ArrayList<>();
 
-            for(ProjectWrapper current: gitlabProjects){
-                ProjectDTO project = new ProjectDTO(
-                        current.getProjectName(),
-                        current.getProject().getId(),
-                        current.getProject().getWebUrl(),
-                        current.getProject().getCreatedAt(),
-                        current.getProject().getLastActivityAt());
-                projects.add(project);
-            }
+        for(ProjectWrapper current: gitlabProjects){
+            ProjectDTO project = new ProjectDTO(
+                    current.getProject().getName(),
+                    current.getProject().getId(),
+                    current.getProject().getWebUrl(),
+                    current.getProject().getCreatedAt(),
+                    current.getProject().getLastActivityAt(),
+                    current.getProject().getNamespace().getName());
+            projects.add(project);
+        }
 
-            return projects;
-        }
-        catch (GitLabApiException e){
-            throw new GitLabRuntimeException(e.getLocalizedMessage());
-        }
+        return projects;
 
     }
 }

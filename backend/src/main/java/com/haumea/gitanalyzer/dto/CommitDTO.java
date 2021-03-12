@@ -1,22 +1,29 @@
 package com.haumea.gitanalyzer.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class CommitDTO {
-    private String commitId;
+    private String commitMessage;
     private Date commitDate;
     private String commitAuthor;
-    private Integer commitScore;
+    private double commitScore;
+    private List<DiffDTO> commitDiffs;
+    private int linesAdded;
+    private int linesRemoved;
 
-    public CommitDTO(String commitId, Date commitDate, String commitAuthor, Integer commitScore) {
-        this.commitId = commitId;
+    public CommitDTO(String commitMessage, Date commitDate, String commitAuthor, double commitScore, List<DiffDTO> commitDiffs, int linesAdded, int linesRemoved) {
+        this.commitMessage = commitMessage;
         this.commitDate = commitDate;
         this.commitAuthor = commitAuthor;
         this.commitScore = commitScore;
+        this.commitDiffs = commitDiffs;
+        this.linesAdded = linesAdded;
+        this.linesRemoved = linesRemoved;
     }
 
-    public String getCommitId() {
-        return commitId;
+    public String getCommitMessage() {
+        return commitMessage;
     }
 
     public Date getCommitDate() {
@@ -27,7 +34,19 @@ public class CommitDTO {
         return commitAuthor;
     }
 
-    public Integer getCommitScore() {
+    public double getCommitScore() {
         return commitScore;
+    }
+
+    public List<DiffDTO> getCommitDiffs() {
+        return commitDiffs;
+    }
+
+    public int getLinesAdded() {
+        return linesAdded;
+    }
+
+    public int getLinesRemoved() {
+        return linesRemoved;
     }
 }

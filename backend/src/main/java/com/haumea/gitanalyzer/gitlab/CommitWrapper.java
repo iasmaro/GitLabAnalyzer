@@ -1,10 +1,9 @@
 package com.haumea.gitanalyzer.gitlab;
+import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import org.gitlab4j.api.CommitsApi;
-import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
-import org.gitlab4j.api.models.Project;
 
 import java.util.List;
 /*
@@ -14,24 +13,28 @@ Needed as the commit data and code differences are separated into 2 different ob
 
  */
 
-
-
 public class CommitWrapper {
     private final Commit commitData;
     private final List<Diff> codeChanges;
 
-    public List<Diff> getNewCode() { return codeChanges; }
+    public List<Diff> getNewCode() {
+        return codeChanges;
+    }
 
     public Commit getCommitData() {
         return commitData;
     }
 
     // need to create commitData list in calling code and create the student and commit wrapper objects from that list
-    public CommitWrapper(GitLabApi gitLabApi, int projectId, Commit commitData) throws GitLabApiException {
-        CommitsApi commitApi = new CommitsApi(gitLabApi);
+    public CommitWrapper(int projectId, CommitsApi commitsApi, Commit commitData) throws GitLabRuntimeException {
 
         this.commitData = commitData;
-        this.codeChanges = commitApi.getDiff(projectId, commitData.getId());
+        try{
+            this.codeChanges = commitsApi.getDiff(projectId, commitData.getId());
+        } catch (GitLabApiException e){
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
+
     }
 }
 
