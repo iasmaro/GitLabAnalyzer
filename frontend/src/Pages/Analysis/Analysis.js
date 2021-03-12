@@ -17,6 +17,7 @@ const Analysis = (props) => {
     const [mergeRequests, setMergeRequests] = useState();
     const [commits, setCommits] = useState();
     const username = useUserState();
+    
     useEffect(() => {
         getMergeRequests(username, data.memberId, data.start, data.end, data.projectId).then((data) => {
             setMergeRequests(data);

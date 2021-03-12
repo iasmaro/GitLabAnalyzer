@@ -7,7 +7,6 @@ import getMembersAndAliases from 'Utils/getMembersAndAliases';
 import { useUserState } from 'UserContext';
 import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
 
-
 const Repo = (props) => {
     const { repo } = props || {};
     const [members, setMembers] = useState([]);
@@ -21,7 +20,6 @@ const Repo = (props) => {
         getMembersAndAliases(username, repo.projectId).then((data) => {
             setMembers(data.members);
             setAliases(data.aliases);
-            console.log('finished');
             setIsLoading(false);
         });
         

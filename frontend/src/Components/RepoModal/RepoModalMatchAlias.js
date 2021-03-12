@@ -6,7 +6,6 @@ import RepoModalMemberIdRow from './RepoModalMemberIdRow';
 import './RepoModal.css';
 
 const RepoModalMatchAlias = (props) => {
-
     const {aliases, memberIds, mappedAliases, setMappedAliases} = props || {};
     const tableWidth = memberIds.length + 1;
 

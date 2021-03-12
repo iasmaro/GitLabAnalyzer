@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 
@@ -8,17 +8,10 @@ import './RepoModal.css';
 import mapAliasToMember from 'Utils/mapAliasToMember';
 
 const RepoModal = (props) => {
-
     const {name, id, members, aliases, status, toggleModal} = props || {};
-    const [isLoading, setIsLoading] = useState(false);
     const [config, setConfig] = useState("Select a configuration");
     const [student, setStudent] = useState("Select a student");
     const [mappedAliases, setMappedAliases] = useState(aliases.map((alias) => ({alias:alias, memberIndex: -1}))); 
-
-    // Temporary for testing:
-    // const {name, id, status, toggleModal} = props || {};
-    // const aliases = ['Batman', 'Superman', 'Catwoman', 'Hulk', 'Ironman', 'Aquaman' ];
-    // const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner'];
 
     // TODO: SET THESE DATES BASED ON THE CONFIG FILE SELECTED
     const [startDate, setStartDate] = useState(new Date());
