@@ -1,17 +1,13 @@
 package com.haumea.gitanalyzer.model;
 
 import com.haumea.gitanalyzer.gitlab.CommentType;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Configuration {
-    private ObjectId _id;
     private String fileName;
     private Date start;
     private Date end;
@@ -30,7 +26,6 @@ public class Configuration {
                          String targetBranch, Map<String, Float> editFactor,
                          Map<String, Float> fileFactor, List<String> ignoreFileExtension,
                          Map<String, List<CommentType>> commentTypes) {
-        this._id = new ObjectId();
         this.fileName = fileName;
         this.start = start;
         this.end = end;
