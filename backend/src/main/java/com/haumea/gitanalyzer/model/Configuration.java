@@ -6,8 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.util.Date;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Configuration {
     private ObjectId _id;
@@ -15,10 +16,10 @@ public class Configuration {
     private Date start;
     private Date end;
     private String targetBranch;
-    private HashMap<String, Float> editFactor;
-    private HashMap<String, Float> fileFactor;
+    private Map<String, Float> editFactor;
+    private Map<String, Float> fileFactor;
     private List<String> ignoreFileExtension;
-    private HashMap<String, List<CommentType>> commentTypes;
+    private Map<String, List<CommentType>> commentTypes;
 
     public Configuration() {
         super();
@@ -26,9 +27,9 @@ public class Configuration {
 
     @PersistenceConstructor
     public Configuration(String fileName, Date start, Date end,
-                         String targetBranch, HashMap<String, Float> editFactor,
-                         HashMap<String, Float> fileFactor, List<String> ignoreFileExtension,
-                         HashMap<String, List<CommentType>> commentTypes) {
+                         String targetBranch, Map<String, Float> editFactor,
+                         Map<String, Float> fileFactor, List<String> ignoreFileExtension,
+                         Map<String, List<CommentType>> commentTypes) {
         this._id = new ObjectId();
         this.fileName = fileName;
         this.start = start;
@@ -56,11 +57,11 @@ public class Configuration {
         return targetBranch;
     }
 
-    public HashMap<String, Float> getEditFactor(){
+    public Map<String, Float> getEditFactor(){
         return editFactor;
     }
 
-    public HashMap<String, Float> getFileFactor(){
+    public Map<String, Float> getFileFactor(){
         return fileFactor;
     }
 
@@ -68,7 +69,7 @@ public class Configuration {
         return ignoreFileExtension;
     }
 
-    public HashMap<String, List<CommentType>> getCommentTypes() {
+    public Map<String, List<CommentType>> getCommentTypes() {
         return commentTypes;
     }
 
