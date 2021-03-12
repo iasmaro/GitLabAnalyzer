@@ -69,8 +69,12 @@ public class UserService {
         return userRepository.saveConfiguration(userId, configuration);
     }
 
-    public List<Configuration> getConfigurations(String userId){
-        return userRepository.getConfigurations(userId);
+    public List<String> getConfigurationFileNames(String userId) {
+        return userRepository.getConfigurationFileNames(userId);
+    }
+
+    public Configuration getConfigurationByFileName(String userId, String configFileName) {
+        return userRepository.getConfigurationByFileName(userId, configFileName);
     }
 
     public User updateConfiguration(String userId, Configuration configuration) {

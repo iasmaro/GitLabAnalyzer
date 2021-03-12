@@ -98,7 +98,14 @@ public class UserRepository {
         return gitlabServer;
     }
 
-    public List<String> getConfigurationFileNames(Optional<User> user) {
+    public List<String> getConfigurationFileNames(String userId) throws ResourceNotFoundException {
+
+        Optional<User> user = findUserByUserId(userId);
+
+        if(!user.isPresent()) {
+            throw new ResourceNotFoundException("User not found!");
+        }
+
         List<Configuration> userConfigurations = user.get().getConfigurations();
         List<String> fileNames = new ArrayList<>();
         for(Configuration userConfiguration : userConfigurations) {
@@ -116,7 +123,7 @@ public class UserRepository {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        List<String> fileNames = getConfigurationFileNames(user);
+        List<String> fileNames = getConfigurationFileNames(user.get().getUserId());
 
         if(!fileNames.contains(configuration.getFileName())) {
             Query query = new Query();
@@ -132,7 +139,8 @@ public class UserRepository {
         return user.get();
     }
 
-    public List<Configuration> getConfigurations(String userId) throws ResourceNotFoundException {
+
+    public Configuration getConfigurationByFileName(String userId, String configFileName) throws ResourceNotFoundException {
 
         Optional<User> user = findUserByUserId(userId);
 
@@ -140,9 +148,21 @@ public class UserRepository {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        List<Configuration> configurations = user.get().getConfigurations();
+        List<String> fileNames = getConfigurationFileNames(user.get().getUserId());
 
-        return configurations;
+        if(!fileNames.contains(configFileName)) {
+            throw new ResourceNotFoundException("Configuration with this name does not exist!");
+        }
+
+        Configuration requestedConfig = null;
+
+        for(Configuration userConfig : user.get().getConfigurations()) {
+            if(userConfig.getFileName() == configFileName) {
+                requestedConfig = userConfig;
+            }
+        }
+
+        return requestedConfig;
     }
 
     public User updateConfiguration(String userId, Configuration configuration) throws ResourceNotFoundException {
@@ -153,7 +173,7 @@ public class UserRepository {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        List<String> fileNames = getConfigurationFileNames(user);
+        List<String> fileNames = getConfigurationFileNames(user.get().getUserId());
 
         if(fileNames.contains(configuration.getFileName())) {
             Query query = new Query();
@@ -179,7 +199,7 @@ public class UserRepository {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        List<String> fileNames = getConfigurationFileNames(user);
+        List<String> fileNames = getConfigurationFileNames(user.get().getUserId());
 
         if(fileNames.contains(fileName)) {
             Query query = new Query();

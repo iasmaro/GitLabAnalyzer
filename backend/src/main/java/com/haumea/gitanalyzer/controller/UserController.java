@@ -66,8 +66,14 @@ public class UserController {
     }
 
     @GetMapping("/configuration")
-    public List<Configuration> getConfigurations(@RequestParam @NotBlank String userId) {
-        return userService.getConfigurations(userId);
+    public List<String> getConfigurationFileNames(@RequestParam @NotBlank String userId) {
+        return userService.getConfigurationFileNames(userId);
+    }
+
+    @GetMapping("/configuration/:configFileName")
+    public Configuration getConfigurationByFileName(@RequestParam @NotBlank String userId,
+                                                    @RequestParam @NotBlank String configFileName) {
+        return userService.getConfigurationByFileName(userId, configFileName);
     }
 
     @PutMapping("/configuration")
