@@ -7,6 +7,7 @@ import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
+import com.haumea.gitanalyzer.mapper.MemberMapper;
 import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Commit;
@@ -24,12 +25,14 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final UserService userService;
+    private final MemberMapper memberMapper;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, UserService userService) {
+    public MemberService(MemberRepository memberRepository, UserService userService, MemberMapper memberMapper) {
 
         this.memberRepository = memberRepository;
         this.userService = userService;
+        this.memberMapper = memberMapper;
     }
 
     public List<String> getMembers(String userId, Integer projectId) {
@@ -89,6 +92,6 @@ public class MemberService {
 
         List<String> memberIds = getMembers(userId, projectId);
 
-        return memberRepository.getMembersAndAliasesFromDB(memberIds);
+        return memberRepository.getMembersAndAliasesFromDatabase(memberIds);
     }
 }

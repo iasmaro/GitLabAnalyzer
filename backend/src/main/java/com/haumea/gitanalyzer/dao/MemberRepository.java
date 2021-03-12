@@ -45,7 +45,7 @@ public class MemberRepository {
     }
 
 
-    public List<Member> getMembersAndAliasesFromDB(List<String> memberIds) throws ResourceNotFoundException {
+    public List<Member> getMembersAndAliasesFromDatabase(List<String> memberIds) throws ResourceNotFoundException {
 
         List<Member> members = new ArrayList<>();
 
