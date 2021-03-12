@@ -33,16 +33,16 @@ const ConfigDetails = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {configInfo?.codeWeightings.length > 0 && Object.entries(configInfo?.codeWeightings[0]).map(([key, value]) => 
-                        <tr key={key}>
-                            <td>{key}</td>
+                    {Object.entries(configInfo?.codeWeightings).map(([codeScore, value]) => 
+                        <tr key={codeScore}>
+                            <td>{codeScore}</td>
                             <td>{value}</td>
                         </tr>
                     )}
                 </tbody>
             </Table>
 
-            <ConfigFileWeights fileWeightings={configInfo?.fileWeightings}/>
+            <ConfigFileWeights fileTypes={configInfo?.fileTypes}/>
         </div>
 
     );

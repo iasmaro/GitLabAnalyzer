@@ -2,8 +2,9 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 import './ConfigDetails.css'
+
 const ConfigFileWeights = (props) => {
-    const {fileWeightings} = props || {};
+    const {fileTypes} = props || {};
     return (
         <Table striped bordered hover variant="light">             
             <thead>
@@ -11,19 +12,18 @@ const ConfigFileWeights = (props) => {
                     <th colSpan='4'>File Weightings</th>
                 </tr>
             </thead>
-            
-            {fileWeightings.length > 0 && Object.entries(fileWeightings[0]).map((fileWeighting) => 
-                <div key={fileWeighting} className='file-weightings'>
+            {Object.entries(fileTypes).map(([fileType, info]) => 
+                <div key={fileType} className='file-weightings'>
                     <thead>
                         <tr>
-                            <th>{fileWeighting[0]}</th>
+                            <th>{fileType}</th>
                             
                         </tr>
                     </thead>
-                    {(Object.entries(fileWeighting[1]).map(([key, value]) =>
-                        <tbody key={key}>
+                    {(Object.entries(info).map(([property, value]) =>
+                        <tbody key={property}>
                             <tr>
-                                <td>{key}</td>
+                                <td>{property}</td>
                                 <td>{value}</td>
                             </tr>
                         </tbody>
