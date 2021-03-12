@@ -37,6 +37,11 @@ public class UserService {
         return userRepository.getPersonalAccessToken(userId);
     }
 
+    public String getGitlabServer(String userId) {
+
+        return userRepository.getGitlabServer(userId);
+    }
+
     public String getUserId(String url, String ticket) {
         String finalURL = SFU_API_URL + url + "&ticket=" + ticket;
         try {
