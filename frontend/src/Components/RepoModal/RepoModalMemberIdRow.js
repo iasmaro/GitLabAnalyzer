@@ -13,7 +13,6 @@ const RepoModalMemberIdRow = (props) => {
             setSelectedMemberId(e.target.name);
             mappedAliases[aliasIndex].memberIndex = e.target.value;
         }
-        console.log(mappedAliases);
         setMappedAliases(mappedAliases);
       };
 
