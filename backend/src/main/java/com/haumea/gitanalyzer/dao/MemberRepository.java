@@ -31,7 +31,7 @@ public class MemberRepository {
 
     }
 
-    public Optional<Member> findMemberByMemberId(String memberId){
+    public Optional<Member> findMemberByMemberId(String memberId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("memberId").is(memberId));
         return Optional.ofNullable(mongoTemplate.findOne(query, Member.class));
@@ -40,7 +40,7 @@ public class MemberRepository {
     public void mapAliasToMember(List<MemberDTO> membersAndAliases) throws ResourceAlredyExistException {
         for(MemberDTO memberDTO : membersAndAliases) {
             Member member = new Member(memberDTO.getMemberId(), memberDTO.getAlias());
-            if(!findMemberByMemberId(member.getMemberId()).isPresent()){
+            if(!findMemberByMemberId(member.getMemberId()).isPresent()) {
                 mongoTemplate.save(member);
             }
             else {
@@ -55,7 +55,7 @@ public class MemberRepository {
         List<MemberDTO> members = new ArrayList<>();
 
         for(String memberId : memberIds){
-            if(!findMemberByMemberId(memberId).isPresent()){
+            if(!findMemberByMemberId(memberId).isPresent()) {
                 throw new ResourceNotFoundException("Member " + memberId + " not found!");
             }
             else {

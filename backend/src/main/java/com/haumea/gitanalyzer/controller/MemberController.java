@@ -50,7 +50,7 @@ public class MemberController {
 
     @GetMapping("mapping")
     public List<MemberDTO> getMembersAndAliasesFromDatabase(@RequestParam @NotBlank String userId,
-                                                         @RequestParam @NotNull Integer projectId) {
+                                                            @RequestParam @NotNull Integer projectId) {
 
         return memberService.getMembersAndAliasesFromDatabase(userId, projectId);
     }

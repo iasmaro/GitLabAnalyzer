@@ -42,7 +42,7 @@ public class MemberService {
         List<String> members = new ArrayList<>();
 
         List<MemberWrapper> gitlabMembers = gitlabService.getMembers(projectId);
-        for(MemberWrapper current: gitlabMembers){
+        for(MemberWrapper current: gitlabMembers) {
             members.add(current.getUsername());
         }
 
@@ -67,9 +67,9 @@ public class MemberService {
 
         List<Commit> commits = gitlabService.getAllCommitsNoDiff(projectId);
 
-        for (Commit commit: commits){
+        for (Commit commit: commits) {
             String alias = commit.getAuthorName();
-            if(!aliases.contains(alias)){
+            if(!aliases.contains(alias)) {
                 aliases.add(alias);
             }
         }
