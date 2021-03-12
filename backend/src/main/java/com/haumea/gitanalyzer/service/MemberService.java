@@ -3,8 +3,6 @@ package com.haumea.gitanalyzer.service;
 import com.haumea.gitanalyzer.dao.MemberRepository;
 import com.haumea.gitanalyzer.dto.MemberDTO;
 import com.haumea.gitanalyzer.dto.MemberRRDTO;
-import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
-import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
 import com.haumea.gitanalyzer.model.Member;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberService {

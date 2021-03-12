@@ -159,6 +159,24 @@ public class MergeRequestService {
         return new MergeRequestDTO(mergeRequestIiD, mergeRequestTitle, mergedDate, createdDate, updatedDate, roundScore(this.MRScore), sumOfCommitScore, mergeRequestDiffs, this.linesAdded, this.linesRemoved, commitDTOList);
     }
 
+    private MergeRequestDTO createDummyMergeRequest(List<CommitDTO> commitDTOList) {
+
+        int size = commitDTOList.size();
+        int mergeRequestIid = -1;
+        String mergeRequestTitle = "All commits made directly to master";
+        Date mergedDate = commitDTOList.get(size - 1).getCommitDate();
+        Date createdDate = commitDTOList.get(0).getCommitDate();
+
+        List<DiffDTO> dummyMergeRequestDiffList = new ArrayList<>();
+        for(CommitDTO commitDTO : commitDTOList) {
+            dummyMergeRequestDiffList.addAll(commitDTO.getCommitDiffs());
+        }
+
+        double sumOfCommitScore = getSumOfCommitsScore(commitDTOList);
+
+        return new MergeRequestDTO(mergeRequestIid, mergeRequestTitle, mergedDate, createdDate, mergedDate, roundScore(this.MRScore), sumOfCommitScore, dummyMergeRequestDiffList, this.linesAdded, this.linesRemoved, commitDTOList);
+    }
+
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, Date start, Date end) {
 
         GitlabService gitlabService = getGitLabService(userId);
@@ -171,6 +189,14 @@ public class MergeRequestService {
 
             MergeRequestDTO mergeRequestDTO = getMergeRequestDTO(userId, projectId, mergeRequestWrapper);
             mergeRequestDTOList.add(mergeRequestDTO);
+        }
+
+        List<CommitDTO> dummyCommitDTOList = commitService.getAllOrphanCommits(userId, projectId, "target", start, end);
+
+        if(!dummyCommitDTOList.isEmpty()) {
+
+            MergeRequestDTO dummyMergeRequestDTO = createDummyMergeRequest(dummyCommitDTOList);
+            mergeRequestDTOList.add(dummyMergeRequestDTO);
         }
 
         return mergeRequestDTOList;
@@ -189,6 +215,14 @@ public class MergeRequestService {
 
             MergeRequestDTO mergeRequestDTO = getMergeRequestDTO(userId, projectId, mergeRequestWrapper);
             mergeRequestDTOList.add(mergeRequestDTO);
+        }
+
+        List<CommitDTO> dummyCommitDTOList = commitService.getOrphanCommitsForSelectedMemberAndDate(userId, projectId, "master", memberId, start, end);
+
+        if(!dummyCommitDTOList.isEmpty()) {
+
+            MergeRequestDTO dummyMergeRequestDTO = createDummyMergeRequest(dummyCommitDTOList);
+            mergeRequestDTOList.add(dummyMergeRequestDTO);
         }
 
         return mergeRequestDTOList;

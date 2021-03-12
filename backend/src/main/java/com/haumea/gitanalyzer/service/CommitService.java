@@ -10,7 +10,6 @@ import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Commit;
-import org.gitlab4j.api.models.CommitStats;
 import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -164,6 +163,19 @@ public class CommitService {
         return convertCommitWrappersToDTOs(filteredCommits);
     }
 
+    public List<CommitDTO> getOrphanCommitsForSelectedMemberAndDate(String userId, int projectId, String targetBranch, String memberId, Date start, Date end) {
+
+        GitlabService gitlabService = createGitlabService(userId);
+        List<CommitWrapper> filteredCommits;
+
+        List<String> alias = getAliasForMember(memberId);
+
+        filteredCommits = gitlabService.getOrphanFilteredCommitsWithDiffByAuthor(projectId, targetBranch, start, end, alias);
+
+        return convertCommitWrappersToDTOs(filteredCommits);
+
+    }
+
     public List<CommitDTO> getCommitsForSelectedMergeRequest(String userId, int projectId, int mergeRequestId) {
 
         GitlabService gitlabService = createGitlabService(userId);
@@ -177,6 +189,22 @@ public class CommitService {
         }
 
         return convertCommitWrappersToDTOs(mergeRequestCommits);
+    }
+
+    public List<CommitDTO> getAllOrphanCommits(String userId, int projectId, String targetBranch, Date start, Date end) {
+
+        GitlabService gitlabService = createGitlabService(userId);
+        List<CommitWrapper> mergeRequestCommits;
+
+        try {
+            mergeRequestCommits = gitlabService.getOrphanFilteredCommitsWithDiff(projectId, targetBranch, start, end);
+        }
+        catch (GitLabRuntimeException e) {
+            throw new GitLabRuntimeException(e.getLocalizedMessage());
+        }
+
+        return convertCommitWrappersToDTOs(mergeRequestCommits);
+
     }
 
 }

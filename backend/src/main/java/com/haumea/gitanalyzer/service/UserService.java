@@ -22,12 +22,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User saveUser(User user){
+    public User saveUser(User user) {
 
         return userRepository.saveUser(user);
     }
 
-    public User updateUser(User user){
+    public User updateUser(User user) {
 
         return userRepository.updateUser(user);
     }
