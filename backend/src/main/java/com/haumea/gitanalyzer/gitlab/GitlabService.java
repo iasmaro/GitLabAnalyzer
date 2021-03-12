@@ -351,6 +351,110 @@ public class GitlabService {
 
     }
 
+    /*
+    * There are 2 ways to get orphan commits
+    * methods 1: get all commits, for each commit, make 1 API to get its associated MRs,
+    * if the empty list, then the commit is an orphan commit -> O(N)
+    * method 2: get all commits, get all MR & their commits, extract commits that are not in any MR's commit list
+    * -> 1 API calls to all commits + 2M API calls to get MRs commit list -> 0(M)
+    * since the number of commits is typically much larger the number of MR (N >> 2M)
+    * methods should incur less API calls on average
+    * */
+    public List<Commit> getOrphanFilteredCommitsNoDiff(Integer projectId,
+                                                       String targetBranch,
+                                                       Date start,
+                                                       Date end){
+
+        List<MergeRequestWrapper> mergeRequestWrappers = getFilteredMergeRequestsWithDiff(
+                projectId,
+                targetBranch,
+                start,
+                end);
+
+        List<String> commitSHAs = getcommitSHAs(mergeRequestWrappers);
+
+        List<Commit> commits = getFilteredCommitsNoDiff(projectId, targetBranch, start, end);
+
+        List<Commit> filteredCommits = new ArrayList<>();
+        for(Commit commit :  commits){
+            if(!commitSHAs.contains(commit.getId())){
+                filteredCommits.add(commit);
+            }
+        }
+
+        return filteredCommits;
+
+    }
+
+    public List<Commit> getOrphanFilteredCommitsNoDiffByAuthor(Integer projectId,
+                                                               String targetBranch,
+                                                               Date start,
+                                                               Date end,
+                                                               List<String> alias){
+        List<MergeRequestWrapper> mergeRequestWrappers = getFilteredMergeRequestsWithDiffByAuthor(
+                projectId,
+                targetBranch,
+                start,
+                end,
+                alias);
+
+        List<String> commitSHAs = getcommitSHAs(mergeRequestWrappers);
+
+        List<Commit> commits = getFilteredCommitsNoDiff(projectId, targetBranch, start, end);
+
+        List<Commit> filteredCommits = new ArrayList<>();
+        for(Commit commit :  commits){
+            if(!commitSHAs.contains(commit.getId()) && alias.contains(commit.getAuthorName())){
+                filteredCommits.add(commit);
+            }
+        }
+
+        return filteredCommits;
+
+    }
+
+    private List<String> getcommitSHAs(List<MergeRequestWrapper> mergeRequestWrappers){
+
+        List<String> commitSHAs = new ArrayList<>();
+        for(MergeRequestWrapper mergeRequestWrapper: mergeRequestWrappers){
+            for(Commit commit: mergeRequestWrapper.getMergeRequestDiff().getCommits()){
+                commitSHAs.add(commit.getId());
+            }
+        }
+
+        return commitSHAs;
+
+    }
+
+    public List<CommitWrapper> getOrphanFilteredCommitsWithDiff(Integer projectId,
+                                                                String targetBranch,
+                                                                Date start,
+                                                                Date end){
+        List<Commit> commits = getOrphanFilteredCommitsNoDiff(projectId, targetBranch, start, end);
+        List<CommitWrapper> filteredCommits = new ArrayList<>();
+
+        for(Commit commit : commits){
+            filteredCommits.add(new CommitWrapper(projectId, commitsApi, commit));
+        }
+
+        return filteredCommits;
+    }
+
+    public List<CommitWrapper> getOrphanFilteredCommitsWithDiffByAuthor(Integer projectId,
+                                                                String targetBranch,
+                                                                Date start,
+                                                                Date end,
+                                                                List<String> alias){
+        List<Commit> commits = getOrphanFilteredCommitsNoDiffByAuthor(projectId, targetBranch, start, end, alias);
+        List<CommitWrapper> filteredCommits = new ArrayList<>();
+
+        for(Commit commit : commits){
+            filteredCommits.add(new CommitWrapper(projectId, commitsApi, commit));
+        }
+
+        return filteredCommits;
+    }
+
     public List<Commit> getAllCommitsNoDiff(Integer projectId){
         try {
             return commitsApi.getCommits(projectId);
@@ -390,99 +494,6 @@ public class GitlabService {
         } catch (GitLabApiException e){
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
-
-    }
-
-    @Deprecated
-    public List<CommitWrapper> getAllCommits(Integer projectId) {
-        List<Commit> commits;
-        try{
-            commits = commitsApi.getCommits(projectId);
-        } catch (GitLabApiException e){
-            throw new GitLabRuntimeException(e.getLocalizedMessage());
-        }
-
-        List<CommitWrapper> commitList = new ArrayList<>();
-
-        for(Commit current : commits) {
-            CommitWrapper newCommit = new CommitWrapper(projectId, commitsApi, current);
-
-            commitList.add(newCommit);
-        }
-
-        return commitList;
-    }
-
-    @Deprecated
-    public List<MergeRequestWrapper> getMergeRequestForMember(int projectId, String name) throws GitLabApiException {
-        List<MergeRequestWrapper> filteredList = new ArrayList<>();
-
-        for(MergeRequestWrapper currentMergeRequest : getAllMergeRequests(projectId)) {
-            if(currentMergeRequest.getMergeRequestData().getAuthor().getName().equals(name)) {
-                filteredList.add(currentMergeRequest);
-            }
-
-        }
-
-        return filteredList;
-
-    }
-
-    @Deprecated
-    public List<MergeRequest> getAllMergeRequestData(int projectId) throws GitLabApiException {
-        return mergeRequestApi.getMergeRequests(projectId);
-
-    }
-
-    @Deprecated
-    public List<MergeRequestWrapper> getAllMergeRequests(int projectId) throws GitLabApiException {
-
-        List<MergeRequestWrapper> mergeRequestList = new ArrayList<>();
-
-        for(MergeRequest currentMR : mergeRequestApi.getMergeRequests(projectId)) {
-
-            MergeRequestWrapper newMergeRequest = new MergeRequestWrapper(mergeRequestApi, projectId, currentMR);
-
-            mergeRequestList.add(newMergeRequest);
-
-        }
-        return mergeRequestList;
-    }
-
-    @Deprecated
-    public List<CommitWrapper> getMergeRequestCommits(int projectId, int mergeRequestId) throws GitLabApiException {
-        List<CommitWrapper> commitListMR = new ArrayList<>();
-
-        for(Commit currentCommit : mergeRequestApi.getCommits(projectId, mergeRequestId)) {
-            CommitWrapper newCommit = new CommitWrapper(projectId, commitsApi, currentCommit);
-
-            commitListMR.add(newCommit);
-        }
-
-        return commitListMR;
-    }
-
-    @Deprecated
-    public List<Commit> getMergeRequestCommitsData(int projectId, int mergeRequestId) throws GitLabApiException {
-
-        return mergeRequestApi.getCommits(projectId, mergeRequestId);
-    }
-
-    @Deprecated
-    public List<CommitWrapper> filterCommitsForDateAndAuthor(int projectId, String authorName, Date start, Date end) throws GitLabApiException {
-        CommitsApi commitsApi = new CommitsApi(gitLabApi);
-        List<CommitWrapper> commitList = new ArrayList<>();
-
-        for(Commit currentCommit : commitsApi.getCommits(projectId, "master", start, end)) {
-            if(currentCommit.getAuthorName().equals(authorName) ) {
-                CommitWrapper newCommit = new CommitWrapper(projectId, commitsApi, currentCommit);
-
-                commitList.add(newCommit);
-
-            }
-        }
-
-        return commitList;
 
     }
 
