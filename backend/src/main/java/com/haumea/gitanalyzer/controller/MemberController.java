@@ -42,17 +42,17 @@ public class MemberController {
     }
 
     @GetMapping("alias")
-    public MemberRRDTO getMembersAndAliasesFromGit(@RequestParam @NotBlank String userId,
+    public MemberRRDTO getMembersAndAliasesFromGitLab(@RequestParam @NotBlank String userId,
                                                    @RequestParam @NotNull Integer projectId) {
 
-        return memberService.getMembersAndAliasesFromGit(userId, projectId);
+        return memberService.getMembersAndAliasesFromGitLab(userId, projectId);
     }
 
     @GetMapping("mapping")
-    public List<Member> getMembersAndAliasesFromDB(@RequestParam @NotBlank String userId,
+    public List<Member> getMembersAndAliasesFromDatabase(@RequestParam @NotBlank String userId,
                                                    @RequestParam @NotNull Integer projectId) {
 
-        return memberService.getMembersAndAliasesFromDB(userId, projectId);
+        return memberService.getMembersAndAliasesFromDatabase(userId, projectId);
     }
 
 }

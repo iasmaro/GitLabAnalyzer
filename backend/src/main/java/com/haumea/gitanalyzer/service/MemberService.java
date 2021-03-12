@@ -54,7 +54,7 @@ public class MemberService {
 
     }
 
-    public MemberRRDTO getMembersAndAliasesFromGit(String userId, Integer projectId) {
+    public MemberRRDTO getMembersAndAliasesFromGitLab(String userId, Integer projectId) {
 
         String token = userService.getPersonalAccessToken(userId);
 
@@ -85,7 +85,7 @@ public class MemberService {
         return member.getAlias();
     }
 
-    public List<Member> getMembersAndAliasesFromDB(String userId, Integer projectId) {
+    public List<Member> getMembersAndAliasesFromDatabase(String userId, Integer projectId) {
 
         List<String> memberIds = getMembers(userId, projectId);
 
