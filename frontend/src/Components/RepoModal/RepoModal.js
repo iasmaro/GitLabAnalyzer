@@ -20,11 +20,17 @@ const RepoModal = (props) => {
     const [members, setMembers] = useState([]);
     const [aliases, setAliases] = useState([]);
     const username = useUserState();
+    const [mappedAliases, setMappedAliases] = useState([]);
 
     // Temporary for testing:
     // const {name, id, status, toggleModal} = props || {};
     // const aliases = ['Batman', 'Superman', 'Catwoman', 'Hulk', 'Ironman', 'Aquaman' ];
     // const members = ['brucewayne', 'tonystark', 'clarkkent', 'selinakyle', 'brucebanner'];
+
+    /*Default times are both at the current date and time*/
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [redirect, setRedirect] = useState(false);
 
     useEffect(() => {
         getMembersAndAliases(username, id).then((data) => {
@@ -33,18 +39,8 @@ const RepoModal = (props) => {
             setIsLoading(false);
         });
     }, []);
-    
-    const [mappedAliases, setMappedAliases] = useState([]);
-    // const [mappedAliases, setMappedAliases] = useState([aliases.map((alias) => ({alias:alias, memberIndex: -1}))]);
-    // const [mapping, setMapping] = useState(members.map((member) => ({alias:[], memberId:member})));
 
-
-    /*Default times are both at the current date and time*/
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
-    const [redirect, setRedirect] = useState(false);
-
-    const updateMappingForApi = (mapping) => {
+    const createApiMappingFromLocalMapping = (mapping) => {
         for (var i = 0; i < mappedAliases.length; i ++) {
             var memberIndex = mappedAliases[i].memberIndex;
             if (memberIndex > -1) {
@@ -59,23 +55,22 @@ const RepoModal = (props) => {
     }
 
     const handleClick = () => {
-        console.log(mappedAliases);
-        console.log(members);
-        var mapping = members.map((member) => ({alias:[], memberId:member}));
-        updateMappingForApi(mapping);        
-        console.log(mapping);
-        //mapAliasToMember(mapping);
-        if (student !== "Select a student") {
+        if (config !== "Select a configuration") {
+            console.log(mappedAliases);
+            var mapping = members.map((member) => ({alias:[], memberId:member}));
+            createApiMappingFromLocalMapping(mapping);        
+            console.log(mapping);
+            mapAliasToMember(mapping);
             setRedirect(true);
         }
     }
 
     if (redirect) {
         const data = {
-            memberId: student,
             start: startDate.toISOString(),
             end: endDate.toISOString(),
             projectId: id,
+            configuration: config,
         }
         return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
     }
@@ -93,13 +88,12 @@ const RepoModal = (props) => {
             <Modal.Header closeButton>
                 <Modal.Title>{name}</Modal.Title>
             </Modal.Header>
+
             <Modal.Body className="repo-modal-body">
                 <RepoModalConfig config={config} setConfig={setConfig} />
-                {/* <RepoModalStudent members={members} student={student} setStudent={setStudent} /> */}
-                {isLoading ? 
-                <span><Spinner animation="border" className="spinner"/></span> 
+
+                {isLoading ? <span><Spinner animation="border" className="spinner"/></span> 
                 : <RepoModalMatchAlias aliases={aliases} memberIds={members} mappedAliases={aliases.map((alias) => ({alias:alias, memberIndex: -1}))} setMappedAliases={setMappedAliases}/>}
-                
             </Modal.Body>
 
             <Modal.Footer>

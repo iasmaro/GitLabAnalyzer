@@ -9,8 +9,8 @@ import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
 
 const Repo = (props) => {
     const { repo } = props || {};
-    const [members, setMembers] = useState([]);
-    const [aliases, setAliases] = useState([]);
+    // const [members, setMembers] = useState([]);
+    // const [aliases, setAliases] = useState([]);
     const [show, setShow] = useState(false);
     const username = useUserState();
     
@@ -34,7 +34,7 @@ const Repo = (props) => {
             <td>
                 <Button variant="dark" onClick={handleShow}> Analyze </Button>
             </td>
-            {show && <RepoModal name={repo?.projectName} id={repo?.projectId} createdAt={repo?.createdAt} members={members} aliases={aliases} status={show} toggleModal={handleClose}/>}
+            {show && <RepoModal name={repo?.projectName} id={repo?.projectId} createdAt={repo?.createdAt} status={show} toggleModal={handleClose}/>}
         </tr>
     );
 };
