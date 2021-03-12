@@ -25,14 +25,12 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final UserService userService;
-    private final MemberMapper memberMapper;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, UserService userService, MemberMapper memberMapper) {
+    public MemberService(MemberRepository memberRepository, UserService userService) {
 
         this.memberRepository = memberRepository;
         this.userService = userService;
-        this.memberMapper = memberMapper;
     }
 
     public List<String> getMembers(String userId, Integer projectId) {
@@ -88,7 +86,7 @@ public class MemberService {
         return member.getAlias();
     }
 
-    public List<Member> getMembersAndAliasesFromDatabase(String userId, Integer projectId) {
+    public List<MemberDTO> getMembersAndAliasesFromDatabase(String userId, Integer projectId) {
 
         List<String> memberIds = getMembers(userId, projectId);
 
