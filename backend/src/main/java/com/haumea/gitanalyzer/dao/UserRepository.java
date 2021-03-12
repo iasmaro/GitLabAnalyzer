@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -25,15 +26,16 @@ public class UserRepository {
         this.mongoTemplate = mongoTemplate;
     }
 
-    private User findUserByUserId(String userId) {
+
+    private Optional<User> findUserByUserId(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
-        return mongoTemplate.findOne(query, User.class);
+        return Optional.ofNullable(mongoTemplate.findOne(query, User.class));
     }
 
     public User saveUser(User user) throws ResourceAlredyExistException {
 
-        if(findUserByUserId(user.getUserId()) == null) {
+        if(!findUserByUserId(user.getUserId()).isPresent()) {
             mongoTemplate.save(user);
         }
         else {
@@ -48,7 +50,13 @@ public class UserRepository {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(user.getUserId()));
         Update update = new Update();
-        update.set("personalAccessToken", user.getPersonalAccessToken());
+        if(!(user.getPersonalAccessToken() == null) && !user.getPersonalAccessToken().trim().isEmpty()) {
+            update.set("personalAccessToken", user.getPersonalAccessToken());
+        }
+        if(!(user.getGitlabServer() == null) && !user.getGitlabServer().trim().isEmpty()) {
+            update.set("gitlabServer", user.getGitlabServer());
+        }
+
         if(mongoTemplate.findAndModify(query, update, User.class) == null) {
             throw new ResourceNotFoundException("User not found!");
         }
@@ -58,13 +66,13 @@ public class UserRepository {
 
     public String getPersonalAccessToken(String userId) throws ResourceNotFoundException {
 
-        User user = findUserByUserId(userId);
+        Optional<User> user = findUserByUserId(userId);
 
-        if(user == null) {
+        if(!user.isPresent()){
             throw new ResourceNotFoundException("User not found!");
         }
 
-        String token = user.getPersonalAccessToken();
+        String token = user.get().getPersonalAccessToken();
 
         if(token == null) {
             throw new ResourceNotFoundException("Token not found!");
@@ -72,6 +80,24 @@ public class UserRepository {
 
         return token;
     }
+
+    public String getGitlabServer(String userId) throws ResourceNotFoundException {
+
+        Optional<User> user = findUserByUserId(userId);
+
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        String gitlabServer = user.get().getGitlabServer();
+
+        if(gitlabServer == null){
+            throw new ResourceNotFoundException("Gitlab Server not found!");
+        }
+
+        return gitlabServer;
+    }
+
 
     public User saveConfiguration(String userId, Configuration configuration) throws ResourceNotFoundException, ResourceAlredyExistException {
 
@@ -175,4 +201,5 @@ public class UserRepository {
 
         return user;
     }
+
 }

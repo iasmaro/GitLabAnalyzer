@@ -20,16 +20,18 @@ public class User {
     private String userId;
     private String personalAccessToken;
     private List<Configuration> configurations;
+    private String gitlabServer;
 
     public User() {
         super();
     }
 
     @PersistenceConstructor
-    public User(String userId, String personalAccessToken) {
+    public User(String userId, String personalAccessToken, String gitlabServer) {
         this.userId = userId;
         this.personalAccessToken = personalAccessToken;
         this.configurations = new ArrayList<>();
+        this.gitlabServer = gitlabServer;
     }
 
     public String getUserId() {
@@ -43,4 +45,7 @@ public class User {
     public List<Configuration> getConfigurations() {
         return configurations;
     }
+
+    public String getGitlabServer() { return gitlabServer; }
+
 }
