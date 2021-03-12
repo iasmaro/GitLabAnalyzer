@@ -4,8 +4,9 @@ import { Redirect } from "react-router-dom";
 
 import RepoModalConfig from './RepoModalConfig';
 import RepoModalMatchAlias from './RepoModalMatchAlias';
-import './RepoModal.css';
 import mapAliasToMember from 'Utils/mapAliasToMember';
+
+import './RepoModal.css';
 
 const RepoModal = (props) => {
     const {name, id, members, aliases, status, toggleModal} = props || {};

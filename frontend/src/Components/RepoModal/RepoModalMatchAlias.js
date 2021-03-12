@@ -3,6 +3,7 @@ import Table from 'react-bootstrap/Table';
 
 import { message } from 'Constants/constants';
 import RepoModalMemberIdRow from './RepoModalMemberIdRow';
+
 import './RepoModal.css';
 
 const RepoModalMatchAlias = (props) => {

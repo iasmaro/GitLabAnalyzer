@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {Button} from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 
 import RepoModal from 'Components/RepoModal/RepoModal';
+import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
 import getMembersAndAliases from 'Utils/getMembersAndAliases';
 import { useUserState } from 'UserContext';
-import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
 
 const Repo = (props) => {
     const { repo } = props || {};
