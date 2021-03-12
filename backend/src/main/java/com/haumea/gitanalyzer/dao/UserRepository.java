@@ -97,17 +97,16 @@ public class UserRepository {
 
         return gitlabServer;
     }
-
-
+    
     public User saveConfiguration(String userId, Configuration configuration) throws ResourceNotFoundException, ResourceAlredyExistException {
 
-        User user = findUserByUserId(userId);
+        Optional<User> user = findUserByUserId(userId);
 
-        if(user == null) {
+        if(!user.isPresent()) {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        List<Configuration> userConfigurations = user.getConfigurations();
+        List<Configuration> userConfigurations = user.get().getConfigurations();
         List<String> filenames = new ArrayList<>();
         for(Configuration userConfiguration : userConfigurations) {
             String filename = userConfiguration.getFileName();
@@ -116,7 +115,7 @@ public class UserRepository {
 
         if(!filenames.contains(configuration.getFileName())) {
             Query query = new Query();
-            query.addCriteria(Criteria.where("userId").is(user.getUserId()));
+            query.addCriteria(Criteria.where("userId").is(user.get().getUserId()));
             Update update = new Update();
             update.push("configurations", configuration);
             mongoTemplate.updateFirst(query, update, User.class);
@@ -125,31 +124,31 @@ public class UserRepository {
             throw new ResourceAlredyExistException("Configuration with this name already exist!");
         }
 
-        return user;
+        return user.get();
     }
 
     public List<Configuration> getConfigurations(String userId) throws ResourceNotFoundException {
 
-        User user = findUserByUserId(userId);
+        Optional<User> user = findUserByUserId(userId);
 
-        if(user == null) {
+        if(!user.isPresent()) {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        List<Configuration> configurations = user.getConfigurations();
+        List<Configuration> configurations = user.get().getConfigurations();
 
         return configurations;
     }
 
     public User updateConfiguration(String userId, Configuration configuration) throws ResourceNotFoundException {
 
-        User user = findUserByUserId(userId);
+        Optional<User> user = findUserByUserId(userId);
 
-        if(user == null) {
+        if(!user.isPresent()) {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        List<Configuration> userConfigurations = user.getConfigurations();
+        List<Configuration> userConfigurations = user.get().getConfigurations();
         List<String> fileNames = new ArrayList<>();
         for(Configuration userConfiguration : userConfigurations) {
             String fileName = userConfiguration.getFileName();
@@ -158,7 +157,7 @@ public class UserRepository {
 
         if(fileNames.contains(configuration.getFileName())) {
             Query query = new Query();
-            query.addCriteria(Criteria.where("userId").is(user.getUserId())
+            query.addCriteria(Criteria.where("userId").is(user.get().getUserId())
                                         .and("configurations.fileName").is(configuration.getFileName()));
             Update update = new Update();
             update.set("configurations.$", configuration);
@@ -168,19 +167,19 @@ public class UserRepository {
             throw new ResourceNotFoundException("Configuration with this name does not exist!");
         }
 
-        return user;
+        return user.get();
 
     }
 
     public User deleteConfiguration(String userId, String fileName) throws ResourceNotFoundException {
 
-        User user = findUserByUserId(userId);
+        Optional<User> user = findUserByUserId(userId);
 
-        if(user == null) {
+        if(!user.isPresent()) {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        List<Configuration> userConfigurations = user.getConfigurations();
+        List<Configuration> userConfigurations = user.get().getConfigurations();
         List<String> fileNames = new ArrayList<>();
         for(Configuration userConfiguration : userConfigurations) {
             String configFileName = userConfiguration.getFileName();
@@ -189,7 +188,7 @@ public class UserRepository {
 
         if(fileNames.contains(fileName)) {
             Query query = new Query();
-            query.addCriteria(Criteria.where("userId").is(user.getUserId())
+            query.addCriteria(Criteria.where("userId").is(user.get().getUserId())
                     .and("configurations.fileName").is(fileName));
             Update update = new Update();
             update.pull("configurations", new BasicDBObject("fileName", fileName));
@@ -199,7 +198,7 @@ public class UserRepository {
             throw new ResourceNotFoundException("Configuration with this name does not exist!");
         }
 
-        return user;
+        return user.get();
     }
 
 }
