@@ -5,7 +5,6 @@ import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
 import com.haumea.gitanalyzer.exception.ResourceAlredyExistException;
 import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
-import com.haumea.gitanalyzer.mapper.MemberMapper;
 import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,10 @@ import java.util.Optional;
 public class MemberRepository {
 
     private final MongoTemplate mongoTemplate;
-    private final MemberMapper memberMapper;
 
     @Autowired
-    public MemberRepository(MongoTemplate mongoTemplate, MemberMapper memberMapper) {
+    public MemberRepository(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
-        this.memberMapper = memberMapper;
 
     }
 
@@ -50,9 +47,9 @@ public class MemberRepository {
     }
 
 
-    public List<MemberDTO> getMembersAndAliasesFromDatabase(List<String> memberIds) throws ResourceNotFoundException {
+    public List<Member> getMembersAndAliasesFromDatabase(List<String> memberIds) throws ResourceNotFoundException {
 
-        List<MemberDTO> members = new ArrayList<>();
+        List<Member> members = new ArrayList<>();
 
         for(String memberId : memberIds){
             if(!findMemberByMemberId(memberId).isPresent()) {
@@ -60,7 +57,7 @@ public class MemberRepository {
             }
             else {
                 Member member = findMemberByMemberId(memberId).get();
-                members.add(memberMapper.toDTO(member));
+                members.add(member);
             }
         }
         return members;

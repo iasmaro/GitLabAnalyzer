@@ -25,12 +25,14 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final UserService userService;
+    private final MemberMapper memberMapper;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, UserService userService) {
+    public MemberService(MemberRepository memberRepository, UserService userService, MemberMapper memberMapper) {
 
         this.memberRepository = memberRepository;
         this.userService = userService;
+        this.memberMapper = memberMapper;
     }
 
     public List<String> getMembers(String userId, Integer projectId) {
@@ -90,6 +92,6 @@ public class MemberService {
 
         List<String> memberIds = getMembers(userId, projectId);
 
-        return memberRepository.getMembersAndAliasesFromDatabase(memberIds);
+        return memberMapper.toDTOs(memberRepository.getMembersAndAliasesFromDatabase(memberIds));
     }
 }
