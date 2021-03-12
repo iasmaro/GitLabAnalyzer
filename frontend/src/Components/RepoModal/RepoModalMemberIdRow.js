@@ -4,7 +4,7 @@ import Radio from '@material-ui/core/Radio';
 const RepoModalMemberIdRow = (props) => {
     const { alias, memberIds, aliasIndex, mappedAliases, setMappedAliases} = props || {};
     const [selectedMemberId, setSelectedMemberId] = useState('');
-    
+
     const handleClick = (e) => {
         if (selectedMemberId === e.target.name) {
             setSelectedMemberId('');
@@ -13,6 +13,8 @@ const RepoModalMemberIdRow = (props) => {
             setSelectedMemberId(e.target.name);
             mappedAliases[aliasIndex].memberIndex = e.target.value;
         }
+        console.log(mappedAliases);
+        setMappedAliases(mappedAliases);
       };
 
     return (

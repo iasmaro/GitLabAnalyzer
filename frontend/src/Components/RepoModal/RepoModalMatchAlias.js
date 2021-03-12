@@ -10,32 +10,22 @@ const RepoModalMatchAlias = (props) => {
     const {aliases, memberIds, mappedAliases, setMappedAliases} = props || {};
     const tableWidth = memberIds.length + 1;
 
-    const memberIdHeadings = memberIds.map((memberId) =>
-        <td key={memberId} className='sticky-title'>{memberId}</td>
-    );
-
     return (
         <div className='mapping'>
             <Table striped bordered variant="light">
                 <thead>
                     <tr>
-                        <th className='sticky-title'></th>
                         <th colSpan={tableWidth} className='sticky-title'>Member IDs</th>
                     </tr>
                 </thead>
                 <thead>
                     <tr>
                         <th className='sticky-column'>Aliases</th>
-                        {memberIdHeadings}
+                        {memberIds.map((memberId) => <td key={memberId} className='sticky-title'>{memberId}</td>)}
                     </tr>
                 </thead>
                 <tbody>
-                    {!memberIds.length ? (
-                        <tr>
-                            <td colSpan={tableWidth}>{message.NO_MEMBERIDS}</td>
-                        </tr>
-                    )
-                    : !aliases.length ? (
+                    { !aliases.length ? (
                         <tr>
                             <td colSpan={tableWidth}>{message.NO_ALIASES}</td>
                         </tr>

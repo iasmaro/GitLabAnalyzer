@@ -15,10 +15,12 @@ const Repo = (props) => {
     const username = useUserState();
     
     const handleShow = () => {
-        getMembersAndAliases(username, repo.projectId).then((data) => {
-            setMembers(data.members);
-            setAliases(data.aliases);
-        });
+        // getMembersAndAliases(username, repo.projectId).then((data) => {
+        //     setMembers(data.members);
+        //     setAliases(data.aliases);
+        // });
+        // console.log(members);
+        // console.log(aliases);
         
         setShow(true);
     }
