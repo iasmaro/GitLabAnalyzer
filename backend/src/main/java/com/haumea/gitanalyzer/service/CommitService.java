@@ -194,16 +194,17 @@ public class CommitService {
     public List<CommitDTO> getAllOrphanCommits(String userId, int projectId, String targetBranch, Date start, Date end) {
 
         GitlabService gitlabService = createGitlabService(userId);
-        List<CommitWrapper> mergeRequestCommits;
+        List<CommitWrapper> dummyMergeRequestCommits;
 
         try {
-            mergeRequestCommits = gitlabService.getOrphanFilteredCommitsWithDiff(projectId, targetBranch, start, end);
+            dummyMergeRequestCommits = gitlabService.getOrphanFilteredCommitsWithDiff(projectId, targetBranch, start, end);
+            System.out.println(dummyMergeRequestCommits.size());
         }
         catch (GitLabRuntimeException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
 
-        return convertCommitWrappersToDTOs(mergeRequestCommits);
+        return convertCommitWrappersToDTOs(dummyMergeRequestCommits);
 
     }
 

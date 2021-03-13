@@ -376,8 +376,8 @@ public class GitlabService {
         List<Commit> commits = getFilteredCommitsNoDiff(projectId, targetBranch, start, end);
 
         List<Commit> filteredCommits = new ArrayList<>();
-        for(Commit commit :  commits){
-            if(!commitSHAs.contains(commit.getId())){
+        for(Commit commit : commits) {
+            if(!commitSHAs.contains(commit.getId())) {
                 filteredCommits.add(commit);
             }
         }

@@ -51,7 +51,11 @@ public class MergeRequestService {
 
     private List<String> getAliasForMember(String memberId) {
 
-        return memberService.getAliasesForSelectedMember(memberId);
+        List<String> alias = new ArrayList<>();
+        alias.add("hvtruong");
+        alias.add("Viet");
+
+        return alias;
     }
 
     private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, Date start, Date end) {
@@ -191,9 +195,11 @@ public class MergeRequestService {
             mergeRequestDTOList.add(mergeRequestDTO);
         }
 
-        List<CommitDTO> dummyCommitDTOList = commitService.getAllOrphanCommits(userId, projectId, "target", start, end);
+        List<CommitDTO> dummyCommitDTOList = commitService.getAllOrphanCommits(userId, projectId, "master", start, end);
 
         if(!dummyCommitDTOList.isEmpty()) {
+
+            System.out.println("Dummy");
 
             MergeRequestDTO dummyMergeRequestDTO = createDummyMergeRequest(dummyCommitDTOList);
             mergeRequestDTOList.add(dummyMergeRequestDTO);
