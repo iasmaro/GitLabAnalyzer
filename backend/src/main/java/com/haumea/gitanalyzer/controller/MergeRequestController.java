@@ -36,8 +36,8 @@ public class MergeRequestController {
 
     @GetMapping(path = "/member/{memberId}")
     public List<MergeRequestDTO> getAllMergeRequests(@NotBlank @RequestParam String userId,
-                                                     @PathVariable int projectId,
-                                                     @NotNull @RequestParam String memberId,
+                                                     @NotNull @RequestParam int projectId,
+                                                     @NotNull @PathVariable String memberId,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
 
