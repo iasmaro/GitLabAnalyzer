@@ -25,6 +25,15 @@ public class CommitController {
         this.commitService = commitService;
     }
 
+    @GetMapping("/mergeRequests/{mergeRequestId}")
+    public List<CommitDTO> getCommitsForSelectedMergeRequest(@PathVariable @NotNull int mergeRequestId,
+                                                             @RequestParam @NotBlank String userId,
+                                                             @RequestParam @NotNull int projectId) {
+
+
+        return commitService.getCommitsForSelectedMergeRequest(userId, projectId, mergeRequestId);
+    }
+
     @GetMapping("mergeRequests/{mergeRequestId}/members/{memberId}")
     public List<CommitDTO> getMergeRequestCommitsForMember(@RequestParam @NotBlank String userId,
                                                            @RequestParam @NotNull Integer projectId,
@@ -44,17 +53,6 @@ public class CommitController {
 
         return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, memberId, start, end);
     }
-
-    @GetMapping("/mergeRequests/{mergeRequestId}")
-    public List<CommitDTO> getCommitsForSelectedMergeRequest(@PathVariable @NotNull int mergeRequestId,
-                                                             @RequestParam @NotBlank String userId,
-                                                             @RequestParam @NotNull int projectId) {
-
-
-        return commitService.getCommitsForSelectedMergeRequest(userId, projectId, mergeRequestId);
-    }
-
-
 
 }
 

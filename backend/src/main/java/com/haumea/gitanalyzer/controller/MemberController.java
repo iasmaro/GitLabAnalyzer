@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class MemberController {
 
     @GetMapping
     public List<String> getMembers(@RequestParam @NotBlank String userId,
-                                   @RequestParam @NotNull Integer projectId){
+                                   @RequestParam @NotNull Integer projectId) {
 
         return memberService.getMembers(userId, projectId);
     }
@@ -41,10 +42,17 @@ public class MemberController {
     }
 
     @GetMapping("alias")
-    public MemberRRDTO getMembersAndAliases(@RequestParam @NotBlank String userId,
-                                            @RequestParam @NotNull Integer projectId){
+    public MemberRRDTO getMembersAndAliasesFromGitLab(@RequestParam @NotBlank String userId,
+                                                      @RequestParam @NotNull Integer projectId) {
 
-        return memberService.getMembersAndAliases(userId, projectId);
+        return memberService.getMembersAndAliasesFromGitLab(userId, projectId);
+    }
+
+    @GetMapping("mapping")
+    public List<MemberDTO> getMembersAndAliasesFromDatabase(@RequestParam @NotBlank String userId,
+                                                            @RequestParam @NotNull Integer projectId) {
+
+        return memberService.getMembersAndAliasesFromDatabase(userId, projectId);
     }
 
 }

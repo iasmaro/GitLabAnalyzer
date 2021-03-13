@@ -92,6 +92,32 @@ public class Main {
                 createDateFromString("2021-02-22T02:30:00-08:00"),
                 new ArrayList<String>(Arrays.asList("tmbui")));
 
+        test.testGetOrphanFilteredCommitsNoDiff(
+                25516,
+                "master",
+                createDateFromString("2021-01-07T00:00:00-08:00"),
+                createDateFromString("2021-02-22T02:30:00-08:00"));
+
+        test.testGetOrphanFilteredCommitsNoDiffByAuthor(
+                25516,
+                "master",
+                createDateFromString("2021-01-07T00:00:00-08:00"),
+                createDateFromString("2021-02-22T02:30:00-08:00"),
+                new ArrayList<String>(Arrays.asList("tmbui")));
+
+        test.testGetOrphanFilteredCommitsWithDiff(
+                25516,
+                "master",
+                createDateFromString("2021-01-07T00:00:00-08:00"),
+                createDateFromString("2021-02-22T02:30:00-08:00"));
+
+        test.testGetOrphanFilteredCommitsWithDiffByAuthor(
+                25516,
+                "master",
+                createDateFromString("2021-01-07T00:00:00-08:00"),
+                createDateFromString("2021-02-22T02:30:00-08:00"),
+                new ArrayList<String>(Arrays.asList("tmbui")));
+
         test.testGetAllCommitsNoDiff(25516);
 
         test.testGetAllCommitsWithDiff(25516);

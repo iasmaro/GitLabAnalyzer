@@ -15,15 +15,17 @@ public class User {
     @NotBlank
     private String userId;
     private String personalAccessToken;
+    private String gitlabServer;
 
     public User() {
         super();
     }
 
     @PersistenceConstructor
-    public User(String userId, String personalAccessToken) {
+    public User(String userId, String personalAccessToken, String gitlabServer) {
         this.userId = userId;
         this.personalAccessToken = personalAccessToken;
+        this.gitlabServer = gitlabServer;
     }
 
     public String getUserId() {
@@ -33,4 +35,6 @@ public class User {
     public String getPersonalAccessToken() {
         return personalAccessToken;
     }
+
+    public String getGitlabServer() { return gitlabServer; }
 }
