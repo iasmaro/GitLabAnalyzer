@@ -35,19 +35,25 @@ public class MemberRepository {
         return Optional.ofNullable(mongoTemplate.findOne(query, Member.class));
     }
 
+    public void createDefaultAlias(MemberDTO memberDTO) {
+        List<String> alias = new ArrayList<>();
+        alias.add(memberDTO.getMemberId());
+        memberDTO.setAlias(alias);
+    }
+
     public void mapAliasToMember(List<MemberDTO> membersAndAliases) {
 
         for(MemberDTO memberDTO : membersAndAliases) {
-            Member member = new Member(memberDTO.getMemberId(), memberDTO.getAlias());
 
-            if(!findMemberByMemberId(member.getMemberId()).isPresent()) {
+            if(!findMemberByMemberId(memberDTO.getMemberId()).isPresent()) {
 
-                // need to make sure Alias is not empty so we default to memberId if none is provided
-                if(member.getAlias().isEmpty()) {
-                    List<String> alias = new ArrayList<>();
-                    alias.add(member.getMemberId());
-                    member.setAlias(alias);
+                // need to make sure Alias is not empty because an empty alias signifies
+                // the member is not actually in the database
+                if(memberDTO.getAlias().isEmpty()) {
+                    createDefaultAlias(memberDTO);
                 }
+
+                Member member = new Member(memberDTO.getMemberId(), memberDTO.getAlias());
 
                 mongoTemplate.save(member);
             }
@@ -68,11 +74,10 @@ public class MemberRepository {
         // of updating some and then failing. Now it either updates all or fails.
         for(MemberDTO memberDTO : membersAndAliases) {
 
-            // need to make sure Alias is not empty so we default to memberId if none is provided
+            // need to make sure Alias is not empty because an empty alias signifies
+            // the member is not actually in the database
             if(memberDTO.getAlias().isEmpty()) {
-                List<String> alias = new ArrayList<>();
-                alias.add(memberDTO.getMemberId());
-                memberDTO.setAlias(alias);
+                createDefaultAlias(memberDTO);
             }
 
             Query query = new Query();
