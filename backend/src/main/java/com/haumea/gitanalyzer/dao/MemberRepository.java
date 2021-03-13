@@ -35,13 +35,20 @@ public class MemberRepository {
     }
 
     public void mapAliasToMember(List<MemberDTO> membersAndAliases) throws ResourceAlredyExistException {
+
         for(MemberDTO memberDTO : membersAndAliases) {
             Member member = new Member(memberDTO.getMemberId(), memberDTO.getAlias());
+
             if(!findMemberByMemberId(member.getMemberId()).isPresent()) {
+
+                // need to make sure Alias is not empty so we default to memberId if none is provided
+                if(member.getAlias().isEmpty()) {
+                    List<String> alias = new ArrayList<>();
+                    alias.add(member.getMemberId());
+                    member.setAlias(alias);
+                }
+
                 mongoTemplate.save(member);
-            }
-            else {
-                throw new ResourceAlredyExistException("Member " + memberDTO.getMemberId() + " already exists!");
             }
         }
     }
@@ -51,9 +58,15 @@ public class MemberRepository {
 
         List<Member> members = new ArrayList<>();
 
-        for(String memberId : memberIds){
+        for(String memberId : memberIds) {
             if(!findMemberByMemberId(memberId).isPresent()) {
-                throw new ResourceNotFoundException("Member " + memberId + " not found!");
+
+                // If a member should be in the database but isn't, return a dummy member
+                // with an empty alias to let user know they need to add the member to the database.
+
+                List<String> emptyAlias = new ArrayList<>();
+                Member member = new Member(memberId, emptyAlias);
+                members.add(member);
             }
             else {
                 Member member = findMemberByMemberId(memberId).get();
