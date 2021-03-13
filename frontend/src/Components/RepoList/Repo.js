@@ -11,7 +11,7 @@ import { useUserState } from 'UserContext';
 const Repo = (props) => {
 
     // TESTING WITH MOCK DATA
-    const mockMembers = ['anne', 'billy', 'chris', 'dan', 'emily', 'fred'];
+    const mockMembers = ['anne', 'billy', 'chris', 'dan', 'emily', 'fred', 'k', 'h'];
     const mockAliases = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
     const mockDatabaseMapping = [ {alias:['a', 'm'], memberId:'anne'}, {alias:['f', 'l'], memberId:'fred'} ];
 

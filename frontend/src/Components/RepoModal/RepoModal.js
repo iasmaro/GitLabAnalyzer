@@ -17,7 +17,7 @@ const RepoModal = (props) => {
     const databaseAliasIdPairs = createInitialAliasIdPairs(aliases, members, databaseMapping);
 
     // MOCK VALUES:
-    // members = ['anne', 'billy', 'chris', 'dan', 'emily', 'fred'];
+    // members = ['anne', 'billy', 'chris', 'dan', 'emily', 'fred', 'k', 'h'];
     // aliases = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
     // databaseMapping = [ {alias:['a', 'm'], memberId:'anne'}, {alias:['f', 'l'], memberId:'fred'} ];
     // AliasIdPairs = [{alias:'a', memberIndex:0}, 
@@ -27,10 +27,10 @@ const RepoModal = (props) => {
     //                     {alias:'e', memberIndex:-1}, 
     //                     {alias:'f', memberIndex:5}, 
     //                     {alias:'g', memberIndex:-1},
-    //                     {alias:'h', memberIndex:-1}, 
+    //                     {alias:'h', memberIndex:7}, 
     //                     {alias:'i', memberIndex:-1},
     //                     {alias:'j', memberIndex:-1},
-    //                     {alias:'k', memberIndex:-1},
+    //                     {alias:'k', memberIndex:6},
     //                     {alias:'l', memberIndex:5},
     //                     {alias:'m', memberIndex:0}];
 
@@ -50,7 +50,7 @@ const RepoModal = (props) => {
 
     const handleClick = () => {
         // -- FOR TESTING MOCK DATA
-        console.log('aliasIdPairs === databaseAliasIdPairs :' + sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs));
+        console.log('User changed mapping: ' + sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs));
         const mapping = members.map((member) => ({alias:[], memberId:member}));
         createApiMappingFromLocalMapping(mapping);
         console.log(mapping);
