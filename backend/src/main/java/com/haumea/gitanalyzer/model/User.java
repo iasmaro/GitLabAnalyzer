@@ -7,6 +7,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 @Document(collection = "user")
 public class User {
     @Id
@@ -15,6 +19,7 @@ public class User {
     @NotBlank
     private String userId;
     private String personalAccessToken;
+    private List<Configuration> configurations;
     private String gitlabServer;
 
     public User() {
@@ -25,6 +30,7 @@ public class User {
     public User(String userId, String personalAccessToken, String gitlabServer) {
         this.userId = userId;
         this.personalAccessToken = personalAccessToken;
+        this.configurations = new ArrayList<>();
         this.gitlabServer = gitlabServer;
     }
 
@@ -36,5 +42,10 @@ public class User {
         return personalAccessToken;
     }
 
+    public List<Configuration> getConfigurations() {
+        return configurations;
+    }
+
     public String getGitlabServer() { return gitlabServer; }
+
 }
