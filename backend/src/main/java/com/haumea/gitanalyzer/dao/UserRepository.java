@@ -57,6 +57,9 @@ public class UserRepository {
             update.set("gitlabServer", user.getGitlabServer());
         }
         if(!(user.getActiveConfig() == null) && !user.getActiveConfig().trim().isEmpty()) {
+            if(!getConfigurationFileNames(user.getUserId()).contains(user.getActiveConfig())){
+                throw new ResourceNotFoundException(user.getActiveConfig() + " configuration not found!");
+            }
             update.set("activeConfig", user.getActiveConfig());
         }
 
@@ -158,7 +161,6 @@ public class UserRepository {
 
         return user.get();
     }
-
 
     public Configuration getConfigurationByFileName(String userId, String configFileName) throws ResourceNotFoundException {
 
