@@ -8,9 +8,7 @@ import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
-import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Commit;
-import org.gitlab4j.api.models.CommitStats;
 import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +47,9 @@ public class CommitService {
     private GitlabService createGitlabService(String userId) {
         String token = userService.getPersonalAccessToken(userId);
 
-        return new GitlabService(GlobalConstants.gitlabURL, token);
+        String gitlabServer = userService.getGitlabServer(userId);
+
+        return new GitlabService(gitlabServer, token);
     }
 
     private String getDiffExtension(String newPath) {
