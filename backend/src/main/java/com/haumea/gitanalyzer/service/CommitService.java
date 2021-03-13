@@ -159,6 +159,7 @@ public class CommitService {
     public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId) {
 
         List<String> configFileNames = userService.getConfigurationFileNames(userId);
+//        String targetBranch = userService.
 
         GitlabService gitlabService = createGitlabService(userId);
         List<CommitWrapper> filteredCommits;
