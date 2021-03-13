@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.controller;
 
+import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.model.User;
 import com.haumea.gitanalyzer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/users")
@@ -22,29 +26,37 @@ public class UserController {
     }
 
     @PostMapping
-    public void saveUser(@Valid @RequestBody User user){
+    public void saveUser(@Valid @RequestBody User user) {
 
         userService.saveUser(user);
     }
 
     @PutMapping
-    public void updateUser(@Valid @RequestBody User user){
+    public void updateUser(@Valid @RequestBody User user) {
 
         userService.updateUser(user);
 
     }
 
     @GetMapping("/token")
-    public String getPersonalAccessToken(@RequestParam @NotBlank String userId){
+
+    public String getPersonalAccessToken(@RequestParam @NotBlank String userId) {
 
       return userService.getPersonalAccessToken(userId);
 
     }
 
     @GetMapping("/server")
-    public String getGitlabServer(@RequestParam @NotBlank String userId){
+    public String getGitlabServer(@RequestParam @NotBlank String userId) {
 
         return userService.getGitlabServer(userId);
+
+    }
+
+    @GetMapping("/activeConfig")
+    public String getActiveConfig(@RequestParam @NotBlank String userId) {
+
+        return userService.getActiveConfig(userId);
 
     }
 
@@ -53,5 +65,31 @@ public class UserController {
 
         return userService.getUserId(url, ticket);
 
+    }
+
+    @PostMapping("/configuration")
+    public void saveConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration) {
+        userService.saveConfiguration(userId, configuration);
+    }
+
+    @GetMapping("/configuration")
+    public List<String> getConfigurationFileNames(@RequestParam @NotBlank String userId) {
+        return userService.getConfigurationFileNames(userId);
+    }
+
+    @GetMapping("/configuration/{configFileName}")
+    public Configuration getConfigurationByFileName(@RequestParam @NotBlank String userId,
+                                                    @PathVariable @NotBlank String configFileName) {
+        return userService.getConfigurationByFileName(userId, configFileName);
+    }
+
+    @PutMapping("/configuration")
+    public void updateConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration) {
+        userService.updateConfiguration(userId, configuration);
+    }
+
+    @DeleteMapping("/configuration")
+    public void deleteConfiguration(@RequestParam @NotBlank String userId, @RequestParam @NotBlank String fileName) {
+        userService.deleteConfiguration(userId, fileName);
     }
 }

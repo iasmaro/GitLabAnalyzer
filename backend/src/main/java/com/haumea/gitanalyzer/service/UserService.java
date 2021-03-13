@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.UserRepository;
+import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.net.URL;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -42,6 +44,11 @@ public class UserService {
         return userRepository.getGitlabServer(userId);
     }
 
+    public String getActiveConfig(String userId) {
+
+        return userRepository.getActiveConfig(userId);
+    }
+
     public String getUserId(String url, String ticket) {
         String finalURL = SFU_API_URL + url + "&ticket=" + ticket;
         try {
@@ -61,5 +68,25 @@ public class UserService {
         catch (Exception e)  {
             return "";
         }
+    }
+
+    public User saveConfiguration(String userId, Configuration configuration) {
+        return userRepository.saveConfiguration(userId, configuration);
+    }
+
+    public List<String> getConfigurationFileNames(String userId) {
+        return userRepository.getConfigurationFileNames(userId);
+    }
+
+    public Configuration getConfigurationByFileName(String userId, String configFileName) {
+        return userRepository.getConfigurationByFileName(userId, configFileName);
+    }
+
+    public User updateConfiguration(String userId, Configuration configuration) {
+        return userRepository.updateConfiguration(userId, configuration);
+    }
+
+    public User deleteConfiguration(String userId, String fileName) {
+        return userRepository.deleteConfiguration(userId, fileName);
     }
 }

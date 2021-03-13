@@ -32,11 +32,17 @@ public class MemberService {
         this.memberMapper = memberMapper;
     }
 
-    public List<String> getMembers(String userId, Integer projectId) {
-
+    private GitlabService createGitlabService(String userId) {
         String token = userService.getPersonalAccessToken(userId);
 
-        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+        String gitlabServer = userService.getGitlabServer(userId);
+
+        return new GitlabService(gitlabServer, token);
+    }
+
+    public List<String> getMembers(String userId, Integer projectId) {
+
+        GitlabService gitlabService = createGitlabService(userId);
 
         List<String> members = new ArrayList<>();
 
@@ -56,9 +62,7 @@ public class MemberService {
 
     public MemberRRDTO getMembersAndAliasesFromGitLab(String userId, Integer projectId) {
 
-        String token = userService.getPersonalAccessToken(userId);
-
-        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+        GitlabService gitlabService = createGitlabService(userId);
 
         List<String> members = getMembers(userId, projectId);
 
