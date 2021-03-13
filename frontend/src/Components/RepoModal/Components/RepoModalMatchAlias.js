@@ -4,11 +4,11 @@ import Table from 'react-bootstrap/Table';
 import { message } from 'Constants/constants';
 import RepoModalMemberIdRow from './RepoModalMemberIdRow';
 
-import './RepoModal.css';
+import 'Components/RepoModal/RepoModal.css';
 
 const RepoModalMatchAlias = (props) => {
-    const {aliases, memberIds, mappedAliases, setMappedAliases} = props || {};
-    const tableWidth = memberIds.length + 1;
+    const {aliases, members, aliasIdPairs, setAliasIdPairs} = props || {};
+    const tableWidth = members.length + 1;
 
     return (
         <div className='mapping'>
@@ -21,7 +21,7 @@ const RepoModalMatchAlias = (props) => {
                 <thead>
                     <tr>
                         <th className='sticky-column'>Aliases</th>
-                        {memberIds.map((memberId) => <td key={memberId} className='sticky-title'>{memberId}</td>)}
+                        {members.map((member) => <td key={member} className='sticky-title'>{member}</td>)}
                     </tr>
                 </thead>
                 <tbody>
@@ -31,7 +31,7 @@ const RepoModalMatchAlias = (props) => {
                         </tr>
                     )
                     : aliases.map((alias, index) => (
-                        <RepoModalMemberIdRow key={alias} alias={alias} memberIds={memberIds} aliasIndex={index} mappedAliases={mappedAliases} setMappedAliases={setMappedAliases}/>
+                        <RepoModalMemberIdRow key={alias} alias={alias} members={members} aliasIndex={index} aliasIdPairs={aliasIdPairs} setAliasIdPairs={setAliasIdPairs}/>
                     ))
                     }
                 </tbody>

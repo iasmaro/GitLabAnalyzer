@@ -1,10 +1,10 @@
 
 .custom-modal {
     font-family: 'Roboto', sans-serif;
+    min-width: 80%;
 }
 
 .modal-content {
-    /* background-color: #acbed8; */
     background-color: white;
 }
 

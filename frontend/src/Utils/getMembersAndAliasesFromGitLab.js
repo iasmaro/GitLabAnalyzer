@@ -1,6 +1,6 @@
 import { config } from 'Constants/constants';
 
-const getMembersAndAliases = async (username, projectId) => {
+const getMembersAndAliasesFromGitLab = async (username, projectId) => {
     const response = await fetch(`${config.PROJECT_ALIAS_API_URL}?projectId=${projectId}&userId=${username}`);
     const data = await response.json();
     if (response.ok) {
@@ -9,4 +9,4 @@ const getMembersAndAliases = async (username, projectId) => {
     return null;
 }
 
-export default getMembersAndAliases;
+export default getMembersAndAliasesFromGitLab;
