@@ -70,9 +70,9 @@ public class UserController {
         return userService.getConfigurationFileNames(userId);
     }
 
-    @GetMapping("/configuration/:configFileName")
+    @GetMapping("/configuration/{configFileName}")
     public Configuration getConfigurationByFileName(@RequestParam @NotBlank String userId,
-                                                    @RequestParam @NotBlank String configFileName) {
+                                                    @PathVariable @NotBlank String configFileName) {
         return userService.getConfigurationByFileName(userId, configFileName);
     }
 
