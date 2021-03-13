@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Radio from '@material-ui/core/Radio';
 
-const RepoModalMemberIdRow = (props) => {
+const RepoModalMapAliasTableRow = (props) => {
     const { alias, members, aliasIndex, aliasIdPairs, setAliasIdPairs } = props || {};
     const [selectedMemberId, setSelectedMemberId] = useState( aliasIdPairs[aliasIndex].memberIndex === -1 ? '' : members[aliasIdPairs[aliasIndex].memberIndex] );
 
@@ -35,4 +35,4 @@ const RepoModalMemberIdRow = (props) => {
     );
 };
 
-export default RepoModalMemberIdRow;
+export default RepoModalMapAliasTableRow;

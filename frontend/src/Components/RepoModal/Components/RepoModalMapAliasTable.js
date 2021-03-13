@@ -2,11 +2,11 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 
 import { message } from 'Constants/constants';
-import RepoModalMemberIdRow from './RepoModalMemberIdRow';
+import RepoModalMapAliasTableRow from './RepoModalMapAliasTableRow';
 
 import 'Components/RepoModal/RepoModal.css';
 
-const RepoModalMatchAlias = (props) => {
+const RepoModalMapAliasTable = (props) => {
     const {aliases, members, aliasIdPairs, setAliasIdPairs} = props || {};
     const tableWidth = members.length + 1;
 
@@ -31,7 +31,7 @@ const RepoModalMatchAlias = (props) => {
                         </tr>
                     )
                     : aliases.map((alias, index) => (
-                        <RepoModalMemberIdRow key={alias} alias={alias} members={members} aliasIndex={index} aliasIdPairs={aliasIdPairs} setAliasIdPairs={setAliasIdPairs}/>
+                        <RepoModalMapAliasTableRow key={alias} alias={alias} members={members} aliasIndex={index} aliasIdPairs={aliasIdPairs} setAliasIdPairs={setAliasIdPairs}/>
                     ))
                     }
                 </tbody>
@@ -40,4 +40,4 @@ const RepoModalMatchAlias = (props) => {
     );
 };
 
-export default RepoModalMatchAlias;
+export default RepoModalMapAliasTable;

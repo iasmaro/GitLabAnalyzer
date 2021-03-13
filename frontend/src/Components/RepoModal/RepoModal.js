@@ -3,7 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 
 import RepoModalConfig from './Components/RepoModalConfig';
-import RepoModalMatchAlias from './Components/RepoModalMatchAlias';
+import RepoModalMapAliasTable from './Components/RepoModalMapAliasTable';
 import mapAliasToMember from 'Utils/mapAliasToMember';
 import { createInitialAliasIdPairs } from './Utils/createInitialAliasIdPairs';
 import { sameAliasIdPairs } from './Utils/sameAliasIdPairs';
@@ -50,7 +50,7 @@ const RepoModal = (props) => {
 
     const handleClick = () => {
         // -- FOR TESTING MOCK DATA
-        console.log('User changed mapping: ' + sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs));
+        console.log('User changed mapping: ' + !sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs));
         const mapping = members.map((member) => ({alias:[], memberId:member}));
         createApiMappingFromLocalMapping(mapping);
         console.log(mapping);
@@ -100,7 +100,7 @@ const RepoModal = (props) => {
             <Modal.Body className="repo-modal-body">
                 <RepoModalConfig config={config} setConfig={setConfig} />
 
-                <RepoModalMatchAlias aliases={aliases} members={members} aliasIdPairs={aliasIdPairs} setAliasIdPairs={setAliasIdPairs}/>
+                <RepoModalMapAliasTable aliases={aliases} members={members} aliasIdPairs={aliasIdPairs} setAliasIdPairs={setAliasIdPairs}/>
             </Modal.Body>
 
             <Modal.Footer>
