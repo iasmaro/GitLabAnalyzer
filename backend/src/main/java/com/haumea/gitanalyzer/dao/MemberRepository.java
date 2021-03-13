@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class MemberRepository {
         return Optional.ofNullable(mongoTemplate.findOne(query, Member.class));
     }
 
-    public void mapAliasToMember(List<MemberDTO> membersAndAliases) throws ResourceAlredyExistException {
+    public void mapAliasToMember(List<MemberDTO> membersAndAliases) {
 
         for(MemberDTO memberDTO : membersAndAliases) {
             Member member = new Member(memberDTO.getMemberId(), memberDTO.getAlias());
@@ -50,6 +51,35 @@ public class MemberRepository {
 
                 mongoTemplate.save(member);
             }
+        }
+    }
+
+    public void updateAliasForMembers(List<MemberDTO> membersAndAliases) throws ResourceNotFoundException {
+
+        for(MemberDTO memberDTO : membersAndAliases) {
+
+            if(!findMemberByMemberId(memberDTO.getMemberId()).isPresent()) {
+                throw new ResourceNotFoundException("Member " + memberDTO.getMemberId() + " not found!");
+            }
+
+        }
+
+        // split the checking and updating into two different loops to avoid problem
+        // of updating some and then failing. Now it either updates all or fails.
+        for(MemberDTO memberDTO : membersAndAliases) {
+
+            // need to make sure Alias is not empty so we default to memberId if none is provided
+            if(memberDTO.getAlias().isEmpty()) {
+                List<String> alias = new ArrayList<>();
+                alias.add(memberDTO.getMemberId());
+                memberDTO.setAlias(alias);
+            }
+
+            Query query = new Query();
+            query.addCriteria(Criteria.where("memberId").is(memberDTO.getMemberId()));
+            Update update = new Update();
+            update.set("alias", memberDTO.getAlias());
+            mongoTemplate.updateFirst(query, update, Member.class);
         }
     }
 

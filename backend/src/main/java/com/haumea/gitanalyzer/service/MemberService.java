@@ -13,7 +13,9 @@ import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -61,6 +63,11 @@ public class MemberService {
 
         memberRepository.mapAliasToMember(membersAndAliases);
 
+    }
+
+    public void updateAliasForMembers(List<MemberDTO> membersAndAliases) {
+
+        memberRepository.updateAliasForMembers(membersAndAliases);
     }
 
     public MemberRRDTO getMembersAndAliasesFromGitLab(String userId, Integer projectId) {
