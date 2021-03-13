@@ -39,6 +39,10 @@ public class CommitService {
         this.commitScore = 0.0;
     }
 
+    public UserService getUserService() {
+        return userService;
+    }
+
     private List<String> getAliasForMember(String memberId) {
 
         List<String> alias = memberService.getAliasesForSelectedMember(memberId);
@@ -152,14 +156,17 @@ public class CommitService {
         }
     }
 
-    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) {
+    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId) {
+
+        List<String> configFileNames = userService.getConfigurationFileNames(userId);
 
         GitlabService gitlabService = createGitlabService(userId);
         List<CommitWrapper> filteredCommits;
 
         List<String> alias = getAliasForMember(memberId);
 
-        filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId, "master", start, end, alias);
+//        filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId, "master", start, end, alias);
+        filteredCommits = gitlabService.getAllCommitsWithDiff(projectId);
 
         return convertCommitWrappersToDTOs(filteredCommits);
     }

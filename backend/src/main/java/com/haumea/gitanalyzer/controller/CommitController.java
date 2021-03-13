@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.controller;
 
+import com.haumea.gitanalyzer.dao.UserRepository;
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.service.CommitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +47,12 @@ public class CommitController {
     @GetMapping("/members/{memberId}")
     public List<CommitDTO> getCommitsForMemberAndDate(@PathVariable @NotBlank String memberId,
                                                       @RequestParam @NotBlank String userId,
-                                                      @RequestParam @NotNull int projectId,
-                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
-                                                      @NotNull @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
+                                                      @RequestParam @NotNull int projectId) {
 
 
-        return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, memberId, start, end);
+
+
+        return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, memberId);
     }
 
 }
