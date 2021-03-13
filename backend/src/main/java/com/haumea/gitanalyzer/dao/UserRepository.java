@@ -56,6 +56,9 @@ public class UserRepository {
         if(!(user.getGitlabServer() == null) && !user.getGitlabServer().trim().isEmpty()) {
             update.set("gitlabServer", user.getGitlabServer());
         }
+        if(!(user.getActiveConfig() == null) && !user.getActiveConfig().trim().isEmpty()) {
+            update.set("activeConfig", user.getActiveConfig());
+        }
 
         if(mongoTemplate.findAndModify(query, update, User.class) == null) {
             throw new ResourceNotFoundException("User not found!");
@@ -96,6 +99,23 @@ public class UserRepository {
         }
 
         return gitlabServer;
+    }
+
+    public String getActiveConfig(String userId) throws ResourceNotFoundException {
+
+        Optional<User> user = findUserByUserId(userId);
+
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        String activeConfig = user.get().getActiveConfig();
+
+        if(activeConfig == null){
+            throw new ResourceNotFoundException("Default Config not found!");
+        }
+
+        return activeConfig;
     }
 
     public List<String> getConfigurationFileNames(String userId) throws ResourceNotFoundException {

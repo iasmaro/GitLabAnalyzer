@@ -41,6 +41,12 @@ public class MemberController {
         memberService.mapAliasToMember(membersAndAliases);
     }
 
+    @PutMapping("alias")
+    public void updateAliasForMembers(@Valid @RequestBody List<MemberDTO> membersAndAliases) {
+
+        memberService.updateAliasForMembers(membersAndAliases);
+    }
+
     @GetMapping("alias")
     public MemberRRDTO getMembersAndAliasesFromGitLab(@RequestParam @NotBlank String userId,
                                                       @RequestParam @NotNull Integer projectId) {

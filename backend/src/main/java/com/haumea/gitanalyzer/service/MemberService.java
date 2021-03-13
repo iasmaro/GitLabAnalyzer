@@ -13,7 +13,9 @@ import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -35,11 +37,17 @@ public class MemberService {
         this.memberMapper = memberMapper;
     }
 
-    public List<String> getMembers(String userId, Integer projectId) {
-
+    private GitlabService createGitlabService(String userId) {
         String token = userService.getPersonalAccessToken(userId);
 
-        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+        String gitlabServer = userService.getGitlabServer(userId);
+
+        return new GitlabService(gitlabServer, token);
+    }
+
+    public List<String> getMembers(String userId, Integer projectId) {
+
+        GitlabService gitlabService = createGitlabService(userId);
 
         List<String> members = new ArrayList<>();
 
@@ -57,11 +65,14 @@ public class MemberService {
 
     }
 
+    public void updateAliasForMembers(List<MemberDTO> membersAndAliases) {
+
+        memberRepository.updateAliasForMembers(membersAndAliases);
+    }
+
     public MemberRRDTO getMembersAndAliasesFromGitLab(String userId, Integer projectId) {
 
-        String token = userService.getPersonalAccessToken(userId);
-
-        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+        GitlabService gitlabService = createGitlabService(userId);
 
         List<String> members = getMembers(userId, projectId);
 

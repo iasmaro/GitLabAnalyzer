@@ -24,7 +24,9 @@ public class ProjectService {
 
         String token = userService.getPersonalAccessToken(userId);
 
-        GitlabService gitlabService = new GitlabService(GlobalConstants.gitlabURL, token);
+        String gitlabServer = userService.getGitlabServer(userId);
+
+        GitlabService gitlabService = new GitlabService(gitlabServer, token);
 
         List<ProjectWrapper> gitlabProjects = gitlabService.getProjects();
         List<ProjectDTO> projects = new ArrayList<>();

@@ -53,6 +53,13 @@ public class UserController {
 
     }
 
+    @GetMapping("/activeConfig")
+    public String getActiveConfig(@RequestParam @NotBlank String userId) {
+
+        return userService.getActiveConfig(userId);
+
+    }
+
     @GetMapping("/userId")
     public String getUserId(@RequestParam @NotBlank String url, @RequestParam @NotBlank String ticket) {
 
