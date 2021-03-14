@@ -7,6 +7,8 @@ import getConfigurations from 'Utils/getConfigurations';
 import getConfigurationInfo from 'Utils/getConfigurationInfo';
 import { useUserState } from 'UserContext';
 import './Configuration.css';
+import ConfigDefault from 'Components/Configurations/ConfigDefault';
+import { defaultConfig } from 'Mocks/mockConfigs.js';
 
 const ConfigurationPage = () => {
 
@@ -18,12 +20,18 @@ const ConfigurationPage = () => {
     const username = useUserState();
 
     const handleClick = (config) => {
-        getConfigurationInfo(username, config).then((data) => {
-            setConfigInfo(data);
+        if (config.fileName === "default") {
+            setConfigInfo(config)
             setSelectedConfig(config);
             setIsLoadingConfigInfo(false);
-            
-        });
+        }
+        else {
+            getConfigurationInfo(username, config).then((data) => {
+                setConfigInfo(data);
+                setSelectedConfig(config);
+                setIsLoadingConfigInfo(false);
+            });
+        }
     }
 
     useEffect(() => {
@@ -43,7 +51,7 @@ const ConfigurationPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    <ConfigDefault defaultConfig={defaultConfig} handleClick={handleClick}/>
                     {!isLoadingConfigs && configs?.length > 0 && configs.map((config) => (
                         <Config key={config} config={config} handleClick={handleClick}/>
                     ))}

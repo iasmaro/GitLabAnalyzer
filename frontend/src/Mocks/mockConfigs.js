@@ -1,36 +1,152 @@
-export const defaultConfig = [
-    {
-        configName: 'CMPT276 Iteration 1',
-        startDate: 'February 20, 2021 @ 12:54:32',
-        endDate: 'March 19, 2021 @ 17:30:00',
-        codeWeightings: {
-            addLine: 1.0,
-            deleteLine: 0.2,
-            comment: 0,
-            spacingChange: 0.0,
-            syntax: 0.2
-        },
-        fileTypes: {
-            java: {
-                weight: 1.0,
-                startComment: '/*',
-                endComment: '*/'
-            },
-            html: {
-                weight: 1.0,
-                startComment: '<!--',
-                endComment: '-->'
-            },
-            css: {
-                weight: 1.0,
-                startComment: '/*',
-                endComment: '*/'
-            },
-            js: {
-                weight: 1.0,
-                startComment: '/*',
-                endComment: '*/'
-            },
+export const defaultConfig = {
+    fileName: "default",
+    start: "Repo creation date",
+    end: (new Date()).toString(),
+    targetBranch: "master",
+    editFactor: {
+      addLine: 1,
+      deleteLine: 0.2,
+      moveLine: 0.5,
+      syntaxLine: 0.2
+    },
+    fileFactor: {
+      html: 1,
+      css: 1,
+      cpp: 1,
+      cxx: 1,
+      java: 1,
+      hpp: 1,
+      hxx: 1,
+      ts: 1,
+      c: 1,
+      js: 1,
+      py: 1,
+      h: 1,
+      xml: 1
+    },
+    ignoreFileExtension: [],
+    commentTypes: {
+      html: [
+        {
+          "startType": "<!--",
+          "endType": "-->"
         }
+      ],
+      css: [
+        {
+          "startType": "/*",
+          "endType": "*/"
+        }
+      ],
+      cpp: [
+        {
+          "startType": "//",
+          "endType": ""
+        },
+        {
+          "startType": "/*",
+          "endType": "*/"
+        }
+      ],
+      cxx: [
+        {
+          "startType": "//",
+          "endType": ""
+        },
+        {
+          "startType": "/*",
+          "endType": "*/"
+        }
+      ],
+      java: [
+        {
+          "startType": "//",
+          "endType": ""
+        },
+        {
+          "startType": "/*",
+          "endType": "*/"
+        }
+      ],
+      hpp: [
+        {
+          "startType": "//",
+          "endType": ""
+        },
+        {
+          "startType": "/*",
+          "endType": "*/"
+        }
+      ],
+      hxx: [
+        {
+          "startType": "//",
+          "endType": ""
+        },
+        {
+          "startType": "/*",
+          "endType": "*/"
+        }
+      ],
+      ts: [
+        {
+          "startType": "//",
+          "endType": ""
+        },
+        {
+          "startType": "/*",
+          "endType": "*/"
+        }
+      ],
+      c: [
+        {
+          "startType": "//",
+          "endType": ""
+        },
+        {
+          "startType": "/*",
+          "endType": "*/"
+        }
+      ],
+      js: [
+        {
+          "startType": "//",
+          "endType": ""
+        },
+        {
+          "startType": "/*",
+          "endType": "*/"
+        }
+      ],
+      py: [
+        {
+          "startType": "#",
+          "endType": ""
+        },
+        {
+          "startType": "\"\"\"",
+          "endType": "\"\"\""
+        },
+        {
+          "startType": "'''",
+          "endType": "'''"
+        }
+      ],
+      h: [
+        {
+          "startType": "//",
+          "endType": ""
+        },
+        {
+          "startType": "/*",
+          "endType": "*/"
+        }
+      ],
+      xml: [
+        {
+          "startType": "<!--",
+          "endType": "-->"
+        }
+      ]
     }
-]
+  }
