@@ -1,7 +1,6 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.UserRepository;
-import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.ProjectWrapper;
 import com.haumea.gitanalyzer.model.Configuration;
@@ -15,7 +14,6 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.net.URL;
-import java.time.Instant;
 import java.util.*;
 
 @Service
