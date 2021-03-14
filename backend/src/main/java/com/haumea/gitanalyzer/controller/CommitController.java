@@ -41,6 +41,7 @@ public class CommitController {
                                                            @PathVariable @NotNull Integer mergeRequestId,
                                                            @PathVariable @NotBlank String memberId) {
 
+
         return commitService.getMergeRequestCommitsForMember(userId, projectId, mergeRequestId, memberId);
     }
 
@@ -50,9 +51,18 @@ public class CommitController {
                                                       @RequestParam @NotNull int projectId) {
 
 
-
+//        System.out.println("vars are: " + memberId + " " + userId + " " + projectId);
 
         return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, memberId);
+//        Date today = new Date();
+//
+//        List<CommitDTO> testList = new ArrayList<>();
+//        CommitDTO test = new CommitDTO("testing... testing", today, "tester", 0.0,
+//                null, 0, 0);
+//
+//        testList.add(test);
+//
+//        return testList;
     }
 
 }

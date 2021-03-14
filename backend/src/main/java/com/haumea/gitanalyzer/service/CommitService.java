@@ -8,6 +8,7 @@ import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
+import com.haumea.gitanalyzer.model.Configuration;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,16 +159,40 @@ public class CommitService {
 
     public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId) {
 
-        List<String> configFileNames = userService.getConfigurationFileNames(userId);
-//        String targetBranch = userService.
+
+        // TODO: Replace with Minh's new default inclusion config method
+        String activeConfigName = userService.getActiveConfig(userId);
+        System.out.println("name of config is: " + activeConfigName);
+
+        Configuration activeConfiguration = userService.getConfigurationByFileName(userId, activeConfigName);
+
+        if(activeConfiguration == null) {
+            System.out.println("active config is null");
+        }
+
+
+        System.out.println("Config is: " + activeConfiguration.getFileFactor());
 
         GitlabService gitlabService = createGitlabService(userId);
         List<CommitWrapper> filteredCommits;
 
+        System.out.println("dates are: " + activeConfiguration.getStart() + "-" + activeConfiguration.getEnd());
+
+
+
         List<String> alias = getAliasForMember(memberId);
 
-//        filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId, "master", start, end, alias);
-        filteredCommits = gitlabService.getAllCommitsWithDiff(projectId);
+        System.out.println("exception is occuring in aliases ");
+
+
+
+        filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId,
+                activeConfiguration.getTargetBranch(),
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd(),
+                alias);
+
+        System.out.println("size of list is: " + filteredCommits.size());
 
         return convertCommitWrappersToDTOs(filteredCommits);
     }
