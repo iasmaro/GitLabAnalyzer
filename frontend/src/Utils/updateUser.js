@@ -1,9 +1,9 @@
-import { config } from 'Constants/constants';
+import { config, SCHEME } from 'Constants/constants';
 
 const updateUser = async (username, token, gitlabServer) => {
     const URL = `${config.USERS_API_URL}`;
-    if (gitlabServer.substring(0,7) !== 'http://' && gitlabServer.substring(0,8) !== 'https://') {
-        gitlabServer = 'http://' + gitlabServer;
+    if (gitlabServer.substring(0,7) !== SCHEME.HTTP && gitlabServer.substring(0,8) !== SCHEME.HTTPS) {
+        gitlabServer = SCHEME.HTTP + gitlabServer;
     }
     fetch(URL, { 
         method: "PUT",

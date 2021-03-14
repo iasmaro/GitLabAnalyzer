@@ -43,3 +43,8 @@ export const message = {
     TOKEN_NOT_SET: 'Please set your gitlab token in the Profile page',
     NO_REPOS: 'It seems that you do not have any repositories at this moment',
 };
+
+export const SCHEME = {
+    HTTP: 'http://',
+    HTTPS: 'https://',
+}

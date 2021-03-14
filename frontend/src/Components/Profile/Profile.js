@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Col, Row } from 'react-bootstrap';
 
+import { SCHEME } from 'Constants/constants';
 import updateUser from 'Utils/updateUser';
 import saveUser from 'Utils/saveUser';
 
@@ -13,7 +14,7 @@ const Profile = (props) => {
     const [gitlabServer, setGitlabServer] = useState(givenGitlabServer);
     const [isInvalid, setInvalid] = useState(false);
     const handleSubmit = (event) => {
-        const invalid = gitlabServer.substring(0,7) !== 'http://' && gitlabServer.substring(0,8) !== 'https://';
+        const invalid = gitlabServer.substring(0,7) !== SCHEME.HTTP && gitlabServer.substring(0,8) !== SCHEME.HTTPS;
         setInvalid(invalid);
         event.preventDefault();
         if (!invalid) {
