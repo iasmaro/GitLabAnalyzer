@@ -63,7 +63,7 @@ public class MergeRequestService {
 
             if(newPath.charAt(index) == '.') {
                 index++;
-                return newPath.substring(index);
+                return newPath.substring(index).toLowerCase();
             }
 
         }
