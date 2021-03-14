@@ -11,10 +11,12 @@ const Profile = (props) => {
     //Adapted from: https://www.code-boost.com/video/ultimate-react-todo-list/
     const [token, setToken] = useState(givenToken);
     const [gitlabServer, setGitlabServer] = useState(givenGitlabServer);
-    const isInvalid = gitlabServer.substring(0,7) !== 'http://' && gitlabServer.substring(0,8) !== 'https://';
+    const [isInvalid, setInvalid] = useState(false);
     const handleSubmit = (event) => {
+        const invalid = gitlabServer.substring(0,7) !== 'http://' && gitlabServer.substring(0,8) !== 'https://';
+        setInvalid(invalid);
         event.preventDefault();
-        if (!isInvalid) {
+        if (!invalid) {
             if (givenToken || givenGitlabServer) {
                 updateUser(username, token, gitlabServer);
             } else {
