@@ -7,15 +7,10 @@ import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MemberWrapper;
 import com.haumea.gitanalyzer.mapper.MemberMapper;
 import com.haumea.gitanalyzer.model.Member;
-import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,17 +29,9 @@ public class MemberService {
         this.memberMapper = memberMapper;
     }
 
-    private GitlabService createGitlabService(String userId) {
-        String token = userService.getPersonalAccessToken(userId);
-
-        String gitlabServer = userService.getGitlabServer(userId);
-
-        return new GitlabService(gitlabServer, token);
-    }
-
     public List<String> getMembers(String userId, Integer projectId) {
 
-        GitlabService gitlabService = createGitlabService(userId);
+        GitlabService gitlabService = userService.createGitlabService(userId);
 
         List<String> members = new ArrayList<>();
 
@@ -69,7 +56,7 @@ public class MemberService {
 
     public MemberRRDTO getMembersAndAliasesFromGitLab(String userId, Integer projectId) {
 
-        GitlabService gitlabService = createGitlabService(userId);
+        GitlabService gitlabService = userService.createGitlabService(userId);
 
         List<String> members = getMembers(userId, projectId);
 
