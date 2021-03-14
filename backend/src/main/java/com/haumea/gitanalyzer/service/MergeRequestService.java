@@ -47,14 +47,14 @@ public class MergeRequestService {
         return memberService.getAliasesForSelectedMember(memberId);
     }
 
-    private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, Date start, Date end) {
+    private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, String targetBranch, Date start, Date end) {
 
-        return gitlabService.getFilteredMergeRequestsWithDiff(projectId, "master", start, end);
+        return gitlabService.getFilteredMergeRequestsWithDiff(projectId, targetBranch, start, end);
     }
 
-    private List<MergeRequestWrapper> getMergeRequestWrapperForMember(GitlabService gitlabService, int projectId, Date start, Date end, List<String> alias) {
+    private List<MergeRequestWrapper> getMergeRequestWrapperForMember(GitlabService gitlabService, int projectId, String targetBranch, Date start, Date end, List<String> alias) {
 
-        return gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, "master", start, end, alias);
+        return gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, targetBranch, start, end, alias);
     }
 
     private String getDiffExtension(String newPath) {
@@ -167,7 +167,17 @@ public class MergeRequestService {
 
         double sumOfCommitScore = getSumOfCommitsScore(commitDTOList);
 
-        return new MergeRequestDTO(mergeRequestIiD, mergeRequestTitle, mergedDate, createdDate, updatedDate, roundScore(this.MRScore), sumOfCommitScore, mergeRequestDiffs, this.linesAdded, this.linesRemoved, commitDTOList);
+        return new MergeRequestDTO(mergeRequestIiD,
+                mergeRequestTitle,
+                mergedDate,
+                createdDate,
+                updatedDate,
+                roundScore(this.MRScore),
+                sumOfCommitScore,
+                mergeRequestDiffs,
+                this.linesAdded,
+                this.linesRemoved,
+                commitDTOList);
     }
 
     private MergeRequestDTO createDummyMergeRequest(List<CommitDTO> commitDTOList) {
@@ -188,7 +198,6 @@ public class MergeRequestService {
         return new MergeRequestDTO(mergeRequestIid, mergeRequestTitle, mergedDate, createdDate, mergedDate, roundScore(this.MRScore), sumOfCommitScore, dummyMergeRequestDiffList, this.linesAdded, this.linesRemoved, commitDTOList);
     }
 
-    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, Date start, Date end) {
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId) {
 
         GitlabService gitlabService = userService.createGitlabService(userId);
@@ -198,6 +207,7 @@ public class MergeRequestService {
         List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapper(
                 gitlabService,
                 projectId,
+                activeConfiguration.getTargetBranch(),
                 activeConfiguration.getStart(),
                 activeConfiguration.getEnd());
 
@@ -209,7 +219,11 @@ public class MergeRequestService {
             mergeRequestDTOList.add(mergeRequestDTO);
         }
 
-        List<CommitDTO> dummyCommitDTOList = commitService.getAllOrphanCommits(userId, projectId, "master", start, end);
+        List<CommitDTO> dummyCommitDTOList = commitService.getAllOrphanCommits(userId,
+                projectId,
+                activeConfiguration.getTargetBranch(),
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd());
 
         if(!dummyCommitDTOList.isEmpty()) {
 
@@ -232,6 +246,7 @@ public class MergeRequestService {
         List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapperForMember(
                 gitlabService,
                 projectId,
+                activeConfiguration.getTargetBranch(),
                 activeConfiguration.getStart(),
                 activeConfiguration.getEnd(),
                 alias);
@@ -244,7 +259,12 @@ public class MergeRequestService {
             mergeRequestDTOList.add(mergeRequestDTO);
         }
 
-        List<CommitDTO> dummyCommitDTOList = commitService.getOrphanCommitsForSelectedMemberAndDate(userId, projectId, "master", memberId, start, end);
+        List<CommitDTO> dummyCommitDTOList = commitService.getOrphanCommitsForSelectedMemberAndDate(userId,
+                projectId,
+                activeConfiguration.getTargetBranch(),
+                memberId,
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd());
 
         if(!dummyCommitDTOList.isEmpty()) {
 
