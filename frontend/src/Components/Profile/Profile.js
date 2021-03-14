@@ -7,6 +7,9 @@ import saveUser from 'Utils/saveUser';
 
 import './Profile.css';
 
+const tokenPlaceHolder = 'Enter access token';
+const serverPlaceHolder = 'Enter GitLab server url';
+
 const Profile = (props) => {
     const { username, givenToken, givenGitlabServer } = props || {};
     //Adapted from: https://www.code-boost.com/video/ultimate-react-todo-list/
@@ -44,14 +47,14 @@ const Profile = (props) => {
                 <Row>
                     <Col sm="9">
                         <Form.Label>Access token</Form.Label>
-                        <Form.Control required type="text" placeholder={givenToken ? token : 'Enter access token'} value={token} onChange={handleTokenChange}/>
+                        <Form.Control required type="text" placeholder={givenToken ? token : tokenPlaceHolder} value={token} onChange={handleTokenChange}/>
                     </Col>
                 </Row>
                 <Row>
                     <Col sm="9">
                         <Form.Group>
                             <Form.Label>GitLab server</Form.Label>
-                            <Form.Control required type="text" isInvalid={isInvalid} placeholder={givenGitlabServer ? gitlabServer : 'Enter GitLab server url'} value={gitlabServer} onChange={handleGitlabServerChange}/>
+                            <Form.Control required type="text" isInvalid={isInvalid} placeholder={givenGitlabServer ? gitlabServer : serverPlaceHolder} value={gitlabServer} onChange={handleGitlabServerChange}/>
                             <Form.Control.Feedback type="invalid">
                                 URL must start with either http:// or https://
                             </Form.Control.Feedback>
