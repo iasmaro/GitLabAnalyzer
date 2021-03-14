@@ -11,12 +11,15 @@ const Profile = (props) => {
     //Adapted from: https://www.code-boost.com/video/ultimate-react-todo-list/
     const [token, setToken] = useState(givenToken);
     const [gitlabServer, setGitlabServer] = useState(givenGitlabServer);
+    const isInvalid = gitlabServer.substring(0,7) !== 'http://' && gitlabServer.substring(0,8) !== 'https://';
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (givenToken || givenGitlabServer) {
-            updateUser(username, token, gitlabServer);
-        } else {
-            saveUser(username, token, gitlabServer);
+        if (!isInvalid) {
+            if (givenToken || givenGitlabServer) {
+                updateUser(username, token, gitlabServer);
+            } else {
+                saveUser(username, token, gitlabServer);
+            }
         }
     }
 
@@ -27,7 +30,6 @@ const Profile = (props) => {
     const handleGitlabServerChange = (event) => {
         setGitlabServer(event.target.value)
     }
-
     return (
         <>
             <Row>
@@ -39,14 +41,17 @@ const Profile = (props) => {
                 <Row>
                     <Col sm="9">
                         <Form.Label>Access token</Form.Label>
-                        <Form.Control required type="text" placeholder={givenToken ? token : "Enter access token"} value={token} onChange={handleTokenChange}/>
+                        <Form.Control required type="text" placeholder={givenToken ? token : 'Enter access token'} value={token} onChange={handleTokenChange}/>
                     </Col>
                 </Row>
                 <Row>
                     <Col sm="9">
                         <Form.Group>
                             <Form.Label>GitLab server</Form.Label>
-                            <Form.Control required type="text" placeholder={givenGitlabServer ? gitlabServer : "Enter GitLab server url"} value={gitlabServer} onChange={handleGitlabServerChange}/>
+                            <Form.Control required type="text" isInvalid={isInvalid} placeholder={givenGitlabServer ? gitlabServer : 'Enter GitLab server url'} value={gitlabServer} onChange={handleGitlabServerChange}/>
+                            <Form.Control.Feedback type="invalid">
+                                URL must start with either http:// or https://
+                            </Form.Control.Feedback>
                         </Form.Group>
                     </Col>
                 </Row>
