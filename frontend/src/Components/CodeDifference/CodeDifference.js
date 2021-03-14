@@ -9,7 +9,7 @@ import getLanguageFromFile from 'Utils/getLanguageFromFile';
 
 import FileHeader from './components/FileHeader';
 import './CodeDifference.css';
-import './prism.css';
+import './syntaxHighlighter/prism.css';
 
 
 const CodeDifference = (props) => {
