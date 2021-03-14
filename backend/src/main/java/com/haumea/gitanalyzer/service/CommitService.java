@@ -87,9 +87,20 @@ public class CommitService {
 
             List<CommentType> commentTypes = configuration.getCommentTypes().getOrDefault(diffExtension, createDefaultCommentTypes());
 
-            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(), diff.getDeletedFile(), addLine, deleteLine, syntaxLine, moveLine, fileTypeMultiplier, commentTypes);
+            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
+                    diff.getDeletedFile(),
+                    addLine,
+                    deleteLine,
+                    syntaxLine,
+                    moveLine,
+                    fileTypeMultiplier,
+                    commentTypes);
 
-            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diffExtension, diff.getDiff(), scoreDTO);
+            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(),
+                    diff.getNewPath(),
+                    diffExtension,
+                    diff.getDiff(),
+                    scoreDTO);
 
             this.linesAdded = this.linesAdded + scoreDTO.getLinesAdded();
             this.linesRemoved = this.linesRemoved + scoreDTO.getLinesRemoved();
