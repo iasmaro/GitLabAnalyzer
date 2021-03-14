@@ -159,7 +159,6 @@ public class UserRepository {
         return user.get();
     }
 
-
     public Configuration getConfigurationByFileName(String userId, String configFileName) throws ResourceNotFoundException {
 
         Optional<User> user = findUserByUserId(userId);
