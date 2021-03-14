@@ -38,10 +38,6 @@ public class CommitService {
         this.commitScore = 0.0;
     }
 
-    public UserService getUserService() {
-        return userService;
-    }
-
     private List<String> getAliasForMember(String memberId) {
 
         List<String> alias = memberService.getAliasesForSelectedMember(memberId);

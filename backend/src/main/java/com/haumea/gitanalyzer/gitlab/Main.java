@@ -126,12 +126,6 @@ public class Main {
 
         test.testGetMergeRequestDiffs(25516, 52);
 
-
-
-
-
-
-
     }
 
 }
