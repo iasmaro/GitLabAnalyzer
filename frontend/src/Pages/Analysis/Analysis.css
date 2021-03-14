@@ -1,5 +1,8 @@
 .analysis-page {
     background-color: #acbed8;
     height: 100vh;
-    color: #ffffff;
+}
+
+.spinner {
+    color: #fff;
 }
