@@ -5,7 +5,7 @@ import './FileHeader.css';
 
 
 const FileHeader = (props) => {
-    const { isOpen, fileName, linesAdded, linesRemoved } = props || {};
+    const { isOpen, fileName, linesAdded, linesRemoved, diffScore } = props || {};
 
     return (
         <>
@@ -19,6 +19,10 @@ const FileHeader = (props) => {
                 </div>
                 <div className="lines-removed">
                     <span>-{linesRemoved}</span>
+                </div>
+                <div>
+                    <span> Score: </span>
+                    <span>{diffScore}</span>
                 </div>
             </div>
         </>         

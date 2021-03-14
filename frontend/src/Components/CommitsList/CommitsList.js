@@ -35,8 +35,8 @@ const CommitsList = (props) => {
                         <td colSpan={4} >{message.NO_COMMITS}</td>
                     )
                     :
-                    commits.map((commit) => (
-                        <Commit key={commit?.commitId} commit={commit} handleClick={handleClick} />
+                    commits.map((commit, i) => (
+                        <Commit key={i} commit={commit} handleClick={handleClick} />
                     ))}
 
                 </tbody>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 import { parseDiff, Diff, tokenize } from 'react-diff-view';
@@ -36,6 +36,7 @@ const CodeDifference = (props) => {
     const linesAdded = diff.codeDiff.match(/\n\+/g)?.length || 0;
     const linesRemoved = diff.codeDiff.match(/\n-/g)?.length || 0;
     const fileName = diff.newPath;
+    const diffScore = diff.diffScore || 0;
 
     const language = getLanguageFromFile(fileName);
 
@@ -60,7 +61,7 @@ const CodeDifference = (props) => {
             <Card>
                 <Card.Header>
                     <Accordion.Toggle as="div" eventKey="1" onClick={handleClick} className="diff-toggle">
-                        <FileHeader isOpen={isOpen} linesAdded={linesAdded} linesRemoved={linesRemoved} fileName={fileName} />
+                        <FileHeader isOpen={isOpen} linesAdded={linesAdded} linesRemoved={linesRemoved} fileName={fileName} diffScore={diffScore} />
                     </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="1">

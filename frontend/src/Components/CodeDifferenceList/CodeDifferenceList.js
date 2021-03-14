@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button'
 
 import CodeDifference from 'Components/CodeDifference/CodeDifference';
