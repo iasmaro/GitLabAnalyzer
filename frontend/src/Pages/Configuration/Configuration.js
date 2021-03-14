@@ -3,7 +3,9 @@ import { Table, Spinner } from 'react-bootstrap';
 
 import Config from 'Components/Configurations/Config';
 import ConfigDetails from 'Components/Configurations/ConfigDetails';
-import { configs } from 'Mocks/mockConfigs.js'
+import getConfigurations from 'Utils/getConfigurations';
+import getConfigurationInfo from 'Utils/getConfigurationInfo';
+import { useUserState } from 'UserContext';
 import './Configuration.css';
 
 const ConfigurationPage = () => {
@@ -11,20 +13,35 @@ const ConfigurationPage = () => {
     const [selectedConfig, setSelectedConfig] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [configInfo, setConfigInfo] = useState();
+    const [configs, setConfigs] = useState([]);
+    const username = useUserState();
 
     const handleClick = (config) => {
-        setSelectedConfig(config?.configName);
+        setSelectedConfig(config);
         setIsLoading(false);
-        setConfigInfo(config)
+
+        getConfigurationInfo(username, selectedConfig).then((data) => {
+            console.log(data)
+            setConfigInfo(data);
+        });
     }
 
     useEffect(() => {
-        if (configs.length > 0) {
-            setSelectedConfig(configs?.[0].configName);
+        getConfigurations(username).then((data) => {
+            setConfigs(data);
             setIsLoading(false);
-            setConfigInfo(configs[0]);
+        });
+    }, [username]);
+
+    useEffect(() => {
+        if (configs.length > 0) {
+            setSelectedConfig(configs[0]);
+            setIsLoading(false);
         }
-      }, []);
+      }, [configs]);
+
+
+
 
     return (
     <div className = 'configs-list-container'>
@@ -37,14 +54,14 @@ const ConfigurationPage = () => {
                 </thead>
                 <tbody>
                     {configs.map((config) => (
-                        <Config key={config?.configName} config={config} handleClick={handleClick}/>
+                        <Config key={config} config={config} handleClick={handleClick}/>
                     ))}
                 </tbody>
             </Table>
         </div>
         <div className="right">
             {selectedConfig && isLoading && <Spinner animation="border" className="right-spinner" />}
-            {selectedConfig && !isLoading && <ConfigDetails configInfo={configInfo} />}
+            {/* {selectedConfig && !isLoading && <ConfigDetails configInfo={configInfo} />} */}
         </div>
     </div>
     )

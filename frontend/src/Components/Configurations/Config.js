@@ -4,7 +4,7 @@ const Config = (props) => {
     const { config, handleClick } = props || {};
     return (
         <tr onClick={() => {handleClick(config)}}>
-            <td>{config?.configName}</td>
+            <td>{config}</td>
         </tr>
     );
 }
