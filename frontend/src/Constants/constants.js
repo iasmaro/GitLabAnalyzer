@@ -8,6 +8,8 @@ const dev = {
     USERS_API_URL: 'http://localhost:8080/api/v1/users',
     USERS_TOKEN_API_URL: 'http://localhost:8080/api/v1/users/token',
     PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
+    PROJECT_ALIAS_API_URL: 'http://localhost:8080/api/v1/members/alias',
+    PROJECT_MAPPING_API_URL: 'http://localhost:8080/api/v1/members/mapping',
 }
 
 const prod = {

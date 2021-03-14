@@ -18,6 +18,7 @@ const RepoModal = (props) => {
     const [config, setConfig] = useState("Select a configuration");
     const [aliasIdPairs, setAliasIdPairs] = useState(createInitialAliasIdPairs(aliases, members, databaseMapping)); 
     const databaseAliasIdPairs = createInitialAliasIdPairs(aliases, members, databaseMapping);
+    const mapping = createMappingContainingPastAliases(aliases, members, databaseMapping);
 
     console.log("DATA FROM API CALLS");
     console.log(aliases);
@@ -41,24 +42,16 @@ const RepoModal = (props) => {
     const handleClick = () => {
 
         if (config !== "Select a configuration") {
-
-            const mapping = createMappingContainingPastAliases(aliases, databaseMapping);
             createApiMappingFromLocalMapping(mapping); 
-            console.log('DATA IN MAP/POST REQUEST');
-            console.log(mapping);
             if (noMembersHaveAliases(databaseMapping)) {
-                console.log('no members have aliases');
-                //mapAliasToMember(mapping);
+                mapAliasToMember(mapping);
             } else if (allMembersHaveAliases(databaseMapping)) {
-                console.log('all members have aliases');
                 if(!sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs)) {
-                    console.log('submit put request');
-                    //updateAliasForMembers(mapping);
+                    updateAliasForMembers(mapping);
                 }
             } else {
-                console.log('some members have aliases, some dont');
                 if(!sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs)) {
-                    //mapAliasToMember(mapping);
+                    mapAliasToMember(mapping);
                 }
             }  
             //setRedirect(true);

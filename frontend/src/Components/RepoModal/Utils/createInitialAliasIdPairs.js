@@ -1,10 +1,12 @@
 // Return array of alias and memberIndex pairs which are used to track the user's mapping of members and aliases in current repo
 export function createInitialAliasIdPairs(aliases, members, databaseMapping) {
     const aliasIdPairs = aliases.map((alias) => ({alias:alias, memberIndex: -1}));
+    // Fill array with initial databaseMapping pairs
     for (var i = 0; i < databaseMapping.length; i++) {
         for (var j = 0; j < databaseMapping[i].alias.length; j++) {
-            if (aliases.indexOf(databaseMapping[i].alias[j]) !== -1) {
-                aliasIdPairs[aliases.indexOf(databaseMapping[i].alias[j])].memberIndex = members.indexOf(databaseMapping[i].memberId);
+            const indexOfDatabaseAliasInAliases = aliases.indexOf(databaseMapping[i].alias[j]);
+            if (indexOfDatabaseAliasInAliases !== -1) {
+                aliasIdPairs[indexOfDatabaseAliasInAliases].memberIndex = members.indexOf(databaseMapping[i].memberId);
             }
         }
     }
