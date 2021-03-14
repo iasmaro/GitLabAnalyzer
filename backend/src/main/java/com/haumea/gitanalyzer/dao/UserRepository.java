@@ -111,10 +111,6 @@ public class UserRepository {
 
         String activeConfig = user.get().getActiveConfig();
 
-        if(activeConfig == null){
-            throw new ResourceNotFoundException("Default Config not found!");
-        }
-
         return activeConfig;
     }
 
@@ -158,7 +154,6 @@ public class UserRepository {
 
         return user.get();
     }
-
 
     public Configuration getConfigurationByFileName(String userId, String configFileName) throws ResourceNotFoundException {
 
