@@ -47,14 +47,14 @@ public class MergeRequestService {
         return memberService.getAliasesForSelectedMember(memberId);
     }
 
-    private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, Date start, Date end) {
+    private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, String targetBranch, Date start, Date end) {
 
-        return gitlabService.getFilteredMergeRequestsWithDiff(projectId, "master", start, end);
+        return gitlabService.getFilteredMergeRequestsWithDiff(projectId, targetBranch, start, end);
     }
 
-    private List<MergeRequestWrapper> getMergeRequestWrapperForMember(GitlabService gitlabService, int projectId, Date start, Date end, List<String> alias) {
+    private List<MergeRequestWrapper> getMergeRequestWrapperForMember(GitlabService gitlabService, int projectId, String targetBranch, Date start, Date end, List<String> alias) {
 
-        return gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, "master", start, end, alias);
+        return gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, targetBranch, start, end, alias);
     }
 
     private String getDiffExtension(String newPath) {
@@ -70,8 +70,17 @@ public class MergeRequestService {
         return "No extension";
     }
 
-    //TODO: Update passing configuration file to calculator
-    private List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff) {
+    private List<CommentType> createDefaultCommentTypes() {
+
+        List<CommentType> defaultCommentTypes = new ArrayList<>();
+
+        defaultCommentTypes.add(new CommentType("//", ""));
+        defaultCommentTypes.add(new CommentType("/*", "*/"));
+
+        return defaultCommentTypes;
+    }
+
+    private List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff, Configuration configuration) {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
@@ -81,26 +90,33 @@ public class MergeRequestService {
 
         List<DiffDTO> mergeRequestDiffs = new ArrayList<>();
 
-        List<CommentType> commentTypes = new ArrayList<>();
-        commentTypes.add(new CommentType("//", ""));
-        commentTypes.add(new CommentType("/*", "*/"));
-
         List<Diff> codeDiffs = mergeRequestDiff.getDiffs();
 
         for(Diff diff : codeDiffs) {
 
-            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
-                                                                            diff.getDeletedFile(),
-                                                                            1,
-                                                                            0.2,
-                                                                            0,
-                                                                            0,
-                                                                            1,
-                                                                            commentTypes);
-
             String diffExtension = getDiffExtension(diff.getNewPath());
 
-            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diffExtension, diff.getDiff(), scoreDTO);
+            double addLine = configuration.getEditFactor().getOrDefault("addLine", 1.0F).doubleValue();
+            double deleteLine = configuration.getEditFactor().getOrDefault("deleteLine", 1.0F).doubleValue();
+            double syntaxLine = configuration.getEditFactor().getOrDefault("syntaxLine", 1.0F).doubleValue();
+            double moveLine = configuration.getEditFactor().getOrDefault("moveLine", 1.0F).doubleValue();
+            double fileTypeMultiplier = configuration.getFileFactor().getOrDefault(diffExtension, 1.0F).doubleValue();
+
+            List<CommentType> commentTypes = configuration.getCommentTypes().getOrDefault(diffExtension, createDefaultCommentTypes());
+
+            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
+                    diff.getDeletedFile(),
+                    addLine, deleteLine,
+                    syntaxLine,
+                    moveLine,
+                    fileTypeMultiplier,
+                    commentTypes);
+
+            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(),
+                    diff.getNewPath(),
+                    diffExtension,
+                    diff.getDiff(),
+                    scoreDTO);
 
             this.linesAdded = this.linesAdded + scoreDTO.getLinesAdded();
             this.linesRemoved = this.linesRemoved + scoreDTO.getLinesRemoved();
@@ -144,12 +160,42 @@ public class MergeRequestService {
         Date createdDate = mergeRequest.getCreatedAt();
         Date updatedDate = mergeRequest.getUpdatedAt();
 
-        List<DiffDTO> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestDiff());
+        Configuration configuration = userService.getConfiguration(userId, projectId);
+
+        List<DiffDTO> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestDiff(), configuration);
         List<CommitDTO> commitDTOList = commitService.getCommitsForSelectedMergeRequest(userId, projectId, mergeRequestIiD);
 
         double sumOfCommitScore = getSumOfCommitsScore(commitDTOList);
 
-        return new MergeRequestDTO(mergeRequestIiD, mergeRequestTitle, mergedDate, createdDate, updatedDate, roundScore(this.MRScore), sumOfCommitScore, mergeRequestDiffs, this.linesAdded, this.linesRemoved, commitDTOList);
+        return new MergeRequestDTO(mergeRequestIiD,
+                mergeRequestTitle,
+                mergedDate,
+                createdDate,
+                updatedDate,
+                roundScore(this.MRScore),
+                sumOfCommitScore,
+                mergeRequestDiffs,
+                this.linesAdded,
+                this.linesRemoved,
+                commitDTOList);
+    }
+
+    private MergeRequestDTO createDummyMergeRequest(List<CommitDTO> commitDTOList) {
+
+        int size = commitDTOList.size();
+        int mergeRequestIid = -1;
+        String mergeRequestTitle = "All commits made directly to master";
+        Date mergedDate = commitDTOList.get(size - 1).getCommitDate();
+        Date createdDate = commitDTOList.get(0).getCommitDate();
+
+        List<DiffDTO> dummyMergeRequestDiffList = new ArrayList<>();
+        for(CommitDTO commitDTO : commitDTOList) {
+            dummyMergeRequestDiffList.addAll(commitDTO.getCommitDiffs());
+        }
+
+        double sumOfCommitScore = getSumOfCommitsScore(commitDTOList);
+
+        return new MergeRequestDTO(mergeRequestIid, mergeRequestTitle, mergedDate, createdDate, mergedDate, roundScore(this.MRScore), sumOfCommitScore, dummyMergeRequestDiffList, this.linesAdded, this.linesRemoved, commitDTOList);
     }
 
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId) {
@@ -161,6 +207,7 @@ public class MergeRequestService {
         List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapper(
                 gitlabService,
                 projectId,
+                activeConfiguration.getTargetBranch(),
                 activeConfiguration.getStart(),
                 activeConfiguration.getEnd());
 
@@ -171,6 +218,19 @@ public class MergeRequestService {
             MergeRequestDTO mergeRequestDTO = getMergeRequestDTO(userId, projectId, mergeRequestWrapper);
             mergeRequestDTOList.add(mergeRequestDTO);
         }
+
+        List<CommitDTO> dummyCommitDTOList = commitService.getAllOrphanCommits(userId,
+                projectId,
+                activeConfiguration.getTargetBranch(),
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd());
+
+        if(!dummyCommitDTOList.isEmpty()) {
+
+            MergeRequestDTO dummyMergeRequestDTO = createDummyMergeRequest(dummyCommitDTOList);
+            mergeRequestDTOList.add(dummyMergeRequestDTO);
+        }
+
 
         return mergeRequestDTOList;
     }
@@ -186,6 +246,7 @@ public class MergeRequestService {
         List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapperForMember(
                 gitlabService,
                 projectId,
+                activeConfiguration.getTargetBranch(),
                 activeConfiguration.getStart(),
                 activeConfiguration.getEnd(),
                 alias);
@@ -198,6 +259,21 @@ public class MergeRequestService {
             mergeRequestDTOList.add(mergeRequestDTO);
         }
 
+        List<CommitDTO> dummyCommitDTOList = commitService.getOrphanCommitsForSelectedMemberAndDate(userId,
+                projectId,
+                activeConfiguration.getTargetBranch(),
+                memberId,
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd());
+
+        if(!dummyCommitDTOList.isEmpty()) {
+
+            MergeRequestDTO dummyMergeRequestDTO = createDummyMergeRequest(dummyCommitDTOList);
+            mergeRequestDTOList.add(dummyMergeRequestDTO);
+        }
+
+
         return mergeRequestDTOList;
     }
+
 }
