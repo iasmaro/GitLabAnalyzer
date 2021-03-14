@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Form, Button, Col, Row} from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Form, Button, Col, Row } from 'react-bootstrap';
 
 import updateUser from 'Utils/updateUser';
 import saveUser from 'Utils/saveUser';
@@ -9,14 +9,11 @@ import './Profile.css';
 const Profile = (props) => {
     const { username, givenToken, givenGitlabServer } = props || {};
     //Adapted from: https://www.code-boost.com/video/ultimate-react-todo-list/
-    const [savedToken, setSavedToken] = useState(givenToken);
     const [token, setToken] = useState(givenToken);
-    const [savedGitlabServer, setSavedGitlabServer] = useState(givenGitlabServer);
-    const [gitlabServer, setGitlabServer] = useState('');
-
+    const [gitlabServer, setGitlabServer] = useState(givenGitlabServer);
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (savedToken && savedGitlabServer) {
+        if (givenToken || givenGitlabServer) {
             updateUser(username, token, gitlabServer);
         } else {
             saveUser(username, token, gitlabServer);
@@ -41,12 +38,16 @@ const Profile = (props) => {
             <Form className="profile-form" onSubmit={handleSubmit}>                
                 <Row>
                     <Col sm="9">
-                        <Form.Control required type="text" placeholder={savedToken? token : "Enter access token"} value={token} onChange={handleTokenChange}/>
+                        <Form.Label>Access token</Form.Label>
+                        <Form.Control required type="text" placeholder={givenToken ? token : "Enter access token"} value={token} onChange={handleTokenChange}/>
                     </Col>
                 </Row>
                 <Row>
                     <Col sm="9">
-                        <Form.Control required type="text" placeholder={savedGitlabServer? gitlabServer : "Enter GitLab server url"} value={gitlabServer} onChange={handleGitlabServerChange}/>
+                        <Form.Group>
+                            <Form.Label>GitLab server</Form.Label>
+                            <Form.Control required type="text" placeholder={givenGitlabServer ? gitlabServer : "Enter GitLab server url"} value={gitlabServer} onChange={handleGitlabServerChange}/>
+                        </Form.Group>
                     </Col>
                 </Row>
                 <Row>
@@ -54,17 +55,7 @@ const Profile = (props) => {
                         <Button variant="success" type="submit">Save Changes</Button>
                     </Col>
                 </Row>
-            </Form>               
-            {/* {savedToken && <Row className="token">
-                <Col sm="9">
-                    {savedToken}
-                </Col>
-            </Row>}
-            {savedGitlabServer && <Row className="token">
-                <Col sm="9">
-                    {savedGitlabServer}
-                </Col>
-            </Row>} */}
+            </Form>
         </>
     )
 }
