@@ -182,7 +182,11 @@ public class CommitService {
 
         List<String> alias = getAliasForMember(memberId);
 
-        System.out.println("exception is occuring in aliases ");
+        System.out.println("target branch is: " + activeConfiguration.getTargetBranch());
+
+
+        System.out.println("alias list size is: " + alias.size());
+
 
 
 
