@@ -8,6 +8,7 @@ import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
+import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.MergeRequest;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -51,11 +54,14 @@ public class MergeRequestService {
 
     private List<String> getAliasForMember(String memberId) {
 
-        List<String> alias = new ArrayList<>();
-        alias.add("hvtruong");
-        alias.add("Viet");
+        return memberService.getAliasesForSelectedMember(memberId);
+    }
 
-        return alias;
+    private Configuration getConfiguration(String userId) {
+
+        String activeConfiguration = userService.getActiveConfig(userId);
+
+        return userService.getConfigurationByFileName(userId, activeConfiguration);
     }
 
     private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, Date start, Date end) {
@@ -66,6 +72,16 @@ public class MergeRequestService {
     private List<MergeRequestWrapper> getMergeRequestWrapperForMember(GitlabService gitlabService, int projectId, Date start, Date end, List<String> alias) {
 
         return gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, "master", start, end, alias);
+    }
+
+    private List<CommentType> createDefaultCommentTypes(){
+
+        List<CommentType> defaultCommentTypes = new ArrayList<>();
+
+        defaultCommentTypes.add(new CommentType("//", ""));
+        defaultCommentTypes.add(new CommentType("/*", "*/"));
+
+        return defaultCommentTypes;
     }
 
     private String getDiffExtension(String newPath) {
@@ -81,8 +97,7 @@ public class MergeRequestService {
         return "No extension";
     }
 
-    //TODO: Update passing configuration file to calculator
-    private List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff) {
+    private List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff, Configuration configuration) {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
@@ -92,24 +107,21 @@ public class MergeRequestService {
 
         List<DiffDTO> mergeRequestDiffs = new ArrayList<>();
 
-        List<CommentType> commentTypes = new ArrayList<>();
-        commentTypes.add(new CommentType("//", ""));
-        commentTypes.add(new CommentType("/*", "*/"));
-
         List<Diff> codeDiffs = mergeRequestDiff.getDiffs();
 
         for(Diff diff : codeDiffs) {
 
-            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
-                                                                            diff.getDeletedFile(),
-                                                                            1,
-                                                                            0.2,
-                                                                            0,
-                                                                            0,
-                                                                            1,
-                                                                            commentTypes);
-
             String diffExtension = getDiffExtension(diff.getNewPath());
+
+            double addLine = configuration.getEditFactor().getOrDefault("addLine", 1.0F).doubleValue();
+            double deleteLine = configuration.getEditFactor().getOrDefault("deleteLine", 1.0F).doubleValue();
+            double syntaxLine = configuration.getEditFactor().getOrDefault("deleteLine", 1.0F).doubleValue();
+            double moveLine = configuration.getEditFactor().getOrDefault("moveLine", 1.0F).doubleValue();
+            double fileTypeMultiplier = configuration.getFileFactor().getOrDefault("fileTypeMultiplier", 1.0F).doubleValue();
+
+            List<CommentType> commentTypes = configuration.getCommentTypes().getOrDefault(diffExtension, createDefaultCommentTypes());
+
+            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(), diff.getDeletedFile(), addLine, deleteLine, syntaxLine, moveLine, fileTypeMultiplier, commentTypes);
 
             DiffDTO diffDTO = new DiffDTO(diff.getOldPath(), diff.getNewPath(), diffExtension, diff.getDiff(), scoreDTO);
 
@@ -155,7 +167,10 @@ public class MergeRequestService {
         Date createdDate = mergeRequest.getCreatedAt();
         Date updatedDate = mergeRequest.getUpdatedAt();
 
-        List<DiffDTO> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestDiff());
+        Configuration configuration = getConfiguration(userId);
+
+        List<DiffDTO> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestDiff(), configuration);
+
         List<CommitDTO> commitDTOList = commitService.getCommitsForSelectedMergeRequest(userId, projectId, mergeRequestIiD);
 
         double sumOfCommitScore = getSumOfCommitsScore(commitDTOList);
@@ -198,8 +213,6 @@ public class MergeRequestService {
         List<CommitDTO> dummyCommitDTOList = commitService.getAllOrphanCommits(userId, projectId, "master", start, end);
 
         if(!dummyCommitDTOList.isEmpty()) {
-
-            System.out.println("Dummy");
 
             MergeRequestDTO dummyMergeRequestDTO = createDummyMergeRequest(dummyCommitDTOList);
             mergeRequestDTOList.add(dummyMergeRequestDTO);
