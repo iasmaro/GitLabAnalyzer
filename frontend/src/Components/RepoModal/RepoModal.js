@@ -5,6 +5,9 @@ import { Redirect } from "react-router-dom";
 import RepoModalConfig from './Components/RepoModalConfig';
 import RepoModalMapAliasTable from './Components/RepoModalMapAliasTable';
 import mapAliasToMember from 'Utils/mapAliasToMember';
+import updateAliasForMembers from 'Utils/updateAliasForMembers';
+import { allMembersHaveAliases, noMembersHaveAliases } from './Utils/checkInitialMemberAliasMapping';
+import { createMappingContainingPastAliases } from './Utils/createMappingContainingPastAliases';
 import { createInitialAliasIdPairs } from './Utils/createInitialAliasIdPairs';
 import { sameAliasIdPairs } from './Utils/sameAliasIdPairs';
 
@@ -16,23 +19,10 @@ const RepoModal = (props) => {
     const [aliasIdPairs, setAliasIdPairs] = useState(createInitialAliasIdPairs(aliases, members, databaseMapping)); 
     const databaseAliasIdPairs = createInitialAliasIdPairs(aliases, members, databaseMapping);
 
-    // MOCK VALUES:
-    // members = ['anne', 'billy', 'chris', 'dan', 'emily', 'fred', 'k', 'h'];
-    // aliases = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
-    // databaseMapping = [ {alias:['a', 'm'], memberId:'anne'}, {alias:['f', 'l'], memberId:'fred'} ];
-    // AliasIdPairs = [{alias:'a', memberIndex:0}, 
-    //                     {alias:'b', memberIndex:-1}, 
-    //                     {alias:'c', memberIndex:-1}, 
-    //                     {alias:'d', memberIndex:-1}, 
-    //                     {alias:'e', memberIndex:-1}, 
-    //                     {alias:'f', memberIndex:5}, 
-    //                     {alias:'g', memberIndex:-1},
-    //                     {alias:'h', memberIndex:7}, 
-    //                     {alias:'i', memberIndex:-1},
-    //                     {alias:'j', memberIndex:-1},
-    //                     {alias:'k', memberIndex:6},
-    //                     {alias:'l', memberIndex:5},
-    //                     {alias:'m', memberIndex:0}];
+    console.log("DATA FROM API CALLS");
+    console.log(aliases);
+    console.log(members);
+    console.log(databaseMapping);
 
     // TODO: SET THESE DATES BASED ON THE CONFIG FILE SELECTED
     const [startDate, setStartDate] = useState(new Date());
@@ -49,28 +39,29 @@ const RepoModal = (props) => {
     }
 
     const handleClick = () => {
-        // -- FOR TESTING MOCK DATA
-        console.log('User changed mapping: ' + !sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs));
-        const mapping = members.map((member) => ({alias:[], memberId:member}));
-        createApiMappingFromLocalMapping(mapping);
-        console.log(mapping);
-        // -----
 
         if (config !== "Select a configuration") {
-            const mapping = members.map((member) => ({alias:[], memberId:member}));
-            if (databaseMapping?.length === 0) {
-                mapAliasToMember(mapping);
-            } else if (databaseMapping?.length === members?.length) {
+
+            const mapping = createMappingContainingPastAliases(aliases, databaseMapping);
+            createApiMappingFromLocalMapping(mapping); 
+            console.log('DATA IN MAP/POST REQUEST');
+            console.log(mapping);
+            if (noMembersHaveAliases(databaseMapping)) {
+                console.log('no members have aliases');
+                //mapAliasToMember(mapping);
+            } else if (allMembersHaveAliases(databaseMapping)) {
+                console.log('all members have aliases');
                 if(!sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs)) {
-                    // INSERT PUT REQUEST HERE
+                    console.log('submit put request');
+                    //updateAliasForMembers(mapping);
                 }
             } else {
+                console.log('some members have aliases, some dont');
                 if(!sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs)) {
-                    mapAliasToMember(mapping);
+                    //mapAliasToMember(mapping);
                 }
-            }
-            createApiMappingFromLocalMapping(mapping);   
-            setRedirect(true);
+            }  
+            //setRedirect(true);
         }
     }
 

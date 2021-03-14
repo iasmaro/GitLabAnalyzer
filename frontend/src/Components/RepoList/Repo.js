@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
-import Spinner from 'react-bootstrap/Spinner';
+import { Button, Spinner } from 'react-bootstrap';
 
 import RepoModal from 'Components/RepoModal/RepoModal';
 import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
@@ -9,38 +8,27 @@ import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromData
 import { useUserState } from 'UserContext';
 
 const Repo = (props) => {
-
-    // TESTING WITH MOCK DATA
-    const mockMembers = ['anne', 'billy', 'chris', 'dan', 'emily', 'fred', 'k', 'h'];
-    const mockAliases = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
-    const mockDatabaseMapping = [ {alias:['a', 'm'], memberId:'anne'}, {alias:['f', 'l'], memberId:'fred'} ];
-
     const { repo } = props || {};
-    // TEMPORARILY COMMENTED FOR TESTING WITH MOCK DATA
-    // const [members, setMembers] = useState([]);
-    // const [aliases, setAliases] = useState([]);
-    // const [databaseMapping, setDatabaseMapping] = useState([]);
-    const [members, setMembers] = useState(mockMembers);
-    const [aliases, setAliases] = useState(mockAliases);
-    const [databaseMapping, setDatabaseMapping] = useState(mockDatabaseMapping);
+    const [members, setMembers] = useState([]);
+    const [aliases, setAliases] = useState([]);
+    const [databaseMapping, setDatabaseMapping] = useState([]);
     const [show, setShow] = useState(false);
     const [isLoadingGitLabCall, setIsLoadingGitLabCall] = useState(false);
     const [isLoadingDatabaseCall, setIsLoadingDatabaseCall] = useState(false);
     const username = useUserState();
     
     const handleShow = () => {
-        // TEMPORARILY COMMENTED FOR TESTING WITH MOCK DATA
-        // setIsLoadingGitLabCall(true);
-        // setIsLoadingDatabaseCall(true);
-        // getMembersAndAliasesFromGitLab(username, repo.projectId).then((data) => {
-        //     setMembers(data.members);
-        //     setAliases(data.aliases);
-        //     setIsLoadingGitLabCall(false);
-        // });
-        // getMembersAndAliasesFromDatabase(username, repo.projectId).then((data) => {
-        //     setDatabaseMapping(data);
-        //     setIsLoadingDatabaseCall(false);
-        // });
+        setIsLoadingGitLabCall(true);
+        setIsLoadingDatabaseCall(true);
+        getMembersAndAliasesFromGitLab(username, repo.projectId).then((data) => {
+            setMembers(data.members);
+            setAliases(data.aliases);
+            setIsLoadingGitLabCall(false);
+        });
+        getMembersAndAliasesFromDatabase(username, repo.projectId).then((data) => {
+            setDatabaseMapping(data);
+            setIsLoadingDatabaseCall(false);
+        });
         setShow(true);
     }
 
