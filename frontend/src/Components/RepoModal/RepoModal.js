@@ -20,11 +20,6 @@ const RepoModal = (props) => {
     const databaseAliasIdPairs = createInitialAliasIdPairs(aliases, members, databaseMapping);
     const mapping = createMappingContainingPastAliases(aliases, members, databaseMapping);
 
-    console.log("DATA FROM API CALLS");
-    console.log(aliases);
-    console.log(members);
-    console.log(databaseMapping);
-
     // TODO: SET THESE DATES BASED ON THE CONFIG FILE SELECTED
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
@@ -34,7 +29,7 @@ const RepoModal = (props) => {
         for (var i = 0; i < aliasIdPairs.length; i ++) {
             var memberIndex = aliasIdPairs[i].memberIndex;
             if (memberIndex > -1) {
-                mapping[memberIndex]?.alias?.push(aliasIdPairs[i].alias);
+                mapping[memberIndex].alias.push(aliasIdPairs[i].alias);
             }
         }
     }
@@ -49,10 +44,8 @@ const RepoModal = (props) => {
                 if(!sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs)) {
                     updateAliasForMembers(mapping);
                 }
-            } else {
-                if(!sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs)) {
-                    mapAliasToMember(mapping);
-                }
+            } else {             
+                updateAliasForMembers(mapping);                
             }  
             //setRedirect(true);
         }

@@ -3,15 +3,20 @@ import Radio from '@material-ui/core/Radio';
 
 const RepoModalMapAliasTableRow = (props) => {
     const { alias, members, aliasIndex, aliasIdPairs, setAliasIdPairs } = props || {};
-    const [selectedMemberId, setSelectedMemberId] = useState( aliasIdPairs[aliasIndex].memberIndex === -1 ? '' : members[aliasIdPairs[aliasIndex].memberIndex] );
+    const selectedState = aliasIdPairs?.[aliasIndex]?.memberIndex === -1 ? '' : members?.[aliasIdPairs?.[aliasIndex]?.memberIndex];
+    const [selectedMemberId, setSelectedMemberId] = useState( selectedState );
 
     const handleClick = (e) => {
         if (selectedMemberId === e.target.name) {
             setSelectedMemberId('');
-            aliasIdPairs[aliasIndex].memberIndex = -1;
+            if (aliasIdPairs?.[aliasIndex]?.memberIndex) {
+                aliasIdPairs[aliasIndex].memberIndex = -1;
+            } 
         } else {
             setSelectedMemberId(e.target.name);
-            aliasIdPairs[aliasIndex].memberIndex = e.target.value;
+            if (aliasIdPairs?.[aliasIndex]?.memberIndex) {
+                aliasIdPairs[aliasIndex].memberIndex = parseInt(e.target.value);
+            } 
         }
         setAliasIdPairs(aliasIdPairs);
     };
@@ -19,7 +24,7 @@ const RepoModalMapAliasTableRow = (props) => {
     return (
         <tr>
             <td className='sticky-column'>{alias}</td>
-            {members.map((member, i) => 
+            {members?.map((member, i) => 
                 <td key={member} align={'center'}>
                     <Radio
                         checked={selectedMemberId === member}

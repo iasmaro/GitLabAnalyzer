@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import {Dropdown, DropdownButton, Row, Col} from 'react-bootstrap';
+import { Dropdown, DropdownButton, Row, Col } from 'react-bootstrap';
 
 import FormattedDateTimePicker from "Components/FormattedDateTimePicker";
 import { modal } from "Constants/constants";
 
 const RepoModalConfig = (props) => {
     
-    const {config, setConfig} = props || {};
+    const { config, setConfig } = props || {};
     /*Default times are both at the current date and time*/
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());

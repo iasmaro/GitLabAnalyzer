@@ -2,20 +2,20 @@
 export function createInitialAliasIdPairs(aliases, members, databaseMapping) {
     const aliasIdPairs = aliases.map((alias) => ({alias:alias, memberIndex: -1}));
     // Fill array with initial databaseMapping pairs
-    for (var i = 0; i < databaseMapping.length; i++) {
-        for (var j = 0; j < databaseMapping[i].alias.length; j++) {
-            const indexOfDatabaseAliasInAliases = aliases.indexOf(databaseMapping[i].alias[j]);
+    for (let mapping of databaseMapping) {
+        for (let alias of mapping.alias) {
+            const indexOfDatabaseAliasInAliases = aliases.indexOf(alias);
             if (indexOfDatabaseAliasInAliases !== -1) {
-                aliasIdPairs[indexOfDatabaseAliasInAliases].memberIndex = members.indexOf(databaseMapping[i].memberId);
+                aliasIdPairs[indexOfDatabaseAliasInAliases].memberIndex = members.indexOf(mapping.memberId);
             }
         }
     }
 
     // Need to automatically map aliases to members that are the same (if no previous mapping to that alias exists)
-    for (i = 0; i < aliases.length; i++) {
-        for (j = 0; j < members.length; j++) {
-            if (aliases[i] === members[j] && aliasIdPairs[i].memberIndex === -1) {
-                aliasIdPairs[i].memberIndex = j;
+    for (let [aliasIndex, alias] of aliases.entries()) {
+        for (let [memberIndex, member] of members.entries()) {
+            if (alias === member && aliasIdPairs[aliasIndex].memberIndex === -1) {
+                aliasIdPairs[aliasIndex].memberIndex = memberIndex;
             } 
         }
     }

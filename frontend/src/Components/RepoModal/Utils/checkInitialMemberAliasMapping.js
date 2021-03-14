@@ -1,6 +1,6 @@
 export function allMembersHaveAliases(databaseMapping) {
-    for (var i = 0; i < databaseMapping.length; i++) {
-        if (databaseMapping[i].alias.length === 0) {
+    for (let mapping of databaseMapping) {
+        if (mapping.alias.length === 0) {
             return false;
         } 
     }
@@ -8,8 +8,8 @@ export function allMembersHaveAliases(databaseMapping) {
 }
 
 export function noMembersHaveAliases(databaseMapping) {
-    for (var i = 0; i < databaseMapping.length; i++) {
-        if (databaseMapping[i].alias.length !== 0) {
+    for (let mapping of databaseMapping) {
+        if (mapping.alias.length !== 0) {
             return false;
         } 
     }

@@ -7,7 +7,7 @@ import RepoModalMapAliasTableRow from './RepoModalMapAliasTableRow';
 import 'Components/RepoModal/RepoModal.css';
 
 const RepoModalMapAliasTable = (props) => {
-    const {aliases, members, aliasIdPairs, setAliasIdPairs} = props || {};
+    const { aliases, members, aliasIdPairs, setAliasIdPairs } = props || {};
     const tableWidth = members.length + 1;
 
     return (
@@ -25,13 +25,19 @@ const RepoModalMapAliasTable = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    { !aliases.length ? (
+                    { !aliases?.length ? (
                         <tr>
                             <td colSpan={tableWidth}>{message.NO_ALIASES}</td>
                         </tr>
                     )
                     : aliases.map((alias, index) => (
-                        <RepoModalMapAliasTableRow key={alias} alias={alias} members={members} aliasIndex={index} aliasIdPairs={aliasIdPairs} setAliasIdPairs={setAliasIdPairs}/>
+                        <RepoModalMapAliasTableRow 
+                            key={alias} 
+                            alias={alias} 
+                            members={members} 
+                            aliasIndex={index} 
+                            aliasIdPairs={aliasIdPairs} 
+                            setAliasIdPairs={setAliasIdPairs}/>
                     ))
                     }
                 </tbody>
