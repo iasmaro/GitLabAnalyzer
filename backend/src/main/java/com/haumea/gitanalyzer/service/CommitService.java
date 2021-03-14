@@ -151,44 +151,18 @@ public class CommitService {
 
     public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId) {
 
-
-        // TODO: Replace with Minh's new default inclusion config method
-        String activeConfigName = userService.getActiveConfig(userId);
-        System.out.println("name of config is: " + activeConfigName);
-
-        Configuration activeConfiguration = userService.getConfigurationByFileName(userId, activeConfigName);
-
-        if(activeConfiguration == null) {
-            System.out.println("active config is null");
-        }
-
-
-        System.out.println("Config is: " + activeConfiguration.getFileFactor());
+        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
 
         GitlabService gitlabService = userService.createGitlabService(userId);
         List<CommitWrapper> filteredCommits;
 
-        System.out.println("dates are: " + activeConfiguration.getStart() + "-" + activeConfiguration.getEnd());
-
-
-
         List<String> alias = getAliasForMember(memberId);
-
-        System.out.println("target branch is: " + activeConfiguration.getTargetBranch());
-
-
-        System.out.println("alias list size is: " + alias.size());
-
-
-
 
         filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId,
                 activeConfiguration.getTargetBranch(),
                 activeConfiguration.getStart(),
                 activeConfiguration.getEnd(),
                 alias);
-
-        System.out.println("size of list is: " + filteredCommits.size());
 
         return convertCommitWrappersToDTOs(filteredCommits);
     }

@@ -50,19 +50,8 @@ public class CommitController {
                                                       @RequestParam @NotBlank String userId,
                                                       @RequestParam @NotNull int projectId) {
 
-
-//        System.out.println("vars are: " + memberId + " " + userId + " " + projectId);
-
         return commitService.getCommitsForSelectedMemberAndDate(userId, projectId, memberId);
-//        Date today = new Date();
-//
-//        List<CommitDTO> testList = new ArrayList<>();
-//        CommitDTO test = new CommitDTO("testing... testing", today, "tester", 0.0,
-//                null, 0, 0);
-//
-//        testList.add(test);
-//
-//        return testList;
+
     }
 
 }
