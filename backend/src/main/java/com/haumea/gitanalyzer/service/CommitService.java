@@ -156,14 +156,20 @@ public class CommitService {
         return convertCommitWrappersToDTOs(mergeRequestCommits, configuration);
     }
 
-    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) {
+    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId) {
+
+        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
 
         GitlabService gitlabService = userService.createGitlabService(userId);
         List<CommitWrapper> filteredCommits;
 
         List<String> alias = getAliasForMember(memberId);
 
-        filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId, "master", start, end, alias);
+        filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId,
+                activeConfiguration.getTargetBranch(),
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd(),
+                alias);
 
         Configuration configuration = userService.getConfiguration(userId, projectId);
 

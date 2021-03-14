@@ -189,10 +189,17 @@ public class MergeRequestService {
     }
 
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, Date start, Date end) {
+    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId) {
 
         GitlabService gitlabService = userService.createGitlabService(userId);
 
-        List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapper(gitlabService, projectId, start, end);
+        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
+
+        List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapper(
+                gitlabService,
+                projectId,
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd());
 
         List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
 
@@ -214,13 +221,20 @@ public class MergeRequestService {
         return mergeRequestDTOList;
     }
 
-    public List<MergeRequestDTO> getAllMergeRequestsForMember(String userId, int projectId, String memberId, Date start, Date end) {
+    public List<MergeRequestDTO> getAllMergeRequestsForMember(String userId, int projectId, String memberId) {
 
         GitlabService gitlabService = userService.createGitlabService(userId);
 
+        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
+
         List<String> alias = getAliasForMember(memberId);
 
-        List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapperForMember(gitlabService, projectId, start, end, alias);
+        List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapperForMember(
+                gitlabService,
+                projectId,
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd(),
+                alias);
 
         List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
 
