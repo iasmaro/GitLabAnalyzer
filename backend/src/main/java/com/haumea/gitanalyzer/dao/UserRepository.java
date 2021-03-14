@@ -179,7 +179,7 @@ public class UserRepository {
         Configuration requestedConfig = null;
 
         for(Configuration userConfig : user.get().getConfigurations()) {
-            if(userConfig.getFileName() == configFileName) {
+            if(userConfig.getFileName().equals(configFileName)) {
                 requestedConfig = userConfig;
             }
         }
