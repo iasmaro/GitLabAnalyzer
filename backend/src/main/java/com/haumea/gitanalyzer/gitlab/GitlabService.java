@@ -7,6 +7,7 @@ import org.gitlab4j.api.models.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /*
 Class that shadows the functionality of our front end web client
@@ -351,6 +352,12 @@ public class GitlabService {
 
     }
 
+    private boolean isMergedMRCommits(String message){
+        // Merge branch 'xxx' into 'master'
+        String pattern = "^Merge\\s+branch\\s+.+\\s+into\\s+.+";
+        return Pattern.compile(pattern).matcher(message).find();
+    }
+
     /*
     * There are 2 ways to get orphan commits
     * methods 1: get all commits, for each commit, make 1 API to get its associated MRs,
@@ -377,7 +384,7 @@ public class GitlabService {
 
         List<Commit> filteredCommits = new ArrayList<>();
         for(Commit commit :  commits){
-            if(!commitSHAs.contains(commit.getId())){
+            if(!commitSHAs.contains(commit.getId()) && !isMergedMRCommits(commit.getMessage())){
                 filteredCommits.add(commit);
             }
         }
@@ -404,7 +411,7 @@ public class GitlabService {
 
         List<Commit> filteredCommits = new ArrayList<>();
         for(Commit commit :  commits){
-            if(!commitSHAs.contains(commit.getId()) && alias.contains(commit.getAuthorName())){
+            if(!commitSHAs.contains(commit.getId()) && !isMergedMRCommits(commit.getMessage()) && alias.contains(commit.getAuthorName())){
                 filteredCommits.add(commit);
             }
         }
