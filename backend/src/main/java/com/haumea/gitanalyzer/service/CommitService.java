@@ -49,14 +49,6 @@ public class CommitService {
         return alias;
     }
 
-    private GitlabService createGitlabService(String userId) {
-        String token = userService.getPersonalAccessToken(userId);
-
-        String gitlabServer = userService.getGitlabServer(userId);
-
-        return new GitlabService(gitlabServer, token);
-    }
-
     private String getDiffExtension(String newPath) {
 
         for(int index = newPath.length() - 1; index >= 0; index--) {
@@ -143,7 +135,7 @@ public class CommitService {
     public List<CommitDTO> getMergeRequestCommitsForMember(String userId, Integer projectId,
                                                            Integer mergeRequestId, String memberId) throws GitLabRuntimeException {
 
-       GitlabService gitlabService = createGitlabService(userId);
+       GitlabService gitlabService = userService.createGitlabService(userId);
 
         List<String> alias = getAliasForMember(memberId);
 
@@ -173,7 +165,7 @@ public class CommitService {
 
         System.out.println("Config is: " + activeConfiguration.getFileFactor());
 
-        GitlabService gitlabService = createGitlabService(userId);
+        GitlabService gitlabService = userService.createGitlabService(userId);
         List<CommitWrapper> filteredCommits;
 
         System.out.println("dates are: " + activeConfiguration.getStart() + "-" + activeConfiguration.getEnd());
@@ -203,7 +195,7 @@ public class CommitService {
 
     public List<CommitDTO> getCommitsForSelectedMergeRequest(String userId, int projectId, int mergeRequestId) {
 
-        GitlabService gitlabService = createGitlabService(userId);
+        GitlabService gitlabService = userService.createGitlabService(userId);
         List<CommitWrapper> mergeRequestCommits;
 
         try {
