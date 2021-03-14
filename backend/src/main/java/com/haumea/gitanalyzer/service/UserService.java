@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.UserRepository;
+import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.ProjectWrapper;
 import com.haumea.gitanalyzer.model.Configuration;
@@ -95,12 +96,21 @@ public class UserService {
     }
 
     public Configuration getConfiguration(String userId, Integer projectId){
-        Optional<String> activeConfig = Optional.ofNullable(getActiveConfig(userId));
+
+        Configuration configuration = createDefaultConfig(userId, projectId);
+        Optional<String> activeConfig;
+
+        try{
+            activeConfig = Optional.ofNullable(getActiveConfig(userId));
+        } catch (ResourceNotFoundException e){
+            return configuration;
+        }
+
         if(activeConfig.isPresent() && getConfigurationFileNames(userId).contains(activeConfig.get())){
             return getConfigurationByFileName(userId, activeConfig.get());
         }
 
-        return createDefaultConfig(userId, projectId);
+        return configuration;
 
     }
 
