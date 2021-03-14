@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -105,7 +103,7 @@ public class CommitService {
             double deleteLine = configuration.getEditFactor().getOrDefault("deleteLine", 1.0F).doubleValue();
             double syntaxLine = configuration.getEditFactor().getOrDefault("deleteLine", 1.0F).doubleValue();
             double moveLine = configuration.getEditFactor().getOrDefault("moveLine", 1.0F).doubleValue();
-            double fileTypeMultiplier = configuration.getFileFactor().getOrDefault("fileTypeMultiplier", 1.0F).doubleValue();
+            double fileTypeMultiplier = configuration.getFileFactor().getOrDefault(diffExtension, 1.0F).doubleValue();
 
             List<CommentType> commentTypes = configuration.getCommentTypes().getOrDefault(diffExtension, createDefaultCommentTypes());
 
