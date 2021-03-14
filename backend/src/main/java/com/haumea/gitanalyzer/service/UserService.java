@@ -75,11 +75,19 @@ public class UserService {
         }
     }
 
+    public GitlabService createGitlabService(String userId){
+
+        String token = getPersonalAccessToken(userId);
+
+        String gitlabServer = getGitlabServer(userId);
+
+        return new GitlabService(gitlabServer, token);
+
+    }
+
     private Configuration createDefaultConfig(String userId,  Integer projectId){
 
-        String accessToken = getPersonalAccessToken(userId);
-        String gitlabServer = getGitlabServer(userId);
-        GitlabService gitlabService = new GitlabService(gitlabServer, accessToken);
+        GitlabService gitlabService = createGitlabService(userId);
 
         // cannot delegate to project service to avoid circular dependency
         ProjectWrapper projectWrapper = new ProjectWrapper(gitlabService.getSelectedProject(projectId));
@@ -117,4 +125,5 @@ public class UserService {
     public User deleteConfiguration(String userId, String fileName) {
         return userRepository.deleteConfiguration(userId, fileName);
     }
+
 }

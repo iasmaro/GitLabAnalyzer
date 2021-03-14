@@ -21,17 +21,9 @@ public class ProjectService {
         this.userService = userService;
     }
 
-    private GitlabService createGitlabService(String userId) {
-        String token = userService.getPersonalAccessToken(userId);
-
-        String gitlabServer = userService.getGitlabServer(userId);
-
-        return new GitlabService(gitlabServer, token);
-    }
-
     public List<ProjectDTO> getProjects(String userId) {
 
-        GitlabService gitlabService = createGitlabService(userId);
+        GitlabService gitlabService = userService.createGitlabService(userId);
 
         List<ProjectWrapper> gitlabProjects = gitlabService.getProjects();
         List<ProjectDTO> projects = new ArrayList<>();

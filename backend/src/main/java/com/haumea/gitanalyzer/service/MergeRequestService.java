@@ -42,15 +42,6 @@ public class MergeRequestService {
         this.MRScore = 0.0;
     }
 
-    private GitlabService getGitLabService(String userId) {
-
-        String accessToken = userService.getPersonalAccessToken(userId);
-
-        String gitlabServer = userService.getGitlabServer(userId);
-
-        return new GitlabService(gitlabServer, accessToken);
-    }
-
     private List<String> getAliasForMember(String memberId) {
 
         return memberService.getAliasesForSelectedMember(memberId);
@@ -163,7 +154,7 @@ public class MergeRequestService {
 
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, Date start, Date end) {
 
-        GitlabService gitlabService = getGitLabService(userId);
+        GitlabService gitlabService = userService.createGitlabService(userId);
 
         List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapper(gitlabService, projectId, start, end);
 
@@ -180,7 +171,7 @@ public class MergeRequestService {
 
     public List<MergeRequestDTO> getAllMergeRequestsForMember(String userId, int projectId, String memberId, Date start, Date end) {
 
-        GitlabService gitlabService = getGitLabService(userId);
+        GitlabService gitlabService = userService.createGitlabService(userId);
 
         List<String> alias = getAliasForMember(memberId);
         List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapperForMember(gitlabService, projectId, start, end, alias);
