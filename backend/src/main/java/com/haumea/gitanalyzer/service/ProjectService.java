@@ -7,6 +7,7 @@ import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,13 +21,17 @@ public class ProjectService {
         this.userService = userService;
     }
 
-    public List<ProjectDTO> getProjects(String userId) {
-
+    private GitlabService createGitlabService(String userId) {
         String token = userService.getPersonalAccessToken(userId);
 
         String gitlabServer = userService.getGitlabServer(userId);
 
-        GitlabService gitlabService = new GitlabService(gitlabServer, token);
+        return new GitlabService(gitlabServer, token);
+    }
+
+    public List<ProjectDTO> getProjects(String userId) {
+
+        GitlabService gitlabService = createGitlabService(userId);
 
         List<ProjectWrapper> gitlabProjects = gitlabService.getProjects();
         List<ProjectDTO> projects = new ArrayList<>();

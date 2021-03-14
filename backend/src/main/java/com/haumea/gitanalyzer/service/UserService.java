@@ -1,6 +1,9 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.UserRepository;
+import com.haumea.gitanalyzer.gitlab.CommentType;
+import com.haumea.gitanalyzer.gitlab.GitlabService;
+import com.haumea.gitanalyzer.gitlab.ProjectWrapper;
 import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.net.URL;
-import java.util.List;
+import java.time.Instant;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -21,6 +25,7 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepository userRepository) {
+
         this.userRepository = userRepository;
     }
 
@@ -68,6 +73,29 @@ public class UserService {
         catch (Exception e)  {
             return "";
         }
+    }
+
+    private Configuration createDefaultConfig(String userId,  Integer projectId){
+
+        String accessToken = getPersonalAccessToken(userId);
+        String gitlabServer = getGitlabServer(userId);
+        GitlabService gitlabService = new GitlabService(gitlabServer, accessToken);
+
+        // cannot delegate to project service to avoid circular dependency
+        ProjectWrapper projectWrapper = new ProjectWrapper(gitlabService.getSelectedProject(projectId));
+        Date start = projectWrapper.getProject().getCreatedAt();
+        return new Configuration(start);
+
+    }
+
+    public Configuration getConfiguration(String userId,  Integer projectId){
+        Optional<String> activeConfig = Optional.ofNullable(getActiveConfig(userId));
+        if(activeConfig.isPresent() && getConfigurationFileNames(userId).contains(activeConfig.get())){
+            return getConfigurationByFileName(userId, activeConfig.get());
+        }
+
+        return createDefaultConfig(userId, projectId);
+
     }
 
     public User saveConfiguration(String userId, Configuration configuration) {

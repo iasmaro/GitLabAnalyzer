@@ -46,7 +46,9 @@ public class MergeRequestService {
 
         String accessToken = userService.getPersonalAccessToken(userId);
 
-        return new GitlabService(GlobalConstants.gitlabURL, accessToken);
+        String gitlabServer = userService.getGitlabServer(userId);
+
+        return new GitlabService(gitlabServer, accessToken);
     }
 
     private List<String> getAliasForMember(String memberId) {
