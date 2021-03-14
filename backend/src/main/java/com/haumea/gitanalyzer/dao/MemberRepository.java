@@ -64,27 +64,27 @@ public class MemberRepository {
 
         for(MemberDTO memberDTO : membersAndAliases) {
 
-            if(!findMemberByMemberId(memberDTO.getMemberId()).isPresent()) {
-                throw new ResourceNotFoundException("Member " + memberDTO.getMemberId() + " not found!");
-            }
-
-        }
-
-        // split the checking and updating into two different loops to avoid problem
-        // of updating some and then failing. Now it either updates all or fails.
-        for(MemberDTO memberDTO : membersAndAliases) {
-
             // need to make sure Alias is not empty because an empty alias signifies
             // the member is not actually in the database
             if(memberDTO.getAlias().isEmpty()) {
                 createDefaultAlias(memberDTO);
             }
 
-            Query query = new Query();
-            query.addCriteria(Criteria.where("memberId").is(memberDTO.getMemberId()));
-            Update update = new Update();
-            update.set("alias", memberDTO.getAlias());
-            mongoTemplate.updateFirst(query, update, Member.class);
+            if(!findMemberByMemberId(memberDTO.getMemberId()).isPresent()) {
+
+                Member member = new Member(memberDTO.getMemberId(), memberDTO.getAlias());
+
+                mongoTemplate.save(member);
+            }
+
+            else {
+                Query query = new Query();
+                query.addCriteria(Criteria.where("memberId").is(memberDTO.getMemberId()));
+                Update update = new Update();
+                update.set("alias", memberDTO.getAlias());
+                mongoTemplate.updateFirst(query, update, Member.class);
+            }
+
         }
     }
 
