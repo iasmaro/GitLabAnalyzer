@@ -47,6 +47,7 @@ public class CommitService {
         for(int index = newPath.length() - 1; index >= 0; index--) {
 
             if(newPath.charAt(index) == '.') {
+                index++;
                 return newPath.substring(index);
             }
 
