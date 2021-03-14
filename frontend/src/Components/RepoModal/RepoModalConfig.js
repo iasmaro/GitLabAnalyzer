@@ -5,7 +5,7 @@ import { modal } from "Constants/constants";
 
 const RepoModalConfig = (props) => {
     
-    const {config, setConfig} = props;
+    const {defaultConfig, configs, config, setConfig} = props;
 
     const selectConfig = (config) => {
         setConfig(config);
@@ -18,7 +18,10 @@ const RepoModalConfig = (props) => {
         </Col>
         <Col sm='8'>
             <DropdownButton variant="secondary" id="dropdown-basic-button" title={config}>
-                <Dropdown.Item onClick={() => selectConfig(modal.CONFIG_OPTION)}>{modal.CONFIG_OPTION}</Dropdown.Item>
+                <Dropdown.Item as="button" onClick={() => selectConfig(defaultConfig)}>{defaultConfig}</Dropdown.Item>
+                {configs.map((config) => (
+                    <Dropdown.Item key={config} as="button" onClick={() => selectConfig(config)}>{config}</Dropdown.Item>
+                ))}
             </DropdownButton>
         </Col>
     </Row>
