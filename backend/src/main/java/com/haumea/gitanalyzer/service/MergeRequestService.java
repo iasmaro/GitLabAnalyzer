@@ -8,7 +8,6 @@ import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
-import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.MergeRequest;
 import org.gitlab4j.api.models.MergeRequestDiff;
@@ -40,13 +39,6 @@ public class MergeRequestService {
         this.linesAdded = 0;
         this.linesRemoved = 0;
         this.MRScore = 0.0;
-    }
-
-    private GitlabService getGitLabService(String userId) {
-
-        String accessToken = userService.getPersonalAccessToken(userId);
-
-        return new GitlabService(GlobalConstants.gitlabURL, accessToken);
     }
 
     private List<String> getAliasForMember(String memberId) {
@@ -161,7 +153,7 @@ public class MergeRequestService {
 
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, Date start, Date end) {
 
-        GitlabService gitlabService = getGitLabService(userId);
+        GitlabService gitlabService = userService.createGitlabService(userId);
 
         List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapper(gitlabService, projectId, start, end);
 
@@ -178,7 +170,7 @@ public class MergeRequestService {
 
     public List<MergeRequestDTO> getAllMergeRequestsForMember(String userId, int projectId, String memberId, Date start, Date end) {
 
-        GitlabService gitlabService = getGitLabService(userId);
+        GitlabService gitlabService = userService.createGitlabService(userId);
 
         List<String> alias = getAliasForMember(memberId);
         List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapperForMember(gitlabService, projectId, start, end, alias);
