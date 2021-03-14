@@ -1,23 +1,20 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 
-import { useUserState } from 'UserContext';
 import { message } from 'Constants/constants';
-import getCommitsInMR from 'Utils/getCommitsInMR';
 
 import './MergeRequestList.css';
 import MergeRequest from './MergeRequest';
 
 
 const MergeRequestList = (props) => {
-    const { mergerequests, projectId, setCommit, setCodeDiffs } = props || {};
-    const username = useUserState();
-    const handleClick = (id, diffs) => {
+    const { mergerequests, setCommit, setCodeDiffs } = props || {};
+    const handleClick = (commits, diffs) => {
         if(setCodeDiffs) {
             setCodeDiffs(diffs);
         }
         if(setCommit) {
-            setCommit(getCommitsInMR(username, projectId, id));
+            setCommit(commits);
         }
     }
     return (

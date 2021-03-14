@@ -28,14 +28,14 @@ const CodeDifference = (props) => {
         }
     }, [expandAll]);
 
-    if (!diff || !diff["new_path"] || !diff["diff"]) {
+    if (!diff || !diff.newPath || !diff.codeDiff) {
         return null;
     }
-    const diffText = `--- ${diff["old_path"]}\n+++ ${diff["new_path"]}\n${diff["diff"]}`;
+    const diffText = `--- ${diff.oldPth}\n+++ ${diff.newPath}\n${diff.codeDiff}`;
 
-    const linesAdded = diff["diff"].match(/\n\+/g)?.length || 0;
-    const linesRemoved = diff["diff"].match(/\n-/g)?.length || 0;
-    const fileName = diff["new_path"];
+    const linesAdded = diff.codeDiff.match(/\n\+/g)?.length || 0;
+    const linesRemoved = diff.codeDiff.match(/\n-/g)?.length || 0;
+    const fileName = diff.newPath;
 
     const language = getLanguageFromFile(fileName);
 
