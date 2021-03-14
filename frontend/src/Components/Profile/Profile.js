@@ -1,32 +1,41 @@
-import React, {useState} from 'react';
-import {Form, Button, Col, Row} from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Form, Button, Col, Row } from 'react-bootstrap';
 
-import updateToken from 'Utils/updateToken';
-import addToken from 'Utils/addToken';
+import { SCHEME } from 'Constants/constants';
+import updateUser from 'Utils/updateUser';
+import saveUser from 'Utils/saveUser';
 
 import './Profile.css';
 
-const Profile = (props) => {
-    const { username, givenToken } = props || {};
-    //Adapted from: https://www.code-boost.com/video/ultimate-react-todo-list/
-    const [savedToken, setSavedToken] = useState(givenToken);
-    const [token, setToken] = useState('');
+const tokenPlaceHolder = 'Enter access token';
+const serverPlaceHolder = 'Enter GitLab server url';
 
+const Profile = (props) => {
+    const { username, givenToken, givenGitlabServer } = props || {};
+    //Adapted from: https://www.code-boost.com/video/ultimate-react-todo-list/
+    const [token, setToken] = useState(givenToken);
+    const [gitlabServer, setGitlabServer] = useState(givenGitlabServer);
+    const [isInvalid, setInvalid] = useState(false);
     const handleSubmit = (event) => {
+        const invalid = gitlabServer.substring(0,7) !== SCHEME.HTTP && gitlabServer.substring(0,8) !== SCHEME.HTTPS;
+        setInvalid(invalid);
         event.preventDefault();
-        if (savedToken) {
-            updateToken(username, token);
-        } else {
-            addToken(username, token);
+        if (!invalid) {
+            if (givenToken || givenGitlabServer) {
+                updateUser(username, token, gitlabServer);
+            } else {
+                saveUser(username, token, gitlabServer);
+            }
         }
-        setSavedToken(token)
-        setToken('')
     }
 
-    const handleChange = (event) => {
+    const handleTokenChange = (event) => {
         setToken(event.target.value)
     }
 
+    const handleGitlabServerChange = (event) => {
+        setGitlabServer(event.target.value)
+    }
     return (
         <>
             <Row>
@@ -37,18 +46,27 @@ const Profile = (props) => {
             <Form className="profile-form" onSubmit={handleSubmit}>                
                 <Row>
                     <Col sm="9">
-                        <Form.Control required type="text" placeholder="Enter access token" value={token} onChange={handleChange}/>
-                    </Col>
-                    <Col sm="3">
-                        <Button variant="success" type="submit">Save Token</Button>
+                        <Form.Label>Access token</Form.Label>
+                        <Form.Control required type="text" placeholder={givenToken ? token : tokenPlaceHolder} value={token} onChange={handleTokenChange}/>
                     </Col>
                 </Row>
-            </Form>               
-            {savedToken && <Row className="token">
-                <Col sm="9">
-                    {savedToken}
-                </Col>
-            </Row>}
+                <Row>
+                    <Col sm="9">
+                        <Form.Group>
+                            <Form.Label>GitLab server</Form.Label>
+                            <Form.Control required type="text" isInvalid={isInvalid} placeholder={givenGitlabServer ? gitlabServer : serverPlaceHolder} value={gitlabServer} onChange={handleGitlabServerChange}/>
+                            <Form.Control.Feedback type="invalid">
+                                URL must start with either http:// or https://
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col sm="9">
+                        <Button variant="success" type="submit">Save Changes</Button>
+                    </Col>
+                </Row>
+            </Form>
         </>
     )
 }

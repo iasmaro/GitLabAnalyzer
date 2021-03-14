@@ -6,6 +6,7 @@ const dev = {
     MR_COMMITS_API_URL: 'http://localhost:8080/api/v1/commits/mergeRequests/',
     COMMITS_API_URL: 'http://localhost:8080/api/v1/commits/members/',
     USERS_API_URL: 'http://localhost:8080/api/v1/users',
+    USERS_TOKEN_API_URL: 'http://localhost:8080/api/v1/users/token',
     PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
 }
 
@@ -17,9 +18,9 @@ const prod = {
     MR_COMMITS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/commits/mergeRequests/',
     COMMITS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/commits/members/',
     USERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users',
+    USERS_TOKEN_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/token',
     PROJECT_MEMBERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members',
 }
-
 
 export const config = process.env.NODE_ENV === 'development' ? dev : prod;
 
@@ -42,3 +43,8 @@ export const message = {
     TOKEN_NOT_SET: 'Please set your gitlab token in the Profile page',
     NO_REPOS: 'It seems that you do not have any repositories at this moment',
 };
+
+export const SCHEME = {
+    HTTP: 'http://',
+    HTTPS: 'https://',
+}
