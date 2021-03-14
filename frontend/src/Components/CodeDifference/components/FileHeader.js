@@ -20,7 +20,7 @@ const FileHeader = (props) => {
                 <div className="lines-removed">
                     <span>-{linesRemoved}</span>
                 </div>
-                <div>
+                <div className="file-score">
                     <span> Score: </span>
                     <span>{diffScore}</span>
                 </div>
