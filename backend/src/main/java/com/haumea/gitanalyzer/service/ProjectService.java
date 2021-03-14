@@ -3,7 +3,6 @@ package com.haumea.gitanalyzer.service;
 import com.haumea.gitanalyzer.dto.ProjectDTO;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.ProjectWrapper;
-import com.haumea.gitanalyzer.utility.GlobalConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +21,7 @@ public class ProjectService {
 
     public List<ProjectDTO> getProjects(String userId) {
 
-        String token = userService.getPersonalAccessToken(userId);
-
-        String gitlabServer = userService.getGitlabServer(userId);
-
-        GitlabService gitlabService = new GitlabService(gitlabServer, token);
+        GitlabService gitlabService = userService.createGitlabService(userId);
 
         List<ProjectWrapper> gitlabProjects = gitlabService.getProjects();
         List<ProjectDTO> projects = new ArrayList<>();
