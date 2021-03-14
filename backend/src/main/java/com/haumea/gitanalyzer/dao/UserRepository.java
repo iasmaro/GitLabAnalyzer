@@ -58,7 +58,7 @@ public class UserRepository {
         }
         if(!(user.getActiveConfig() == null) && !user.getActiveConfig().trim().isEmpty()) {
             if(!getConfigurationFileNames(user.getUserId()).contains(user.getActiveConfig())){
-                throw new ResourceNotFoundException(user.getActiveConfig() + " configuration not found!");
+                throw new ResourceNotFoundException("configuration named '" + user.getActiveConfig() + "' not found!");
             }
             update.set("activeConfig", user.getActiveConfig());
         }
