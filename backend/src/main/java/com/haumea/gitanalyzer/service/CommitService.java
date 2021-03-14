@@ -81,7 +81,7 @@ public class CommitService {
 
             double addLine = configuration.getEditFactor().getOrDefault("addLine", 1.0F).doubleValue();
             double deleteLine = configuration.getEditFactor().getOrDefault("deleteLine", 1.0F).doubleValue();
-            double syntaxLine = configuration.getEditFactor().getOrDefault("deleteLine", 1.0F).doubleValue();
+            double syntaxLine = configuration.getEditFactor().getOrDefault("syntaxLine", 1.0F).doubleValue();
             double moveLine = configuration.getEditFactor().getOrDefault("moveLine", 1.0F).doubleValue();
             double fileTypeMultiplier = configuration.getFileFactor().getOrDefault(diffExtension, 1.0F).doubleValue();
 
