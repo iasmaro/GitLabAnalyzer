@@ -15,12 +15,12 @@ public class Configuration {
     private List<String> ignoreFileExtension;
     private Map<String, List<CommentType>> commentTypes;
 
-    private static final CommentType single1 = new CommentType("//", "");
-    private static final CommentType single2 = new CommentType("#", "");
-    private static final CommentType multi1 = new CommentType("/*", "*/");
-    private static final CommentType multi2 = new CommentType("\"\"\"", "\"\"\"");
-    private static final CommentType multi3 = new CommentType("'''", "'''");
-    private static final CommentType multi4 = new CommentType("<!--", "-->");
+    private static final CommentType singleDoubleSlash = new CommentType("//", "");
+    private static final CommentType singleHash = new CommentType("#", "");
+    private static final CommentType multiSlashStar = new CommentType("/*", "*/");
+    private static final CommentType multiTripleDoubleQuote = new CommentType("\"\"\"", "\"\"\"");
+    private static final CommentType multiTripleSingleQuote = new CommentType("'''", "'''");
+    private static final CommentType multiArrow = new CommentType("<!--", "-->");
 
     public Configuration() {
         super();
@@ -68,19 +68,19 @@ public class Configuration {
         this.ignoreFileExtension = new ArrayList<>();
 
         Map<String, List<CommentType>> commentTypes = new HashMap<>();
-        commentTypes.put(".java", new ArrayList<CommentType>(Arrays.asList(single1, multi1)));
-        commentTypes.put(".js", new ArrayList<CommentType>(Arrays.asList(single1, multi1)));
-        commentTypes.put(".ts", new ArrayList<CommentType>(Arrays.asList(single1, multi1)));
-        commentTypes.put(".py", new ArrayList<CommentType>(Arrays.asList(single2, multi2, multi3)));
-        commentTypes.put(".html", new ArrayList<CommentType>(Arrays.asList(multi4)));
-        commentTypes.put(".css", new ArrayList<CommentType>(Arrays.asList(multi1)));
-        commentTypes.put(".xml", new ArrayList<CommentType>(Arrays.asList(multi4)));
-        commentTypes.put(".c", new ArrayList<CommentType>(Arrays.asList(single1, multi1)));
-        commentTypes.put(".h", new ArrayList<CommentType>(Arrays.asList(single1, multi1)));
-        commentTypes.put(".cpp", new ArrayList<CommentType>(Arrays.asList(single1, multi1)));
-        commentTypes.put(".hpp", new ArrayList<CommentType>(Arrays.asList(single1, multi1)));
-        commentTypes.put(".cxx", new ArrayList<CommentType>(Arrays.asList(single1, multi1)));
-        commentTypes.put(".hxx", new ArrayList<CommentType>(Arrays.asList(single1, multi1)));
+        commentTypes.put(".java", new ArrayList<CommentType>(Arrays.asList(singleDoubleSlash, multiSlashStar)));
+        commentTypes.put(".js", new ArrayList<CommentType>(Arrays.asList(singleDoubleSlash, multiSlashStar)));
+        commentTypes.put(".ts", new ArrayList<CommentType>(Arrays.asList(singleDoubleSlash, multiSlashStar)));
+        commentTypes.put(".py", new ArrayList<CommentType>(Arrays.asList(singleHash, multiTripleDoubleQuote, multiTripleSingleQuote)));
+        commentTypes.put(".html", new ArrayList<CommentType>(Arrays.asList(multiArrow)));
+        commentTypes.put(".css", new ArrayList<CommentType>(Arrays.asList(multiSlashStar)));
+        commentTypes.put(".xml", new ArrayList<CommentType>(Arrays.asList(multiArrow)));
+        commentTypes.put(".c", new ArrayList<CommentType>(Arrays.asList(singleDoubleSlash, multiSlashStar)));
+        commentTypes.put(".h", new ArrayList<CommentType>(Arrays.asList(singleDoubleSlash, multiSlashStar)));
+        commentTypes.put(".cpp", new ArrayList<CommentType>(Arrays.asList(singleDoubleSlash, multiSlashStar)));
+        commentTypes.put(".hpp", new ArrayList<CommentType>(Arrays.asList(singleDoubleSlash, multiSlashStar)));
+        commentTypes.put(".cxx", new ArrayList<CommentType>(Arrays.asList(singleDoubleSlash, multiSlashStar)));
+        commentTypes.put(".hxx", new ArrayList<CommentType>(Arrays.asList(singleDoubleSlash, multiSlashStar)));
         this.commentTypes = commentTypes;
 
     }
