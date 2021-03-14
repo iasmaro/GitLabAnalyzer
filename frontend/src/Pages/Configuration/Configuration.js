@@ -10,38 +10,28 @@ import './Configuration.css';
 
 const ConfigurationPage = () => {
 
-    const [selectedConfig, setSelectedConfig] = useState();
-    const [isLoading, setIsLoading] = useState(true);
+    const [selectedConfig, setSelectedConfig] = useState("");
+    const [isLoadingConfigs, setIsLoadingConfigs] = useState(true);
+    const [isLoadingConfigInfo, setIsLoadingConfigInfo] = useState(true);
     const [configInfo, setConfigInfo] = useState();
     const [configs, setConfigs] = useState([]);
     const username = useUserState();
 
     const handleClick = (config) => {
-        setSelectedConfig(config);
-        setIsLoading(false);
-
-        getConfigurationInfo(username, selectedConfig).then((data) => {
-            console.log(data)
+        getConfigurationInfo(username, config).then((data) => {
             setConfigInfo(data);
+            setSelectedConfig(config);
+            setIsLoadingConfigInfo(false);
+            
         });
     }
 
     useEffect(() => {
         getConfigurations(username).then((data) => {
             setConfigs(data);
-            setIsLoading(false);
+            setIsLoadingConfigs(false);
         });
     }, [username]);
-
-    useEffect(() => {
-        if (configs.length > 0) {
-            setSelectedConfig(configs[0]);
-            setIsLoading(false);
-        }
-      }, [configs]);
-
-
-
 
     return (
     <div className = 'configs-list-container'>
@@ -53,15 +43,16 @@ const ConfigurationPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {configs.map((config) => (
+                    
+                    {!isLoadingConfigs && configs?.length > 0 && configs.map((config) => (
                         <Config key={config} config={config} handleClick={handleClick}/>
                     ))}
                 </tbody>
             </Table>
         </div>
         <div className="right">
-            {selectedConfig && isLoading && <Spinner animation="border" className="right-spinner" />}
-            {/* {selectedConfig && !isLoading && <ConfigDetails configInfo={configInfo} />} */}
+            {selectedConfig && isLoadingConfigInfo && <Spinner animation="border" className="right-spinner" />}
+            {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} />}
         </div>
     </div>
     )
