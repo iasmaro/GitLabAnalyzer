@@ -8,6 +8,7 @@ import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
+import com.haumea.gitanalyzer.model.Configuration;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,14 +145,20 @@ public class CommitService {
         }
     }
 
-    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId, Date start, Date end) {
+    public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId) {
+
+        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
 
         GitlabService gitlabService = userService.createGitlabService(userId);
         List<CommitWrapper> filteredCommits;
 
         List<String> alias = getAliasForMember(memberId);
 
-        filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId, "master", start, end, alias);
+        filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId,
+                activeConfiguration.getTargetBranch(),
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd(),
+                alias);
 
         return convertCommitWrappersToDTOs(filteredCommits);
     }
