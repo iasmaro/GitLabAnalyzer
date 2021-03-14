@@ -1,0 +1,14 @@
+.configFileScore{
+    text-align: center;
+}
+
+.ConfigContainer{
+    padding: 50px 80px;
+}
+
+.justify-content-md-centers {
+    text-align: center;
+    background-color: #acbed8;
+    font-family: 'Roboto', sans-serif;
+    padding: 10px 10px;
+}
