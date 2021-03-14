@@ -83,7 +83,7 @@ public class UserService {
 
     }
 
-    private Configuration createDefaultConfig(String userId,  Integer projectId){
+    private Configuration createDefaultConfig(String userId, Integer projectId){
 
         GitlabService gitlabService = createGitlabService(userId);
 
@@ -94,7 +94,7 @@ public class UserService {
 
     }
 
-    public Configuration getConfiguration(String userId,  Integer projectId){
+    public Configuration getConfiguration(String userId, Integer projectId){
         Optional<String> activeConfig = Optional.ofNullable(getActiveConfig(userId));
         if(activeConfig.isPresent() && getConfigurationFileNames(userId).contains(activeConfig.get())){
             return getConfigurationByFileName(userId, activeConfig.get());
