@@ -3,9 +3,8 @@ import React from 'react';
 const ConfigDefault = (props) => {
     const { defaultConfig, handleClick } = props || {}; 
     return (
-        <tr onClick={() => {handleClick(defaultConfig)}}>
+        <tr onClick={() => {handleClick && handleClick(defaultConfig)}}>
             <td>{defaultConfig.fileName}</td>
-            
         </tr>
     );
 }

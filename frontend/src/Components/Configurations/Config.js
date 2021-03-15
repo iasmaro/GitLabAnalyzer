@@ -3,7 +3,7 @@ import React from 'react';
 const Config = (props) => {
     const { config, handleClick } = props || {};
     return (
-        <tr onClick={() => {handleClick(config)}}>
+        <tr onClick={() => {handleClick && handleClick(config)}}>
             <td>{config}</td>
         </tr>
     );

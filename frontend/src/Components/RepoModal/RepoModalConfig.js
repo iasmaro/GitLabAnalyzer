@@ -5,6 +5,7 @@ import { modal } from "Constants/constants";
 
 import { useUserState } from 'UserContext';
 import updateUser from 'Utils/updateUser';
+import deleteActiveConfig from 'Utils/deleteActiveConfig';
 
 const RepoModalConfig = (props) => {
     
@@ -14,7 +15,7 @@ const RepoModalConfig = (props) => {
 
     const selectConfig = (configuration) => {
         if (configuration === 'default') {
-            updateUser(username, '', '', '');
+            deleteActiveConfig(username);
         }
         else {
             updateUser(username, '', '', configuration);
