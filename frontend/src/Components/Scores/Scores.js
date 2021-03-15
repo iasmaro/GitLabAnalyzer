@@ -39,7 +39,7 @@ const Scores = (props) => {
                     </div>
                 </div>
             </div>
-            <Button variant="success" onClick={handleClick} className="clip-board-button">Copy to clipboard</Button>
+            <Button variant="success" onClick={handleClick} className="clip-board-button">Copy to Clipboard</Button>
         </>
     );
 }

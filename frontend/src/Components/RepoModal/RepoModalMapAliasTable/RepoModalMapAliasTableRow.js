@@ -9,12 +9,12 @@ const RepoModalMapAliasTableRow = (props) => {
     const handleClick = (e) => {
         if (selectedMemberId === e.target.name) {
             setSelectedMemberId('');
-            if (aliasIdPairs?.[aliasIndex]?.memberIndex) {
+            if (typeof aliasIdPairs?.[aliasIndex]?.memberIndex !== 'undefined') {
                 aliasIdPairs[aliasIndex].memberIndex = -1;
             } 
         } else {
             setSelectedMemberId(e.target.name);
-            if (aliasIdPairs?.[aliasIndex]?.memberIndex) {
+            if (typeof aliasIdPairs?.[aliasIndex]?.memberIndex !== 'undefined') {
                 aliasIdPairs[aliasIndex].memberIndex = parseInt(e.target.value);
             } 
         }
