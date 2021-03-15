@@ -1,10 +1,10 @@
-const calculateCommitScore = (mergerequests) => {
-    let sumOfMRs = 0;
-    for (let mergeRequest of mergerequests) {
-        sumOfMRs += mergeRequest?.mrscore;
+const calculateMrScore = (commits) => {
+    let sumOfCommits = 0;
+    for (let commit of commits) {
+        sumOfCommits += commit.commitScore;
     }
-    sumOfMRs = Math.round(sumOfMRs * 10) / 10;
-    return sumOfMRs;
+    sumOfCommits = Math.round(sumOfCommits * 10) / 10;
+    return sumOfCommits;
 }
 
-export default calculateCommitScore;
+export default calculateMrScore;
