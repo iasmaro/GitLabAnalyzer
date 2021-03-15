@@ -84,7 +84,7 @@ public class UserService {
 
     }
 
-    private Configuration createDefaultConfig(String userId, Integer projectId){
+    public Configuration createDefaultConfig(String userId, Integer projectId){
 
         GitlabService gitlabService = createGitlabService(userId);
 

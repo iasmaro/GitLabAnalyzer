@@ -43,7 +43,7 @@ public class Configuration {
 
     public Configuration(Date start){
 
-        this.fileName = "";
+        this.fileName = "default";
         this.start = start;
         this.end = new Date();
         this.targetBranch = "master";
