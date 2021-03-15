@@ -31,35 +31,6 @@
     margin: 20px;
 }
 
-.mapping {
-    align-items: center;
-    margin: 20px;
-    max-height: 70%;
-    top: 10%;
-    bottom: 10%;
-    right: 10%;
-    left: 10%;
-    overflow-x: scroll;
-    padding: 0px 0px;
-    scrollbar-width: none; 
-}
-
-.sticky-column {
-    position: sticky;
-    left: 0;
-    top: 0;
-    z-index: 1;
-    background-color: white;
-  }
-
-.sticky-title {
-    top: 0;
-    text-align: center;
-    position: sticky;
-    z-index: 1;
-    background-color: white;
-  }
-
 .dropdown-toggle {
     background-color: #747474;
     border-color: white;

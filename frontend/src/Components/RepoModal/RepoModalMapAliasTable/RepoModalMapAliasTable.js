@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 import { message } from 'Constants/constants';
 import RepoModalMapAliasTableRow from './RepoModalMapAliasTableRow';
 
-import 'Components/RepoModal/RepoModal.css';
+import './RepoModalMapAliasTable.css';
 
 const RepoModalMapAliasTable = (props) => {
     const { aliases, members, aliasIdPairs, setAliasIdPairs } = props || {};

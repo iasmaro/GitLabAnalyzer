@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 
-import RepoModalConfig from './Components/RepoModalConfig';
-import RepoModalMapAliasTable from './Components/RepoModalMapAliasTable';
+import RepoModalConfig from './RepoModalConfig';
+import RepoModalMapAliasTable from './RepoModalMapAliasTable/RepoModalMapAliasTable';
 import mapAliasToMember from 'Utils/mapAliasToMember';
 import updateAliasForMembers from 'Utils/updateAliasForMembers';
-import { allMembersHaveAliases, noMembersHaveAliases } from './Utils/checkInitialMemberAliasMapping';
-import { createMappingContainingPastAliases } from './Utils/createMappingContainingPastAliases';
-import { createInitialAliasIdPairs } from './Utils/createInitialAliasIdPairs';
-import { sameAliasIdPairs } from './Utils/sameAliasIdPairs';
+import { allMembersHaveAliases, noMembersHaveAliases } from './RepoModalMapAliasTable/Utils/checkInitialMemberAliasMapping';
+import { createMappingContainingPastAliases } from './RepoModalMapAliasTable/Utils/createMappingContainingPastAliases';
+import { createInitialAliasIdPairs } from './RepoModalMapAliasTable/Utils/createInitialAliasIdPairs';
+import { sameAliasIdPairs } from './RepoModalMapAliasTable/Utils/sameAliasIdPairs';
 
 import 'Components/RepoModal/RepoModal.css';
 
 const RepoModal = (props) => {
-    const {name, id, members, aliases, databaseMapping, status, toggleModal} = props || {};
+    const { name, id, members, aliases, databaseMapping, status, toggleModal } = props || {};
     const [config, setConfig] = useState("Select a configuration");
     const [aliasIdPairs, setAliasIdPairs] = useState(createInitialAliasIdPairs(aliases, members, databaseMapping)); 
     const databaseAliasIdPairs = createInitialAliasIdPairs(aliases, members, databaseMapping);

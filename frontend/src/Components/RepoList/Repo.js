@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 
 import RepoModal from 'Components/RepoModal/RepoModal';
-import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
+import { utcToLocal } from 'Components/RepoModal/getDates';
 import getMembersAndAliasesFromGitLab from 'Utils/getMembersAndAliasesFromGitLab';
 import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
 import { useUserState } from 'UserContext';
