@@ -6,7 +6,6 @@ import './MergeRequestList.css';
 
 const MergeRequest = (props) => {
     const { mergerequest, handleClick } = props || {};
-    console.log(mergerequest);
     return (
         <tr className="merge-request" onClick={() => {handleClick(mergerequest?.commitDTOList, mergerequest?.mergeRequestDiffs)}} >
             <td>{mergerequest?.mergeId === -1 ? "DUMMY" : utcToLocal(mergerequest?.mergedDate)}</td>
