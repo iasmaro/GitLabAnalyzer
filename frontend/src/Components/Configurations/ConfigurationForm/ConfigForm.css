@@ -3,12 +3,19 @@
 }
 
 .ConfigContainer{
-    padding: 50px 80px;
+    padding: 0px 0px;
+    width: 90%;
+    top: 10%;
+    bottom: 10%;
+    right: 10%;
+    left: 10%;
 }
 
-.justify-content-md-centers {
+.ConfigTitle{
+    background-color: rgb(227, 226, 226);
     text-align: center;
-    background-color: #acbed8;
-    font-family: 'Roboto', sans-serif;
-    padding: 10px 10px;
+}
+
+.ConfigTable{
+    background-color: white;
 }
