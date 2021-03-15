@@ -43,7 +43,7 @@ const ConfigurationPage = () => {
 
     return (
     <div className = 'configs-list-container'>
-        <div className="left">
+        <div className="configs-left">
             <Table striped bordered hover variant="light">
                 <thead>
                     <tr>
@@ -58,7 +58,7 @@ const ConfigurationPage = () => {
                 </tbody>
             </Table>
         </div>
-        <div className="right">
+        <div className="configs-right">
             {selectedConfig && isLoadingConfigInfo && <Spinner animation="border" className="right-spinner" />}
             {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} />}
         </div>

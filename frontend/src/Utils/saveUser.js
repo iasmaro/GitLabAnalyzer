@@ -1,6 +1,6 @@
 import { config } from 'Constants/constants';
 
-const saveUser = async (username, token, gitlabServer) => {
+const saveUser = async (username, token, gitlabServer, activeConfiguration = "") => {
     const URL = `${config.USERS_API_URL}`;
     fetch(URL, { 
         method: "POST",
@@ -8,7 +8,8 @@ const saveUser = async (username, token, gitlabServer) => {
         body: JSON.stringify({
             gitlabServer: gitlabServer,
             personalAccessToken: token,
-            userId: username
+            userId: username,
+            activeConfig: activeConfiguration
         })
     });
 }

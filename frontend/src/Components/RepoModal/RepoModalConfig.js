@@ -3,12 +3,23 @@ import {Dropdown, DropdownButton, Row, Col} from 'react-bootstrap';
 
 import { modal } from "Constants/constants";
 
+import { useUserState } from 'UserContext';
+import updateUser from 'Utils/updateUser';
+
 const RepoModalConfig = (props) => {
     
     const {defaultConfig, configs, config, setConfig} = props;
 
-    const selectConfig = (config) => {
-        setConfig(config);
+    const username = useUserState();
+
+    const selectConfig = (configuration) => {
+        if (configuration === 'default') {
+            updateUser(username, '', '', '');
+        }
+        else {
+            updateUser(username, '', '', configuration);
+        }
+        setConfig(configuration);
     };
 
     return (
