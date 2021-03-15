@@ -5,9 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useUserState } from 'UserContext';
 import AnalyzerTabs from 'Components/AnalyzerTabs/AnalyzerTabs';
 import AnalysisDropDown from 'Components/AnalyzerInfo/AnalysisDropDown';
-import getMergeRequests from 'Utils/getMergeRequests';
 import analyzeAll from 'Utils/analyzeAll';
-import getAllCommits from 'Utils/getAllCommits';
 import getProjectMembers from 'Utils/getProjectMembers';
 
 import './Analysis.css'
@@ -16,6 +14,7 @@ const Analysis = (props) => {
     const { location } = props || {};
     const { state } = location || {};
     const { data } = state || {};
+    const { projectId } = data || {};
     const [isLoading, setIsLoading] = useState(true);
     const [mergeRequests, setMergeRequests] = useState();
     const [commits, setCommits] = useState();
@@ -25,17 +24,17 @@ const Analysis = (props) => {
     const username = useUserState();
 
     useEffect(() => {
-        getProjectMembers(username, data.projectId).then((data) => {
+        getProjectMembers(username, projectId).then((data) => {
             setMembers(data);
         });
-    }, [username, data.projectId]);
+    }, [username, projectId]);
 
     useEffect(() => {
         if (members.length > 0 && !analysis) {
             setStudent(members[0]);
-            setAnalysis(analyzeAll(members, username, data.projectId));
+            setAnalysis(analyzeAll(members, username, projectId));
         }
-    }, [analysis, data.projectId, members, username]);
+    }, [analysis, projectId, members, username]);
 
     useEffect(() => {
         const activeAnalysis = analysis && analysis[student];
@@ -57,7 +56,7 @@ const Analysis = (props) => {
             <div className="analysis-header">
                 <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
             </div>
-            {isLoading ? <Spinner animation="border" className="spinner" /> : <AnalyzerTabs mergerequests={mergeRequests} projectId={data.projectId} commits={commits} />}
+            {isLoading ? <Spinner animation="border" className="spinner" /> : <AnalyzerTabs mergerequests={mergeRequests} projectId={projectId} commits={commits} />}
         </div>
     )
 }
