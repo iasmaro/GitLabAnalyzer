@@ -8,6 +8,8 @@ const dev = {
     USERS_TOKEN_API_URL: 'http://localhost:8080/api/v1/users/token',
     USERS_API_URL: 'http://localhost:8080/api/v1/users',
     PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
+    PROJECT_ALIAS_API_URL: 'http://localhost:8080/api/v1/members/alias',
+    PROJECT_MAPPING_API_URL: 'http://localhost:8080/api/v1/members/mapping',
     CONFIGURATION_FILES_URL: 'http://localhost:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://localhost:8080/api/v1/users/configuration/',
 };
@@ -22,6 +24,8 @@ const prod = {
     USERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users',
     USERS_TOKEN_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/token',
     PROJECT_MEMBERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members',
+    PROJECT_ALIAS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members/alias',
+    PROJECT_MAPPING_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members/mapping',
     CONFIGURATION_FILES_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration/',
 };
@@ -36,6 +40,10 @@ export const modal = {
     END_DATE : "End Date:"
 };
 
+export const date = {
+    FULL_DATE_TIME : "yyyy/MM/dd HH:mm"
+};
+
 export const TABS = {
     SCORES: 'Scores',
     GRAPHS: 'Graphs',
@@ -48,6 +56,7 @@ export const message = {
     NO_COMMITS: 'No commits found for this user',
     TOKEN_NOT_SET: 'Please set your gitlab token in the Profile page',
     NO_REPOS: 'It seems that you do not have any repositories at this moment',
+    NO_ALIASES: 'No aliases found',
 };
 
 export const SCHEME = {
