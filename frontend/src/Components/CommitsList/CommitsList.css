@@ -19,3 +19,11 @@
 .commit {
     cursor: pointer;
 }
+
+.lines-added {
+    color: green;
+}
+
+.lines-removed {
+    color: red;
+}
