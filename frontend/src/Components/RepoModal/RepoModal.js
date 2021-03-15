@@ -9,7 +9,7 @@ import FormattedDateTimePicker from "Components/FormattedDateTimePicker";
 
 const RepoModal = (props) => {
 
-    const {name, id, status, toggleModal} = props || {};
+    const { name, id, status, toggleModal } = props || {};
 
     const [config, setConfig] = useState("Select a configuration");
     
