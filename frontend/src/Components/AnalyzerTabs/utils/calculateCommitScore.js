@@ -1,5 +1,9 @@
-const calculateMrScore = (commits) => {
+const calculateCommitScore = (commits) => {
     let sumOfCommits = 0;
+    if(!commits){
+        return sumOfCommits;
+    }
+
     for (let commit of commits) {
         sumOfCommits += commit.commitScore;
     }
@@ -7,4 +11,4 @@ const calculateMrScore = (commits) => {
     return sumOfCommits;
 }
 
-export default calculateMrScore;
+export default calculateCommitScore;

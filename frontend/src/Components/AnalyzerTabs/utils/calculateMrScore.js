@@ -1,5 +1,7 @@
-const calculateCommitScore = (mergerequests) => {
+const calculateMrScore = (mergerequests) => {
     let sumOfMRs = 0;
+    if (!mergerequests)
+        return sumOfMRs;
     for (let mergeRequest of mergerequests) {
         sumOfMRs += mergeRequest?.mrscore;
     }
@@ -7,4 +9,4 @@ const calculateCommitScore = (mergerequests) => {
     return sumOfMRs;
 }
 
-export default calculateCommitScore;
+export default calculateMrScore;
