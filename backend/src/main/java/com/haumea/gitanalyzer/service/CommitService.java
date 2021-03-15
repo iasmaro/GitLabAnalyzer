@@ -172,9 +172,7 @@ public class CommitService {
                 activeConfiguration.getEnd(),
                 alias);
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
-
-        return convertCommitWrappersToDTOs(filteredCommits, configuration);
+        return convertCommitWrappersToDTOs(filteredCommits, activeConfiguration);
     }
 
     public List<CommitDTO> getOrphanCommitsForSelectedMemberAndDate(String userId, int projectId, String targetBranch, String memberId, Date start, Date end) {
