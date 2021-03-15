@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import { Form, Col, Row, Container, Button, Table } from 'react-bootstrap'
+import React, { useState } from 'react';
+import { Form, Col, Row, Container, Button, Table } from 'react-bootstrap';
 
 import {ConfigLabels, initialConfigState} from 'Constants/constants'
 import FormattedDateTimePicker from "Components/DateTimePicker/FormattedDateTimePicker";
 import saveConfig from "Utils/saveConfig";
 
-import './ConfigForm.css'
+import './ConfigForm.css';
 
 const ConfigForm = (props) => {
     const { username, toggleModal } = props || {};

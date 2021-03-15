@@ -18,7 +18,7 @@ const ConfigurationPage = () => {
     const [selectedConfig, setSelectedConfig] = useState("");
     const [isLoadingConfigs, setIsLoadingConfigs] = useState(true);
     const [isLoadingConfigInfo, setIsLoadingConfigInfo] = useState(true);
-    const [updatConfigs, setUpdateConfigs] = useState(false);
+    const [updateConfigs, setUpdateConfigs] = useState(false);
     const [configInfo, setConfigInfo] = useState();
     const [configs, setConfigs] = useState([]);
     const username = useUserState();
@@ -40,16 +40,16 @@ const ConfigurationPage = () => {
 
     const handleDelete = (config) => {
         deleteConfig(username, config);
-        setTimeout(() =>{
-            setUpdateConfigs(!updatConfigs);
+        setTimeout(() => {
+            setUpdateConfigs(!updateConfigs);
         }, 200);
     }
 
     const handleShow = () => setShow(true);
     const handleClose = () => {
         setShow(false);
-        setTimeout(() =>{
-            setUpdateConfigs(!updatConfigs);
+        setTimeout(() => {
+            setUpdateConfigs(!updateConfigs);
         }, 200);
     }
     const [show, setShow] = useState(false);
@@ -59,7 +59,7 @@ const ConfigurationPage = () => {
             setConfigs(data);
             setIsLoadingConfigs(false);
         });
-    }, [username, updatConfigs]);
+    }, [username, updateConfigs]);
 
     return (
     <div className = 'configs-list-container'>

@@ -2,8 +2,8 @@ import React from 'react';
 import { useUserState } from 'UserContext';
 import { Modal, Button } from 'react-bootstrap';
 
-import { ConfigLabels } from 'Constants/constants'
-import ConfigForm from './../ConfigurationForm/ConfigForm'
+import { ConfigLabels } from 'Constants/constants';
+import ConfigForm from 'Components/Configurations/ConfigurationForm/ConfigForm';
 
 
 const ConfigModal = (prop) => {
