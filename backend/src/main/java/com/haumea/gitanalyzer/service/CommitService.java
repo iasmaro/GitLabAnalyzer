@@ -47,7 +47,8 @@ public class CommitService {
         for(int index = newPath.length() - 1; index >= 0; index--) {
 
             if(newPath.charAt(index) == '.') {
-                return newPath.substring(index);
+                index++;
+                return newPath.substring(index).toLowerCase();
             }
 
         }
@@ -171,9 +172,7 @@ public class CommitService {
                 activeConfiguration.getEnd(),
                 alias);
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
-
-        return convertCommitWrappersToDTOs(filteredCommits, configuration);
+        return convertCommitWrappersToDTOs(filteredCommits, activeConfiguration);
     }
 
     public List<CommitDTO> getOrphanCommitsForSelectedMemberAndDate(String userId, int projectId, String targetBranch, String memberId, Date start, Date end) {
