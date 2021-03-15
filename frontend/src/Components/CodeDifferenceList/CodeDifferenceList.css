@@ -1,0 +1,26 @@
+
+
+.button-container {
+    float: right;
+    padding: 0.2em 0.2em 0.2em 0.2em;
+}
+
+.button-container > * {
+    margin: 0.2em 0.2em 0.2em 0.2em;
+}
+
+.view-button {
+    width: 7.2em;
+    
+}
+
+.code-diff-list {
+    width: 100%;
+    height: 50em;
+    float: left;
+    overflow-y: scroll;
+}
+
+.code-diff-list::-webkit-scrollbar {
+    display: none;
+}

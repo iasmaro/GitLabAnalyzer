@@ -31,4 +31,8 @@ public class Member {
     public List<String> getAlias() {
         return alias;
     }
+
+    public void setAlias(List<String> alias) {
+        this.alias = alias;
+    }
 }

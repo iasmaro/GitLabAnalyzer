@@ -1,8 +1,11 @@
-.justify-content-md-center {
-    text-align: center;
+.tab-container {
     background-color: #acbed8;
     font-family: 'Roboto', sans-serif;
-    padding: 50px 50px;
+    height: 100%;
+}
+
+.tab-content {
+    height: 100%;
 }
 
 .nav-tabs .nav-link.active {

@@ -1,0 +1,17 @@
+:root {
+    --diff-omit-gutter-line-color: #fff;
+}
+
+.accordion>.card>.card-header {
+    box-shadow: 0 -2px 0 0 #fff;
+    height: 3em;
+    padding-top: 0px;
+}
+
+.diff-toggle {
+    padding-top: 0.2em;
+}
+
+.card-body {
+    padding: 0px;
+}
