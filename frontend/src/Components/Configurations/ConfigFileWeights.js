@@ -4,7 +4,8 @@ import { Table } from 'react-bootstrap';
 import './ConfigDetails.css'
 
 const ConfigFileWeights = (props) => {
-    const {fileTypes} = props || {};
+    const { fileTypes } = props || {};
+
     return (
         <Table striped bordered hover variant="light">             
             <thead>
@@ -13,7 +14,7 @@ const ConfigFileWeights = (props) => {
                 </tr>
             </thead>
             
-            {Object.entries(fileTypes?.fileFactor).map(([fileType, value]) => 
+            {fileTypes?.fileFactor && Object.entries(fileTypes?.fileFactor).map(([fileType, value]) => 
                 <div key={fileType} className='file-weightings'>
                     <thead>
                         <tr>
@@ -28,7 +29,7 @@ const ConfigFileWeights = (props) => {
                         </tr>
                     </tbody>
 
-                    {fileTypes?.commentTypes[fileType].map((comments) =>
+                    {fileTypes?.commentTypes[fileType] && fileTypes?.commentTypes[fileType].map((comments) =>
                         <tbody>
                             {comments?.endType && (
                                 <>

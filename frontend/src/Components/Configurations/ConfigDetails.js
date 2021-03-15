@@ -4,7 +4,7 @@ import { Table } from 'react-bootstrap';
 import './ConfigDetails.css'
 import ConfigFileWeights from './ConfigFileWeights';
 const ConfigDetails = (props) => {
-    const {configInfo} = props || {};
+    const { configInfo } = props || {};
     return (
         <div className = 'config-details-container'>
             <Table striped bordered hover variant="light">
@@ -33,7 +33,7 @@ const ConfigDetails = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Object.entries(configInfo?.editFactor).map(([codeScore, value]) => 
+                    {configInfo && Object.entries(configInfo?.editFactor).map(([codeScore, value]) => 
                         <tr key={codeScore}>
                             <td>{codeScore}</td>
                             <td>{value}</td>
