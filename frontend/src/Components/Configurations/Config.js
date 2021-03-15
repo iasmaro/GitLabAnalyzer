@@ -6,8 +6,8 @@ const Config = (props) => {
     const { config, handleClick, handleDelete } = props || {};
     
     return (
-        <tr onClick={() => {handleClick && handleClick(config)}}>
-            <td>{config}</td>
+        <tr>
+            <td onClick={() => {handleClick && handleClick(config)}}>{config}</td>
             <td><Button variant="danger" className="delete-config-button" onClick={() => handleDelete && handleDelete(config)}>Delete</Button></td>
         </tr>
     );

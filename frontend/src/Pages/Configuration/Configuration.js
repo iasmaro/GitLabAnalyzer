@@ -40,6 +40,8 @@ const ConfigurationPage = () => {
 
     const handleDelete = (config) => {
         deleteConfig(username, config);
+        setConfigInfo("");
+        setSelectedConfig("");
         setTimeout(() => {
             setUpdateConfigs(!updateConfigs);
         }, 200);
