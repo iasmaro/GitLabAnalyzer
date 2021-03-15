@@ -1,0 +1,55 @@
+.diff-stats {
+    align-items: center;
+    padding: 0.6rem 0rem 0 1rem;
+    display: inline-flex;
+    float: right;
+}
+
+.lines-added {
+    color: #217645;
+    padding: 0 0.25rem;
+}
+
+.file-title {
+    color: black;
+}
+
+.file-title:hover {
+    color: black;
+}
+
+.lines-removed {
+    color: #dd2b0e;
+    padding: 0 0.5rem 0 0.25rem;
+}
+
+.file-score {
+	border-style: solid;
+	border-width: 0.1em;
+	border-color: gray;
+	padding: 0.2em;
+}
+
+.chevron::before {
+	border-style: solid;
+	border-width: 0.1em 0.1em 0 0;
+	content: '';
+	display: inline-block;
+	height: 0.5em;
+	left: 0.15em;
+	position: relative;
+	top: 0.05em;
+	transform: rotate(-45deg);
+	width: 0.5em;
+    cursor: pointer;
+}
+
+.chevron.chevron-right:before {
+	left: 0;
+	transform: rotate(45deg);
+}
+
+.chevron.chevron-bottom:before {
+	top: 0;
+	transform: rotate(135deg);
+}
