@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.gitlab;
 
+import io.swagger.models.auth.In;
 import org.gitlab4j.api.models.*;
 
 import java.util.ArrayList;
@@ -290,6 +291,26 @@ public class TestGitLabService {
         System.out.println(
                         "# commits: " + mergeRequest.getCommits().size() +
                         ", # diffs: " + mergeRequest.getDiffs().size());
+    }
+
+    public void testScoreCalculator(Integer projectId, String commitId) {
+
+        List<Diff> diffs = gitlabService.getCommitDiffs(projectId, commitId);
+
+        IndividualDiffScoreCalculator calculator = new IndividualDiffScoreCalculator();
+
+        CommentType javaShort = new CommentType("//", "");
+        CommentType javaLong = new CommentType("/*", "*/");
+
+        List<CommentType> commentTypes = new ArrayList<>();
+        commentTypes.add(javaShort, javaLong);
+
+        for(Diff diff: diffs){
+            System.out.println(diff.getDiff());
+
+            calculator.calculateDiffScore(diff, false, 1.0, 0.2, 0.2, 0.5, 1.0)
+        }
+
     }
 
 
