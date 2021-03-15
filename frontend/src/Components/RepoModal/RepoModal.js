@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 
-import RepoModalConfig from './RepoModalConfig';
-import RepoModalMapAliasTable from './RepoModalMapAliasTable/RepoModalMapAliasTable';
 import mapAliasToMember from 'Utils/mapAliasToMember';
 import updateAliasForMembers from 'Utils/updateAliasForMembers';
+
+import RepoModalConfig from './RepoModalConfig';
+import RepoModalMapAliasTable from './RepoModalMapAliasTable/RepoModalMapAliasTable';
 import { allMembersHaveAliases, noMembersHaveAliases } from './RepoModalMapAliasTable/Utils/checkInitialMemberAliasMapping';
 import { createMappingContainingPastAliases } from './RepoModalMapAliasTable/Utils/createMappingContainingPastAliases';
 import { createInitialAliasIdPairs } from './RepoModalMapAliasTable/Utils/createInitialAliasIdPairs';
 import { sameAliasIdPairs } from './RepoModalMapAliasTable/Utils/sameAliasIdPairs';
-
 import 'Components/RepoModal/RepoModal.css';
 
 const RepoModal = (props) => {
-    const { name, id, members, aliases, databaseMapping, status, toggleModal } = props || {};
+    const { name, id, members, aliases, databaseMapping, status, toggleModal } = props || {};    
     const [config, setConfig] = useState("Select a configuration");
     const [aliasIdPairs, setAliasIdPairs] = useState(createInitialAliasIdPairs(aliases, members, databaseMapping)); 
     const databaseAliasIdPairs = createInitialAliasIdPairs(aliases, members, databaseMapping);
@@ -26,22 +26,21 @@ const RepoModal = (props) => {
     const [redirect, setRedirect] = useState(false);
 
     const createApiMappingFromLocalMapping = (mapping) => {
-        for (var i = 0; i < aliasIdPairs.length; i ++) {
-            var memberIndex = aliasIdPairs[i].memberIndex;
+        for (let aliasIdPair of aliasIdPairs) {
+            const memberIndex = aliasIdPair.memberIndex;
             if (memberIndex > -1) {
-                mapping[memberIndex].alias.push(aliasIdPairs[i].alias);
+                mapping[memberIndex].alias.push(aliasIdPair.alias);
             }
         }
     }
 
     const handleClick = () => {
-
         if (config !== "Select a configuration") {
             createApiMappingFromLocalMapping(mapping); 
             if (noMembersHaveAliases(databaseMapping)) {
                 mapAliasToMember(mapping);
             } else if (allMembersHaveAliases(databaseMapping)) {
-                if(!sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs)) {
+                if(!sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs)) {          
                     updateAliasForMembers(mapping);
                 }
             } else {             
@@ -57,7 +56,6 @@ const RepoModal = (props) => {
             end: endDate.toISOString(),
             projectId: id,
             configuration: config,
-
         }
         return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
     }
