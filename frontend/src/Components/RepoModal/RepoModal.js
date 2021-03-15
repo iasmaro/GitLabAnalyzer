@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 
-import RepoModalStudent from './RepoModalStudent';
 import RepoModalConfig from './RepoModalConfig';
 import { modal } from 'Constants/constants';
+import { defaultConfig } from 'Mocks/mockConfigs.js';
 import './RepoModal.css';
 import FormattedDateTimePicker from "Components/FormattedDateTimePicker";
 
 const RepoModal = (props) => {
 
-    const {name, id, members, status, toggleModal} = props || {};
+    const {name, id, configs, status, toggleModal} = props || {};
 
-    const [config, setConfig] = useState("Select a configuration");
-    const [student, setStudent] = useState("Select a student");
+    const [config, setConfig] = useState("default");
     
     /*Default times are both at the current date and time*/
     const [startDate, setStartDate] = useState(new Date());
@@ -21,14 +20,12 @@ const RepoModal = (props) => {
     const [redirect, setRedirect] = useState(false);
 
     const handleClick = () => {
-        if (student !== "Select a student") {
-            setRedirect(true);
-        }
+        setRedirect(true);
     }
 
     if (redirect) {
         const data = {
-            memberId: student,
+            configuration: config,
             start: startDate.toISOString(),
             end: endDate.toISOString(),
             projectId: id,
@@ -49,11 +46,9 @@ const RepoModal = (props) => {
                 <Modal.Title>{name}</Modal.Title>
             </Modal.Header>
             <Modal.Body className="repo-modal-body">
-                <RepoModalConfig config={config} setConfig={setConfig} />
-                <RepoModalStudent members={members} student={student} setStudent={setStudent} />
+                <RepoModalConfig defaultConfig={defaultConfig.fileName} configs={configs} config={config} setConfig={setConfig} />
 
                 <FormattedDateTimePicker startName={modal.START_DATE} endName={modal.END_DATE} setStartDate={setStartDate} setEndDate={setEndDate}/>
-
             </Modal.Body>
 
             <Modal.Footer>

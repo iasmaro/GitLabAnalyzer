@@ -4,36 +4,51 @@ import { Table, Spinner, Button } from 'react-bootstrap';
 import Config from 'Components/Configurations/Config';
 import ConfigDetails from 'Components/Configurations/ConfigDetails';
 import ConfigModal from 'Components/Configurations/ConfigurationModal/ConfigModal'
-import { configs } from 'Mocks/mockConfigs.js'
+import getConfigurations from 'Utils/getConfigurations';
+import getConfigurationInfo from 'Utils/getConfigurationInfo';
+import { useUserState } from 'UserContext';
 import './Configuration.css';
+import ConfigDefault from 'Components/Configurations/ConfigDefault';
+import { defaultConfig } from 'Mocks/mockConfigs.js';
 
 const ConfigurationPage = () => {
 
-    const [selectedConfig, setSelectedConfig] = useState();
-    const [isLoading, setIsLoading] = useState(true);
+    const [selectedConfig, setSelectedConfig] = useState("");
+    const [isLoadingConfigs, setIsLoadingConfigs] = useState(true);
+    const [isLoadingConfigInfo, setIsLoadingConfigInfo] = useState(true);
     const [configInfo, setConfigInfo] = useState();
+    const [configs, setConfigs] = useState([]);
+    const username = useUserState();
 
     const handleClick = (config) => {
-        setSelectedConfig(config?.configName);
-        setIsLoading(false);
-        setConfigInfo(config)
+        if (config.fileName === "default") {
+            setConfigInfo(config)
+            setSelectedConfig(config);
+            setIsLoadingConfigInfo(false);
+        }
+        else {
+            getConfigurationInfo(username, config).then((data) => {
+                setConfigInfo(data);
+                setSelectedConfig(config);
+                setIsLoadingConfigInfo(false);
+            });
+        }
     }
 
-    useEffect(() => {
-        if (configs.length > 0) {
-            setSelectedConfig(configs?.[0].configName);
-            setIsLoading(false);
-            setConfigInfo(configs[0]);
-        }
-      }, []);
-    
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
     const [show, setShow] = useState(false);
 
+    useEffect(() => {
+        getConfigurations(username).then((data) => {
+            setConfigs(data);
+            setIsLoadingConfigs(false);
+        });
+    }, [username]);
+
     return (
     <div className = 'configs-list-container'>
-        <div className="left">
+        <div className="configs-left">
             <Table striped bordered hover variant="light">
                 <thead>
                     <tr>
@@ -47,15 +62,16 @@ const ConfigurationPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {configs.map((config) => (
-                        <Config key={config?.configName} config={config} handleClick={handleClick}/>
+                    <ConfigDefault defaultConfig={defaultConfig} handleClick={handleClick}/>
+                    {!isLoadingConfigs && configs?.length > 0 && configs.map((config) => (
+                        <Config key={config} config={config} handleClick={handleClick}/>
                     ))}
                 </tbody>
             </Table>
         </div>
-        <div className="right">
-            {selectedConfig && isLoading && <Spinner animation="border" className="right-spinner" />}
-            {selectedConfig && !isLoading && <ConfigDetails configInfo={configInfo} />}
+        <div className="configs-right">
+            {selectedConfig && isLoadingConfigInfo && <Spinner animation="border" className="right-spinner" />}
+            {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} />}
         </div>
     </div>
     )
