@@ -6,3 +6,9 @@
 .spinner {
     color: #fff;
 }
+
+.analysis-header {
+    position: absolute;
+    right: 0px;
+    z-index: 2;
+}

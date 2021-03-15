@@ -17,6 +17,7 @@ const Repo = (props) => {
     const [isLoadingDatabaseCall, setIsLoadingDatabaseCall] = useState(false);
     const username = useUserState();
     
+    //Change to getConfigurations
     const handleShow = () => {
         setIsLoadingGitLabCall(true);
         setIsLoadingDatabaseCall(true);

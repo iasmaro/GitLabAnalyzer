@@ -4,6 +4,8 @@ import { Redirect } from "react-router-dom";
 
 import mapAliasToMember from 'Utils/mapAliasToMember';
 import updateAliasForMembers from 'Utils/updateAliasForMembers';
+import { modal } from 'Constants/constants';
+import FormattedDateTimePicker from "Components/FormattedDateTimePicker";
 
 import RepoModalConfig from './RepoModalConfig';
 import RepoModalMapAliasTable from './RepoModalMapAliasTable/RepoModalMapAliasTable';
@@ -13,14 +15,17 @@ import { createInitialAliasIdPairs } from './RepoModalMapAliasTable/Utils/create
 import { sameAliasIdPairs } from './RepoModalMapAliasTable/Utils/sameAliasIdPairs';
 import 'Components/RepoModal/RepoModal.css';
 
+
 const RepoModal = (props) => {
     const { name, id, members, aliases, databaseMapping, status, toggleModal } = props || {};    
     const [config, setConfig] = useState("Select a configuration");
     const [aliasIdPairs, setAliasIdPairs] = useState(createInitialAliasIdPairs(aliases, members, databaseMapping)); 
     const databaseAliasIdPairs = createInitialAliasIdPairs(aliases, members, databaseMapping);
     const mapping = createMappingContainingPastAliases(aliases, members, databaseMapping);
-
-    // TODO: SET THESE DATES BASED ON THE CONFIG FILE SELECTED
+    
+    /*Default times are both at the current date and time*/
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
     const [redirect, setRedirect] = useState(false);
 
     const createApiMappingFromLocalMapping = (mapping) => {
@@ -50,6 +55,8 @@ const RepoModal = (props) => {
 
     if (redirect) {
         const data = {
+            start: startDate.toISOString(),
+            end: endDate.toISOString(),
             projectId: id,
             configuration: config,
         }
@@ -71,7 +78,6 @@ const RepoModal = (props) => {
 
             <Modal.Body className="repo-modal-body">
                 <RepoModalConfig config={config} setConfig={setConfig} />
-
                 <RepoModalMapAliasTable aliases={aliases} members={members} aliasIdPairs={aliasIdPairs} setAliasIdPairs={setAliasIdPairs}/>
             </Modal.Body>
 
