@@ -1,259 +1,359 @@
-import React, {useState, useEffect} from 'react'
-import FormattedDateTimePicker from "Components/DateTimePicker/FormattedDateTimePicker";
-import {Form, Col, Row, Container, Button} from 'react-bootstrap'
+import React, { useState, useEffect } from 'react'
+import { Form, Col, Row, Container, Button, Table } from 'react-bootstrap'
+
 import {ConfigLabels, initialConfigState} from 'Constants/constants'
+import FormattedDateTimePicker from "Components/DateTimePicker/FormattedDateTimePicker";
+import saveConfig from "Utils/saveConfig";
+
 import './ConfigForm.css'
 
-const ConfigForm = () => {
+const ConfigForm = (props) => {
+    const { username } = props || {};
 
-    const [state, setstate] = useState([]);
+    const [state, setstate] = useState(initialConfigState);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
-    const [inputList, setInputList] = useState([{ FILE_EXTENSION: "", SINGLE_COMMENT: "", MULTI_START_COMMENT: "", MULTI_END_COMMENT: "", WEIGHT: "" }]);
+    const [inputList, setInputList] = useState([{ FILE_EXTENSION: state.FILE_EXTENSION, SINGLE_COMMENT: state.SINGLE_COMMENT, MULTI_START_COMMENT: state.MULTI_LINE_COMMENT_START, MULTI_END_COMMENT: state.MULTI_LINE_COMMENT_END, WEIGHT: state.WEIGHT }]);
 
     const handleInputChange = event =>{
-        const {name, value} = event.target.value
+        const {name, value} = event.target
         setstate({
             ...state,
             [name]: value
         })
 
     }
+
     const handleAddClick = (event) => {
         event.preventDefault();
-        setInputList([...inputList, { FILE_EXTENSION: event.target.value, SINGLE_COMMENT: "", MULTI_START_COMMENT: "", MULTI_END_COMMENT: "", WEIGHT: "" }]);
-        console.log(inputList)
-
+        setInputList([...inputList, { 
+            FILE_EXTENSION: state.FILE_EXTENSION, SINGLE_COMMENT: state.SINGLE_COMMENT, MULTI_START_COMMENT: state.MULTI_LINE_COMMENT_START, MULTI_END_COMMENT: state.MULTI_LINE_COMMENT_END, WEIGHT: state.WEIGHT 
+        }]);
     };
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const editFact = {
+            addLine: state.ADD_NEW_LINE,
+            delLine: state.DELETE_LINE,
+            movLine: state.MOVE_LINE,
+            syntax: state.SYNTAX,
+            spaceChange: state.SPACING
+        }
 
+        const fileFact = {
+            JAVA: state.JAVA,
+            JS: state.JS,
+            TS: state.TS,
+            PY: state.PY,
+            HTML: state.HTML,
+            CSS: state.CSS,
+            XML: state.XML,
+            CPP: state.CPP,
+            C: state.C,
+            [(state.FILE_EXTENSION).replace(".","")] : state.WEIGHT
+        }
 
+        const singleComments = {
+            END_TYPE: '',
+            START_TYPE:  state.SINGLE_COMMENT
+        }
+
+        const multiComments = {
+            END_TYPE: state.MULTI_END_COMMENT,
+            START_TYPE:  state.MULTI_START_COMMENT
+        }
+
+        const commentTypes = {
+            [(state.FILE_EXTENSION).replace(".","")] : [singleComments, multiComments]
+        }
+
+        console.log(state)
+
+        saveConfig(commentTypes, editFact, username, startDate, endDate, fileFact, state.CONFIGURATION_NAME);
+    };
 
 
     return (
         <>
             <Container fluid className="ConfigContainer">
                 <Row className="justify-content-md-center" xs={12}>
-                    <h2>{ConfigLabels.CONFIGURATION_FORM}</h2>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Form>
-                        <Form.Group as={Row} controlId="configName">
-                            <Form.Label comlumn md={2}>
-                                {ConfigLabels.CONFIGURATION_NAME}
-                            </Form.Label>
-                            <Col md={10}>
-                                <Form.Control 
-                                    placeholder="Enter Configuration Name" 
-                                    defaultValue={initialConfigState.CONFIGURATION_NAME}
-                                    name = "ConfigName"
-                                    onChange = {handleInputChange}
-                                />
-                            </Col>
-                        </Form.Group>
-                        <Form.Row className="justify-content-md-center">
-                            <h4>{ConfigLabels.DATE_TIME}</h4>
-                        </Form.Row>
-                        <Form.Row className="justify-content-md-center">
-                            <FormattedDateTimePicker 
-                                startName={ConfigLabels.START_DATE} 
-                                endName={ConfigLabels.END_DATE} 
-                                setStartDate={setStartDate} 
-                                setEndDate={setEndDate}
-                            />
-                        </Form.Row>
-                        <Form.Row className="justify-content-md-center">
-                            <h4>{ConfigLabels.CODE_SCORE}</h4>
-                        </Form.Row>
-                        <Form.Row>
-                            <Form.Group as={Col} controlId="CodeScoreValues">
-                                <Form.Label>{ConfigLabels.ADD_NEW_LINE}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.SCORE_WEIGHT}  
-                                    defaultValue={initialConfigState.ADD_NEW_LINE}
-                                    name = "addline"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="CodeScoreValues">
-                                <Form.Label>{ConfigLabels.DELETE_LINE}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.SCORE_WEIGHT}  
-                                    defaultValue={state.DELETE_LINE}
-                                    name = "deleteline"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="CodeScoreValues">
-                                <Form.Label>{ConfigLabels.MOVE_LINE}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.SCORE_WEIGHT} 
-                                    defaultValue={state.MOVE_LINE}
-                                    name = "moveline"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="CodeScoreValues">
-                                <Form.Label>{ConfigLabels.SPACING}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.SCORE_WEIGHT}
-                                    defaultValue={state.SPACING}
-                                    name = "spacing"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="CodeScoreValues">
-                                <Form.Label>{ConfigLabels.SYNTAX}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.SCORE_WEIGHT} 
-                                    defaultValue={state.SYNTAX}
-                                    name = "syntax"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                        </Form.Row>
-                        <Form.Row className="justify-content-md-center">
-                            <h4>{ConfigLabels.DEFAULT_FILE}</h4>
-                        </Form.Row>
-                        <Form.Row>
-                            <Form.Group as={Col} controlId="configFileScore">
-                                <Form.Label>{ConfigLabels.JAVA}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.FILE_WEIGHT} 
-                                    defaultValue={state.JAVA}
-                                    name = "java"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="configFileScore">
-                                <Form.Label>{ConfigLabels.JS}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.FILE_WEIGHT} 
-                                    defaultValue={state.JS}
-                                    name = "js"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="configFileScore">
-                                <Form.Label>{ConfigLabels.TS}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.FILE_WEIGHT} 
-                                    defaultValue={state.TS}
-                                    name = "ts"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="configFileScore">
-                                <Form.Label>{ConfigLabels.PY}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.FILE_WEIGHT} 
-                                    defaultValue={state.PY}
-                                    name = "py"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="configFileScore">
-                                <Form.Label>{ConfigLabels.HTML}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.FILE_WEIGHT} 
-                                    defaultValue={state.HTML}
-                                    name = "html"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="configFileScore">
-                                <Form.Label>{ConfigLabels.CSS}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.FILE_WEIGHT} 
-                                    defaultValue={state.CSS}
-                                    name = "css"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="configFileScore">
-                                <Form.Label>{ConfigLabels.XML}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.FILE_WEIGHT} 
-                                    defaultValue={state.XML}
-                                    name = "xml"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="configFileScore">
-                                <Form.Label>{ConfigLabels.CPP}</Form.Label>
-                                <Form.Control
-                                    placeholder={ConfigLabels.FILE_WEIGHT} 
-                                    defaultValue={state.CPP}
-                                    name = "cpp"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="configFileScore">
-                                <Form.Label>{ConfigLabels.C}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.FILE_WEIGHT} 
-                                    defaultValue={state.C}
-                                    name = "c"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                        </Form.Row>
-                        <Form.Row className="justify-content-md-center">
-                            <h4>{ConfigLabels.NEW_FILE}</h4>
-                        </Form.Row>
-                        <Form.Row className="justify-content-md-center">
-                            <Form.Group as={Col} controlId="newFileScore">
-                                <Form.Label>{ConfigLabels.FILE_EXTENSION}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.NEW_FILE_EXTENSION} 
-                                    name = "fileExtension"
-                                    onChange = {handleInputChange}
-                                    value = {state.FILE_EXTENSION}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="newFileScore">
-                                <Form.Label>{ConfigLabels.SINGLE_LINE_COMMENT}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.SINGLE_COMMENT}
-                                    name = "singleComment"
-                                    onChange = {handleInputChange} 
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="newFileScore">
-                                <Form.Label>{ConfigLabels.MULTI_LINE_COMMENT_START}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.MULTI_START_COMMENT} 
-                                    name = "multiStartComment"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="newFileScore">
-                                <Form.Label>{ConfigLabels.MULTI_LINE_COMMENT_END}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.MULTI_END_COMMENT} 
-                                    name = "multiEndComment"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="newFileScore">
-                                <Form.Label>{ConfigLabels.WEIGHT}</Form.Label>
-                                <Form.Control 
-                                    placeholder={ConfigLabels.FILE_WEIGHT} 
-                                    name = "weight"
-                                    onChange = {handleInputChange}
-                                />
-                            </Form.Group>
-                    
-                            <Form.Group as={Col} controlId="newFileScore">
-                                <Form.Label ></Form.Label>
-                                <Button type="submit" size='md'block onClick={handleAddClick}>+</Button>
-                            </Form.Group>
+                    <Form onSubmit={handleSubmit}>
+                        <Table hover className="ConfigTable">
+                            <thead>
+                                <th className='ConfigTitle'>
+                                    {ConfigLabels.CONFIGURATION_NAME}
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder="Enter Configuration Name" 
+                                            defaultValue={state.CONFIGURATION_NAME}
+                                            name = "CONFIGURATION_NAME"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </Table>
+                        <Table hover className="ConfigTable">
+                            <thead>
+                                <tr>
+                                    <th className='ConfigTitle'>
+                                        {ConfigLabels.DATE_TIME}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <FormattedDateTimePicker 
+                                            startName={ConfigLabels.START_DATE} 
+                                            endName={ConfigLabels.END_DATE} 
+                                            setStartDate={setStartDate} 
+                                            setEndDate={setEndDate}
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </Table>
+                        <Table hover className="ConfigTable">
+                            <thead>
+                                <tr>
+                                    <th colSpan='5' className='ConfigTitle'>
+                                        {ConfigLabels.CODE_SCORE}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th>{ConfigLabels.ADD_NEW_LINE}</th>
+                                    <th>{ConfigLabels.DELETE_LINE}</th>
+                                    <th>{ConfigLabels.MOVE_LINE}</th>
+                                    <th>{ConfigLabels.SPACING}</th>
+                                    <th>{ConfigLabels.SYNTAX}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.SCORE_WEIGHT}  
+                                            defaultValue={state.ADD_NEW_LINE}
+                                            name = "ADD_NEW_LINE"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.SCORE_WEIGHT}  
+                                            defaultValue={state.DELETE_LINE}
+                                            name = "DELETE_LINE"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.SCORE_WEIGHT} 
+                                            defaultValue={state.MOVE_LINE}
+                                            name = "MOVE_LINE"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.SCORE_WEIGHT}
+                                            defaultValue={state.SPACING}
+                                            name = "SPACING"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.SCORE_WEIGHT} 
+                                            defaultValue={state.SYNTAX}
+                                            name = "SYNTAX"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </Table>
 
-                            {/* <Form.Group as={Col} controlId="newFileScore">
-                                <Form.Label></Form.Label>
-                                <Button variant="danger" type="submit" size='md'block>-</Button>
-                            </Form.Group> */}
-                        </Form.Row>
+                        <Table hover className="ConfigTable">
+                            <thead>
+                                <tr>
+                                    <th colSpan='9' className='ConfigTitle'> 
+                                        {ConfigLabels.DEFAULT_FILE}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <th>{ConfigLabels.JAVA}</th>
+                                <th>{ConfigLabels.JS}</th>
+                                <th>{ConfigLabels.TS}</th>
+                                <th>{ConfigLabels.PY}</th>
+                                <th>{ConfigLabels.HTML}</th>
+                                <th>{ConfigLabels.CSS}</th>
+                                <th>{ConfigLabels.XML}</th>
+                                <th>{ConfigLabels.CPP}</th>
+                                <th>{ConfigLabels.C}</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.FILE_WEIGHT} 
+                                            defaultValue={state.JAVA}
+                                            name = "JAVA"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.FILE_WEIGHT} 
+                                            defaultValue={state.JS}
+                                            name = "JS"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.FILE_WEIGHT} 
+                                            defaultValue={state.TS}
+                                            name = "TS"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.FILE_WEIGHT} 
+                                            defaultValue={state.PY}
+                                            name = "PY"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.FILE_WEIGHT} 
+                                            defaultValue={state.HTML}
+                                            name = "HTML"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.FILE_WEIGHT} 
+                                            defaultValue={state.CSS}
+                                            name = "CSS"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                    <   Form.Control 
+                                            placeholder={ConfigLabels.FILE_WEIGHT} 
+                                            defaultValue={state.XML}
+                                            name = "XML"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control
+                                            placeholder={ConfigLabels.FILE_WEIGHT} 
+                                            defaultValue={state.CPP}
+                                            name = "CPP"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.FILE_WEIGHT} 
+                                            defaultValue={state.C}
+                                            name = "C"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </Table>
+
+
+                        <Table hover className="ConfigTable">
+                            <thead>
+                                <tr>
+                                    <th colSpan='6' className='ConfigTitle'> 
+                                        {ConfigLabels.NEW_FILE}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th>{ConfigLabels.FILE_EXTENSION}</th>
+                                    <th>{ConfigLabels.SINGLE_LINE_COMMENT}</th>
+                                    <th>{ConfigLabels.MULTI_LINE_COMMENT_START}</th>
+                                    <th>{ConfigLabels.MULTI_LINE_COMMENT_END}</th>
+                                    <th>{ConfigLabels.WEIGHT}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.NEW_FILE_EXTENSION} 
+                                            name = "FILE_EXTENSION"
+                                            defaultValue = {state.FILE_EXTENSION}
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.SINGLE_COMMENT}
+                                            name = "SINGLE_COMMENT"
+                                            onChange = {handleInputChange} 
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.MULTI_START_COMMENT} 
+                                            name = "MULTI_START_COMMENT"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.MULTI_END_COMMENT} 
+                                            name = "MULTI_END_COMMENT"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder={ConfigLabels.FILE_WEIGHT} 
+                                            name = "WEIGHT"
+                                            onChange = {handleInputChange}
+                                        />
+                                    </td>
+                                    <td>
+                                        {!inputList?.length ? (
+                                            <td colSpan={6} ></td>
+                                        )
+                                        :
+                                        inputList.map((inputList) => (
+                                            <Button type="submit" size='md' block key={inputList?.FILE_EXTENSION} inputList={inputList} onClick={handleAddClick}>+</Button>
+                                        ))}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </Table>
+                        <Col md="auto">
+                            <Button variant="success" type="submit" size='md'>
+                                Submit
+                            </Button>
+                        </Col>
                     </Form>
                 </Row>
             </Container>
