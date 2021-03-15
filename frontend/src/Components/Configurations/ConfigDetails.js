@@ -41,7 +41,6 @@ const ConfigDetails = (props) => {
                     )}
                 </tbody>
             </Table>
-            {console.log(configInfo)}
 
             <ConfigFileWeights fileTypes={configInfo}/>
         </div>

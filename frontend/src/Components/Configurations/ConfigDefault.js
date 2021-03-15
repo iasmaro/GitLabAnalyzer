@@ -4,7 +4,7 @@ const ConfigDefault = (props) => {
     const { defaultConfig, handleClick } = props || {}; 
     return (
         <tr onClick={() => {handleClick && handleClick(defaultConfig)}}>
-            <td>{defaultConfig.fileName}</td>
+            <td colSpan='2'>{defaultConfig.fileName}</td>
         </tr>
     );
 }

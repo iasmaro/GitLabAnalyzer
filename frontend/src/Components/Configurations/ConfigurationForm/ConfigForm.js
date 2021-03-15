@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import { Form, Col, Row, Container, Button, Table } from 'react-bootstrap'
+import React, { useState } from 'react';
+import { Form, Col, Row, Container, Button, Table } from 'react-bootstrap';
 
 import {ConfigLabels, initialConfigState} from 'Constants/constants'
 import FormattedDateTimePicker from "Components/DateTimePicker/FormattedDateTimePicker";
 import saveConfig from "Utils/saveConfig";
 
-import './ConfigForm.css'
+import './ConfigForm.css';
 
 const ConfigForm = (props) => {
-    const { username } = props || {};
+    const { username, toggleModal } = props || {};
 
     const [state, setstate] = useState(initialConfigState);
     const [startDate, setStartDate] = useState(new Date());
@@ -68,9 +68,10 @@ const ConfigForm = (props) => {
             [(state.FILE_EXTENSION).replace(".","")] : [singleComments, multiComments]
         }
 
-        console.log(state)
-
         saveConfig(commentTypes, editFact, username, startDate, endDate, fileFact, state.CONFIGURATION_NAME);
+        if (toggleModal) {
+            toggleModal();
+        }
     };
 
 
