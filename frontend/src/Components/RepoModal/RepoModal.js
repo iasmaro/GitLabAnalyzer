@@ -2,35 +2,55 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 
-import RepoModalStudent from './RepoModalStudent';
+import mapAliasToMember from 'Utils/mapAliasToMember';
+import updateAliasForMembers from 'Utils/updateAliasForMembers';
+import { defaultConfig } from 'Mocks/mockConfigs.js';
+
 import RepoModalConfig from './RepoModalConfig';
-import { modal } from 'Constants/constants';
-import './RepoModal.css';
-import FormattedDateTimePicker from "Components/FormattedDateTimePicker";
+import RepoModalMapAliasTable from './RepoModalMapAliasTable/RepoModalMapAliasTable';
+import { allMembersHaveAliases, noMembersHaveAliases } from './RepoModalMapAliasTable/Utils/checkInitialMemberAliasMapping';
+import { createMappingContainingPastAliases } from './RepoModalMapAliasTable/Utils/createMappingContainingPastAliases';
+import { createInitialAliasIdPairs } from './RepoModalMapAliasTable/Utils/createInitialAliasIdPairs';
+import { sameAliasIdPairs } from './RepoModalMapAliasTable/Utils/sameAliasIdPairs';
+import 'Components/RepoModal/RepoModal.css';
+
 
 const RepoModal = (props) => {
-
-    const {name, id, members, status, toggleModal} = props || {};
-
+    const { name, id, members, aliases, configs, databaseMapping, status, toggleModal } = props || {};    
     const [config, setConfig] = useState("Select a configuration");
-    const [student, setStudent] = useState("Select a student");
-    
-    /*Default times are both at the current date and time*/
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const [aliasIdPairs, setAliasIdPairs] = useState(createInitialAliasIdPairs(aliases, members, databaseMapping)); 
+    const databaseAliasIdPairs = createInitialAliasIdPairs(aliases, members, databaseMapping);
+    const mapping = createMappingContainingPastAliases(aliases, members, databaseMapping);
     const [redirect, setRedirect] = useState(false);
 
+    const createApiMappingFromLocalMapping = (mapping) => {
+        for (let aliasIdPair of aliasIdPairs) {
+            const memberIndex = aliasIdPair.memberIndex;
+            if (memberIndex > -1) {
+                mapping[memberIndex].alias.push(aliasIdPair.alias);
+            }
+        }
+    }
+
     const handleClick = () => {
-        if (student !== "Select a student") {
+        if (config !== "Select a configuration") {
+            createApiMappingFromLocalMapping(mapping); 
+            if (noMembersHaveAliases(databaseMapping)) {
+                mapAliasToMember(mapping);
+            } else if (allMembersHaveAliases(databaseMapping)) {
+                if(!sameAliasIdPairs(aliasIdPairs, databaseAliasIdPairs)) {          
+                    updateAliasForMembers(mapping);
+                }
+            } else {             
+                updateAliasForMembers(mapping);                
+            }  
             setRedirect(true);
         }
     }
 
     if (redirect) {
         const data = {
-            memberId: student,
-            start: startDate.toISOString(),
-            end: endDate.toISOString(),
+            configuration: config,
             projectId: id,
         }
         return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
@@ -42,23 +62,20 @@ const RepoModal = (props) => {
             onHide={toggleModal}
             backdrop="static"
             keyboard={false}
-            size="xl"
-            className="custom-modal"
+            dialogClassName="custom-modal"
+            scrollable={true}
         >
             <Modal.Header closeButton>
                 <Modal.Title>{name}</Modal.Title>
             </Modal.Header>
+
             <Modal.Body className="repo-modal-body">
-                <RepoModalConfig config={config} setConfig={setConfig} />
-                <RepoModalStudent members={members} student={student} setStudent={setStudent} />
-
-                <FormattedDateTimePicker startName={modal.START_DATE} endName={modal.END_DATE} setStartDate={setStartDate} setEndDate={setEndDate}/>
-
+                <RepoModalConfig defaultConfig={defaultConfig.fileName} configs={configs} config={config} setConfig={setConfig} />
+                <RepoModalMapAliasTable aliases={aliases} members={members} aliasIdPairs={aliasIdPairs} setAliasIdPairs={setAliasIdPairs}/>
             </Modal.Body>
 
             <Modal.Footer>
                 <Button onClick={toggleModal} variant="secondary">Cancel</Button>
-                {/* TODO: Hookup the analyze button to send this data and begin analysis */}
                 <Button variant="success" onClick={handleClick}>Analyze</Button>
             </Modal.Footer>
 
@@ -66,4 +83,4 @@ const RepoModal = (props) => {
     );
 };
 
-export default RepoModal
+export default RepoModal;

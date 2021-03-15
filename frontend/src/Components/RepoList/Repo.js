@@ -1,23 +1,40 @@
-import React, {useState} from 'react';
-import {Button} from 'react-bootstrap'
+import React, { useState } from 'react';
+import { Button, Spinner } from 'react-bootstrap';
 
 import RepoModal from 'Components/RepoModal/RepoModal';
-import getProjectMembers from 'Utils/getProjectMembers';
+import { utcToLocal } from 'Components/RepoModal/getDates';
+import getMembersAndAliasesFromGitLab from 'Utils/getMembersAndAliasesFromGitLab';
+import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
+import getConfigurations from 'Utils/getConfigurations';
 import { useUserState } from 'UserContext';
-import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
-
 
 const Repo = (props) => {
     const { repo } = props || {};
-    const [members, setMembers] = useState([]);
+    const [configs, setConfigs] = useState([]);
     const [show, setShow] = useState(false);
+    const [isLoadingGitLabCall, setIsLoadingGitLabCall] = useState(false);
+    const [isLoadingDatabaseCall, setIsLoadingDatabaseCall] = useState(false);
+    const [members, setMembers] = useState([]);
+    const [aliases, setAliases] = useState([]);
+    const [databaseMapping, setDatabaseMapping] = useState([]);
     const username = useUserState();
     
     const handleShow = () => {
-        getProjectMembers(username, repo.projectId).then((data) => {
-            setMembers(data);
-            setShow(true);
+        setIsLoadingGitLabCall(true);
+        setIsLoadingDatabaseCall(true);
+        getMembersAndAliasesFromGitLab(username, repo.projectId).then((data) => {
+            setMembers(data.members);
+            setAliases(data.aliases);
+            setIsLoadingGitLabCall(false);
         });
+        getMembersAndAliasesFromDatabase(username, repo.projectId).then((data) => {
+            setDatabaseMapping(data);
+            setIsLoadingDatabaseCall(false);
+        });
+        getConfigurations(username).then((data) => {
+            setConfigs(data);
+        });
+        setShow(true);
     }
 
     const handleClose = () => setShow(false);
@@ -29,9 +46,10 @@ const Repo = (props) => {
             <td>
                 <Button variant="dark" onClick={handleShow}> Analyze </Button>
             </td>
-            {show && <RepoModal name={repo?.projectName} id={repo?.projectId} createdAt={repo?.createdAt} members={members} status={show} toggleModal={handleClose}/>}
+            {(isLoadingGitLabCall || isLoadingDatabaseCall) ? <Spinner animation="border" className="spinner" /> :
+             show && <RepoModal name={repo?.projectName} id={repo?.projectId} members={members} aliases={aliases} databaseMapping={databaseMapping} createdAt={repo?.createdAt} configs={configs} status={show} toggleModal={handleClose}/>}
         </tr>
     );
 };
 
-export default Repo
+export default Repo;
