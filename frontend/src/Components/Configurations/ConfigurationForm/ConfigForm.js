@@ -8,7 +8,7 @@ import saveConfig from "Utils/saveConfig";
 import './ConfigForm.css'
 
 const ConfigForm = (props) => {
-    const { username } = props || {};
+    const { username, toggleModal } = props || {};
 
     const [state, setstate] = useState(initialConfigState);
     const [startDate, setStartDate] = useState(new Date());
@@ -68,9 +68,10 @@ const ConfigForm = (props) => {
             [(state.FILE_EXTENSION).replace(".","")] : [singleComments, multiComments]
         }
 
-        console.log(state)
-
         saveConfig(commentTypes, editFact, username, startDate, endDate, fileFact, state.CONFIGURATION_NAME);
+        if (toggleModal) {
+            toggleModal();
+        }
     };
 
 

@@ -7,15 +7,18 @@ import ConfigModal from 'Components/Configurations/ConfigurationModal/ConfigModa
 import getConfigurations from 'Utils/getConfigurations';
 import getConfigurationInfo from 'Utils/getConfigurationInfo';
 import { useUserState } from 'UserContext';
-import './Configuration.css';
+import deleteConfig from 'Utils/deleteConfig';
+
 import ConfigDefault from 'Components/Configurations/ConfigDefault';
 import { defaultConfig } from 'Mocks/mockConfigs.js';
+import './Configuration.css';
 
 const ConfigurationPage = () => {
 
     const [selectedConfig, setSelectedConfig] = useState("");
     const [isLoadingConfigs, setIsLoadingConfigs] = useState(true);
     const [isLoadingConfigInfo, setIsLoadingConfigInfo] = useState(true);
+    const [updatConfigs, setUpdateConfigs] = useState(false);
     const [configInfo, setConfigInfo] = useState();
     const [configs, setConfigs] = useState([]);
     const username = useUserState();
@@ -35,8 +38,20 @@ const ConfigurationPage = () => {
         }
     }
 
+    const handleDelete = (config) => {
+        deleteConfig(username, config);
+        setTimeout(() =>{
+            setUpdateConfigs(!updatConfigs);
+        }, 200);
+    }
+
     const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        setTimeout(() =>{
+            setUpdateConfigs(!updatConfigs);
+        }, 200);
+    }
     const [show, setShow] = useState(false);
 
     useEffect(() => {
@@ -44,7 +59,7 @@ const ConfigurationPage = () => {
             setConfigs(data);
             setIsLoadingConfigs(false);
         });
-    }, [username]);
+    }, [username, updatConfigs]);
 
     return (
     <div className = 'configs-list-container'>
@@ -52,23 +67,21 @@ const ConfigurationPage = () => {
             <Table striped bordered hover variant="light">
                 <thead>
                     <tr>
-                        <Button variant="info" onClick={handleShow}>Add New Configuration</Button>
-                    </tr>
-                        {show && <ConfigModal status={show} toggleModal={handleClose}/>}
-                    <tr>
                         <th colSpan='3' className='configTitle'>
-                            Configuration Titles
+                            Configurations
+                            <Button variant="info" onClick={handleShow} className="new-config-button">+</Button>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <ConfigDefault defaultConfig={defaultConfig} handleClick={handleClick}/>
                     {!isLoadingConfigs && configs?.length > 0 && configs.map((config) => (
-                        <Config key={config} config={config} handleClick={handleClick}/>
-                    ))}
+                        <Config key={config} config={config} handleClick={handleClick} handleDelete={handleDelete} />
+                        ))}
                 </tbody>
             </Table>
         </div>
+        {show && <ConfigModal status={show} toggleModal={handleClose}/>}
         <div className="configs-right">
             {selectedConfig && isLoadingConfigInfo && <Spinner animation="border" className="right-spinner" />}
             {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} />}

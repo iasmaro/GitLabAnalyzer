@@ -5,6 +5,7 @@ const ConfigDefault = (props) => {
     return (
         <tr onClick={() => {handleClick && handleClick(defaultConfig)}}>
             <td>{defaultConfig.fileName}</td>
+            <td></td>
         </tr>
     );
 }

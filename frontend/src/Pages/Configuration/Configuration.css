@@ -29,3 +29,12 @@
 .configs-right::-webkit-scrollbar { 
     display: none;
 }
+
+.new-config-button {
+    float: right;
+}
+
+.delete-config-button {
+    float: right;
+    z-index: 2;
+}

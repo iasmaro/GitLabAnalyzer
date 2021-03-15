@@ -29,7 +29,7 @@ const ConfigModal = (prop) => {
             </Modal.Header>
 
             <Modal.Body className="repo-modal-body">
-                <ConfigForm username={username}/>
+                <ConfigForm username={username} toggleModal={toggleModal}/>
             </Modal.Body>
 
             <Modal.Footer>
