@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.gitlab;
 
+import com.haumea.gitanalyzer.dto.DiffScoreDTO;
 import io.swagger.models.auth.In;
 import org.gitlab4j.api.models.*;
 
@@ -357,9 +358,10 @@ public class TestGitLabService {
                         ", # diffs: " + mergeRequest.getDiffs().size());
     }
 
-    public void testScoreCalculator(Integer projectId, String commitId) {
+    // warning use on small project
+    public void testScoreCalculator(Integer projectId) {
 
-        List<Diff> diffs = gitlabService.getCommitDiffs(projectId, commitId);
+        List<CommitWrapper> commits = gitlabService.getAllCommitsWithDiff(projectId);
 
         IndividualDiffScoreCalculator calculator = new IndividualDiffScoreCalculator();
 
@@ -367,12 +369,26 @@ public class TestGitLabService {
         CommentType javaLong = new CommentType("/*", "*/");
 
         List<CommentType> commentTypes = new ArrayList<>();
-        commentTypes.add(javaShort, javaLong);
+        commentTypes.add(javaLong);
+        commentTypes.add(javaShort);
 
-        for(Diff diff: diffs){
-            System.out.println(diff.getDiff());
+        for(CommitWrapper commit : commits){
 
-            calculator.calculateDiffScore(diff, false, 1.0, 0.2, 0.2, 0.5, 1.0)
+            System.out.println(commit.getCommitData().getMessage());
+
+            for (Diff diff : commit.getNewCode()) {
+                System.out.println(diff.getDiff());
+
+                DiffScoreDTO score = calculator.calculateDiffScore(diff.getDiff(), false,
+                        1.0,
+                        0.2, 0.2, 0.5, 1.0, commentTypes);
+
+                System.out.println("score is: " + score.getDiffScore());
+
+                System.out.println();
+
+
+            }
         }
 
     }

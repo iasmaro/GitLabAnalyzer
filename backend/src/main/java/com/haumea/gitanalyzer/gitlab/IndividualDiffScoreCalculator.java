@@ -135,9 +135,15 @@ public class IndividualDiffScoreCalculator {
             if(lineWasAdded(line) == true) { // line was added earlier and removed in this position
                 lineScore = calculatePointsForLineMovedUpOrDown(addLineWeight);
                 addedLines.remove(line);
+
+                System.out.println(line + " was moved on remove side " + lineScore);
+
             }
             else {
                 lineScore = deleteLineWeight;
+
+                System.out.println(line + " was removed " + lineScore);
+
             }
         }
 
@@ -187,6 +193,8 @@ public class IndividualDiffScoreCalculator {
 
                 addedLines.add(line);
                 removedLines.remove(line);
+
+                System.out.println(line + " was moved on add side " + lineScore);
             }
 
             if(isLongComment == true) {
