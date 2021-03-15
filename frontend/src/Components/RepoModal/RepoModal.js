@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 
-import RepoModalStudent from './RepoModalStudent';
 import RepoModalConfig from './RepoModalConfig';
 import { modal } from 'Constants/constants';
 import './RepoModal.css';
@@ -10,10 +9,9 @@ import FormattedDateTimePicker from "Components/FormattedDateTimePicker";
 
 const RepoModal = (props) => {
 
-    const {name, id, members, status, toggleModal} = props || {};
+    const { name, id, status, toggleModal } = props || {};
 
     const [config, setConfig] = useState("Select a configuration");
-    const [student, setStudent] = useState("Select a student");
     
     /*Default times are both at the current date and time*/
     const [startDate, setStartDate] = useState(new Date());
@@ -21,17 +19,17 @@ const RepoModal = (props) => {
     const [redirect, setRedirect] = useState(false);
 
     const handleClick = () => {
-        if (student !== "Select a student") {
+        if (config !== "Select a configuration") {
             setRedirect(true);
         }
     }
 
     if (redirect) {
         const data = {
-            memberId: student,
             start: startDate.toISOString(),
             end: endDate.toISOString(),
             projectId: id,
+            configuration: config,
         }
         return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
     }
@@ -50,10 +48,7 @@ const RepoModal = (props) => {
             </Modal.Header>
             <Modal.Body className="repo-modal-body">
                 <RepoModalConfig config={config} setConfig={setConfig} />
-                <RepoModalStudent members={members} student={student} setStudent={setStudent} />
-
                 <FormattedDateTimePicker startName={modal.START_DATE} endName={modal.END_DATE} setStartDate={setStartDate} setEndDate={setEndDate}/>
-
             </Modal.Body>
 
             <Modal.Footer>
