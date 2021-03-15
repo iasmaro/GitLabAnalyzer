@@ -53,6 +53,10 @@ public class UserService {
         return userRepository.getActiveConfig(userId);
     }
 
+    public void delateActiveConfig(String userId){
+        userRepository.deleteActiveConfig(userId);
+    }
+
     public String getUserId(String url, String ticket) {
         String finalURL = SFU_API_URL + url + "&ticket=" + ticket;
         try {

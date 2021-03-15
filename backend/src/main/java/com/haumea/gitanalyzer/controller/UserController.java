@@ -61,6 +61,13 @@ public class UserController {
 
     }
 
+    @DeleteMapping("/activeConfig")
+    public void deleteActiveConfig(@RequestParam @NotBlank String userId) {
+
+        userService.delateActiveConfig(userId);
+
+    }
+
     @GetMapping("/userId")
     public String getUserId(@RequestParam @NotBlank String url, @RequestParam @NotBlank String ticket) {
 

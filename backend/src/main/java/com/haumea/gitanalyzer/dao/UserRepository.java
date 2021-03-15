@@ -104,6 +104,21 @@ public class UserRepository {
         return gitlabServer;
     }
 
+    public void deleteActiveConfig(String userId){
+        Optional<User> user = findUserByUserId(userId);
+
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+        Update update = new Update();
+        update.unset("activeConfig");
+        mongoTemplate.updateFirst(query, update, User.class);
+
+    }
+
     public String getActiveConfig(String userId) throws ResourceNotFoundException {
 
         Optional<User> user = findUserByUserId(userId);
