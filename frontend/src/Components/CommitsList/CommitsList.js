@@ -20,19 +20,22 @@ const CommitsList = (props) => {
             <Table striped bordered hover variant="light">
                 <thead>
                         <tr>
-                            <th colSpan='4'className='commitTitle'>Commits</th>
+                            <th colSpan='6' className='commitTitle'>Commits</th>
                         </tr>
                 </thead>
                 <thead>
                     <tr>
-                        <th>Commit ID</th>
                         <th>Date</th>
+                        <th>Commit Message</th>
+                        <th>Score</th>
                         <th>Author</th>
+                        <th>Lines +</th>
+                        <th>Lines -</th>
                     </tr>
                 </thead>
                 <tbody>
                     {!commits?.length ? (
-                        <td colSpan={4} >{message.NO_COMMITS}</td>
+                        <td colSpan='4' >{message.NO_COMMITS}</td>
                     )
                     :
                     commits.map((commit, i) => (
@@ -43,6 +46,6 @@ const CommitsList = (props) => {
             </Table>
         </div>
     );
-    };
+};
 
 export default CommitsList
