@@ -20,9 +20,7 @@ const RepoModal = (props) => {
     const [redirect, setRedirect] = useState(false);
 
     const handleClick = () => {
-        if (config !== "default") {
-            setRedirect(true);
-        }
+        setRedirect(true);
     }
 
     if (redirect) {
@@ -51,7 +49,6 @@ const RepoModal = (props) => {
                 <RepoModalConfig defaultConfig={defaultConfig.fileName} configs={configs} config={config} setConfig={setConfig} />
 
                 <FormattedDateTimePicker startName={modal.START_DATE} endName={modal.END_DATE} setStartDate={setStartDate} setEndDate={setEndDate}/>
-
             </Modal.Body>
 
             <Modal.Footer>

@@ -13,6 +13,7 @@ const Repo = (props) => {
     const [show, setShow] = useState(false);
     const username = useUserState();
     
+    //Change to getConfigurations
     const handleShow = () => {
         getConfigurations(username).then((data) => {
             setConfigs(data);
