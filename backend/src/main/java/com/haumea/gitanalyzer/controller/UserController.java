@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,5 +92,11 @@ public class UserController {
     @DeleteMapping("/configuration")
     public void deleteConfiguration(@RequestParam @NotBlank String userId, @RequestParam @NotBlank String fileName) {
         userService.deleteConfiguration(userId, fileName);
+    }
+
+    @GetMapping("/configuration/default")
+    public Configuration getDefaultConfiguration(@RequestParam @NotBlank String userId,
+                                                 @RequestParam @NotNull Integer projectId){
+        return userService.createDefaultConfig(userId, projectId);
     }
 }
