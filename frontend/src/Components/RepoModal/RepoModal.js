@@ -21,8 +21,6 @@ const RepoModal = (props) => {
     const mapping = createMappingContainingPastAliases(aliases, members, databaseMapping);
 
     // TODO: SET THESE DATES BASED ON THE CONFIG FILE SELECTED
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
     const [redirect, setRedirect] = useState(false);
 
     const createApiMappingFromLocalMapping = (mapping) => {
@@ -52,8 +50,6 @@ const RepoModal = (props) => {
 
     if (redirect) {
         const data = {
-            start: startDate.toISOString(),
-            end: endDate.toISOString(),
             projectId: id,
             configuration: config,
         }

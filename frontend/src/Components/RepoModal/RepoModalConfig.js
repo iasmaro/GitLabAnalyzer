@@ -8,8 +8,8 @@ const RepoModalConfig = (props) => {
     
     const { config, setConfig } = props || {};
     /*Default times are both at the current date and time*/
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const startDate = useState(new Date());
+    const endDate = useState(new Date());
 
     const selectConfig = (config) => {
         // TO-DO: Update start & end date with dates in the selected config
@@ -29,7 +29,7 @@ const RepoModalConfig = (props) => {
             </DropdownButton>
         </Col>
         <Col lg='5'>
-            <FormattedDateTimePicker startName={modal.START_DATE} endName={modal.END_DATE} setStartDate={setStartDate} setEndDate={setEndDate} readOnly={true}/>
+            <FormattedDateTimePicker startName={modal.START_DATE} endName={modal.END_DATE} setStartDate={startDate} setEndDate={endDate} readOnly={true}/>
         </Col>
     </Row>
     );
