@@ -10,7 +10,7 @@ const dev = {
     PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
     CONFIGURATION_FILES_URL: 'http://localhost:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://localhost:8080/api/v1/users/configuration/',
-}
+};
 
 const prod = {
     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://cmpt373-1211-11.cmpt.sfu.ca/',
@@ -24,7 +24,7 @@ const prod = {
     PROJECT_MEMBERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members',
     CONFIGURATION_FILES_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration/',
-}
+};
 
 
 export const config = process.env.NODE_ENV === 'development' ? dev : prod;
