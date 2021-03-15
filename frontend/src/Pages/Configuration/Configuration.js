@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Spinner } from 'react-bootstrap';
+import { Table, Spinner, Button } from 'react-bootstrap';
 
 import Config from 'Components/Configurations/Config';
 import ConfigDetails from 'Components/Configurations/ConfigDetails';
+import ConfigModal from 'Components/Configurations/ConfigurationModal/ConfigModal'
 import getConfigurations from 'Utils/getConfigurations';
 import getConfigurationInfo from 'Utils/getConfigurationInfo';
 import { useUserState } from 'UserContext';
@@ -34,6 +35,10 @@ const ConfigurationPage = () => {
         }
     }
 
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+    const [show, setShow] = useState(false);
+
     useEffect(() => {
         getConfigurations(username).then((data) => {
             setConfigs(data);
@@ -47,7 +52,13 @@ const ConfigurationPage = () => {
             <Table striped bordered hover variant="light">
                 <thead>
                     <tr>
-                        <th colSpan='4' className='configTitle'>Configuration Titles</th>
+                        <Button variant="info" onClick={handleShow}>Add New Configuration</Button>
+                    </tr>
+                        {show && <ConfigModal status={show} toggleModal={handleClose}/>}
+                    <tr>
+                        <th colSpan='3' className='configTitle'>
+                            Configuration Titles
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
