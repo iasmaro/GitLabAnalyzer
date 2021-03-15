@@ -4,14 +4,15 @@ import { Redirect } from "react-router-dom";
 
 import RepoModalConfig from './RepoModalConfig';
 import { modal } from 'Constants/constants';
+import { defaultConfig } from 'Mocks/mockConfigs.js';
 import './RepoModal.css';
 import FormattedDateTimePicker from "Components/FormattedDateTimePicker";
 
 const RepoModal = (props) => {
 
-    const { name, id, status, toggleModal } = props || {};
+    const {name, id, configs, status, toggleModal} = props || {};
 
-    const [config, setConfig] = useState("Select a configuration");
+    const [config, setConfig] = useState("default");
     
     /*Default times are both at the current date and time*/
     const [startDate, setStartDate] = useState(new Date());
@@ -19,17 +20,15 @@ const RepoModal = (props) => {
     const [redirect, setRedirect] = useState(false);
 
     const handleClick = () => {
-        if (config !== "Select a configuration") {
-            setRedirect(true);
-        }
+        setRedirect(true);
     }
 
     if (redirect) {
         const data = {
+            configuration: config,
             start: startDate.toISOString(),
             end: endDate.toISOString(),
             projectId: id,
-            configuration: config,
         }
         return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
     }
@@ -47,7 +46,8 @@ const RepoModal = (props) => {
                 <Modal.Title>{name}</Modal.Title>
             </Modal.Header>
             <Modal.Body className="repo-modal-body">
-                <RepoModalConfig config={config} setConfig={setConfig} />
+                <RepoModalConfig defaultConfig={defaultConfig.fileName} configs={configs} config={config} setConfig={setConfig} />
+
                 <FormattedDateTimePicker startName={modal.START_DATE} endName={modal.END_DATE} setStartDate={setStartDate} setEndDate={setEndDate}/>
             </Modal.Body>
 

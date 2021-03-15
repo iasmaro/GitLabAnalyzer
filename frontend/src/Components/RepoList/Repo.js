@@ -2,21 +2,21 @@ import React, {useState} from 'react';
 import {Button} from 'react-bootstrap'
 
 import RepoModal from 'Components/RepoModal/RepoModal';
-import getProjectMembers from 'Utils/getProjectMembers';
 import { useUserState } from 'UserContext';
 import { utcToLocal } from 'Components/RepoModal/Utils/getDates';
+import getConfigurations from 'Utils/getConfigurations';
 
 
 const Repo = (props) => {
     const { repo } = props || {};
-    const [members, setMembers] = useState([]);
+    const [configs, setConfigs] = useState([]);
     const [show, setShow] = useState(false);
     const username = useUserState();
     
     //Change to getConfigurations
     const handleShow = () => {
-        getProjectMembers(username, repo.projectId).then((data) => {
-            setMembers(data);
+        getConfigurations(username).then((data) => {
+            setConfigs(data);
             setShow(true);
         });
     }
@@ -30,7 +30,7 @@ const Repo = (props) => {
             <td>
                 <Button variant="dark" onClick={handleShow}> Analyze </Button>
             </td>
-            {show && <RepoModal name={repo?.projectName} id={repo?.projectId} createdAt={repo?.createdAt} members={members} status={show} toggleModal={handleClose}/>}
+            {show && <RepoModal name={repo?.projectName} id={repo?.projectId} createdAt={repo?.createdAt} configs={configs} status={show} toggleModal={handleClose}/>}
         </tr>
     );
 };
