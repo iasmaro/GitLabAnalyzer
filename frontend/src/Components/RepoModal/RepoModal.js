@@ -47,7 +47,7 @@ const RepoModal = (props) => {
             } else {             
                 updateAliasForMembers(mapping);                
             }  
-            //setRedirect(true);
+            setRedirect(true);
         }
     }
 
@@ -57,6 +57,7 @@ const RepoModal = (props) => {
             end: endDate.toISOString(),
             projectId: id,
             configuration: config,
+
         }
         return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
     }
