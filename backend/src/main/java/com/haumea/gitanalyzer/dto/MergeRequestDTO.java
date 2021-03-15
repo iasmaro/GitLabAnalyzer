@@ -1,32 +1,43 @@
 package com.haumea.gitanalyzer.dto;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
 import java.util.List;
 
 public class MergeRequestDTO {
 
     private int mergeId;
+    private String mergeRequestTitle;
     private Date mergedDate;
 
     private Date createdDate;
     private Date updatedDate;
     private double MRScore;
-    private double memberScore;
+    private double sumOfCommitScore;
+    private List<DiffDTO> mergeRequestDiffs;
+    private int linesAdded;
+    private int linesRemoved;
+    private List<CommitDTO> commitDTOList;
 
-
-    public MergeRequestDTO(int mergeId, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double memberScore) {
+    public MergeRequestDTO(int mergeId, String mergeRequestTitle, Date mergedDate, Date createdDate, Date updatedDate, double MRScore, double sumOfCommitScore, List<DiffDTO> mergeRequestDiffs, int linesAdded, int linesRemoved, List<CommitDTO> commitDTOList) {
         this.mergeId = mergeId;
+        this.mergeRequestTitle = mergeRequestTitle;
         this.mergedDate = mergedDate;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.MRScore = MRScore;
-        this.memberScore = memberScore;
+        this.sumOfCommitScore = sumOfCommitScore;
+        this.mergeRequestDiffs = mergeRequestDiffs;
+        this.linesAdded = linesAdded;
+        this.linesRemoved = linesRemoved;
+        this.commitDTOList = commitDTOList;
     }
 
     public int getMergeId() {
         return mergeId;
+    }
+
+    public String getMergeRequestTitle() {
+        return mergeRequestTitle;
     }
 
     public Date getMergedDate() {
@@ -45,7 +56,23 @@ public class MergeRequestDTO {
         return MRScore;
     }
 
-    public double getMemberScore() {
-        return memberScore;
+    public double getSumOfCommitScore() {
+        return sumOfCommitScore;
+    }
+
+    public List<DiffDTO> getMergeRequestDiffs() {
+        return mergeRequestDiffs;
+    }
+
+    public int getLinesAdded() {
+        return linesAdded;
+    }
+
+    public int getLinesRemoved() {
+        return linesRemoved;
+    }
+
+    public List<CommitDTO> getCommitDTOList() {
+        return commitDTOList;
     }
 }

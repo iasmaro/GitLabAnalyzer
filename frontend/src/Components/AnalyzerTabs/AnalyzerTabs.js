@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Col, Row, Tabs, Tab } from 'react-bootstrap';
 
 import { TABS } from 'Constants/constants';
-import MergeRequestList from 'Components/MergeRequestList/MergeRequestList';
-import CommitsList from 'Components/CommitsList/CommitsList';
+import MergeRequestTab from 'Components/MergeRequestTab/MergeRequestTab';
+import CommitsTab from 'Components/CommitsTab/CommitsTab';
 
 import './AnalyzerTabs.css';
 
@@ -15,19 +15,15 @@ const AnalyzerTabs = (props) => {
     }
 
     return (
-        <Tab.Container fluid>
-            <Row className="justify-content-md-center">
+        <Tab.Container>
+            <Row className="tab-container" >
                 <Col>
-                    <Tabs
-                        id="controlled-tab-example"
-                        activeKey={key}
-                        onSelect={(k) => changeTab(k)}
-                    >
+                    <Tabs activeKey={key} onSelect={(k) => changeTab(k)} >
                         <Tab eventKey={"merge-requests"} title={TABS.MERGE_REQUESTS}>
-                            <MergeRequestList {...props} />
+                            <MergeRequestTab {...props} />
                         </Tab>
                         <Tab eventKey={"commits"} title={TABS.COMMITS}>
-                            <CommitsList {...props} />
+                            <CommitsTab {...props} />
                         </Tab>
                     </Tabs>
                 </Col>

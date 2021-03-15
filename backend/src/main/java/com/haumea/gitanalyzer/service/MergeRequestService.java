@@ -1,147 +1,280 @@
 package com.haumea.gitanalyzer.service;
 
-import com.haumea.gitanalyzer.exception.GitLabRuntimeException;
-import com.haumea.gitanalyzer.gitlab.CommitWrapper;
+import com.haumea.gitanalyzer.dto.CommitDTO;
+import com.haumea.gitanalyzer.dto.DiffDTO;
+import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
+import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
-import com.haumea.gitanalyzer.utility.GlobalConstants;
-import org.gitlab4j.api.GitLabApiException;
+import com.haumea.gitanalyzer.model.Configuration;
 import org.gitlab4j.api.models.Diff;
-import org.gitlab4j.api.models.Project;
+import org.gitlab4j.api.models.MergeRequest;
+import org.gitlab4j.api.models.MergeRequestDiff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Service
 public class MergeRequestService {
+
     private final UserService userService;
-    private double memberScore;
+    private final MemberService memberService;
+    private final CommitService commitService;
+
+    private int linesAdded;
+    private int linesRemoved;
+    private double MRScore;
 
     @Autowired
-    public MergeRequestService(UserService userService) {
+    public MergeRequestService(UserService userService, MemberService memberService, CommitService commitService) {
+
         this.userService = userService;
-        memberScore = 0;
+        this.memberService = memberService;
+        this.commitService = commitService;
+
+        this.linesAdded = 0;
+        this.linesRemoved = 0;
+        this.MRScore = 0.0;
     }
 
-    private GitlabService getGitLabService(String userId){
+    private List<String> getAliasForMember(String memberId) {
 
-        String accessToken = userService.getPersonalAccessToken(userId);
-
-        return new GitlabService(GlobalConstants.gitlabURL, accessToken);
+        return memberService.getAliasesForSelectedMember(memberId);
     }
 
-    private Project getProject(GitlabService gitlabService, int projectId) {
+    private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, String targetBranch, Date start, Date end) {
 
-        return gitlabService.getSelectedProject(projectId);
+        return gitlabService.getFilteredMergeRequestsWithDiff(projectId, targetBranch, start, end);
     }
 
-    private List<MergeRequestWrapper> getMergeRequestWrapper(GitlabService gitlabService, int projectId, Project project, Date start, Date end) {
+    private List<MergeRequestWrapper> getMergeRequestWrapperForMember(GitlabService gitlabService, int projectId, String targetBranch, Date start, Date end, List<String> alias) {
 
-        return gitlabService.getFilteredMergeRequestsWithDiff(projectId, "master", start, end);
+        return gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, targetBranch, start, end, alias);
     }
 
-    private List<CommitWrapper> getCommitWrapper(GitlabService gitlabService, int projectId, int mergeRequestIiD) throws GitLabRuntimeException{
+    private String getDiffExtension(String newPath) {
 
-        List<CommitWrapper> commits = null;
+        for(int index = newPath.length() - 1; index >= 0; index--) {
 
-        try {
-
-            commits = gitlabService.getMergeRequestCommits(projectId, mergeRequestIiD);
-        } catch (GitLabApiException e) {
-
-            throw new GitLabRuntimeException(e.getLocalizedMessage());
-        }
-
-        return commits;
-    }
-
-    //TODO: Update the comparison with data from alias
-    private boolean filterMemberId(String authorName, String authorEmail, String memberId){
-
-        if(authorName.equals(memberId) || authorEmail.equals(memberId + "@sfu.ca")){
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private double getMRDiffScoreAndMemberScore(List<CommitWrapper> commits, String memberId){
-
-        double MRDifScore = 0;
-        int insertions = 0;
-        int deletions = 0;
-
-        //Temporarily comparing author and email to capture alias
-        //TODO: Recalculate scores using more appropriate analysis
-        for(CommitWrapper commit : commits){
-
-            List<Diff> newCode = commit.getNewCode();
-            for (Diff code : newCode) {
-
-                int newInsertions = 0;
-                newInsertions = StringUtils.countOccurrencesOf(code.getDiff(), "\n+");
-                int newDeletions = 0;
-                newDeletions = StringUtils.countOccurrencesOf(code.getDiff(), "\n-");
-
-                insertions = insertions + newInsertions;
-                deletions = deletions + newDeletions;
-
-                if(filterMemberId(commit.getCommitData().getAuthorName(), commit.getCommitData().getAuthorEmail(), memberId)){
-
-                    memberScore = memberScore + newInsertions + newDeletions*0.2;
-                }
-
+            if(newPath.charAt(index) == '.') {
+                index++;
+                return newPath.substring(index).toLowerCase();
             }
 
         }
 
-        MRDifScore = insertions + deletions*0.2;
-
-        return MRDifScore;
+        return "No extension";
     }
 
-    private double roundScore(double score){
+    private List<CommentType> createDefaultCommentTypes() {
 
-        return Math.round(score*10)/10.0;
+        List<CommentType> defaultCommentTypes = new ArrayList<>();
+
+        defaultCommentTypes.add(new CommentType("//", ""));
+        defaultCommentTypes.add(new CommentType("/*", "*/"));
+
+        return defaultCommentTypes;
     }
 
-    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId, String memberId, Date start, Date end, boolean memberFilter){
+    private List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff, Configuration configuration) {
 
-        GitlabService gitlabService = getGitLabService(userId);
+        IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
-        Project project = getProject(gitlabService, projectId);
+        this.linesAdded = 0;
+        this.linesRemoved = 0;
+        this.MRScore = 0.0;
 
-        List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapper(gitlabService, projectId, project, start, end);
+        List<DiffDTO> mergeRequestDiffs = new ArrayList<>();
 
-        List<MergeRequestDTO> normalizedMergeRequestDTOList = new ArrayList<>();
+        List<Diff> codeDiffs = mergeRequestDiff.getDiffs();
 
-        for(int i = 0; i < mergeRequestsList.size(); i++){
-            org.gitlab4j.api.models.MergeRequest mergeRequest = mergeRequestsList.get(i).getMergeRequestData();
+        for(Diff diff : codeDiffs) {
 
-            int mergeRequestIiD = mergeRequest.getIid();
-            int mergeIiD = mergeRequest.getIid();
-            Date mergedDate = mergeRequest.getMergedAt();
-            Date createdDate = mergeRequest.getCreatedAt();
-            Date updatedDate = mergeRequest.getUpdatedAt();
+            String diffExtension = getDiffExtension(diff.getNewPath());
 
-            List<CommitWrapper> commits = getCommitWrapper(gitlabService, projectId, mergeRequestIiD);
+            double addLine = configuration.getEditFactor().getOrDefault("addLine", 1.0F).doubleValue();
+            double deleteLine = configuration.getEditFactor().getOrDefault("deleteLine", 1.0F).doubleValue();
+            double syntaxLine = configuration.getEditFactor().getOrDefault("syntaxLine", 1.0F).doubleValue();
+            double moveLine = configuration.getEditFactor().getOrDefault("moveLine", 1.0F).doubleValue();
+            double fileTypeMultiplier = configuration.getFileFactor().getOrDefault(diffExtension, 1.0F).doubleValue();
 
-            memberScore = 0;
-            double MRScore = roundScore(getMRDiffScoreAndMemberScore(commits, memberId));
-            memberScore = roundScore(memberScore);
+            List<CommentType> commentTypes = configuration.getCommentTypes().getOrDefault(diffExtension, createDefaultCommentTypes());
 
-            if(memberFilter && memberScore == 0.0) {
-                continue;
-            }
+            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
+                    diff.getDeletedFile(),
+                    addLine, deleteLine,
+                    syntaxLine,
+                    moveLine,
+                    fileTypeMultiplier,
+                    commentTypes);
 
-            MergeRequestDTO normalizedMR = new MergeRequestDTO(mergeIiD, mergedDate, createdDate, updatedDate, MRScore, memberScore);
-            normalizedMergeRequestDTOList.add(normalizedMR);
+            DiffDTO diffDTO = new DiffDTO(diff.getOldPath(),
+                    diff.getNewPath(),
+                    diffExtension,
+                    diff.getDiff(),
+                    scoreDTO);
+
+            this.linesAdded = this.linesAdded + scoreDTO.getLinesAdded();
+            this.linesRemoved = this.linesRemoved + scoreDTO.getLinesRemoved();
+            this.MRScore = this.MRScore + scoreDTO.getDiffScore();
+
+            mergeRequestDiffs.add(diffDTO);
         }
 
-        return normalizedMergeRequestDTOList;
+        return mergeRequestDiffs;
     }
+
+    //Source: Andrew's IndividualDiffScoreCalculator
+    private double roundScore(double score) {
+
+        BigDecimal roundedScore = new BigDecimal(Double.toString(score));
+        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
+
+        return roundedScore.doubleValue();
+    }
+
+    private double getSumOfCommitsScore(List<CommitDTO> commitDTOList) {
+
+        double sumOfCommitsScore = 0.0;
+
+        for(CommitDTO commitDTO : commitDTOList) {
+
+            sumOfCommitsScore = sumOfCommitsScore + commitDTO.getCommitScore();
+
+        }
+
+        return roundScore(sumOfCommitsScore);
+    }
+
+    private MergeRequestDTO getMergeRequestDTO(String userId, int projectId, MergeRequestWrapper mergeRequestWrapper) {
+
+        MergeRequest mergeRequest = mergeRequestWrapper.getMergeRequestData();
+
+        int mergeRequestIiD = mergeRequest.getIid();
+        String mergeRequestTitle = mergeRequest.getTitle();
+        Date mergedDate = mergeRequest.getMergedAt();
+        Date createdDate = mergeRequest.getCreatedAt();
+        Date updatedDate = mergeRequest.getUpdatedAt();
+
+        Configuration configuration = userService.getConfiguration(userId, projectId);
+
+        List<DiffDTO> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestDiff(), configuration);
+        List<CommitDTO> commitDTOList = commitService.getCommitsForSelectedMergeRequest(userId, projectId, mergeRequestIiD);
+
+        double sumOfCommitScore = getSumOfCommitsScore(commitDTOList);
+
+        return new MergeRequestDTO(mergeRequestIiD,
+                mergeRequestTitle,
+                mergedDate,
+                createdDate,
+                updatedDate,
+                roundScore(this.MRScore),
+                sumOfCommitScore,
+                mergeRequestDiffs,
+                this.linesAdded,
+                this.linesRemoved,
+                commitDTOList);
+    }
+
+    private MergeRequestDTO createDummyMergeRequest(List<CommitDTO> commitDTOList) {
+
+        int size = commitDTOList.size();
+        int mergeRequestIid = -1;
+        String mergeRequestTitle = "All commits made directly to master";
+        Date mergedDate = commitDTOList.get(size - 1).getCommitDate();
+        Date createdDate = commitDTOList.get(0).getCommitDate();
+
+        List<DiffDTO> dummyMergeRequestDiffList = new ArrayList<>();
+        for(CommitDTO commitDTO : commitDTOList) {
+            dummyMergeRequestDiffList.addAll(commitDTO.getCommitDiffs());
+        }
+
+        double sumOfCommitScore = getSumOfCommitsScore(commitDTOList);
+
+        return new MergeRequestDTO(mergeRequestIid, mergeRequestTitle, mergedDate, createdDate, mergedDate, roundScore(this.MRScore), sumOfCommitScore, dummyMergeRequestDiffList, this.linesAdded, this.linesRemoved, commitDTOList);
+    }
+
+    public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId) {
+
+        GitlabService gitlabService = userService.createGitlabService(userId);
+
+        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
+
+        List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapper(
+                gitlabService,
+                projectId,
+                activeConfiguration.getTargetBranch(),
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd());
+
+        List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
+
+        for(MergeRequestWrapper mergeRequestWrapper : mergeRequestsList) {
+
+            MergeRequestDTO mergeRequestDTO = getMergeRequestDTO(userId, projectId, mergeRequestWrapper);
+            mergeRequestDTOList.add(mergeRequestDTO);
+        }
+
+        List<CommitDTO> dummyCommitDTOList = commitService.getAllOrphanCommits(userId,
+                projectId,
+                activeConfiguration.getTargetBranch(),
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd());
+
+        if(!dummyCommitDTOList.isEmpty()) {
+
+            MergeRequestDTO dummyMergeRequestDTO = createDummyMergeRequest(dummyCommitDTOList);
+            mergeRequestDTOList.add(dummyMergeRequestDTO);
+        }
+
+
+        return mergeRequestDTOList;
+    }
+
+    public List<MergeRequestDTO> getAllMergeRequestsForMember(String userId, int projectId, String memberId) {
+
+        GitlabService gitlabService = userService.createGitlabService(userId);
+
+        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
+
+        List<String> alias = getAliasForMember(memberId);
+
+        List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapperForMember(
+                gitlabService,
+                projectId,
+                activeConfiguration.getTargetBranch(),
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd(),
+                alias);
+
+        List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
+
+        for(MergeRequestWrapper mergeRequestWrapper : mergeRequestsList) {
+
+            MergeRequestDTO mergeRequestDTO = getMergeRequestDTO(userId, projectId, mergeRequestWrapper);
+            mergeRequestDTOList.add(mergeRequestDTO);
+        }
+
+        List<CommitDTO> dummyCommitDTOList = commitService.getOrphanCommitsForSelectedMemberAndDate(userId,
+                projectId,
+                activeConfiguration.getTargetBranch(),
+                memberId,
+                activeConfiguration.getStart(),
+                activeConfiguration.getEnd());
+
+        if(!dummyCommitDTOList.isEmpty()) {
+
+            MergeRequestDTO dummyMergeRequestDTO = createDummyMergeRequest(dummyCommitDTOList);
+            mergeRequestDTOList.add(dummyMergeRequestDTO);
+        }
+
+
+        return mergeRequestDTOList;
+    }
+
 }

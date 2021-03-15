@@ -8,13 +8,15 @@ public class ProjectDTO {
     private String projectURL;
     private Date createdAt;
     private Date updatedAt;
+    private String namespace;
 
-    public ProjectDTO(String projectName, Integer projectId, String projectURL, Date createdAt, Date updatedAt) {
+    public ProjectDTO(String projectName, Integer projectId, String projectURL, Date createdAt, Date updatedAt, String namespace) {
         this.projectName = projectName;
         this.projectId = projectId;
         this.projectURL = projectURL;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.namespace = namespace;
     }
     // getters needed to serialize object to json
     // setters needed to deserialize json to object
@@ -34,4 +36,6 @@ public class ProjectDTO {
     public Date getCreatedAt() { return createdAt; }
 
     public Date getUpdatedAt() { return updatedAt; }
+
+    public String getNamespace() { return namespace; }
 }
