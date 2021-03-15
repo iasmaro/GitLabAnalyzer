@@ -6,6 +6,7 @@ import { useUserState } from 'UserContext';
 import AnalyzerTabs from 'Components/AnalyzerTabs/AnalyzerTabs';
 import AnalysisDropDown from 'Components/AnalyzerInfo/AnalysisDropDown';
 import getMergeRequests from 'Utils/getMergeRequests';
+import analyzeAll from 'Utils/analyzeAll';
 import getAllCommits from 'Utils/getAllCommits';
 import getProjectMembers from 'Utils/getProjectMembers';
 
@@ -20,6 +21,7 @@ const Analysis = (props) => {
     const [commits, setCommits] = useState();
     const [members, setMembers] = useState([]);
     const [student, setStudent] = useState();
+    const [analysis, setAnalysis] = useState();
     const username = useUserState();
 
     useEffect(() => {
@@ -29,20 +31,22 @@ const Analysis = (props) => {
     }, [username, data.projectId]);
 
     useEffect(() => {
-        if (members.length > 0) {
+        if (members.length > 0 && !analysis) {
             setStudent(members[0]);
+            setAnalysis(analyzeAll(members, username, data.projectId));
         }
-    }, [members]);
+    }, [analysis, data.projectId, members, username]);
 
     useEffect(() => {
-        getMergeRequests(username, student, data.start, data.end, data.projectId).then((data) => {
+        const activeAnalysis = analysis && analysis[student];
+        activeAnalysis?.mergeRequests.then((data) => {
             setMergeRequests(data);
             setIsLoading(false);
         });
-        getAllCommits(username, student, data.start, data.end, data.projectId).then((data) => {
+        activeAnalysis?.commits.then((data) => {
             setCommits(data);
         });
-    }, [username, student, data]);
+    }, [student, analysis]);
     
     if (!data) {
         return(<Redirect to={{ pathname: '/' }} />);

@@ -1,15 +1,13 @@
 import React from 'react';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
-import { Redirect } from "react-router-dom";
 
 const AnalysisDropDown = (props) => {
 
-    const { members, student, setStudent, data, setIsLoading } = props
+    const { members, student, setStudent, setIsLoading } = props || {};
 
     const selectStudent = (student) => {
         setStudent(student);
         setIsLoading(true);
-        <Redirect to={{pathname: '/Analysis', state: { data }}} />;
     };
 
     return (
