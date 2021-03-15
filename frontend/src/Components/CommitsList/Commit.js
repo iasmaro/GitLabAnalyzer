@@ -1,15 +1,19 @@
 import React from 'react';
 
+import { utcToLocal } from 'Components/Utils/formatDates';
+
+import './CommitsList.css';
+
 const Commit = (props) => {
     const { commit, handleClick } = props || {};
     return (
         <tr onClick={() => handleClick(commit?.commitDiffs)} className="commit">
-            <td>{commit?.commitDate}</td>
+            <td>{utcToLocal(commit?.commitDate)}</td>
             <td>{commit?.commitMessage}</td>
             <td>{commit?.commitScore}</td>
             <td>{commit?.commitAuthor}</td>
-            <td>{commit?.linesAdded}</td>
-            <td>{commit?.linesRemoved}</td>
+            <td className='lines-added'>+{commit?.linesAdded}</td>
+            <td className='lines-removed'>-{commit?.linesRemoved}</td>
         </tr>
     );
 };

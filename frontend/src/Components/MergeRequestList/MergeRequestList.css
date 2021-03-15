@@ -15,3 +15,16 @@
     display: table;
     clear: both;
 }
+
+.mrTitle {
+    background-color: rgb(227, 226, 226);
+    text-align: center;
+}
+
+.lines-added {
+    color: green;
+}
+
+.lines-removed {
+    color: red;
+}

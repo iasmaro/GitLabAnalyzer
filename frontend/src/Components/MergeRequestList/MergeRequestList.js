@@ -18,7 +18,7 @@ const MergeRequestList = (props) => {
         }
     }
     return (
-        <div className="merge-request-list-container">
+        <div className='merge-request-list-container'>
                 <Table striped bordered hover variant="light">
                     <thead>
                         <tr>
@@ -32,8 +32,7 @@ const MergeRequestList = (props) => {
                             <th>MR Score</th>
                             <th>Commits Score</th>
                             <th># Commits</th>
-                            <th>Lines +</th>
-                            <th>Lines -</th>
+                            <th colSpan='2'>Lines Changed</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 
 import RepoModal from 'Components/RepoModal/RepoModal';
-import { utcToLocal } from 'Components/RepoModal/getDates';
+import { utcToLocal } from 'Components/Utils/formatDates';
 import getMembersAndAliasesFromGitLab from 'Utils/getMembersAndAliasesFromGitLab';
 import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
 import getConfigurations from 'Utils/getConfigurations';
@@ -42,7 +42,7 @@ const Repo = (props) => {
     return (
         <tr>
             <td>{repo?.projectName}</td>
-            <td>{utcToLocal(repo?.updatedAt).toString()}</td>
+            <td>{utcToLocal(repo?.updatedAt)}</td>
             <td>
                 <Button variant="dark" onClick={handleShow}> Analyze </Button>
             </td>

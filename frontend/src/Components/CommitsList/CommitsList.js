@@ -26,11 +26,10 @@ const CommitsList = (props) => {
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Commit Message</th>
+                        <th>Message</th>
                         <th>Score</th>
                         <th>Author</th>
-                        <th>Lines +</th>
-                        <th>Lines -</th>
+                        <th colSpan='2'>Lines Changed</th>
                     </tr>
                 </thead>
                 <tbody>

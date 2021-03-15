@@ -1,14 +1,3 @@
-// const dev = {
-//     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://localhost:3000/',
-//     AUTHENTICATION_API_URL: 'http://localhost:8080/api/v1/users/userId?url=http://localhost:3000/',
-//     REPOS_API_URL: 'http://localhost:8080/api/v1/projects',
-//     MR_API_URL: 'http://localhost:8080/api/v1/mergeRequests/member/',
-//     COMMITS_API_URL: 'http://localhost:8080/api/v1/commits/members/',
-//     USERS_API_URL: 'http://localhost:8080/api/v1/users',
-//     USERS_TOKEN_API_URL: 'http://localhost:8080/api/v1/users/token',
-//     PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
-// };
-
 const dev = {
     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://localhost:3000/',
     AUTHENTICATION_API_URL: 'http://localhost:8080/api/v1/users/userId?url=http://localhost:3000/',
@@ -42,7 +31,6 @@ const prod = {
     CONFIGURATION_FILES_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration/',
 };
-
 
 export const config = process.env.NODE_ENV === 'development' ? dev : prod;
 
