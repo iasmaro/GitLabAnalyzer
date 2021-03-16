@@ -55,13 +55,13 @@ const ConfigForm = (props) => {
         }
 
         const singleComments = {
-            END_TYPE: '',
-            START_TYPE:  state.SINGLE_COMMENT
+            endType: '',
+            startType:  state.SINGLE_COMMENT
         }
 
         const multiComments = {
-            END_TYPE: state.MULTI_END_COMMENT,
-            START_TYPE:  state.MULTI_START_COMMENT
+            endType: state.MULTI_END_COMMENT,
+            startType:  state.MULTI_START_COMMENT
         }
 
         const commentTypes = {
