@@ -94,6 +94,7 @@ const ConfigForm = (props) => {
                                             defaultValue={state.CONFIGURATION_NAME}
                                             name = "CONFIGURATION_NAME"
                                             onChange = {handleInputChange}
+                                            required
                                         />
                                     </td>
                                 </tr>
