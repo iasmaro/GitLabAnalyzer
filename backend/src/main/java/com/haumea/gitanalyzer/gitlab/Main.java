@@ -126,7 +126,7 @@ public class Main {
 //
 //        test.testGetMergeRequestDiffs(25516, 52);
 
-        test.testScoreCalculator(27008);
+        test.testScoreCalculator(26744);
 
     }
 

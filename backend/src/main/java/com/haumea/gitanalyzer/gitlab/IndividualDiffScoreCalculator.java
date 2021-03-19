@@ -139,6 +139,9 @@ public class IndividualDiffScoreCalculator {
                 System.out.println(line + " was moved on remove side " + lineScore);
 
             }
+            else if(isSyntax(line)) {
+                lineScore = 0.0;
+            }
             else {
                 lineScore = deleteLineWeight;
 
@@ -183,6 +186,10 @@ public class IndividualDiffScoreCalculator {
                 lineScore = addLineWeight;
 
                 addedLines.add(line);
+
+                System.out.println(line + " was added " + lineScore);
+
+
             }
             else if(isLongComment == false && lineWasRemoved(line) == true) { // case where line is moved from one area
                 // to another

@@ -1,6 +1,8 @@
 package com.haumea.gitanalyzer.gitlab;
 
 import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+import com.haumea.gitanalyzer.dto.MergeRequestDTO;
+import com.haumea.gitanalyzer.service.MergeRequestService;
 import io.swagger.models.auth.In;
 import org.gitlab4j.api.models.*;
 
@@ -392,6 +394,12 @@ public class TestGitLabService {
         }
 
     }
+
+//    public void testMRScoring(String userId, int projectId, String memberId) {
+//
+////        MergeRequestService service = new MergeRequestService(use)
+//        List<MergeRequestDTO> mergeRequestDTOList =
+//    }
 
 
 }
