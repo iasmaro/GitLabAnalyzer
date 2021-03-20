@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.controller;
 
 
+import com.haumea.gitanalyzer.dto.CodeReviewGraphDTO;
 import com.haumea.gitanalyzer.dto.CommitGraphDTO;
 import com.haumea.gitanalyzer.dto.MergeRequestGraphDTO;
 import com.haumea.gitanalyzer.service.GraphService;
@@ -42,14 +43,14 @@ public class GraphController {
         return graphService.getMergeRequestGraphDetails(userId);
 
     }
-//
-//    @GetMapping("/codeReview")
-//
-//    public String getPersonalAccessToken(@RequestParam @NotBlank String userId) {
-//
-//        return userService.getPersonalAccessToken(userId);
-//
-//    }
+
+    @GetMapping("/codeReview")
+
+    public List<CodeReviewGraphDTO> getCodeReviewGraphDetails(@RequestParam @NotBlank String userId) {
+
+        return graphService.getCodeReviewGraphDetails(userId);
+
+    }
 //
 //    @GetMapping("/issue")
 //
