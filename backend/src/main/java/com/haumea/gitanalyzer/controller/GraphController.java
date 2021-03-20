@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.controller;
 
 
 import com.haumea.gitanalyzer.dto.CommitGraphDTO;
+import com.haumea.gitanalyzer.dto.MergeRequestGraphDTO;
 import com.haumea.gitanalyzer.service.GraphService;
 import com.haumea.gitanalyzer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,13 @@ public class GraphController {
 
     }
 
-//    @GetMapping("/mergeRequest")
-//
-//    public String getPersonalAccessToken(@RequestParam @NotBlank String userId) {
-//
-//        return userService.getPersonalAccessToken(userId);
-//
-//    }
+    @GetMapping("/mergeRequest")
+
+    public List<MergeRequestGraphDTO> getMergeRequestGraphDetails(@RequestParam @NotBlank String userId) {
+
+        return graphService.getMergeRequestGraphDetails(userId);
+
+    }
 //
 //    @GetMapping("/codeReview")
 //
