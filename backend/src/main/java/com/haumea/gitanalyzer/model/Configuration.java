@@ -3,9 +3,11 @@ package com.haumea.gitanalyzer.model;
 import com.haumea.gitanalyzer.gitlab.CommentType;
 import org.springframework.data.annotation.PersistenceConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.*;
 
 public class Configuration {
+    @NotBlank
     private String fileName;
     private Date start;
     private Date end;
