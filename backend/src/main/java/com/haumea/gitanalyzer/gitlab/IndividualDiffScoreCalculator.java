@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.gitlab;
 
 
 import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+import com.haumea.gitanalyzer.dto.LineChangeDTO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,8 +27,11 @@ public class IndividualDiffScoreCalculator {
 
     private List<String> removedLines;
     private List<String> addedLines;
+    private List<LineChangeDTO> lineChangeDTOS;
+
     private int numberOfLinesAdded;
     private int numberOfLinesRemoved;
+
 
 
     public IndividualDiffScoreCalculator() {
@@ -36,6 +40,12 @@ public class IndividualDiffScoreCalculator {
 
         this.removedLines = new ArrayList<>(); // reset when finished
         this.addedLines = new ArrayList<>();
+        this.lineChangeDTOS = new ArrayList<>();
+    }
+
+    private void clearMoveLineLists() {
+        removedLines.clear();
+        addedLines.clear();
     }
 
 
@@ -64,7 +74,7 @@ public class IndividualDiffScoreCalculator {
         this.numberOfLinesRemoved = 0;
 
         if(isFileDeleted) {
-            return new DiffScoreDTO(0, 0, 0.0);
+            return new DiffScoreDTO(0, 0, 0.0, lineChangeDTOS);
         }
         else {
             double score;
@@ -77,11 +87,20 @@ public class IndividualDiffScoreCalculator {
 
             this.removedLines.clear();
             this.addedLines.clear();
+//
+//            for(LineChangeDTO current : lineChangeDTOS) {
+//                System.out.println("Line Change is: " + current.getLine() + " " + current.getLineScore());
+//
+//            }
+
 
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            return new DiffScoreDTO(numberOfLinesAdded, numberOfLinesRemoved, fileTypeMultiplier * roundedScore.doubleValue());
+            System.out.println("score inside calculator is: " + fileTypeMultiplier * roundedScore.doubleValue());
+
+
+            return new DiffScoreDTO(numberOfLinesAdded, numberOfLinesRemoved, fileTypeMultiplier * roundedScore.doubleValue(), lineChangeDTOS);
         }
     }
 
@@ -95,19 +114,33 @@ public class IndividualDiffScoreCalculator {
         String line;
         while((line=bufReader.readLine()) != null )
         {
+            String originalLine = line;
+
+            LineChangeDTO lineChangeDTO;
+
+            double lineScore = 0.0;
+
             if(line.charAt(0) == '+') {
-                diffScore = diffScore + analyzeAddedLine(line);
+                lineScore = analyzeAddedLine(line);
+                diffScore = diffScore + lineScore;
                 this.numberOfLinesAdded++;
+
+                lineChangeDTO = new LineChangeDTO(originalLine, lineScore);
+                lineChangeDTOS.add(lineChangeDTO);
             }
             else if(line.charAt(0) == '-' && (line.trim().length() > 0) && !line.trim().equals("-")) {
 
                 line = line.substring(1); // cutting out the -
                 line = line.trim();
 
-                diffScore = diffScore + analyzeRemovedLine(line);
+                lineScore = analyzeRemovedLine(line);
+                diffScore = diffScore + lineScore;
                 this.numberOfLinesRemoved++;
 
                 removedLines.add(line);
+
+                lineChangeDTO = new LineChangeDTO(originalLine, lineScore);
+                lineChangeDTOS.add(lineChangeDTO);
 
             }
             else { // still need to process unchanged line to check whether a long comment was changed
@@ -123,6 +156,8 @@ public class IndividualDiffScoreCalculator {
                 }
 
             }
+
+
         }
 
         return diffScore;
@@ -140,7 +175,7 @@ public class IndividualDiffScoreCalculator {
 
             }
             else if(isSyntax(line)) {
-                lineScore = 0.0;
+                lineScore = syntaxLineWeight;
             }
             else {
                 lineScore = deleteLineWeight;

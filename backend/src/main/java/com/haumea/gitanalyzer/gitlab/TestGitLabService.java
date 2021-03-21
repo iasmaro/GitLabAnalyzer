@@ -376,9 +376,11 @@ public class TestGitLabService {
 
         for(CommitWrapper commit : commits){
 
-            System.out.println(commit.getCommitData().getMessage());
+            System.out.println("Commit is: " + commit.getCommitData().getMessage());
 
             for (Diff diff : commit.getNewCode()) {
+
+                System.out.println("diff is: ");
                 System.out.println(diff.getDiff());
 
                 DiffScoreDTO score = calculator.calculateDiffScore(diff.getDiff(), false,
