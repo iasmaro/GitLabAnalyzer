@@ -23,18 +23,10 @@ public class CommitService {
     private final UserService userService;
     private final MemberService memberService;
 
-    private int linesAdded;
-    private int linesRemoved;
-    private double commitScore;
-
     @Autowired
     public CommitService(UserService userService, MemberService memberService) {
         this.userService = userService;
         this.memberService = memberService;
-
-        this.linesAdded = 0;
-         this.linesRemoved = 0;
-        this.commitScore = 0.0;
     }
 
     private List<String> getAliasForMember(String memberId) {
@@ -70,10 +62,6 @@ public class CommitService {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
-        this.linesAdded = 0;
-        this.linesRemoved = 0;
-        this.commitScore = 0.0;
-
         List<DiffDTO> commitDiffs = new ArrayList<>();
 
         for(Diff diff : codeDiffs) {
@@ -103,15 +91,27 @@ public class CommitService {
                     diff.getDiff(),
                     scoreDTO);
 
-            this.linesAdded = this.linesAdded + scoreDTO.getLinesAdded();
-            this.linesRemoved = this.linesRemoved + scoreDTO.getLinesRemoved();
-            this.commitScore = this.commitScore + scoreDTO.getDiffScore();
-
 
             commitDiffs.add(diffDTO);
         }
 
         return commitDiffs;
+    }
+
+    private DiffScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
+
+        int linesAdded = 0;
+        int linesRemoved = 0;
+        double commitScore = 0.0;
+
+        for (DiffDTO diffDTO : diffDTOList) {
+
+            linesAdded = linesAdded + diffDTO.getLinesAdded();
+            linesRemoved = linesRemoved + diffDTO.getLinesRemoved();
+            commitScore = commitScore + diffDTO.getDiffScore();
+        }
+
+        return new DiffScoreDTO(linesAdded, linesRemoved, commitScore);
     }
 
     //Source: Andrew's IndividualDiffScoreCalculator
@@ -133,9 +133,11 @@ public class CommitService {
 
             List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode(), configuration);
 
-            double roundedCommitScore = roundScore(this.commitScore);
+            DiffScoreDTO commitStats = getCommitStats(commitDiffs);
 
-            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), roundedCommitScore, commitDiffs, this.linesAdded, this.linesRemoved);
+            double roundedCommitScore = roundScore(commitStats.getDiffScore());
+
+            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), roundedCommitScore, commitDiffs, commitStats.getLinesAdded(), commitStats.getLinesRemoved());
 
             commitDTOList.add(newDTO);
         }
