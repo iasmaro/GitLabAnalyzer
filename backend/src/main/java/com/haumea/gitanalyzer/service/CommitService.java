@@ -103,6 +103,7 @@ public class CommitService {
         int linesAdded = 0;
         int linesRemoved = 0;
         double commitScore = 0.0;
+        Map<String, Double> scoreByFileTypes = new HashMap<>();
 
         for (DiffDTO diffDTO : diffDTOList) {
 
@@ -111,7 +112,10 @@ public class CommitService {
             commitScore = commitScore + diffDTO.getDiffScore();
         }
 
-        return new ScoreDTO(linesAdded, linesRemoved, commitScore);
+        ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore);
+        commitScoreDTO.setScoreByFileTypes(scoreByFileTypes);
+
+        return commitScoreDTO;
     }
 
     //Source: Andrew's IndividualDiffScoreCalculator
@@ -137,7 +141,15 @@ public class CommitService {
 
             double roundedCommitScore = roundScore(commitStats.getDiffScore());
 
-            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), commit.getWebUrl(), roundedCommitScore, commitDiffs, commitStats.getLinesAdded(), commitStats.getLinesRemoved());
+            CommitDTO newDTO = new CommitDTO(commit.getMessage(),
+                    commit.getCommittedDate(),
+                    commit.getAuthorName(),
+                    commit.getWebUrl(),
+                    roundedCommitScore,
+                    commitStats.getScoreByFileTypes(),
+                    commitDiffs,
+                    commitStats.getLinesAdded(),
+                    commitStats.getLinesRemoved());
 
             commitDTOList.add(newDTO);
         }
