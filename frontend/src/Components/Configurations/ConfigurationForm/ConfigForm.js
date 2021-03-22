@@ -15,6 +15,15 @@ const ConfigForm = (props) => {
     const [endDate, setEndDate] = useState(new Date());
     const [inputList, setInputList] = useState([{ FILE_EXTENSION: state.FILE_EXTENSION, SINGLE_COMMENT: state.SINGLE_COMMENT, MULTI_START_COMMENT: state.MULTI_LINE_COMMENT_START, MULTI_END_COMMENT: state.MULTI_LINE_COMMENT_END, WEIGHT: state.WEIGHT }]);
 
+    const displayAlert = (successful) => {
+        if (successful) {
+            alert("Successfully added a new configuration");
+        }
+        else {
+            alert("There was an error creating the configuration");  
+        }
+    }
+
     const handleInputChange = event =>{
         const {name, value} = event.target
         setstate({
@@ -68,7 +77,9 @@ const ConfigForm = (props) => {
             [(state.FILE_EXTENSION).replace(".","")] : [singleComments, multiComments]
         }
 
-        saveConfig(commentTypes, editFact, username, startDate, endDate, fileFact, state.CONFIGURATION_NAME);
+        saveConfig(commentTypes, editFact, username, startDate, endDate, fileFact, state.CONFIGURATION_NAME).then(response => {
+            displayAlert(response);
+        });
         if (toggleModal) {
             toggleModal();
         }
