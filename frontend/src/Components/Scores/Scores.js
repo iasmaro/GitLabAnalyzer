@@ -1,18 +1,18 @@
 import Button from 'react-bootstrap/Button';
 
+import copyToClipBoard from './utils/copyToClipboard';
 import './Scores.css';
 
 const Scores = (props) => {
     const { commitsScore, mrsScore, totalCommits, totalMRs } = props || {};
 
     const handleClick = () => {
-        const message = `
-        Total Commits:\t${totalCommits}
-        Total Merge Requests:\t${totalMRs}
-        Total Commits Score:\t${commitsScore}
-        Total Merge Requests Score:\t${mrsScore}
-        `
-        navigator.clipboard.writeText(message);
+        const message = `Total Commits:\t${totalCommits}\n` +
+        `Total Merge Requests:\t${totalMRs}\n` +
+        `Total Commits Score:\t${commitsScore}\n` +
+        `Total Merge Requests Score:\t${mrsScore}`;
+
+        copyToClipBoard(message);
     };
 
     return (
