@@ -3,6 +3,7 @@ package com.haumea.gitanalyzer.service;
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.DiffDTO;
 import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+import com.haumea.gitanalyzer.dto.LineChangeDTO;
 import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
@@ -110,6 +111,7 @@ public class CommitService {
             linesRemoved = linesRemoved + diffDTO.getLinesRemoved();
             commitScore = commitScore + diffDTO.getDiffScore();
         }
+
 
         return new DiffScoreDTO(linesAdded, linesRemoved, commitScore);
     }

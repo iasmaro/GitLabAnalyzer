@@ -82,7 +82,7 @@ public class IndividualDiffScoreCalculator {
         this.numberOfLinesRemoved = 0;
 
         if(isFileDeleted) {
-            return new DiffScoreDTO(0, 0, 0.0, lineChangeDTOS);
+            return new DiffScoreDTO(0, 0, 0.0);
         }
         else {
             double score;
@@ -106,7 +106,7 @@ public class IndividualDiffScoreCalculator {
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            return new DiffScoreDTO(numberOfLinesAdded, numberOfLinesRemoved, fileTypeMultiplier * roundedScore.doubleValue(), lineChangeDTOS);
+            return new DiffScoreDTO(numberOfLinesAdded, numberOfLinesRemoved, fileTypeMultiplier * roundedScore.doubleValue());
         }
     }
 

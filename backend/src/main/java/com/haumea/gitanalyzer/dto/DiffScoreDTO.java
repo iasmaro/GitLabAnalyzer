@@ -9,12 +9,12 @@ public class DiffScoreDTO {
     private double diffScore;
     private List<LineChangeDTO> lineChangeDTOS;
 
-    public DiffScoreDTO(int linesAdded, int linesRemoved, double diffScore, List<LineChangeDTO> lineChangeDTOS) {
+    public DiffScoreDTO(int linesAdded, int linesRemoved, double diffScore) {
         this.linesAdded = linesAdded;
         this.linesRemoved = linesRemoved;
         this.diffScore = diffScore;
 
-        this.lineChangeDTOS = lineChangeDTOS;
+//        this.lineChangeDTOS = lineChangeDTOS;
     }
 
     public int getLinesAdded() {
