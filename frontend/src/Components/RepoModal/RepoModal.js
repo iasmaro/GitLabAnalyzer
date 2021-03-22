@@ -22,6 +22,7 @@ const RepoModal = (props) => {
     const databaseAliasIdPairs = createInitialAliasIdPairs(aliases, members, databaseMapping);
     const mapping = createMappingContainingPastAliases(aliases, members, databaseMapping);
     const [redirect, setRedirect] = useState(false);
+    const [showError, setShowError] = useState(false);
 
     const createApiMappingFromLocalMapping = (mapping) => {
         for (let aliasIdPair of aliasIdPairs) {
@@ -34,6 +35,7 @@ const RepoModal = (props) => {
 
     const handleClick = () => {
         if (config !== "Select a configuration") {
+            setShowError(false);
             createApiMappingFromLocalMapping(mapping); 
             if (noMembersHaveAliases(databaseMapping)) {
                 mapAliasToMember(mapping);
@@ -45,6 +47,9 @@ const RepoModal = (props) => {
                 updateAliasForMembers(mapping);                
             }  
             setRedirect(true);
+        }
+        else {
+            setShowError(true)
         }
     }
 
@@ -70,7 +75,8 @@ const RepoModal = (props) => {
             </Modal.Header>
 
             <Modal.Body className="repo-modal-body">
-                <RepoModalConfig defaultConfig={defaultConfig.fileName} configs={configs} config={config} setConfig={setConfig} />
+                <RepoModalConfig defaultConfig={defaultConfig.fileName} configs={configs} config={config} setConfig={setConfig} setShowError={setShowError} />
+                {showError && <p className='error-message'>Please select a configuration</p>}
                 <RepoModalMapAliasTable aliases={aliases} members={members} aliasIdPairs={aliasIdPairs} setAliasIdPairs={setAliasIdPairs}/>
             </Modal.Body>
 

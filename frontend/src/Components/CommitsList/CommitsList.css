@@ -27,3 +27,11 @@
 .lines-removed {
     color: red;
 }
+
+.commits-headers th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #fff;
+}

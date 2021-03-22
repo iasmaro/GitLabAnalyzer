@@ -26,7 +26,7 @@ const MergeRequestList = (props) => {
                         </tr>
                     </thead>
                     <thead>
-                        <tr>
+                        <tr className="mr-headers">
                             <th>Date Merged</th>
                             <th>Title</th>
                             <th>MR Score</th>

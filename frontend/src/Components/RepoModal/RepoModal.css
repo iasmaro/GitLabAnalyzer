@@ -46,3 +46,8 @@
     background-color: #636363;
     border-color: white;
 }
+
+.error-message {
+    color: red;
+    margin: 0 35px;
+}
