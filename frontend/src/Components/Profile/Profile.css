@@ -13,3 +13,13 @@ label {
     margin-top: 0.5rem;
     margin-bottom: 0;
 }
+
+#snackbar {
+  visibility: hidden;
+  margin: 10px 0px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  animation: fadein 0.5s, fadeout 0.5s 3.5s;
+}
