@@ -1,9 +1,6 @@
 package com.haumea.gitanalyzer.service;
 
-import com.haumea.gitanalyzer.dto.CodeReviewGraphDTO;
-import com.haumea.gitanalyzer.dto.CommitGraphDTO;
-import com.haumea.gitanalyzer.dto.IssueGraphDTO;
-import com.haumea.gitanalyzer.dto.MergeRequestGraphDTO;
+import com.haumea.gitanalyzer.dto.*;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.Configuration;
@@ -23,12 +20,14 @@ public class GraphService {
     private final UserService userService;
     private final MemberService memberService;
     private final GitlabService gitlabService;
+    private final CommitService commitService;
 
     @Autowired
-    public GraphService(UserService userService, MemberService memberService, GitlabService gitlabService) {
+    public GraphService(UserService userService, MemberService memberService, GitlabService gitlabService, CommitService commitService) {
         this.userService = userService;
         this.memberService = memberService;
         this.gitlabService = gitlabService;
+        this.commitService = commitService;
     }
 
     // checking if two dates are the same day function from https://www.baeldung.com/java-check-two-dates-on-same-day
@@ -62,20 +61,20 @@ public class GraphService {
 
                 Date commitDate = commit.getCommitData().getCommittedDate();
                 int numberOfCommits = 0;
-                int totalScore = 0;
+                double totalScore = 0.0;
 
                 if(isSameDay(commitDate, date)) {
                     numberOfCommits++;
-                    int score = 0;
+                    List<DiffDTO> commitDiffs = commitService.getCommitDiffs(commit.getNewCode(), userConfig);
+                    DiffScoreDTO commitScore = commitService.getCommitStats(commitDiffs);
+                    totalScore = totalScore + commitScore.getDiffScore();
                 }
 
                 CommitGraphDTO commitGraphDTO = new CommitGraphDTO(date, numberOfCommits, totalScore);
+                returnList.add(commitGraphDTO);
 
             }
-            System.out.println(date);
         }
-
-
         return returnList;
     }
 
