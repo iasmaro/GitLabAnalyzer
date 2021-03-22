@@ -6,12 +6,12 @@ import java.util.List;
 public class CommitGraphDTO {
     private Date date;
     private int numberOfCommits;
-    private int commitScore;
+    private int totalCommitScore;
 
-    public CommitGraphDTO(Date date, int numberOfCommits, int commitScore) {
+    public CommitGraphDTO(Date date, int numberOfCommits, int totalCommitScore) {
         this.date = date;
         this.numberOfCommits = numberOfCommits;
-        this.commitScore = commitScore;
+        this.totalCommitScore = totalCommitScore;
     }
 
     public Date getDate() {
@@ -22,8 +22,8 @@ public class CommitGraphDTO {
         return numberOfCommits;
     }
 
-    public int getCommitScore() {
-        return commitScore;
+    public int getTotalCommitScore() {
+        return totalCommitScore;
     }
 
 }

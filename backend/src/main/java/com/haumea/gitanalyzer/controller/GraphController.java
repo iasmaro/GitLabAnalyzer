@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -31,9 +32,11 @@ public class GraphController {
 
     @GetMapping("/commit")
 
-    public List<CommitGraphDTO> getCommitGraphDetails(@RequestParam @NotBlank String userId) {
+    public List<CommitGraphDTO> getCommitGraphDetails(@RequestParam @NotBlank String userId,
+                                                      @RequestParam @NotBlank String memberId,
+                                                      @RequestParam @NotNull int projectId) {
 
-        return graphService.getCommitGraphDetails(userId);
+        return graphService.getCommitGraphDetails(userId, memberId, projectId);
 
     }
 
