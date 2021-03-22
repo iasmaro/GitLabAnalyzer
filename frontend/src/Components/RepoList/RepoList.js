@@ -18,7 +18,7 @@ const RepoList = (props) => {
                     </tr>
                 </thead>
                 <thead>
-                    <tr>
+                    <tr className="repo-headers">
                         <th>Name</th>
                         <th>Last Modified</th>
                         <th></th>
