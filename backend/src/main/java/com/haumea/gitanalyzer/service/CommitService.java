@@ -98,6 +98,15 @@ public class CommitService {
         return commitDiffs;
     }
 
+    //Source: Andrew's IndividualDiffScoreCalculator
+    private double roundScore(double commitScore) {
+
+        BigDecimal roundedScore = new BigDecimal(Double.toString(commitScore));
+        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
+
+        return roundedScore.doubleValue();
+    }
+
     private ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
@@ -107,24 +116,21 @@ public class CommitService {
 
         for (DiffDTO diffDTO : diffDTOList) {
 
+            String diffExtension = diffDTO.getExtension();
+
             linesAdded = linesAdded + diffDTO.getLinesAdded();
             linesRemoved = linesRemoved + diffDTO.getLinesRemoved();
             commitScore = commitScore + diffDTO.getDiffScore();
+
+            double fifeTypeScore = scoreByFileTypes.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
+            fifeTypeScore = roundScore(fifeTypeScore);
+            scoreByFileTypes.put(diffExtension, fifeTypeScore);
         }
 
         ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore);
         commitScoreDTO.setScoreByFileTypes(scoreByFileTypes);
 
         return commitScoreDTO;
-    }
-
-    //Source: Andrew's IndividualDiffScoreCalculator
-    private double roundScore(double commitScore) {
-
-        BigDecimal roundedScore = new BigDecimal(Double.toString(commitScore));
-        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
-
-        return roundedScore.doubleValue();
     }
 
     private List<CommitDTO> convertCommitWrappersToDTOs(List<CommitWrapper> wrapperList, Configuration configuration) {

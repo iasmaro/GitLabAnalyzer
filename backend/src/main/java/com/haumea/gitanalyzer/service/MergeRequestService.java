@@ -9,6 +9,7 @@ import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
 import com.haumea.gitanalyzer.model.Configuration;
+import lombok.SneakyThrows;
 import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.MergeRequest;
 import org.gitlab4j.api.models.MergeRequestDiff;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -113,6 +115,15 @@ public class MergeRequestService {
         return mergeRequestDiffs;
     }
 
+    //Source: Andrew's IndividualDiffScoreCalculator
+    private double roundScore(double score) {
+
+        BigDecimal roundedScore = new BigDecimal(Double.toString(score));
+        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
+
+        return roundedScore.doubleValue();
+    }
+
     private ScoreDTO getMergeRequestStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
@@ -129,6 +140,7 @@ public class MergeRequestService {
             MRScore = MRScore + diff.getDiffScore();
 
             double fifeTypeScore = scoreByFileTypes.getOrDefault(diffExtension, 0.0) + diff.getDiffScore();
+            fifeTypeScore = roundScore(fifeTypeScore);
             scoreByFileTypes.put(diffExtension, fifeTypeScore);
         }
 
@@ -136,15 +148,6 @@ public class MergeRequestService {
         mergeRequestScoreDTO.setScoreByFileTypes(scoreByFileTypes);
 
         return mergeRequestScoreDTO;
-    }
-
-    //Source: Andrew's IndividualDiffScoreCalculator
-    private double roundScore(double score) {
-
-        BigDecimal roundedScore = new BigDecimal(Double.toString(score));
-        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
-
-        return roundedScore.doubleValue();
     }
 
     private double getSumOfCommitsScore(List<CommitDTO> commitDTOList) {
@@ -216,6 +219,7 @@ public class MergeRequestService {
         return new MergeRequestDTO(mergeRequestIid, mergeRequestTitle, mergedDate, createdDate, mergedDate, "", 0.0, sumOfCommitScore, scoreDTO.getScoreByFileTypes(), dummyMergeRequestDiffList, 0, 0, commitDTOList);
     }
 
+    @SneakyThrows
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId) {
 
         GitlabService gitlabService = userService.createGitlabService(userId);
