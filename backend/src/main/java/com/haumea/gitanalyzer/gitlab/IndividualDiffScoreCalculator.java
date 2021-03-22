@@ -23,6 +23,11 @@ public class IndividualDiffScoreCalculator {
 
     private boolean isLongComment; /* need to save state between line calls as a comment could go
                                                    over multiple lines like this comment*/
+
+    private boolean lineMovedAfterCode; // checking whether a line move is significant within the code
+    String lastLineAdded;
+    String lastLineSeen;
+
     private String longCommentEndBrace;
 
     private List<String> removedLines;
@@ -37,10 +42,13 @@ public class IndividualDiffScoreCalculator {
     public IndividualDiffScoreCalculator() {
 
         this.isLongComment = false;
+        this.lineMovedAfterCode = false;
 
         this.removedLines = new ArrayList<>(); // reset when finished
         this.addedLines = new ArrayList<>();
         this.lineChangeDTOS = new ArrayList<>();
+
+
     }
 
     private void clearMoveLineLists() {
@@ -87,6 +95,7 @@ public class IndividualDiffScoreCalculator {
 
             this.removedLines.clear();
             this.addedLines.clear();
+            lineMovedAfterCode = false;
 //
 //            for(LineChangeDTO current : lineChangeDTOS) {
 //                System.out.println("Line Change is: " + current.getLine() + " " + current.getLineScore());
@@ -96,9 +105,6 @@ public class IndividualDiffScoreCalculator {
 
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
-
-            System.out.println("score inside calculator is: " + fileTypeMultiplier * roundedScore.doubleValue());
-
 
             return new DiffScoreDTO(numberOfLinesAdded, numberOfLinesRemoved, fileTypeMultiplier * roundedScore.doubleValue(), lineChangeDTOS);
         }
@@ -120,13 +126,16 @@ public class IndividualDiffScoreCalculator {
 
             double lineScore = 0.0;
 
-            if(line.charAt(0) == '+') {
+            if(line.charAt(0) == '+' && (line.trim().length() > 0) && !line.trim().equals("+")) {
                 lineScore = analyzeAddedLine(line);
                 diffScore = diffScore + lineScore;
                 this.numberOfLinesAdded++;
 
+                System.out.println("added line: " + line + " " + lineScore);
+
                 lineChangeDTO = new LineChangeDTO(originalLine, lineScore);
                 lineChangeDTOS.add(lineChangeDTO);
+
             }
             else if(line.charAt(0) == '-' && (line.trim().length() > 0) && !line.trim().equals("-")) {
 
@@ -139,16 +148,25 @@ public class IndividualDiffScoreCalculator {
 
                 removedLines.add(line);
 
+                System.out.println("removed line: " + line + " " + lineScore);
+
+
                 lineChangeDTO = new LineChangeDTO(originalLine, lineScore);
                 lineChangeDTOS.add(lineChangeDTO);
+
+                lastLineSeen = line;
 
             }
             else { // still need to process unchanged line to check whether a long comment was changed
 
                 line = line.trim();
 
-                if(line.length() > 0) {
-                    isComment(line);
+                if(line.length() > 1) {
+                    if(isComment(line) == false) {
+                        lineMovedAfterCode = true;
+                        lastLineSeen = line;
+                    }
+
                 }
 
                 if(isLongComment == true) {
@@ -157,8 +175,9 @@ public class IndividualDiffScoreCalculator {
 
             }
 
-
         }
+
+
 
         return diffScore;
     }
@@ -166,22 +185,41 @@ public class IndividualDiffScoreCalculator {
         double lineScore = 0.0;
 
         if(isComment(line) == false && isLongComment == false) {
-
-            if(lineWasAdded(line) == true) { // line was added earlier and removed in this position
+            // line was added earlier and removed in this position
+            if(lineWasAdded(line) == true && isSyntax(line) == false && lineMovedAfterCode == true
+            && lastLineSeen.equals(line) == false) {
                 lineScore = calculatePointsForLineMovedUpOrDown(addLineWeight);
                 addedLines.remove(line);
 
-                System.out.println(line + " was moved on remove side " + lineScore);
+                System.out.println(line + " was moved on remove side " + lineMovedAfterCode);
+                lineMovedAfterCode = false;
 
             }
-            else if(isSyntax(line)) {
+            // line was added earlier but the move did not jump over any code
+            else if(lineWasAdded(line) == true && isSyntax(line) == false
+            && lastLineSeen.equals(line) == true) {
+
+                if(isSyntax(line) == true) {
+                    lineScore = -syntaxLineWeight;
+                }
+                else {
+                    lineScore = -addLineWeight;
+                }
+
+                System.out.println("taking away points");
+                lineMovedAfterCode = false;
+            }
+            else if(lineWasAdded(line) == false && isSyntax(line) == true) {
                 lineScore = syntaxLineWeight;
+                lineMovedAfterCode = false;
+
             }
             else {
                 lineScore = deleteLineWeight;
 
-                System.out.println(line + " was removed " + lineScore);
+                System.out.println(line + " was removed " + lineMovedAfterCode + " " + lastLineSeen);
 
+                lineMovedAfterCode = false;
             }
         }
 
@@ -199,6 +237,7 @@ public class IndividualDiffScoreCalculator {
             score = moveLineWeight - weightFromPrevOccurance;
         }
 
+
         return score;
     }
 
@@ -207,43 +246,74 @@ public class IndividualDiffScoreCalculator {
 
         line = line.trim();
 
-        if(line.length() > 1) {
+        if(line.length() > 1 && line.equals("+") == false) {
             line = line.substring(1); // cutting out the +
             line = line.trim();
 
-            if(isSyntax(line)) {
-                lineScore = syntaxLineWeight;
-            }
-            else if(isComment(line)) {
+
+            if(isComment(line)) {
                 lineScore = 0.0;
             }
+            else if(isLongComment == false && lineWasRemoved(line) == true && isSyntax(line) == false
+                    && lineMovedAfterCode == true) { // case where line is moved from one area to another
+
+                // Making sure that points are not givin out for deletion and moving
+                lineScore = calculatePointsForLineMovedUpOrDown(deleteLineWeight);
+
+                addedLines.add(line);
+                removedLines.remove(line);
+
+                System.out.println(line + " was moved on add side ");
+                lineMovedAfterCode = false;
+
+            }
+            // case where line is moved but is not moved before or after code
+            else if(isLongComment == false && lineWasRemoved(line) == true && lineMovedAfterCode == false) {
+
+                System.out.println("Line: " + line + " was a false remove");
+                if(isSyntax(line) == true) {
+                    lineScore = -syntaxLineWeight;
+                }
+                else {
+                    lineScore = -deleteLineWeight;
+                }
+
+            }
+            // line is a syntax line
+            else if(isLongComment == false && isSyntax(line) == true && lineWasRemoved(line) == false) {
+                lineScore = syntaxLineWeight;
+
+                lineMovedAfterCode = true;
+                lastLineAdded = line;
+
+                System.out.println("line is a legit syntax line");
+            }
+            // normal line added
             else if(isLongComment == false && lineWasRemoved(line) == false) {
                 lineScore = addLineWeight;
 
                 addedLines.add(line);
 
                 System.out.println(line + " was added " + lineScore);
-
+                lineMovedAfterCode = true;
+                lastLineAdded = line;
 
             }
-            else if(isLongComment == false && lineWasRemoved(line) == true) { // case where line is moved from one area
-                // to another
-
-                // Making sure that points are not givin out for deletion and moving
-
-                lineScore = calculatePointsForLineMovedUpOrDown(deleteLineWeight);
-
-                addedLines.add(line);
-                removedLines.remove(line);
-
-                System.out.println(line + " was moved on add side " + lineScore);
+            else {
+                System.out.println("special case " + lineMovedAfterCode);
             }
 
             if(isLongComment == true) {
                 checkForEndBrace(line);
             }
 
+            lastLineSeen = line;
+
+
+
+
         }
+
 
         return lineScore;
     }
