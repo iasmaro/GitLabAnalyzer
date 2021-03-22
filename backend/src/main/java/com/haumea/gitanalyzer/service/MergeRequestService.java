@@ -160,6 +160,7 @@ public class MergeRequestService {
         Date mergedDate = mergeRequest.getMergedAt();
         Date createdDate = mergeRequest.getCreatedAt();
         Date updatedDate = mergeRequest.getUpdatedAt();
+        String mergeRequestLink = mergeRequest.getWebUrl();
 
         Configuration configuration = userService.getConfiguration(userId, projectId);
 
@@ -174,6 +175,7 @@ public class MergeRequestService {
                 mergedDate,
                 createdDate,
                 updatedDate,
+                mergeRequestLink,
                 mergeRequestStats.getDiffScore(),
                 sumOfCommitScore,
                 mergeRequestDiffs,
@@ -197,7 +199,7 @@ public class MergeRequestService {
 
         double sumOfCommitScore = getSumOfCommitsScore(commitDTOList);
 
-        return new MergeRequestDTO(mergeRequestIid, mergeRequestTitle, mergedDate, createdDate, mergedDate, 0.0, sumOfCommitScore, dummyMergeRequestDiffList, 0, 0, commitDTOList);
+        return new MergeRequestDTO(mergeRequestIid, mergeRequestTitle, mergedDate, createdDate, mergedDate, "", 0.0, sumOfCommitScore, dummyMergeRequestDiffList, 0, 0, commitDTOList);
     }
 
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId) {
