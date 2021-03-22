@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +63,12 @@ public class UserRepository {
             }
             update.set("activeConfig", user.getActiveConfig());
         }
+        if(!(user.getStart() == null)){
+            update.set("start", user.getStart());
+        }
+        if(!(user.getEnd() == null)){
+            update.set("end", user.getEnd());
+        }
 
         if(mongoTemplate.findAndModify(query, update, User.class) == null) {
             throw new ResourceNotFoundException("User not found!");
@@ -102,6 +109,40 @@ public class UserRepository {
         }
 
         return gitlabServer;
+    }
+
+    public Date getStart(String userId) throws ResourceNotFoundException {
+
+        Optional<User> user = findUserByUserId(userId);
+
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        Date start = user.get().getStart();
+
+        if(start == null){
+            throw new ResourceNotFoundException("Start date not found!");
+        }
+
+        return start;
+    }
+
+    public Date getEnd(String userId) throws ResourceNotFoundException {
+
+        Optional<User> user = findUserByUserId(userId);
+
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        Date end = user.get().getEnd();
+
+        if(end == null){
+            throw new ResourceNotFoundException("End date not found!");
+        }
+
+        return end;
     }
 
     public void deleteActiveConfig(String userId){
