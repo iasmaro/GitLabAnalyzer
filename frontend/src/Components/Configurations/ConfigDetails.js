@@ -4,13 +4,13 @@ import { Table } from 'react-bootstrap';
 import './ConfigDetails.css'
 import ConfigFileWeights from './ConfigFileWeights';
 const ConfigDetails = (props) => {
-    const {configInfo} = props || {};
+    const { configInfo } = props || {};
     return (
         <div className = 'config-details-container'>
             <Table striped bordered hover variant="light">
                 <thead>
                     <tr>
-                        <th colSpan='4'>{configInfo?.configName}</th>
+                        <th colSpan='4'>{configInfo?.fileName}</th>
                     </tr>
                 </thead>
                 <thead>
@@ -21,8 +21,8 @@ const ConfigDetails = (props) => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{configInfo?.startDate}</td>
-                        <td>{configInfo?.endDate}</td>
+                        <td>{configInfo?.start}</td>
+                        <td>{configInfo?.end}</td>
                     </tr>
                 </tbody>
 
@@ -33,7 +33,7 @@ const ConfigDetails = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Object.entries(configInfo?.codeWeightings).map(([codeScore, value]) => 
+                    {configInfo && Object.entries(configInfo?.editFactor).map(([codeScore, value]) => 
                         <tr key={codeScore}>
                             <td>{codeScore}</td>
                             <td>{value}</td>
@@ -42,7 +42,7 @@ const ConfigDetails = (props) => {
                 </tbody>
             </Table>
 
-            <ConfigFileWeights fileTypes={configInfo?.fileTypes}/>
+            <ConfigFileWeights fileTypes={configInfo}/>
         </div>
 
     );
