@@ -2,7 +2,7 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.DiffDTO;
-import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+import com.haumea.gitanalyzer.dto.ScoreDTO;
 import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
@@ -76,7 +76,7 @@ public class CommitService {
 
             List<CommentType> commentTypes = configuration.getCommentTypes().getOrDefault(diffExtension, createDefaultCommentTypes());
 
-            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
+            ScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
                     diff.getDeletedFile(),
                     addLine,
                     deleteLine,
@@ -98,7 +98,7 @@ public class CommitService {
         return commitDiffs;
     }
 
-    private DiffScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
+    private ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
         int linesRemoved = 0;
@@ -111,7 +111,7 @@ public class CommitService {
             commitScore = commitScore + diffDTO.getDiffScore();
         }
 
-        return new DiffScoreDTO(linesAdded, linesRemoved, commitScore);
+        return new ScoreDTO(linesAdded, linesRemoved, commitScore);
     }
 
     //Source: Andrew's IndividualDiffScoreCalculator
@@ -133,7 +133,7 @@ public class CommitService {
 
             List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode(), configuration);
 
-            DiffScoreDTO commitStats = getCommitStats(commitDiffs);
+            ScoreDTO commitStats = getCommitStats(commitDiffs);
 
             double roundedCommitScore = roundScore(commitStats.getDiffScore());
 

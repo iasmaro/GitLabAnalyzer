@@ -11,7 +11,7 @@ public class DiffDTO {
     private int linesRemoved;
     private double diffScore;
 
-    public DiffDTO(String oldPath, String newPath, String extension, String codeDiff, DiffScoreDTO scoreDTO) {
+    public DiffDTO(String oldPath, String newPath, String extension, String codeDiff, ScoreDTO scoreDTO) {
         this.oldPath = oldPath;
         this.newPath = newPath;
         this.extension = extension;
