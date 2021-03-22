@@ -131,7 +131,6 @@ public class IndividualDiffScoreCalculator {
                 diffScore = diffScore + lineScore;
                 this.numberOfLinesAdded++;
 
-                System.out.println("added line: " + line + " " + lineScore);
 
                 lineChangeDTO = new LineChangeDTO(originalLine, lineScore);
                 lineChangeDTOS.add(lineChangeDTO);
@@ -148,9 +147,6 @@ public class IndividualDiffScoreCalculator {
 
                 removedLines.add(line);
 
-                System.out.println("removed line: " + line + " " + lineScore);
-
-
                 lineChangeDTO = new LineChangeDTO(originalLine, lineScore);
                 lineChangeDTOS.add(lineChangeDTO);
 
@@ -161,7 +157,7 @@ public class IndividualDiffScoreCalculator {
 
                 line = line.trim();
 
-                if(line.length() > 1) {
+                if(line.length() > 1 || isSyntax(line)) {
                     if(isComment(line) == false) {
                         lineMovedAfterCode = true;
                         lastLineSeen = line;
@@ -192,7 +188,7 @@ public class IndividualDiffScoreCalculator {
                 addedLines.remove(line);
 
                 System.out.println(line + " was moved on remove side " + lineMovedAfterCode);
-                lineMovedAfterCode = false;
+//                lineMovedAfterCode = false;
 
             }
             // line was added earlier but the move did not jump over any code
@@ -207,7 +203,7 @@ public class IndividualDiffScoreCalculator {
                 }
 
                 System.out.println("taking away points");
-                lineMovedAfterCode = false;
+//                lineMovedAfterCode = false;
             }
             else if(lineWasAdded(line) == false && isSyntax(line) == true) {
                 lineScore = syntaxLineWeight;
@@ -219,7 +215,7 @@ public class IndividualDiffScoreCalculator {
 
                 System.out.println(line + " was removed " + lineMovedAfterCode + " " + lastLineSeen);
 
-                lineMovedAfterCode = false;
+//                lineMovedAfterCode = false;
             }
         }
 
@@ -264,7 +260,7 @@ public class IndividualDiffScoreCalculator {
                 removedLines.remove(line);
 
                 System.out.println(line + " was moved on add side ");
-                lineMovedAfterCode = false;
+//                lineMovedAfterCode = false;
 
             }
             // case where line is moved but is not moved before or after code
@@ -286,7 +282,6 @@ public class IndividualDiffScoreCalculator {
                 lineMovedAfterCode = true;
                 lastLineAdded = line;
 
-                System.out.println("line is a legit syntax line");
             }
             // normal line added
             else if(isLongComment == false && lineWasRemoved(line) == false) {
@@ -294,7 +289,6 @@ public class IndividualDiffScoreCalculator {
 
                 addedLines.add(line);
 
-                System.out.println(line + " was added " + lineScore);
                 lineMovedAfterCode = true;
                 lastLineAdded = line;
 
@@ -308,8 +302,6 @@ public class IndividualDiffScoreCalculator {
             }
 
             lastLineSeen = line;
-
-
 
 
         }
