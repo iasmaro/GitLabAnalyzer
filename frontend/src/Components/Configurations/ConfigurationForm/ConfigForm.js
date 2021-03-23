@@ -5,6 +5,10 @@ import {ConfigLabels, initialConfigState} from 'Constants/constants'
 import FormattedDateTimePicker from "Components/DateTimePicker/FormattedDateTimePicker";
 import saveConfig from "Utils/saveConfig";
 
+import NewFileTypeCofig from './NewFileTypeConfig';
+import DefaultFileTypeConfig from './DefaultFileTypeConfig';
+import ScoreWeightConfig from './ScoreWeightConfig';
+
 import './ConfigForm.css';
 
 const ConfigForm = (props) => {
@@ -55,13 +59,13 @@ const ConfigForm = (props) => {
         }
 
         const singleComments = {
-            END_TYPE: '',
-            START_TYPE:  state.SINGLE_COMMENT
+            endType: '',
+            startType: state.SINGLE_COMMENT
         }
 
         const multiComments = {
-            END_TYPE: state.MULTI_END_COMMENT,
-            START_TYPE:  state.MULTI_START_COMMENT
+            endType: state.MULTI_END_COMMENT,
+            startType: state.MULTI_START_COMMENT
         }
 
         const commentTypes = {
@@ -73,8 +77,7 @@ const ConfigForm = (props) => {
             toggleModal();
         }
     };
-
-
+    
     return (
         <>
             <Container fluid className="ConfigContainer">
@@ -94,6 +97,7 @@ const ConfigForm = (props) => {
                                             defaultValue={state.CONFIGURATION_NAME}
                                             name = "CONFIGURATION_NAME"
                                             onChange = {handleInputChange}
+                                            required
                                         />
                                     </td>
                                 </tr>
@@ -138,48 +142,7 @@ const ConfigForm = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.SCORE_WEIGHT}  
-                                            defaultValue={state.ADD_NEW_LINE}
-                                            name = "ADD_NEW_LINE"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.SCORE_WEIGHT}  
-                                            defaultValue={state.DELETE_LINE}
-                                            name = "DELETE_LINE"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.SCORE_WEIGHT} 
-                                            defaultValue={state.MOVE_LINE}
-                                            name = "MOVE_LINE"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.SCORE_WEIGHT}
-                                            defaultValue={state.SPACING}
-                                            name = "SPACING"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.SCORE_WEIGHT} 
-                                            defaultValue={state.SYNTAX}
-                                            name = "SYNTAX"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                </tr>
+                                <ScoreWeightConfig state={state} handleInputChange={handleInputChange} />
                             </tbody>
                         </Table>
 
@@ -203,85 +166,10 @@ const ConfigForm = (props) => {
                                 <th>{ConfigLabels.C}</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.FILE_WEIGHT} 
-                                            defaultValue={state.JAVA}
-                                            name = "JAVA"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.FILE_WEIGHT} 
-                                            defaultValue={state.JS}
-                                            name = "JS"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.FILE_WEIGHT} 
-                                            defaultValue={state.TS}
-                                            name = "TS"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.FILE_WEIGHT} 
-                                            defaultValue={state.PY}
-                                            name = "PY"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.FILE_WEIGHT} 
-                                            defaultValue={state.HTML}
-                                            name = "HTML"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.FILE_WEIGHT} 
-                                            defaultValue={state.CSS}
-                                            name = "CSS"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                    <   Form.Control 
-                                            placeholder={ConfigLabels.FILE_WEIGHT} 
-                                            defaultValue={state.XML}
-                                            name = "XML"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control
-                                            placeholder={ConfigLabels.FILE_WEIGHT} 
-                                            defaultValue={state.CPP}
-                                            name = "CPP"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.FILE_WEIGHT} 
-                                            defaultValue={state.C}
-                                            name = "C"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                </tr>
+                                <DefaultFileTypeConfig state={state} handleInputChange={handleInputChange} />
                             </tbody>
 
                         </Table>
-
-
                         <Table hover className="ConfigTable">
                             <thead>
                                 <tr>
@@ -301,53 +189,13 @@ const ConfigForm = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.NEW_FILE_EXTENSION} 
-                                            name = "FILE_EXTENSION"
-                                            defaultValue = {state.FILE_EXTENSION}
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.SINGLE_COMMENT}
-                                            name = "SINGLE_COMMENT"
-                                            onChange = {handleInputChange} 
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.MULTI_START_COMMENT} 
-                                            name = "MULTI_START_COMMENT"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.MULTI_END_COMMENT} 
-                                            name = "MULTI_END_COMMENT"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Form.Control 
-                                            placeholder={ConfigLabels.FILE_WEIGHT} 
-                                            name = "WEIGHT"
-                                            onChange = {handleInputChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        {!inputList?.length ? (
-                                            <td colSpan={6} ></td>
-                                        )
-                                        :
-                                        inputList.map((inputList) => (
-                                            <Button type="submit" size='md' block key={inputList?.FILE_EXTENSION} inputList={inputList} onClick={handleAddClick}>+</Button>
-                                        ))}
-                                    </td>
-                                </tr>
+                                {!inputList?.length ? (
+                                    <td colSpan={6} ></td>
+                                )
+                                :
+                                inputList.map((inputList) => (
+                                    <NewFileTypeCofig state={state} handleInputChange={handleInputChange} key={inputList?.FILE_EXTENSION} inputList={inputList} handleAddClick={handleAddClick}/>
+                                ))}
                             </tbody>
                         </Table>
                         <Col md="auto">
