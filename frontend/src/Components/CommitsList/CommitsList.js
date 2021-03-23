@@ -20,12 +20,13 @@ const CommitsList = (props) => {
             <Table striped bordered hover variant="light">
                 <thead>
                         <tr>
-                            <th colSpan='6' className='commitTitle'>Commits</th>
+                            <th colSpan='7' className='commitTitle'>Commits</th>
                         </tr>
                 </thead>
                 <thead>
-                    <tr className="commits-headers">
+                    <tr className='commits-headers'>
                         <th>Date</th>
+                        <th>GitLab Link</th>
                         <th>Message</th>
                         <th>Score</th>
                         <th>Author</th>
