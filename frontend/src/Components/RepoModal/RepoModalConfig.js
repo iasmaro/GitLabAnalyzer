@@ -9,10 +9,11 @@ import deleteActiveConfig from 'Utils/deleteActiveConfig';
 
 const RepoModalConfig = (props) => {
     
-    const {defaultConfig, configs, config, setConfig} = props;
+    const {defaultConfig, configs, config, setConfig, setShowError} = props;
     const username = useUserState();
 
     const selectConfig = (configuration) => {
+        setShowError(false);
         if (configuration === 'default') {
             deleteActiveConfig(username);
         }
