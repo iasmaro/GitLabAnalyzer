@@ -96,6 +96,8 @@ public class CommitService {
             commitDiffs.add(diffDTO);
         }
 
+        diffScoreCalculator.clearMoveLineLists();
+
         return commitDiffs;
     }
 
@@ -103,6 +105,8 @@ public class CommitService {
 
         int linesAdded = 0;
         int linesRemoved = 0;
+        int linesMoved = 0;
+        int spaceLinesAdded = 0;
         double commitScore = 0.0;
 
         for (DiffDTO diffDTO : diffDTOList) {
@@ -110,10 +114,12 @@ public class CommitService {
             linesAdded = linesAdded + diffDTO.getLinesAdded();
             linesRemoved = linesRemoved + diffDTO.getLinesRemoved();
             commitScore = commitScore + diffDTO.getDiffScore();
+            linesMoved = linesMoved + diffDTO.getLinesMoved();
+            spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
         }
 
 
-        return new DiffScoreDTO(linesAdded, linesRemoved, commitScore);
+        return new DiffScoreDTO(linesAdded, linesRemoved, commitScore, linesMoved, spaceLinesAdded);
     }
 
     //Source: Andrew's IndividualDiffScoreCalculator

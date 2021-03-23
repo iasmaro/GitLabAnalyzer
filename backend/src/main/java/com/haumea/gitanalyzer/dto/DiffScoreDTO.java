@@ -6,15 +6,17 @@ public class DiffScoreDTO {
 
     private int linesAdded;
     private int linesRemoved;
+    private int linesMoved;
+    private int spaceLinesAdded;
     private double diffScore;
-    private List<LineChangeDTO> lineChangeDTOS;
 
-    public DiffScoreDTO(int linesAdded, int linesRemoved, double diffScore) {
+    public DiffScoreDTO(int linesAdded, int linesRemoved, double diffScore, int linesMoved, int spaceLinesAdded) {
         this.linesAdded = linesAdded;
         this.linesRemoved = linesRemoved;
         this.diffScore = diffScore;
+        this.linesMoved = linesMoved;
+        this.spaceLinesAdded = spaceLinesAdded;
 
-//        this.lineChangeDTOS = lineChangeDTOS;
     }
 
     public int getLinesAdded() {
@@ -27,5 +29,13 @@ public class DiffScoreDTO {
 
     public double getDiffScore() {
         return diffScore;
+    }
+
+    public int getLinesMoved() {
+        return linesMoved;
+    }
+
+    public int getSpaceLinesAdded() {
+        return spaceLinesAdded;
     }
 }

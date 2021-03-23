@@ -27,7 +27,6 @@ public class IndividualDiffScoreCalculator {
     private boolean addition;
     private boolean removal;
 
-    String lastLineAdded;
     String lastLineSeen;
 
     private String longCommentEndBrace;
@@ -38,6 +37,8 @@ public class IndividualDiffScoreCalculator {
 
     private int numberOfLinesAdded;
     private int numberOfLinesRemoved;
+    private int numberOfLinesMoved;
+    private int numberOfSpaceLinesAdded;
 
 
 
@@ -53,9 +54,14 @@ public class IndividualDiffScoreCalculator {
 
     }
 
-    private void clearMoveLineLists() {
+    public void clearMoveLineLists() {
         removedLines.clear();
         addedLines.clear();
+
+        addition = false;
+        removal = false;
+
+        lastLineSeen = "";
     }
 
 
@@ -82,9 +88,12 @@ public class IndividualDiffScoreCalculator {
 
         this.numberOfLinesAdded = 0;
         this.numberOfLinesRemoved = 0;
+        this.numberOfLinesMoved = 0;
+        this.numberOfSpaceLinesAdded = 0;
+
 
         if(isFileDeleted) {
-            return new DiffScoreDTO(0, 0, 0.0);
+            return new DiffScoreDTO(0, 0, 0.0, 0, 0);
         }
         else {
             double score;
@@ -95,19 +104,15 @@ public class IndividualDiffScoreCalculator {
                 throw new IllegalArgumentException("input error");
             }
 
-            this.removedLines.clear();
-            this.addedLines.clear();
-//
-//            for(LineChangeDTO current : lineChangeDTOS) {
-//                System.out.println("Line Change is: " + current.getLine() + " " + current.getLineScore());
-//
-//            }
-
-
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            return new DiffScoreDTO(numberOfLinesAdded, numberOfLinesRemoved, fileTypeMultiplier * roundedScore.doubleValue());
+            return new DiffScoreDTO(
+                    numberOfLinesAdded,
+                    numberOfLinesRemoved,
+                    fileTypeMultiplier * roundedScore.doubleValue(),
+                    numberOfLinesMoved,
+                    numberOfSpaceLinesAdded);
         }
     }
 
@@ -127,7 +132,7 @@ public class IndividualDiffScoreCalculator {
 
             double lineScore = 0.0;
 
-            if(line.charAt(0) == '+' && (line.trim().length() > 0) && !line.trim().equals("+")) {
+            if(line.charAt(0) == '+') {
                 lineScore = analyzeAddedLine(line);
                 diffScore = diffScore + lineScore;
                 this.numberOfLinesAdded++;
@@ -181,6 +186,8 @@ public class IndividualDiffScoreCalculator {
 
         return diffScore;
     }
+
+
     private double analyzeRemovedLine(String line) {
         double lineScore = 0.0;
 
@@ -188,19 +195,13 @@ public class IndividualDiffScoreCalculator {
             // line was added earlier and removed in this position
             if(lineWasAdded(line) == true && isSyntax(line) == false
             && lastLineSeen.equals(line) == false) {
-                lineScore = calculatePointsForLineMovedUpOrDown(addLineWeight);
-                addedLines.remove(line);
 
-                System.out.println(line + " was moved on remove side " + addition);
-
+                lineScore = calcMovedLineScoreOnRemoveSide(line);
 
             }
             else if(lineWasAdded(line) == true && isSyntax(line) == false
                     && lastLineSeen.equals(line) == true && addition == false) {
-                lineScore = calculatePointsForLineMovedUpOrDown(addLineWeight);
-                addedLines.remove(line);
-
-                System.out.println(line + " was moved on remove side " + addition);
+                lineScore = calcMovedLineScoreOnRemoveSide(line);
             }
             // line was added earlier but the move did not jump over any code
             else if(lineWasAdded(line) == true && isSyntax(line) == false
@@ -213,7 +214,6 @@ public class IndividualDiffScoreCalculator {
                     lineScore = -addLineWeight;
                 }
 
-                System.out.println("taking away points");
             }
             else if(lineWasAdded(line) == false && isSyntax(line) == true) {
                 lineScore = syntaxLineWeight;
@@ -222,13 +222,21 @@ public class IndividualDiffScoreCalculator {
             else {
                 lineScore = deleteLineWeight;
 
-                System.out.println(line + " was removed " + addition + " " + lastLineSeen);
             }
 
             removal = true;
             addition = false;
 
         }
+
+        return lineScore;
+    }
+    private double calcMovedLineScoreOnRemoveSide(String line) {
+        double lineScore = 0.0;
+        lineScore = calculatePointsForLineMovedUpOrDown(addLineWeight);
+        addedLines.remove(line);
+
+        numberOfLinesMoved++;
 
         return lineScore;
     }
@@ -248,6 +256,23 @@ public class IndividualDiffScoreCalculator {
         return score;
     }
 
+    private double calcMovedLineScoreOnAddSide(String line) {
+        double lineScore = 0.0;
+
+        // Making sure that points are not givin out for deletion and moving
+        lineScore = calculatePointsForLineMovedUpOrDown(deleteLineWeight);
+
+        addedLines.add(line);
+        removedLines.remove(line);
+
+        addition = true;
+        removal = false;
+
+        numberOfLinesMoved++;
+
+        return lineScore;
+    }
+
     private double analyzeAddedLine(String line) {
         double lineScore = 0.0;
 
@@ -261,42 +286,23 @@ public class IndividualDiffScoreCalculator {
             if(isComment(line)) {
                 lineScore = 0.0;
             }
+            // case where line is moved from one area to another
             else if(isLongComment == false && lineWasRemoved(line) == true && isSyntax(line) == false
-                    && (lastLineSeen.equals(line) == false
-                    )) { // case where line is moved from one area to another
+                    && (lastLineSeen.equals(line) == false)) {
+                lineScore = calcMovedLineScoreOnAddSide(line);
 
-                // Making sure that points are not givin out for deletion and moving
-                lineScore = calculatePointsForLineMovedUpOrDown(deleteLineWeight);
-
-                addedLines.add(line);
-                removedLines.remove(line);
-
-                System.out.println(line + " was moved on add side ");
-
-                addition = true;
-                removal = false;
             }
+            // case where line is moved from one area to another
             else if(isLongComment == false && lineWasRemoved(line) == true && isSyntax(line) == false
                     && lastLineSeen.equals(line) == true
                     && removal == false) {
 
-                lineScore = calculatePointsForLineMovedUpOrDown(deleteLineWeight);
-
-                addedLines.add(line);
-                removedLines.remove(line);
-
-                System.out.println(line + " was moved on add side ");
-
-                addition = true;
-                removal = false;
-
-
+                lineScore = calcMovedLineScoreOnAddSide(line);
             }
             // case where line is moved but is not moved before or after code
             else if(isLongComment == false && lineWasRemoved(line) == true && lastLineSeen.equals(line) == true &&
             removal == true) {
 
-                System.out.println("Line: " + line + " was a false remove");
 
                 lineScore = undoLineScore(line);
 
@@ -324,9 +330,7 @@ public class IndividualDiffScoreCalculator {
                 lastLineSeen = line;
 
             }
-            else {
-                System.out.println("special case " + addition);
-            }
+
 
             if(isLongComment == true) {
                 checkForEndBrace(line);
@@ -335,6 +339,9 @@ public class IndividualDiffScoreCalculator {
             lastLineSeen = line;
 
 
+        }
+        else if(line.equals("+")){
+            numberOfSpaceLinesAdded++;
         }
 
 

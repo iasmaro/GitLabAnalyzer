@@ -393,6 +393,8 @@ public class TestGitLabService {
 
 
             }
+
+            calculator.clearMoveLineLists();
         }
 
     }
