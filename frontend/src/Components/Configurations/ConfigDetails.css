@@ -6,4 +6,14 @@
     border: 1px solid black;
     margin: 10px;
     float: left;
+    min-width: 275px;
+}
+
+.file-weightings th {
+    text-align: center;
+    width: 100%;
+}
+
+.file-weightings td {
+    min-width: 75px;
 }
