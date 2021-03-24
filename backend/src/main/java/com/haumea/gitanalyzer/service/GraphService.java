@@ -4,9 +4,11 @@ import com.haumea.gitanalyzer.dto.*;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.Configuration;
+import org.apache.catalina.startup.UserConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -19,14 +21,12 @@ public class GraphService {
 
     private final UserService userService;
     private final MemberService memberService;
-    private final GitlabService gitlabService;
     private final CommitService commitService;
 
     @Autowired
-    public GraphService(UserService userService, MemberService memberService, GitlabService gitlabService, CommitService commitService) {
+    public GraphService(UserService userService, MemberService memberService, CommitService commitService) {
         this.userService = userService;
         this.memberService = memberService;
-        this.gitlabService = gitlabService;
         this.commitService = commitService;
     }
 
@@ -45,6 +45,7 @@ public class GraphService {
 
         List<CommitGraphDTO> returnList = new ArrayList<>();
 
+        GitlabService gitlabService = userService.createGitlabService(userId);
         Configuration userConfig = userService.getConfiguration(userId, projectId);
         List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
         List<CommitWrapper> allCommits =  gitlabService.getFilteredCommitsWithDiffByAuthor(projectId, userConfig.getTargetBranch(),
@@ -57,11 +58,13 @@ public class GraphService {
         end.setTime(userConfig.getEnd());
 
         for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+
+            int numberOfCommits = 0;
+            double totalScore = 0.0;
+
             for(CommitWrapper commit : allCommits) {
 
                 Date commitDate = commit.getCommitData().getCommittedDate();
-                int numberOfCommits = 0;
-                double totalScore = 0.0;
 
                 if(isSameDay(commitDate, date)) {
                     numberOfCommits++;
@@ -70,10 +73,11 @@ public class GraphService {
                     totalScore = totalScore + commitScore.getDiffScore();
                 }
 
-                CommitGraphDTO commitGraphDTO = new CommitGraphDTO(date, numberOfCommits, totalScore);
-                returnList.add(commitGraphDTO);
-
             }
+            CommitGraphDTO commitGraphDTO = new CommitGraphDTO(date, numberOfCommits, totalScore);
+            returnList.add(commitGraphDTO);
+
+            System.out.println(date);
         }
         return returnList;
     }
