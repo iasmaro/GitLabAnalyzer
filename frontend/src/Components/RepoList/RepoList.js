@@ -14,12 +14,13 @@ const RepoList = (props) => {
             <Table striped bordered hover variant="light">
                 <thead>
                     <tr>
-                    <th colSpan='3' className='repoTitle'>Repositories</th>
+                    <th colSpan='4' className='repoTitle'>Repositories</th>
                     </tr>
                 </thead>
                 <thead>
                     <tr className="repo-headers">
-                        <th>Name</th>
+                        <th>Repo</th>
+                        <th>Namespace</th>
                         <th>Last Modified</th>
                         <th></th>
                     </tr>

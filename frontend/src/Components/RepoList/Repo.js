@@ -42,6 +42,7 @@ const Repo = (props) => {
     return (
         <tr>
             <td>{repo?.projectName}</td>
+            <td>{repo?.namespace}</td>
             <td>{utcToLocal(repo?.updatedAt)}</td>
             <td>
                 <Button variant="dark" onClick={handleShow}> Analyze </Button>
