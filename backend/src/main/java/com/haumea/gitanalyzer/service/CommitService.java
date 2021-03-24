@@ -122,9 +122,9 @@ public class CommitService {
             linesRemoved = linesRemoved + diffDTO.getLinesRemoved();
             commitScore = commitScore + diffDTO.getDiffScore();
 
-            double fifeTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
-            fifeTypeScore = roundScore(fifeTypeScore);
-            fileTypeScoresMap.put(diffExtension, fifeTypeScore);
+            double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
+            fileTypeScore = roundScore(fileTypeScore);
+            fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
         ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore);
