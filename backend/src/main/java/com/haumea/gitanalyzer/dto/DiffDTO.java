@@ -9,7 +9,7 @@ public class DiffDTO {
 
     private int linesAdded;
     private int linesRemoved;
-    private double diffScore;
+    private double score;
 
     public DiffDTO(String oldPath, String newPath, String extension, String codeDiff, ScoreDTO scoreDTO) {
         this.oldPath = oldPath;
@@ -18,7 +18,7 @@ public class DiffDTO {
         this.codeDiff = codeDiff;
         this.linesAdded = scoreDTO.getLinesAdded();
         this.linesRemoved = scoreDTO.getLinesRemoved();
-        this.diffScore = scoreDTO.getDiffScore();
+        this.score = scoreDTO.getScore();
     }
 
     public String getOldPath() {
@@ -46,7 +46,7 @@ public class DiffDTO {
     }
 
     public double getDiffScore() {
-        return diffScore;
+        return score;
     }
 
 }

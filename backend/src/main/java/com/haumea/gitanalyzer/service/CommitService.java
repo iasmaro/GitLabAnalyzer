@@ -145,7 +145,7 @@ public class CommitService {
 
             ScoreDTO commitStats = getCommitStats(commitDiffs);
 
-            double roundedCommitScore = roundScore(commitStats.getDiffScore());
+            double roundedCommitScore = roundScore(commitStats.getScore());
 
             CommitDTO newDTO = new CommitDTO(commit.getMessage(),
                     commit.getCommittedDate(),

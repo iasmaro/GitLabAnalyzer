@@ -9,7 +9,6 @@ import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
 import com.haumea.gitanalyzer.model.Configuration;
-import lombok.SneakyThrows;
 import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.MergeRequest;
 import org.gitlab4j.api.models.MergeRequestDiff;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -144,7 +142,7 @@ public class MergeRequestService {
             scoreByFileTypes.put(diffExtension, fifeTypeScore);
         }
 
-        ScoreDTO mergeRequestScoreDTO = new ScoreDTO(linesAdded, linesRemoved, MRScore);
+        ScoreDTO mergeRequestScoreDTO = new ScoreDTO(linesAdded, linesRemoved, roundScore(MRScore));
         mergeRequestScoreDTO.setScoreByFileTypes(scoreByFileTypes);
 
         return mergeRequestScoreDTO;
@@ -190,7 +188,7 @@ public class MergeRequestService {
                 createdDate,
                 updatedDate,
                 mergeRequestLink,
-                mergeRequestStats.getDiffScore(),
+                mergeRequestStats.getScore(),
                 sumOfCommitScore,
                 mergeRequestStats.getScoreByFileTypes(),
                 mergeRequestDiffs,
@@ -219,7 +217,6 @@ public class MergeRequestService {
         return new MergeRequestDTO(mergeRequestIid, mergeRequestTitle, mergedDate, createdDate, mergedDate, "", 0.0, sumOfCommitScore, scoreDTO.getScoreByFileTypes(), dummyMergeRequestDiffList, 0, 0, commitDTOList);
     }
 
-    @SneakyThrows
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId) {
 
         GitlabService gitlabService = userService.createGitlabService(userId);

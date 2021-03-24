@@ -6,13 +6,13 @@ public class ScoreDTO {
 
     private int linesAdded;
     private int linesRemoved;
-    private double diffScore;
+    private double score;
     private Map<String, Double> scoreByFileTypes;
 
-    public ScoreDTO(int linesAdded, int linesRemoved, double diffScore) {
+    public ScoreDTO(int linesAdded, int linesRemoved, double score) {
         this.linesAdded = linesAdded;
         this.linesRemoved = linesRemoved;
-        this.diffScore = diffScore;
+        this.score = score;
     }
 
     public int getLinesAdded() {
@@ -23,8 +23,8 @@ public class ScoreDTO {
         return linesRemoved;
     }
 
-    public double getDiffScore() {
-        return diffScore;
+    public double getScore() {
+        return score;
     }
 
     public Map<String, Double> getScoreByFileTypes() {
