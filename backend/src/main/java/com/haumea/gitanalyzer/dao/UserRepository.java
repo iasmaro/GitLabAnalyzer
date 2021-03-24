@@ -51,22 +51,22 @@ public class UserRepository {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(user.getUserId()));
         Update update = new Update();
-        if(!(user.getPersonalAccessToken() == null) && !user.getPersonalAccessToken().trim().isEmpty()) {
+        if(user.getPersonalAccessToken() != null && !user.getPersonalAccessToken().trim().isEmpty()) {
             update.set("personalAccessToken", user.getPersonalAccessToken());
         }
-        if(!(user.getGitlabServer() == null) && !user.getGitlabServer().trim().isEmpty()) {
+        if(user.getGitlabServer() != null && !user.getGitlabServer().trim().isEmpty()) {
             update.set("gitlabServer", user.getGitlabServer());
         }
-        if(!(user.getActiveConfig() == null) && !user.getActiveConfig().trim().isEmpty()) {
+        if(user.getActiveConfig() != null && !user.getActiveConfig().trim().isEmpty()) {
             if(!getConfigurationFileNames(user.getUserId()).contains(user.getActiveConfig())){
                 throw new ResourceNotFoundException("configuration named '" + user.getActiveConfig() + "' not found!");
             }
             update.set("activeConfig", user.getActiveConfig());
         }
-        if(!(user.getStart() == null)){
+        if(user.getStart() != null){
             update.set("start", user.getStart());
         }
-        if(!(user.getEnd() == null)){
+        if(user.getEnd() != null){
             update.set("end", user.getEnd());
         }
 
