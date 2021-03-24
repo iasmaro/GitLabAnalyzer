@@ -7,15 +7,17 @@ public class CommitDTO {
     private String commitMessage;
     private Date commitDate;
     private String commitAuthor;
+    private String commitLink;
     private double commitScore;
     private List<DiffDTO> commitDiffs;
     private int linesAdded;
     private int linesRemoved;
 
-    public CommitDTO(String commitMessage, Date commitDate, String commitAuthor, double commitScore, List<DiffDTO> commitDiffs, int linesAdded, int linesRemoved) {
+    public CommitDTO(String commitMessage, Date commitDate, String commitAuthor, String commitLink, double commitScore, List<DiffDTO> commitDiffs, int linesAdded, int linesRemoved) {
         this.commitMessage = commitMessage;
         this.commitDate = commitDate;
         this.commitAuthor = commitAuthor;
+        this.commitLink = commitLink;
         this.commitScore = commitScore;
         this.commitDiffs = commitDiffs;
         this.linesAdded = linesAdded;
@@ -32,6 +34,10 @@ public class CommitDTO {
 
     public String getCommitAuthor() {
         return commitAuthor;
+    }
+
+    public String getCommitLink() {
+        return commitLink;
     }
 
     public double getCommitScore() {
