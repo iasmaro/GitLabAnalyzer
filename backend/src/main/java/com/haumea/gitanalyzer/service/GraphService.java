@@ -64,19 +64,27 @@ public class GraphService {
             int numberOfCommits = 0;
             double totalScore = 0.0;
 
+            // Keep track of a list of commits on this date to remove from the list of commits
+            // because a commit can only be on one date. This will slightly improve efficiency.
+            List<CommitWrapper> commitsOnThisDate = new ArrayList<CommitWrapper>();
+
             for(CommitWrapper commit : allCommits) {
 
                 Date commitDate = commit.getCommitData().getCommittedDate();
 
                 if(isSameDay(commitDate, date)) {
+
                     numberOfCommits++;
                     List<DiffDTO> commitDiffs = commitService.getCommitDiffs(commit.getNewCode(), userConfig);
-                    DiffScoreDTO commitScore = commitService.getCommitStats(commitDiffs);
-                    totalScore = totalScore + commitScore.getDiffScore();
+                    DiffScoreDTO commitStats = commitService.getCommitStats(commitDiffs);
+                    totalScore = totalScore + commitStats.getDiffScore();
+                    commitsOnThisDate.add(commit);
+
                 }
 
             }
 
+            allCommits.removeAll(commitsOnThisDate);
             CommitGraphDTO commitGraphDTO = new CommitGraphDTO(date, numberOfCommits, totalScore);
             returnList.add(commitGraphDTO);
 
