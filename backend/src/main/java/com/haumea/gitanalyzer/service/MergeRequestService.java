@@ -161,6 +161,31 @@ public class MergeRequestService {
         return roundScore(sumOfCommitsScore);
     }
 
+    private void checkAndSetScoreForSharedMR(MergeRequestDTO mergeRequestDTO, List<String> alias) {
+
+        boolean isSharedMR = false;
+        double sumOfCommitScoreForSharedMR = 0.0;
+
+        for(CommitDTO commitDTO : mergeRequestDTO.getCommitDTOList()) {
+
+            String commitAuthor = commitDTO.getCommitAuthor();
+
+            if(alias.contains(commitAuthor)) {
+               sumOfCommitScoreForSharedMR = sumOfCommitScoreForSharedMR + commitDTO.getCommitScore();
+            }
+            else {
+                isSharedMR = true;
+            }
+
+        }
+
+        if(isSharedMR) {
+            mergeRequestDTO.setSharedMR(isSharedMR);
+            mergeRequestDTO.setSumOfCommitScoreOnSharedMR(roundScore(sumOfCommitScoreForSharedMR));
+        }
+
+    }
+
     private MergeRequestDTO getMergeRequestDTO(String userId, int projectId, MergeRequestWrapper mergeRequestWrapper) {
 
         MergeRequest mergeRequest = mergeRequestWrapper.getMergeRequestData();
@@ -275,6 +300,9 @@ public class MergeRequestService {
         for(MergeRequestWrapper mergeRequestWrapper : mergeRequestsList) {
 
             MergeRequestDTO mergeRequestDTO = getMergeRequestDTO(userId, projectId, mergeRequestWrapper);
+
+            checkAndSetScoreForSharedMR(mergeRequestDTO, alias);
+
             mergeRequestDTOList.add(mergeRequestDTO);
         }
 
