@@ -14,7 +14,6 @@ public class DiffDTO {
     private int linesMoved;
     private int spaceLinesAdded;
 
-
     private double diffScore;
 
     public DiffDTO(String oldPath, String newPath, String extension, String codeDiff, DiffScoreDTO scoreDTO) {
@@ -60,7 +59,6 @@ public class DiffDTO {
     public int getSpaceLinesAdded() {
         return spaceLinesAdded;
     }
-
 
     public double getDiffScore() {
         return diffScore;
