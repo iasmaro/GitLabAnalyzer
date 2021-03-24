@@ -73,7 +73,7 @@ public class MergeRequestService {
         return defaultCommentTypes;
     }
 
-    private List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff, Configuration configuration) {
+    public List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff, Configuration configuration) {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
@@ -113,7 +113,7 @@ public class MergeRequestService {
         return mergeRequestDiffs;
     }
 
-    private DiffScoreDTO getMergeRequestStats(List<DiffDTO> diffDTOList) {
+    public DiffScoreDTO getMergeRequestStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
         int linesRemoved = 0;

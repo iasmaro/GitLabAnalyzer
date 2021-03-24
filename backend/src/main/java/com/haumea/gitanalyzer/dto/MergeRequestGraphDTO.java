@@ -5,12 +5,12 @@ import java.util.Date;
 public class MergeRequestGraphDTO {
     private Date date;
     private int numberOfMergeRequests;
-    private int mergeRequestScore;
+    private double totalMergeRequestScore;
 
-    public MergeRequestGraphDTO(Date date, int numberOfMergeRequests, int mergeRequestScore) {
+    public MergeRequestGraphDTO(Date date, int numberOfMergeRequests, double totalMergeRequestScore) {
         this.date = date;
         this.numberOfMergeRequests = numberOfMergeRequests;
-        this.mergeRequestScore = mergeRequestScore;
+        this.totalMergeRequestScore = totalMergeRequestScore;
     }
 
     public Date getDate() {
@@ -21,7 +21,7 @@ public class MergeRequestGraphDTO {
         return numberOfMergeRequests;
     }
 
-    public int getMergeRequestScore() {
-        return mergeRequestScore;
+    public double getMergeRequestScore() {
+        return totalMergeRequestScore;
     }
 }

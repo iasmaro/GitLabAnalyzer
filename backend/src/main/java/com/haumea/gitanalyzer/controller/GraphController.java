@@ -42,9 +42,12 @@ public class GraphController {
 
     @GetMapping("/mergeRequest")
 
-    public List<MergeRequestGraphDTO> getMergeRequestGraphDetails(@RequestParam @NotBlank String userId) {
+    public List<MergeRequestGraphDTO> getMergeRequestGraphDetails(@RequestParam @NotBlank String userId,
+                                                                  @RequestParam @NotBlank String memberId,
+                                                                  @RequestParam @NotNull int projectId) {
 
-        return graphService.getMergeRequestGraphDetails(userId);
+
+        return graphService.getMergeRequestGraphDetails(userId, memberId, projectId);
 
     }
 

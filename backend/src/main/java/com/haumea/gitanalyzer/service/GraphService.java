@@ -3,12 +3,12 @@ package com.haumea.gitanalyzer.service;
 import com.haumea.gitanalyzer.dto.*;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
+import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.model.Configuration;
 import org.apache.catalina.startup.UserConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -22,12 +22,14 @@ public class GraphService {
     private final UserService userService;
     private final MemberService memberService;
     private final CommitService commitService;
+    private final MergeRequestService mergeRequestService;
 
     @Autowired
-    public GraphService(UserService userService, MemberService memberService, CommitService commitService) {
+    public GraphService(UserService userService, MemberService memberService, CommitService commitService, MergeRequestService mergeRequestService) {
         this.userService = userService;
         this.memberService = memberService;
         this.commitService = commitService;
+        this.mergeRequestService = mergeRequestService;
     }
 
     // checking if two dates are the same day function from https://www.baeldung.com/java-check-two-dates-on-same-day
@@ -74,16 +76,52 @@ public class GraphService {
                 }
 
             }
+
             CommitGraphDTO commitGraphDTO = new CommitGraphDTO(date, numberOfCommits, totalScore);
             returnList.add(commitGraphDTO);
 
-            System.out.println(date);
         }
         return returnList;
     }
 
-    public List<MergeRequestGraphDTO> getMergeRequestGraphDetails(String userId) {
+    public List<MergeRequestGraphDTO> getMergeRequestGraphDetails(String userId, String memberId, int projectId) {
+
         List<MergeRequestGraphDTO> returnList = new ArrayList<>();
+
+        GitlabService gitlabService = userService.createGitlabService(userId);
+        Configuration userConfig = userService.getConfiguration(userId, projectId);
+        List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
+        List<MergeRequestWrapper> allMergeRequests =  gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, userConfig.getTargetBranch(),
+                                                                                                             userConfig.getStart(), userConfig.getEnd(), aliases);
+
+        //date iterator from https://stackoverflow.com/questions/4534924/how-to-iterate-through-range-of-dates-in-java
+        Calendar start = Calendar.getInstance();
+        start.setTime(userConfig.getStart());
+        Calendar end = Calendar.getInstance();
+        end.setTime(userConfig.getEnd());
+
+        for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+
+            int numberOfMergeRequests= 0;
+            double totalScore = 0.0;
+
+            for(MergeRequestWrapper mergeRequest : allMergeRequests) {
+
+                Date mergeRequestDate = mergeRequest.getMergeRequestData().getMergedAt();
+
+                if(isSameDay(mergeRequestDate, date)) {
+                    numberOfMergeRequests++;
+                    List<DiffDTO> mergeRequestDiffs = mergeRequestService.getMergeRequestDiffs(mergeRequest.getMergeRequestDiff(), userConfig);
+                    DiffScoreDTO mergeRequestScore = mergeRequestService.getMergeRequestStats(mergeRequestDiffs );
+                    totalScore = totalScore + mergeRequestScore.getDiffScore();
+                }
+
+            }
+
+            MergeRequestGraphDTO mergeRequestGraphDTO = new MergeRequestGraphDTO(date, numberOfMergeRequests, totalScore);
+            returnList.add(mergeRequestGraphDTO);
+        }
+
         return returnList;
     }
 
