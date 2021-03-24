@@ -127,7 +127,7 @@ public class MergeRequestService {
         int linesAdded = 0;
         int linesRemoved = 0;
         double MRScore = 0.0;
-        Map<String, Double> scoreByFileTypes = new HashMap<>();
+        Map<String, Double> fileTypeScoresMap = new HashMap<>();
 
         for (DiffDTO diff : diffDTOList) {
 
@@ -137,13 +137,13 @@ public class MergeRequestService {
             linesRemoved = linesRemoved + diff.getLinesRemoved();
             MRScore = MRScore + diff.getDiffScore();
 
-            double fifeTypeScore = scoreByFileTypes.getOrDefault(diffExtension, 0.0) + diff.getDiffScore();
-            fifeTypeScore = roundScore(fifeTypeScore);
-            scoreByFileTypes.put(diffExtension, fifeTypeScore);
+            double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diff.getDiffScore();
+            fileTypeScore = roundScore(fileTypeScore);
+            fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
         ScoreDTO mergeRequestScoreDTO = new ScoreDTO(linesAdded, linesRemoved, roundScore(MRScore));
-        mergeRequestScoreDTO.setScoreByFileTypes(scoreByFileTypes);
+        mergeRequestScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
 
         return mergeRequestScoreDTO;
     }
