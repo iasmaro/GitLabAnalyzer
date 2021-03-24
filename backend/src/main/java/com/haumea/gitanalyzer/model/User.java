@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -22,18 +23,22 @@ public class User {
     private List<Configuration> configurations;
     private String gitlabServer;
     private String activeConfig;
+    private Date start;
+    private Date end;
 
     public User() {
         super();
     }
 
     @PersistenceConstructor
-    public User(String userId, String personalAccessToken, String gitlabServer, String activeConfig) {
+    public User(String userId, String personalAccessToken, String gitlabServer, String activeConfig, Date start, Date end) {
         this.userId = userId;
         this.personalAccessToken = personalAccessToken;
         this.configurations = new ArrayList<>();
         this.gitlabServer = gitlabServer;
         this.activeConfig = activeConfig;
+        this.start = start;
+        this.end = end;
     }
 
     public String getUserId() {
@@ -51,4 +56,8 @@ public class User {
     public String getGitlabServer() { return gitlabServer; }
 
     public String getActiveConfig() { return activeConfig; }
+
+    public Date getStart() { return start; }
+
+    public Date getEnd() { return end; }
 }

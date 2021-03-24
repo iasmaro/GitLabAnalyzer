@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -58,6 +59,20 @@ public class UserController {
     public String getActiveConfig(@RequestParam @NotBlank String userId) {
 
         return userService.getActiveConfig(userId);
+
+    }
+
+    @GetMapping("/start")
+    public Date getStart(@RequestParam @NotBlank String userId) {
+
+        return userService.getStart(userId);
+
+    }
+
+    @GetMapping("/end")
+    public Date getEnd(@RequestParam @NotBlank String userId) {
+
+        return userService.getEnd(userId);
 
     }
 
