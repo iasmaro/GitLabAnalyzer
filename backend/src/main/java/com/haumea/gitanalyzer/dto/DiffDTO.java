@@ -1,7 +1,5 @@
 package com.haumea.gitanalyzer.dto;
 
-import jdk.internal.org.jline.utils.DiffHelper;
-
 public class DiffDTO {
 
     private String oldPath;

@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.service;
 
+import com.haumea.gitanalyzer.dao.UserRepository;
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.DiffDTO;
 import com.haumea.gitanalyzer.dto.DiffScoreDTO;
@@ -23,11 +24,13 @@ public class CommitService {
 
     private final UserService userService;
     private final MemberService memberService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CommitService(UserService userService, MemberService memberService) {
+    public CommitService(UserService userService, MemberService memberService, UserRepository userRepository) {
         this.userService = userService;
         this.memberService = memberService;
+        this.userRepository = userRepository;
     }
 
     private List<String> getAliasForMember(String memberId) {
@@ -178,8 +181,8 @@ public class CommitService {
 
         filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId,
                 activeConfiguration.getTargetBranch(),
-                activeConfiguration.getStart(),
-                activeConfiguration.getEnd(),
+                userRepository.getStart(userId),
+                userRepository.getEnd(userId),
                 alias);
 
         return convertCommitWrappersToDTOs(filteredCommits, activeConfiguration);
