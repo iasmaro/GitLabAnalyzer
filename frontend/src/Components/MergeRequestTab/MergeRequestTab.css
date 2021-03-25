@@ -1,8 +1,9 @@
+.merge-request-tab {
+    width: 100%;
+}
 .mrs-left {
-    position: absolute;
-    left: 1em;
-    top: 5.9em;
-    width: 50%;
+    float: left;
+    width: 40%;
     padding: 10px;
     overflow-y: scroll;
     overflow-x: scroll;
@@ -14,18 +15,19 @@
 }
 
 .mrs-right {
-    position: absolute;
-    right: 0%;
-    top: 2.7em;
-    width: 50%;
-    padding: 10px;
+    overflow: auto;
 }
 
-.bottom-spinner {
+.mr-code-diffs {
+    display: inline-block;
     position: absolute;
-    left: 45%;
-    bottom: 50%;
-    color: #fff;
+    top: 4.4em;
+    margin-right: 1.3em;
+    min-width: 55.5%;
+}
+
+.expanded {
+    min-width: 94.85%;
 }
 
 .mrs-top {
@@ -38,13 +40,24 @@
 }
 
 .mrs-bottom {
-    position: absolute;
-    top: 45%;
-    width: 98%;
+    position: relative;
+    margin-top: 5em;
     height: 23.3em;
     overflow-y: scroll;
 }
 
 .mrs-bottom::-webkit-scrollbar { 
     display: none;
+}
+
+.expand-button {
+    margin-top: 20em;
+
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    width: 3em;
+    height: 3em;
+    padding: 6px 0px;
+    border-radius: 1.5em;
+    text-align: center;
 }
