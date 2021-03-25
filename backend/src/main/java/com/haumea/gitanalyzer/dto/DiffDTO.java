@@ -1,5 +1,7 @@
 package com.haumea.gitanalyzer.dto;
 
+import jdk.internal.org.jline.utils.DiffHelper;
+
 public class DiffDTO {
 
     private String oldPath;
@@ -9,6 +11,9 @@ public class DiffDTO {
 
     private int linesAdded;
     private int linesRemoved;
+    private int linesMoved;
+    private int spaceLinesAdded;
+
     private double diffScore;
 
     public DiffDTO(String oldPath, String newPath, String extension, String codeDiff, DiffScoreDTO scoreDTO) {
@@ -18,6 +23,8 @@ public class DiffDTO {
         this.codeDiff = codeDiff;
         this.linesAdded = scoreDTO.getLinesAdded();
         this.linesRemoved = scoreDTO.getLinesRemoved();
+        this.linesMoved = scoreDTO.getLinesMoved();
+        this.spaceLinesAdded = scoreDTO.getSpaceLinesAdded();
         this.diffScore = scoreDTO.getDiffScore();
     }
 
@@ -43,6 +50,14 @@ public class DiffDTO {
 
     public int getLinesRemoved() {
         return linesRemoved;
+    }
+
+    public int getLinesMoved() {
+        return linesMoved;
+    }
+
+    public int getSpaceLinesAdded() {
+        return spaceLinesAdded;
     }
 
     public double getDiffScore() {

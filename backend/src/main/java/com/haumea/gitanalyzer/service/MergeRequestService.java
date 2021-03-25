@@ -110,6 +110,8 @@ public class MergeRequestService {
             mergeRequestDiffs.add(diffDTO);
         }
 
+        diffScoreCalculator.clearMoveLineLists();
+
         return mergeRequestDiffs;
     }
 
@@ -117,16 +119,20 @@ public class MergeRequestService {
 
         int linesAdded = 0;
         int linesRemoved = 0;
+        int linesMoved = 0;
+        int spaceLinesAdded = 0;
         double MRScore = 0.0;
 
-        for (DiffDTO diff : diffDTOList) {
+        for (DiffDTO diffDTO : diffDTOList) {
 
-            linesAdded = linesAdded + diff.getLinesAdded();
-            linesRemoved = linesRemoved + diff.getLinesRemoved();
-            MRScore = MRScore + diff.getDiffScore();
+            linesAdded = linesAdded + diffDTO.getLinesAdded();
+            linesRemoved = linesRemoved + diffDTO.getLinesRemoved();
+            MRScore = MRScore + diffDTO.getDiffScore();
+            linesMoved = linesMoved + diffDTO.getLinesMoved();
+            spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
         }
 
-        return new DiffScoreDTO(linesAdded, linesRemoved, MRScore);
+        return new DiffScoreDTO(linesAdded, linesRemoved, MRScore, linesMoved, spaceLinesAdded);
     }
 
     //Source: Andrew's IndividualDiffScoreCalculator
