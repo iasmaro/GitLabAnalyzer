@@ -5,6 +5,7 @@ import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.model.Configuration;
+import com.sun.scenario.effect.Merge;
 import org.apache.catalina.startup.UserConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,13 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userConfig.getEnd());
 
+        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
+        // but the next day will not.
+        end.set(Calendar.HOUR_OF_DAY, 0);
+        end.set(Calendar.MINUTE, 0);
+        end.set(Calendar.SECOND, 0);
+        end.add(Calendar.DAY_OF_MONTH,1);
+
         for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
             int numberOfCommits = 0;
@@ -108,24 +116,39 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userConfig.getEnd());
 
+        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
+        // but the next day will not.
+        end.set(Calendar.HOUR_OF_DAY, 0);
+        end.set(Calendar.MINUTE, 0);
+        end.set(Calendar.SECOND, 0);
+        end.add(Calendar.DAY_OF_MONTH,1);
+
         for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
             int numberOfMergeRequests= 0;
             double totalScore = 0.0;
+
+            // Keep track of a list of mergeRequests on this date to remove from the list of mergeRequests
+            // because a mergeRequest can only be on one date. This will slightly improve efficiency.
+            List<MergeRequestWrapper> mergeRequestsOnThisDate = new ArrayList<MergeRequestWrapper>();
 
             for(MergeRequestWrapper mergeRequest : allMergeRequests) {
 
                 Date mergeRequestDate = mergeRequest.getMergeRequestData().getMergedAt();
 
                 if(isSameDay(mergeRequestDate, date)) {
+
                     numberOfMergeRequests++;
                     List<DiffDTO> mergeRequestDiffs = mergeRequestService.getMergeRequestDiffs(mergeRequest.getMergeRequestDiff(), userConfig);
-                    DiffScoreDTO mergeRequestScore = mergeRequestService.getMergeRequestStats(mergeRequestDiffs );
-                    totalScore = totalScore + mergeRequestScore.getDiffScore();
+                    DiffScoreDTO mergeRequestStats = mergeRequestService.getMergeRequestStats(mergeRequestDiffs );
+                    totalScore = totalScore + mergeRequestStats.getDiffScore();
+                    mergeRequestsOnThisDate.add(mergeRequest);
+
                 }
 
             }
 
+            allMergeRequests.removeAll(mergeRequestsOnThisDate);
             MergeRequestGraphDTO mergeRequestGraphDTO = new MergeRequestGraphDTO(date, numberOfMergeRequests, totalScore);
             returnList.add(mergeRequestGraphDTO);
         }
