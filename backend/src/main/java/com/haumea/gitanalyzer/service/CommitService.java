@@ -100,15 +100,6 @@ public class CommitService {
         return commitDiffs;
     }
 
-    //Source: Andrew's IndividualDiffScoreCalculator
-    private double roundScore(double commitScore) {
-
-        BigDecimal roundedScore = new BigDecimal(Double.toString(commitScore));
-        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
-
-        return roundedScore.doubleValue();
-    }
-
     private ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
@@ -129,7 +120,7 @@ public class CommitService {
             spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
 
             double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
-            fileTypeScore = roundScore(fileTypeScore);
+            fileTypeScore = diffDTO.getScoreDTO().roundScore(fileTypeScore);
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
@@ -151,13 +142,11 @@ public class CommitService {
 
             ScoreDTO commitStats = getCommitStats(commitDiffs);
 
-            double roundedCommitScore = roundScore(commitStats.getScore());
-
             CommitDTO newDTO = new CommitDTO(commit.getMessage(),
                     commit.getCommittedDate(),
                     commit.getAuthorName(),
                     commit.getWebUrl(),
-                    roundedCommitScore,
+                    commitStats.getScore(),
                     commitStats.getScoreByFileTypes(),
                     commitDiffs,
                     commitStats.getLinesAdded(),
