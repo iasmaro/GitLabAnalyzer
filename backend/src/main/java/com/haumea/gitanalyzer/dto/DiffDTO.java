@@ -25,7 +25,6 @@ public class DiffDTO {
         this.linesRemoved = scoreDTO.getLinesRemoved();
         this.linesMoved = scoreDTO.getLinesMoved();
         this.spaceLinesAdded = scoreDTO.getSpaceLinesAdded();
-        this.diffScore = scoreDTO.getDiffScore();
         this.diffScore = scoreDTO.getScore();
     }
 

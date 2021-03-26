@@ -3,8 +3,6 @@ package com.haumea.gitanalyzer.service;
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.DiffDTO;
 import com.haumea.gitanalyzer.dto.ScoreDTO;
-import com.haumea.gitanalyzer.dto.DiffScoreDTO;
-import com.haumea.gitanalyzer.dto.LineChangeDTO;
 import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
@@ -135,7 +133,7 @@ public class CommitService {
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
-        ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore);
+        ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore, linesMoved, spaceLinesAdded);
         commitScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
 
         return commitScoreDTO;

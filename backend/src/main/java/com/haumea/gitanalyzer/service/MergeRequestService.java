@@ -95,7 +95,8 @@ public class MergeRequestService {
 
             ScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
                     diff.getDeletedFile(),
-                    addLine, deleteLine,
+                    addLine,
+                    deleteLine,
                     syntaxLine,
                     moveLine,
                     fileTypeMultiplier,
@@ -135,20 +136,20 @@ public class MergeRequestService {
 
         for (DiffDTO diffDTO : diffDTOList) {
 
-            String diffExtension = diff.getExtension();
+            String diffExtension = diffDTO.getExtension();
 
-            linesAdded = linesAdded + diff.getLinesAdded();
-            linesRemoved = linesRemoved + diff.getLinesRemoved();
-            MRScore = MRScore + diff.getDiffScore();
+            linesAdded = linesAdded + diffDTO.getLinesAdded();
+            linesRemoved = linesRemoved + diffDTO.getLinesRemoved();
+            MRScore = MRScore + diffDTO.getDiffScore();
             linesMoved = linesMoved + diffDTO.getLinesMoved();
             spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
 
-            double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diff.getDiffScore();
+            double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
             fileTypeScore = roundScore(fileTypeScore);
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
-        ScoreDTO mergeRequestScoreDTO = new ScoreDTO(linesAdded, linesRemoved, roundScore(MRScore));
+        ScoreDTO mergeRequestScoreDTO = new ScoreDTO(linesAdded, linesRemoved, roundScore(MRScore), linesMoved, spaceLinesAdded);
         mergeRequestScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
 
         return mergeRequestScoreDTO;
