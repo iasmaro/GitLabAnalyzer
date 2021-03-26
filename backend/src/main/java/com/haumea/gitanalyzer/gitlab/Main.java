@@ -126,6 +126,8 @@ public class Main {
 
         test.testGetMergeRequestDiffs(25516, 52);
 
+        test.testScoreCalculator(27200);
+
         test.testGetIssueComments(
                 25516,
                 createDateFromString("2021-01-07T00:00:00-08:00"),
