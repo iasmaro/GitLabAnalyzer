@@ -275,7 +275,6 @@ public class MergeRequestService {
             mergeRequestDTOList.add(dummyMergeRequestDTO);
         }
 
-
         return mergeRequestDTOList;
     }
 
@@ -318,7 +317,6 @@ public class MergeRequestService {
             MergeRequestDTO dummyMergeRequestDTO = createDummyMergeRequest(dummyCommitDTOList);
             mergeRequestDTOList.add(dummyMergeRequestDTO);
         }
-
 
         return mergeRequestDTOList;
     }
