@@ -110,6 +110,8 @@ public class MergeRequestService {
             mergeRequestDiffs.add(diffDTO);
         }
 
+        diffScoreCalculator.clearMoveLineLists();
+
         return mergeRequestDiffs;
     }
 
@@ -126,16 +128,20 @@ public class MergeRequestService {
 
         int linesAdded = 0;
         int linesRemoved = 0;
+        int linesMoved = 0;
+        int spaceLinesAdded = 0;
         double MRScore = 0.0;
         Map<String, Double> fileTypeScoresMap = new HashMap<>();
 
-        for (DiffDTO diff : diffDTOList) {
+        for (DiffDTO diffDTO : diffDTOList) {
 
             String diffExtension = diff.getExtension();
 
             linesAdded = linesAdded + diff.getLinesAdded();
             linesRemoved = linesRemoved + diff.getLinesRemoved();
             MRScore = MRScore + diff.getDiffScore();
+            linesMoved = linesMoved + diffDTO.getLinesMoved();
+            spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
 
             double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diff.getDiffScore();
             fileTypeScore = roundScore(fileTypeScore);

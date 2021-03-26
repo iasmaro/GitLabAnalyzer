@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,17 +51,23 @@ public class UserRepository {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(user.getUserId()));
         Update update = new Update();
-        if(!(user.getPersonalAccessToken() == null) && !user.getPersonalAccessToken().trim().isEmpty()) {
+        if(user.getPersonalAccessToken() != null && !user.getPersonalAccessToken().trim().isEmpty()) {
             update.set("personalAccessToken", user.getPersonalAccessToken());
         }
-        if(!(user.getGitlabServer() == null) && !user.getGitlabServer().trim().isEmpty()) {
+        if(user.getGitlabServer() != null && !user.getGitlabServer().trim().isEmpty()) {
             update.set("gitlabServer", user.getGitlabServer());
         }
-        if(!(user.getActiveConfig() == null) && !user.getActiveConfig().trim().isEmpty()) {
+        if(user.getActiveConfig() != null && !user.getActiveConfig().trim().isEmpty()) {
             if(!getConfigurationFileNames(user.getUserId()).contains(user.getActiveConfig())){
                 throw new ResourceNotFoundException("configuration named '" + user.getActiveConfig() + "' not found!");
             }
             update.set("activeConfig", user.getActiveConfig());
+        }
+        if(user.getStart() != null){
+            update.set("start", user.getStart());
+        }
+        if(user.getEnd() != null){
+            update.set("end", user.getEnd());
         }
 
         if(mongoTemplate.findAndModify(query, update, User.class) == null) {
@@ -102,6 +109,40 @@ public class UserRepository {
         }
 
         return gitlabServer;
+    }
+
+    public Date getStart(String userId) throws ResourceNotFoundException {
+
+        Optional<User> user = findUserByUserId(userId);
+
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        Date start = user.get().getStart();
+
+        if(start == null){
+            throw new ResourceNotFoundException("Start date not found!");
+        }
+
+        return start;
+    }
+
+    public Date getEnd(String userId) throws ResourceNotFoundException {
+
+        Optional<User> user = findUserByUserId(userId);
+
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+        Date end = user.get().getEnd();
+
+        if(end == null){
+            throw new ResourceNotFoundException("End date not found!");
+        }
+
+        return end;
     }
 
     public void deleteActiveConfig(String userId){
@@ -244,6 +285,9 @@ public class UserRepository {
                     .and("configurations.fileName").is(fileName));
             Update update = new Update();
             update.pull("configurations", new BasicDBObject("fileName", fileName));
+            if(user.get().getActiveConfig().equals(fileName)){
+                update.unset("activeConfig");
+            }
             mongoTemplate.updateFirst(query, update, User.class);
         }
         else {
