@@ -1,6 +1,5 @@
 package com.haumea.gitanalyzer.service;
 
-import com.haumea.gitanalyzer.dao.UserRepository;
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.DiffDTO;
 import com.haumea.gitanalyzer.dto.DiffScoreDTO;
@@ -26,15 +25,13 @@ public class MergeRequestService {
     private final UserService userService;
     private final MemberService memberService;
     private final CommitService commitService;
-    private final UserRepository userRepository;
 
     @Autowired
-    public MergeRequestService(UserService userService, MemberService memberService, CommitService commitService, UserRepository userRepository) {
+    public MergeRequestService(UserService userService, MemberService memberService, CommitService commitService) {
 
         this.userService = userService;
         this.memberService = memberService;
         this.commitService = commitService;
-        this.userRepository = userRepository;
     }
 
     private List<String> getAliasForMember(String memberId) {
@@ -221,8 +218,8 @@ public class MergeRequestService {
                 gitlabService,
                 projectId,
                 activeConfiguration.getTargetBranch(),
-                userRepository.getStart(userId),
-                userRepository.getEnd(userId));
+                userService.getStart(userId),
+                userService.getEnd(userId));
 
         List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
 
@@ -235,8 +232,8 @@ public class MergeRequestService {
         List<CommitDTO> dummyCommitDTOList = commitService.getAllOrphanCommits(userId,
                 projectId,
                 activeConfiguration.getTargetBranch(),
-                userRepository.getStart(userId),
-                userRepository.getEnd(userId));
+                userService.getStart(userId),
+                userService.getEnd(userId));
 
         if(!dummyCommitDTOList.isEmpty()) {
 
@@ -260,8 +257,8 @@ public class MergeRequestService {
                 gitlabService,
                 projectId,
                 activeConfiguration.getTargetBranch(),
-                userRepository.getStart(userId),
-                userRepository.getEnd(userId),
+                userService.getStart(userId),
+                userService.getEnd(userId),
                 alias);
 
         List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
@@ -276,8 +273,8 @@ public class MergeRequestService {
                 projectId,
                 activeConfiguration.getTargetBranch(),
                 memberId,
-                userRepository.getStart(userId),
-                userRepository.getEnd(userId));
+                userService.getStart(userId),
+                userService.getEnd(userId));
 
         if(!dummyCommitDTOList.isEmpty()) {
 
