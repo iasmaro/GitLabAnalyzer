@@ -2,7 +2,7 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.DiffDTO;
-import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+import com.haumea.gitanalyzer.dto.ScoreDTO;
 import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
@@ -76,7 +76,7 @@ public class CommitService {
 
             List<CommentType> commentTypes = configuration.getCommentTypes().getOrDefault(diffExtension, createDefaultCommentTypes());
 
-            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
+            ScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
                     diff.getDeletedFile(),
                     addLine,
                     deleteLine,
@@ -95,32 +95,40 @@ public class CommitService {
             commitDiffs.add(diffDTO);
         }
 
+        diffScoreCalculator.clearMoveLineLists();
+
         return commitDiffs;
     }
 
-    public DiffScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
+
+    public ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
         int linesRemoved = 0;
+        int linesMoved = 0;
+        int spaceLinesAdded = 0;
         double commitScore = 0.0;
+        Map<String, Double> fileTypeScoresMap = new HashMap<>();
 
         for (DiffDTO diffDTO : diffDTOList) {
+
+            String diffExtension = diffDTO.getExtension();
 
             linesAdded = linesAdded + diffDTO.getLinesAdded();
             linesRemoved = linesRemoved + diffDTO.getLinesRemoved();
             commitScore = commitScore + diffDTO.getDiffScore();
+            linesMoved = linesMoved + diffDTO.getLinesMoved();
+            spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
+
+            double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
+            fileTypeScore = diffDTO.getScoreDTO().roundScore(fileTypeScore);
+            fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
-        return new DiffScoreDTO(linesAdded, linesRemoved, commitScore);
-    }
+        ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore, linesMoved, spaceLinesAdded);
+        commitScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
 
-    //Source: Andrew's IndividualDiffScoreCalculator
-    private double roundScore(double commitScore) {
-
-        BigDecimal roundedScore = new BigDecimal(Double.toString(commitScore));
-        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
-
-        return roundedScore.doubleValue();
+        return commitScoreDTO;
     }
 
     private List<CommitDTO> convertCommitWrappersToDTOs(List<CommitWrapper> wrapperList, Configuration configuration) {
@@ -133,11 +141,17 @@ public class CommitService {
 
             List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode(), configuration);
 
-            DiffScoreDTO commitStats = getCommitStats(commitDiffs);
+            ScoreDTO commitStats = getCommitStats(commitDiffs);
 
-            double roundedCommitScore = roundScore(commitStats.getDiffScore());
-
-            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), commit.getWebUrl(), roundedCommitScore, commitDiffs, commitStats.getLinesAdded(), commitStats.getLinesRemoved());
+            CommitDTO newDTO = new CommitDTO(commit.getMessage(),
+                    commit.getCommittedDate(),
+                    commit.getAuthorName(),
+                    commit.getWebUrl(),
+                    commitStats.getScore(),
+                    commitStats.getScoreByFileTypes(),
+                    commitDiffs,
+                    commitStats.getLinesAdded(),
+                    commitStats.getLinesRemoved());
 
             commitDTOList.add(newDTO);
         }

@@ -84,8 +84,8 @@ public class GraphService {
 
                     numberOfCommits++;
                     List<DiffDTO> commitDiffs = commitService.getCommitDiffs(commit.getNewCode(), userConfig);
-                    DiffScoreDTO commitStats = commitService.getCommitStats(commitDiffs);
-                    totalScore = totalScore + commitStats.getDiffScore();
+                    ScoreDTO commitStats = commitService.getCommitStats(commitDiffs);
+                    totalScore = totalScore + commitStats.getScore();
                     commitsOnThisDate.add(commit);
 
                 }
@@ -140,8 +140,8 @@ public class GraphService {
 
                     numberOfMergeRequests++;
                     List<DiffDTO> mergeRequestDiffs = mergeRequestService.getMergeRequestDiffs(mergeRequest.getMergeRequestDiff(), userConfig);
-                    DiffScoreDTO mergeRequestStats = mergeRequestService.getMergeRequestStats(mergeRequestDiffs );
-                    totalScore = totalScore + mergeRequestStats.getDiffScore();
+                    ScoreDTO mergeRequestStats = mergeRequestService.getMergeRequestStats(mergeRequestDiffs );
+                    totalScore = totalScore + mergeRequestStats.getScore();
                     mergeRequestsOnThisDate.add(mergeRequest);
 
                 }

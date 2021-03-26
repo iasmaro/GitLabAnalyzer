@@ -89,4 +89,5 @@ public class MemberService {
 
         return memberMapper.toDTOs(memberRepository.getMembersAndAliasesFromDatabase(memberIds));
     }
+
 }
