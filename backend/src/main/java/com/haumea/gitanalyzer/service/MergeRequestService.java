@@ -178,8 +178,7 @@ public class MergeRequestService {
         }
 
         if(isSharedMR) {
-            mergeRequestDTO.setSharedMR(isSharedMR);
-            mergeRequestDTO.setSumOfCommitScoreOnSharedMR(roundScore(sumOfCommitScoreForSharedMR));
+            mergeRequestDTO.setSumOfCommitScoreOnSharedMR(sumOfCommitScoreForSharedMR);
         }
 
     }

@@ -118,7 +118,8 @@ public class MergeRequestDTO {
     }
 
     public void setSumOfCommitScoreOnSharedMR(double sumOfCommitScoreOnSharedMR) {
-        this.sumOfCommitScoreOnSharedMR = sumOfCommitScoreOnSharedMR;
+        ScoreDTO scoreDTO = new ScoreDTO();
+        this.sumOfCommitScoreOnSharedMR = scoreDTO.roundScore(sumOfCommitScoreOnSharedMR);
     }
 
 }
