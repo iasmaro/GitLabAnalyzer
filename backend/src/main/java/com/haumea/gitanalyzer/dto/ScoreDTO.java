@@ -1,5 +1,7 @@
 package com.haumea.gitanalyzer.dto;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 
 public class ScoreDTO {
@@ -12,12 +14,20 @@ public class ScoreDTO {
     private Map<String, Double> scoreByFileTypes;
 
     public ScoreDTO(int linesAdded, int linesRemoved, double score, int linesMoved, int spaceLinesAdded) {
+
         this.linesAdded = linesAdded;
         this.linesRemoved = linesRemoved;
-        this.score = score;
+        this.score = this.roundScore(score);
         this.linesMoved = linesMoved;
         this.spaceLinesAdded = spaceLinesAdded;
+    }
 
+    public double roundScore(double score) {
+
+        BigDecimal roundedScore = new BigDecimal(Double.toString(score));
+        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
+
+        return roundedScore.doubleValue();
     }
 
     public int getLinesAdded() {
