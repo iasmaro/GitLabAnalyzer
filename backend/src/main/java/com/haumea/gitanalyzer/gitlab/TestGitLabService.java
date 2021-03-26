@@ -1,9 +1,6 @@
 package com.haumea.gitanalyzer.gitlab;
 
-import com.haumea.gitanalyzer.dto.DiffScoreDTO;
-import com.haumea.gitanalyzer.dto.MergeRequestDTO;
-import com.haumea.gitanalyzer.service.MergeRequestService;
-import io.swagger.models.auth.In;
+import com.haumea.gitanalyzer.dto.ScoreDTO;
 import org.gitlab4j.api.models.*;
 
 import java.util.ArrayList;
@@ -383,11 +380,11 @@ public class TestGitLabService {
                 System.out.println("diff is: ");
                 System.out.println(diff.getDiff());
 
-                DiffScoreDTO score = calculator.calculateDiffScore(diff.getDiff(), false,
+                ScoreDTO score = calculator.calculateDiffScore(diff.getDiff(), false,
                         1.0,
                         0.2, 0.2, 0.5, 1.0, commentTypes);
 
-                System.out.println("score is: " + score.getDiffScore());
+                System.out.println("score is: " + score.getScore());
 
                 System.out.println();
 

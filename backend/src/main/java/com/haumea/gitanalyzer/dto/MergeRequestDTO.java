@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.dto;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class MergeRequestDTO {
 
@@ -14,12 +15,13 @@ public class MergeRequestDTO {
     private String mergeRequestLink;
     private double MRScore;
     private double sumOfCommitScore;
+    private Map<String, Double> scoreByFileTypes;
     private List<DiffDTO> mergeRequestDiffs;
     private int linesAdded;
     private int linesRemoved;
     private List<CommitDTO> commitDTOList;
 
-    public MergeRequestDTO(int mergeId, String mergeRequestTitle, Date mergedDate, Date createdDate, Date updatedDate, String mergeRequestLink, double MRScore, double sumOfCommitScore, List<DiffDTO> mergeRequestDiffs, int linesAdded, int linesRemoved, List<CommitDTO> commitDTOList) {
+    public MergeRequestDTO(int mergeId, String mergeRequestTitle, Date mergedDate, Date createdDate, Date updatedDate, String mergeRequestLink, double MRScore, double sumOfCommitScore, Map<String, Double> scoreByFileTypes, List<DiffDTO> mergeRequestDiffs, int linesAdded, int linesRemoved, List<CommitDTO> commitDTOList) {
         this.mergeId = mergeId;
         this.mergeRequestTitle = mergeRequestTitle;
         this.mergedDate = mergedDate;
@@ -28,6 +30,7 @@ public class MergeRequestDTO {
         this.mergeRequestLink = mergeRequestLink;
         this.MRScore = MRScore;
         this.sumOfCommitScore = sumOfCommitScore;
+        this.scoreByFileTypes = scoreByFileTypes;
         this.mergeRequestDiffs = mergeRequestDiffs;
         this.linesAdded = linesAdded;
         this.linesRemoved = linesRemoved;
@@ -66,6 +69,10 @@ public class MergeRequestDTO {
         return sumOfCommitScore;
     }
 
+    public Map<String, Double> getScoreByFileTypes() {
+        return scoreByFileTypes;
+    }
+
     public List<DiffDTO> getMergeRequestDiffs() {
         return mergeRequestDiffs;
     }
@@ -81,4 +88,5 @@ public class MergeRequestDTO {
     public List<CommitDTO> getCommitDTOList() {
         return commitDTOList;
     }
+
 }
