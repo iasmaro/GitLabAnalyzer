@@ -95,6 +95,8 @@ public class CommitService {
             commitDiffs.add(diffDTO);
         }
 
+        diffScoreCalculator.clearMoveLineLists();
+
         return commitDiffs;
     }
 
@@ -111,6 +113,8 @@ public class CommitService {
 
         int linesAdded = 0;
         int linesRemoved = 0;
+        int linesMoved = 0;
+        int spaceLinesAdded = 0;
         double commitScore = 0.0;
         Map<String, Double> fileTypeScoresMap = new HashMap<>();
 
@@ -121,13 +125,15 @@ public class CommitService {
             linesAdded = linesAdded + diffDTO.getLinesAdded();
             linesRemoved = linesRemoved + diffDTO.getLinesRemoved();
             commitScore = commitScore + diffDTO.getDiffScore();
+            linesMoved = linesMoved + diffDTO.getLinesMoved();
+            spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
 
             double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
             fileTypeScore = roundScore(fileTypeScore);
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
-        ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore);
+        ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore, linesMoved, spaceLinesAdded);
         commitScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
 
         return commitScoreDTO;

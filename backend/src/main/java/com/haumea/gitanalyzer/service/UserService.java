@@ -53,6 +53,16 @@ public class UserService {
         return userRepository.getActiveConfig(userId);
     }
 
+    public Date getStart(String userId) {
+
+        return userRepository.getStart(userId);
+    }
+
+    public Date getEnd(String userId) {
+
+        return userRepository.getEnd(userId);
+    }
+
     public void delateActiveConfig(String userId){
         userRepository.deleteActiveConfig(userId);
     }
