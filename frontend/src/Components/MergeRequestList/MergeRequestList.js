@@ -22,13 +22,12 @@ const MergeRequestList = (props) => {
                 <Table striped bordered hover variant='light'>
                     <thead>
                         <tr>
-                            <th colSpan='8' className='mrTitle'>Merge Requests</th>
+                            <th colSpan='67' className='mrTitle'>Merge Requests</th>
                         </tr>
                     </thead>
                     <thead>
                         <tr className='mr-headers'>
                             <th>Date Merged</th>
-                            <th>GitLab Link</th>
                             <th>Title</th>
                             <th>MR Score</th>
                             <th>Commits Score</th>
