@@ -52,13 +52,13 @@ public class GraphService {
         Configuration userConfig = userService.getConfiguration(userId, projectId);
         List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
         List<CommitWrapper> allCommits =  gitlabService.getFilteredCommitsWithDiffByAuthor(projectId, userConfig.getTargetBranch(),
-                                                                                  userConfig.getStart(), userConfig.getEnd(), aliases);
+                                                                                  userService.getStart(userId), userService.getEnd(userId), aliases);
 
         //date iterator from https://stackoverflow.com/questions/4534924/how-to-iterate-through-range-of-dates-in-java
         Calendar start = Calendar.getInstance();
-        start.setTime(userConfig.getStart());
+        start.setTime(userService.getStart(userId));
         Calendar end = Calendar.getInstance();
-        end.setTime(userConfig.getEnd());
+        end.setTime(userService.getEnd(userId));
 
         // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
         // but the next day will not.
@@ -108,13 +108,13 @@ public class GraphService {
         Configuration userConfig = userService.getConfiguration(userId, projectId);
         List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
         List<MergeRequestWrapper> allMergeRequests =  gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, userConfig.getTargetBranch(),
-                                                                                                             userConfig.getStart(), userConfig.getEnd(), aliases);
+                                                                                                             userService.getStart(userId), userService.getEnd(userId), aliases);
 
         //date iterator from https://stackoverflow.com/questions/4534924/how-to-iterate-through-range-of-dates-in-java
         Calendar start = Calendar.getInstance();
-        start.setTime(userConfig.getStart());
+        start.setTime(userService.getStart(userId));
         Calendar end = Calendar.getInstance();
-        end.setTime(userConfig.getEnd());
+        end.setTime(userService.getEnd(userId));
 
         // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
         // but the next day will not.
@@ -157,11 +157,13 @@ public class GraphService {
     }
 
     public List<CodeReviewGraphDTO> getCodeReviewGraphDetails(String userId) {
+        // TODO: real implementation after comments is supported
         List<CodeReviewGraphDTO> returnList = new ArrayList<>();
         return returnList;
     }
 
     public List<IssueGraphDTO> getIssueGraphDetails(String userId) {
+        // TODO: real implementation after comments is supported
         List<IssueGraphDTO> returnList = new ArrayList<>();
         return returnList;
     }
