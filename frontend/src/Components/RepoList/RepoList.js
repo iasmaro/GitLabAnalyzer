@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from 'react-bootstrap/Table';
+import { Table, Badge, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
 
@@ -20,7 +20,20 @@ const RepoList = (props) => {
                 <thead>
                     <tr className="repo-headers">
                         <th>Repo</th>
-                        <th>Namespace</th>
+                        <th>Namespace {' '}
+                            <OverlayTrigger
+                                placement='right'
+                                overlay={
+                                    <Tooltip>
+                                        Namespace refers to the user name, group name, or subgroup name associated with the repository.
+                                    </Tooltip>
+                                }
+                            >
+                                <Badge pill variant="dark">
+                                    i
+                                </Badge>
+                            </OverlayTrigger>
+                        </th>
                         <th>Last Modified</th>
                         <th></th>
                     </tr>
