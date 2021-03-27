@@ -184,8 +184,8 @@ public class CommitService {
 
         filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId,
                 activeConfiguration.getTargetBranch(),
-                activeConfiguration.getStart(),
-                activeConfiguration.getEnd(),
+                userService.getStart(userId),
+                userService.getEnd(userId),
                 alias);
 
         return convertCommitWrappersToDTOs(filteredCommits, activeConfiguration);
