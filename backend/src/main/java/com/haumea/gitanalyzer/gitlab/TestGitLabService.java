@@ -1,11 +1,5 @@
 package com.haumea.gitanalyzer.gitlab;
 
-import org.gitlab4j.api.IssuesApi;
-import org.gitlab4j.api.NotesApi;
-import com.haumea.gitanalyzer.dto.DiffScoreDTO;
-import com.haumea.gitanalyzer.dto.MergeRequestDTO;
-import com.haumea.gitanalyzer.service.MergeRequestService;
-import io.swagger.models.auth.In;
 import com.haumea.gitanalyzer.dto.ScoreDTO;
 import org.gitlab4j.api.models.*;
 
