@@ -357,6 +357,58 @@ public class TestGitLabService {
                         ", # diffs: " + mergeRequest.getDiffs().size());
     }
 
+    public void testGetIssueComments(Integer projectId, Date start, Date end){
+        System.out.println("\n---Testing getIssueComments---");
+
+        List<CommentIssueWrapper> issueComments = gitlabService.getIssueComments(projectId, start, end);
+        for(CommentIssueWrapper comment : issueComments){
+            System.out.println(
+                            "issue URL:" + comment.issueURL +
+                            " is Own: " + comment.getOwn() +
+                            " body: " + comment.getNote().getBody());
+        }
+    }
+
+    public void testGetIssueCommentsByAuthor(Integer projectId, Date start, Date end, List<String> alias){
+        System.out.println("\n---Testing getIssueCommentsByAuthor---");
+
+        List<CommentIssueWrapper> issueComments = gitlabService.getIssueCommentsByAuthor(projectId, start, end, alias);
+        for(CommentIssueWrapper comment : issueComments){
+            System.out.println(
+                            "issue URL:" + comment.issueURL +
+                            " is Own: " + comment.getOwn() +
+                            " body: " + comment.getNote().getBody() +
+                            " author: " + comment.getAuthor());
+        }
+    }
+
+    public void testGetMRComments(Integer projectId, String targetBranch, Date start, Date end){
+        System.out.println("\n---Testing getMRComments---");
+
+        List<CommentMRWrapper> MRComments = gitlabService.getMRComments(projectId, targetBranch, start, end);
+        for(CommentMRWrapper comment : MRComments){
+            System.out.println(
+                            "MR URL:" + comment.mergeRequestURL +
+                            " is Own: " + comment.getOwn() +
+                            " body: " + comment.getNote().getBody());
+        }
+    }
+
+    public void testGetMRCommentsByAuthor(Integer projectId, String targetBranch, Date start, Date end, List<String> alias){
+        System.out.println("\n---Testing getMRCommentsByAuthor---");
+
+        List<CommentMRWrapper> MRComments = gitlabService.getMRCommentsByAuthor(projectId, targetBranch, start, end, alias);
+        for(CommentMRWrapper comment : MRComments){
+            System.out.println(
+                            "issue URL:" + comment.mergeRequestURL +
+                            " is Own: " + comment.getOwn() +
+                            " body: " + comment.getNote().getBody() +
+                            " author: " + comment.getAuthor());
+        }
+    }
+
+
+
     // warning use on small project
     public void testScoreCalculator(Integer projectId) {
 
