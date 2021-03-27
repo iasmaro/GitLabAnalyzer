@@ -9,8 +9,6 @@ import java.util.*;
 public class Configuration {
     @NotBlank
     private String fileName;
-    private Date start;
-    private Date end;
     private String targetBranch;
     private Map<String, Float> editFactor;
     private Map<String, Float> fileFactor;
@@ -24,18 +22,12 @@ public class Configuration {
     private static final CommentType multiTripleSingleQuote = new CommentType("'''", "'''");
     private static final CommentType multiArrow = new CommentType("<!--", "-->");
 
-    public Configuration() {
-        super();
-    }
-
     @PersistenceConstructor
-    public Configuration(String fileName, Date start, Date end,
-                         String targetBranch, Map<String, Float> editFactor,
+    public Configuration(String fileName, String targetBranch, Map<String, Float> editFactor,
                          Map<String, Float> fileFactor, List<String> ignoreFileExtension,
                          Map<String, List<CommentType>> commentTypes) {
+
         this.fileName = fileName;
-        this.start = start;
-        this.end = end;
         this.targetBranch = targetBranch;
         this.editFactor = editFactor;
         this.fileFactor = fileFactor;
@@ -43,11 +35,9 @@ public class Configuration {
         this.commentTypes = commentTypes;
     }
 
-    public Configuration(Date start){
+    public Configuration() {
 
         this.fileName = "default";
-        this.start = start;
-        this.end = new Date();
         this.targetBranch = "master";
 
         Map<String, Float> editFactor = new HashMap<String, Float>();
@@ -89,14 +79,6 @@ public class Configuration {
 
     public String getFileName(){
         return fileName;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public Date getEnd() {
-        return end;
     }
 
     public String getTargetBranch() {
