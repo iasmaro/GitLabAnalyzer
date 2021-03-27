@@ -1,7 +1,7 @@
 package com.haumea.gitanalyzer.gitlab;
 
 
-import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+import com.haumea.gitanalyzer.dto.ScoreDTO;
 import com.haumea.gitanalyzer.dto.LineChangeDTO;
 
 import java.io.BufferedReader;
@@ -70,14 +70,14 @@ public class IndividualDiffScoreCalculator {
     }
 
     // check file type and configs in calling code
-    public DiffScoreDTO calculateDiffScore(String diff,
-                                           boolean isFileDeleted,
-                                           double addLineWeight,
-                                           double deleteLineWeight,
-                                           double syntaxLineWeight,
-                                           double movedLineWeight,
-                                           double fileTypeMultiplier,
-                                           List<CommentType> commentTypes) {
+    public ScoreDTO calculateDiffScore(String diff,
+                                       boolean isFileDeleted,
+                                       double addLineWeight,
+                                       double deleteLineWeight,
+                                       double syntaxLineWeight,
+                                       double movedLineWeight,
+                                       double fileTypeMultiplier,
+                                       List<CommentType> commentTypes) {
 
         setTypes(addLineWeight, deleteLineWeight, syntaxLineWeight, movedLineWeight, commentTypes);
 
@@ -88,7 +88,7 @@ public class IndividualDiffScoreCalculator {
 
 
         if(isFileDeleted) {
-            return new DiffScoreDTO(0, 0, 0.0, 0, 0);
+            return new ScoreDTO(0, 0, 0.0, 0, 0);
         }
         else {
             double score;
@@ -102,7 +102,7 @@ public class IndividualDiffScoreCalculator {
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            return new DiffScoreDTO(
+            return new ScoreDTO(
                     numberOfLinesAdded,
                     numberOfLinesRemoved,
                     fileTypeMultiplier * roundedScore.doubleValue(),
