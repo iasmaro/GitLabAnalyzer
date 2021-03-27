@@ -225,8 +225,8 @@ public class MergeRequestService {
                 gitlabService,
                 projectId,
                 activeConfiguration.getTargetBranch(),
-                activeConfiguration.getStart(),
-                activeConfiguration.getEnd());
+                userService.getStart(userId),
+                userService.getEnd(userId));
 
         List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
 
@@ -239,8 +239,8 @@ public class MergeRequestService {
         List<CommitDTO> dummyCommitDTOList = commitService.getAllOrphanCommits(userId,
                 projectId,
                 activeConfiguration.getTargetBranch(),
-                activeConfiguration.getStart(),
-                activeConfiguration.getEnd());
+                userService.getStart(userId),
+                userService.getEnd(userId));
 
         if(!dummyCommitDTOList.isEmpty()) {
 
@@ -264,8 +264,8 @@ public class MergeRequestService {
                 gitlabService,
                 projectId,
                 activeConfiguration.getTargetBranch(),
-                activeConfiguration.getStart(),
-                activeConfiguration.getEnd(),
+                userService.getStart(userId),
+                userService.getEnd(userId),
                 alias);
 
         List<MergeRequestDTO> mergeRequestDTOList = new ArrayList<>();
@@ -280,8 +280,8 @@ public class MergeRequestService {
                 projectId,
                 activeConfiguration.getTargetBranch(),
                 memberId,
-                activeConfiguration.getStart(),
-                activeConfiguration.getEnd());
+                userService.getStart(userId),
+                userService.getEnd(userId));
 
         if(!dummyCommitDTOList.isEmpty()) {
 
