@@ -1,7 +1,6 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommentDTO;
-import com.haumea.gitanalyzer.gitlab.CommentMRWrapper;
 import com.haumea.gitanalyzer.gitlab.CommentWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.Configuration;
@@ -34,7 +33,7 @@ public class CommentService {
         List<String> alias = getAliasForMember(memberId);
 
 
-        List<CommentMRWrapper> commentWrappers = gitlabService.getMRCommentsByAuthor(
+        List<CommentWrapper> commentWrappers = gitlabService.getMRCommentsByAuthor(
                 projectId,
                 activeConfiguration.getTargetBranch(),
                 userService.getStart(userId),
@@ -43,12 +42,12 @@ public class CommentService {
 
         List<CommentDTO> commentDTOS = new ArrayList<>();
 
-        for(CommentMRWrapper current : commentWrappers) {
+        for(CommentWrapper current : commentWrappers) {
 
             CommentDTO commentDTO = new CommentDTO(
-                    current.getMergeRequestURL(),
+                    current.getUrl(),
                     current.getNote().getBody(),
-                    current.getOwn(),
+                    current.getIsSameAuthor(),
                     current.getNote().getCreatedAt().toString());
 
             commentDTOS.add(commentDTO);
