@@ -24,7 +24,7 @@ const CommitsList = (props) => {
                         </tr>
                 </thead>
                 <thead>
-                    <tr className="commits-headers">
+                    <tr className='commits-headers'>
                         <th>Date</th>
                         <th>Message</th>
                         <th>Score</th>

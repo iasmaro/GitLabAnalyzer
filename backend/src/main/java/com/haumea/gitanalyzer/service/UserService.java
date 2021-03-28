@@ -105,7 +105,7 @@ public class UserService {
         // cannot delegate to project service to avoid circular dependency
         ProjectWrapper projectWrapper = new ProjectWrapper(gitlabService.getSelectedProject(projectId));
         Date start = projectWrapper.getProject().getCreatedAt();
-        return new Configuration(start);
+        return new Configuration();
 
     }
 
