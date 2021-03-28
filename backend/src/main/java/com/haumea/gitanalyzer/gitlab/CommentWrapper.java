@@ -4,15 +4,23 @@ import org.gitlab4j.api.models.Note;
 
 public class CommentWrapper {
 
+    private String url;
     private Note note;
-    private Boolean isOwn;
+    private Boolean isSameAuthor;
 
-    public CommentWrapper(Note note, Boolean isOwn) {
+    public CommentWrapper(String url, Note note, Boolean isSameAuthor) {
+        this.url = url;
         this.note = note;
-        this.isOwn = isOwn;
+        this.isSameAuthor = isSameAuthor;
     }
+
+    public String getUrl() { return url; }
 
     public Note getNote() { return note; }
 
-    public Boolean getOwn() { return isOwn; }
+    public Boolean getIsSameAuthor() { return isSameAuthor; }
+
+    public String getAuthor() {
+        return getNote().getAuthor().getUsername();
+    }
 }
