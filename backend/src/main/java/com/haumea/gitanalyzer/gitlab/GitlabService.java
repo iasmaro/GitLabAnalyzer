@@ -582,6 +582,7 @@ public class GitlabService {
                             note.getAuthor().getUsername().equals(mergeRequest.getAuthor().getUsername()),
                             mergeRequest.getWebUrl());
 
+
                     MRComments.add(commentMRWrapper);
                 }
             }
