@@ -167,14 +167,14 @@ public class CommitService {
 
         List<CommitWrapper> mergeRequestCommits = gitlabService.getMergeRequestCommitsWithDiffByAuthor(projectId, mergeRequestId, alias);
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
+        Configuration configuration = userService.getConfiguration(userId);
 
         return convertCommitWrappersToDTOs(mergeRequestCommits, configuration);
     }
 
     public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId) {
 
-        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
+        Configuration activeConfiguration = userService.getConfiguration(userId);
 
         GitlabService gitlabService = userService.createGitlabService(userId);
         List<CommitWrapper> filteredCommits;
@@ -199,7 +199,7 @@ public class CommitService {
 
         filteredCommits = gitlabService.getOrphanFilteredCommitsWithDiffByAuthor(projectId, targetBranch, start, end, alias);
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
+        Configuration configuration = userService.getConfiguration(userId);
 
         return convertCommitWrappersToDTOs(filteredCommits, configuration);
 
@@ -212,7 +212,7 @@ public class CommitService {
 
         mergeRequestCommits = gitlabService.getMergeRequestCommitsWithDiff(projectId, mergeRequestId);
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
+        Configuration configuration = userService.getConfiguration(userId);
 
         return convertCommitWrappersToDTOs(mergeRequestCommits, configuration);
     }
@@ -224,7 +224,7 @@ public class CommitService {
 
         dummyMergeRequestCommits = gitlabService.getOrphanFilteredCommitsWithDiff(projectId, targetBranch, start, end);
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
+        Configuration configuration = userService.getConfiguration(userId);
 
         return convertCommitWrappersToDTOs(dummyMergeRequestCommits, configuration);
 
