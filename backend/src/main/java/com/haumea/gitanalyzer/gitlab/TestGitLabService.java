@@ -360,11 +360,11 @@ public class TestGitLabService {
     public void testGetIssueComments(Integer projectId, Date start, Date end){
         System.out.println("\n---Testing getIssueComments---");
 
-        List<CommentIssueWrapper> issueComments = gitlabService.getIssueComments(projectId, start, end);
-        for(CommentIssueWrapper comment : issueComments){
+        List<CommentWrapper> issueComments = gitlabService.getIssueComments(projectId, start, end);
+        for(CommentWrapper comment : issueComments){
             System.out.println(
-                            "issue URL:" + comment.issueURL +
-                            " is Own: " + comment.getOwn() +
+                            "issue URL:" + comment.getUrl() +
+                            " is Own: " + comment.getIsSameAuthor() +
                             " body: " + comment.getNote().getBody());
         }
     }
@@ -372,11 +372,11 @@ public class TestGitLabService {
     public void testGetIssueCommentsByAuthor(Integer projectId, Date start, Date end, List<String> alias){
         System.out.println("\n---Testing getIssueCommentsByAuthor---");
 
-        List<CommentIssueWrapper> issueComments = gitlabService.getIssueCommentsByAuthor(projectId, start, end, alias);
-        for(CommentIssueWrapper comment : issueComments){
+        List<CommentWrapper> issueComments = gitlabService.getIssueCommentsByAuthor(projectId, start, end, alias);
+        for(CommentWrapper comment : issueComments){
             System.out.println(
-                            "issue URL:" + comment.issueURL +
-                            " is Own: " + comment.getOwn() +
+                            "issue URL:" + comment.getUrl() +
+                            " is Own: " + comment.getIsSameAuthor() +
                             " body: " + comment.getNote().getBody() +
                             " author: " + comment.getAuthor());
         }
@@ -385,11 +385,11 @@ public class TestGitLabService {
     public void testGetMRComments(Integer projectId, String targetBranch, Date start, Date end){
         System.out.println("\n---Testing getMRComments---");
 
-        List<CommentMRWrapper> MRComments = gitlabService.getMRComments(projectId, targetBranch, start, end);
-        for(CommentMRWrapper comment : MRComments){
+        List<CommentWrapper> MRComments = gitlabService.getMRComments(projectId, targetBranch, start, end);
+        for(CommentWrapper comment : MRComments){
             System.out.println(
-                            "MR URL:" + comment.mergeRequestURL +
-                            " is Own: " + comment.getOwn() +
+                            "MR URL:" + comment.getUrl() +
+                            " is Own: " + comment.getIsSameAuthor() +
                             " body: " + comment.getNote().getBody());
         }
     }
@@ -397,17 +397,15 @@ public class TestGitLabService {
     public void testGetMRCommentsByAuthor(Integer projectId, String targetBranch, Date start, Date end, List<String> alias){
         System.out.println("\n---Testing getMRCommentsByAuthor---");
 
-        List<CommentMRWrapper> MRComments = gitlabService.getMRCommentsByAuthor(projectId, targetBranch, start, end, alias);
-        for(CommentMRWrapper comment : MRComments){
+        List<CommentWrapper> MRComments = gitlabService.getMRCommentsByAuthor(projectId, targetBranch, start, end, alias);
+        for(CommentWrapper comment : MRComments){
             System.out.println(
-                            "issue URL:" + comment.mergeRequestURL +
-                            " is Own: " + comment.getOwn() +
+                            "issue URL:" + comment.getUrl() +
+                            " is Own: " + comment.getIsSameAuthor() +
                             " body: " + comment.getNote().getBody() +
                             " author: " + comment.getAuthor());
         }
     }
-
-
 
     // warning use on small project
     public void testScoreCalculator(Integer projectId) {
@@ -447,12 +445,5 @@ public class TestGitLabService {
         }
 
     }
-
-//    public void testMRScoring(String userId, int projectId, String memberId) {
-//
-////        MergeRequestService service = new MergeRequestService(use)
-//        List<MergeRequestDTO> mergeRequestDTOList =
-//    }
-
 
 }
