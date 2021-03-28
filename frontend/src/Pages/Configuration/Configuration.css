@@ -38,3 +38,27 @@
     float: right;
     z-index: 2;
 }
+
+thead th.default {
+    cursor: pointer;
+  }
+  
+  thead th.ascending {
+    cursor: pointer;
+  }
+  
+  thead th.descending {
+    cursor: pointer;
+  }
+  
+  thead th.ascending::after {
+    content: '↑';
+    display: inline-block;
+    margin-left: 1em;
+  }
+  
+  thead th.descending::after {
+    content: '↓';
+    display: inline-block;
+    margin-left: 1em;
+  }

@@ -2,14 +2,14 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 
 import { message } from 'Constants/constants';
-import { useSortableData, getClassNamesFor } from 'Utils/sortTables';
+import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
 
 import Repo from './Repo';
 import './RepoList.css';
 
 const RepoList = (props) => {
     const { repos } = props || {};
-    const { items, requestSort, sortConfig  } = useSortableData(repos);
+    const { items, requestSortObject, sortConfig  } = useSortableDataObject(repos);
 
     return (
         <div className = 'list-container'>
@@ -21,8 +21,8 @@ const RepoList = (props) => {
                 </thead>
                 <thead>
                     <tr className="repo-headers">
-                        <th className={getClassNamesFor('projectName', sortConfig)} onClick={() => requestSort('projectName')}>Name</th>
-                        <th className={getClassNamesFor('updatedAt', sortConfig)} onClick={() => requestSort('updatedAt')}>Last Modified</th>
+                        <th className={getClassNamesFor(sortConfig, 'projectName')} onClick={() => requestSortObject('projectName')}>Name</th>
+                        <th className={getClassNamesFor(sortConfig, 'updatedAt')} onClick={() => requestSortObject('updatedAt')}>Last Modified</th>
                         <th></th>
                     </tr>
                 </thead>
