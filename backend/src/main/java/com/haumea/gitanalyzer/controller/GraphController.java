@@ -53,17 +53,21 @@ public class GraphController {
 
     @GetMapping("/codeReview")
 
-    public List<CodeReviewGraphDTO> getCodeReviewGraphDetails(@RequestParam @NotBlank String userId) {
+    public List<CodeReviewGraphDTO> getCodeReviewGraphDetails(@RequestParam @NotBlank String userId,
+                                                              @RequestParam @NotBlank String memberId,
+                                                              @RequestParam @NotNull int projectId) {
 
-        return graphService.getCodeReviewGraphDetails(userId);
+        return graphService.getCodeReviewGraphDetails(userId, memberId, projectId);
 
     }
 
     @GetMapping("/issue")
 
-    public List<IssueGraphDTO> getIssueGraphDetails(@RequestParam @NotBlank String userId) {
+    public List<IssueGraphDTO> getIssueGraphDetails(@RequestParam @NotBlank String userId,
+                                                    @RequestParam @NotBlank String memberId,
+                                                    @RequestParam @NotNull int projectId) {
 
-        return graphService.getIssueGraphDetails(userId);
+        return graphService.getIssueGraphDetails(userId, memberId, projectId);
 
     }
 

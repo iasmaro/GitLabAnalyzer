@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.*;
+import com.haumea.gitanalyzer.gitlab.CommentWrapper;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
@@ -156,13 +157,68 @@ public class GraphService {
         return returnList;
     }
 
-    public List<CodeReviewGraphDTO> getCodeReviewGraphDetails(String userId) {
-        // TODO: real implementation after comments is supported
+    public List<CodeReviewGraphDTO> getCodeReviewGraphDetails(String userId, String memberId, int projectId) {
+
         List<CodeReviewGraphDTO> returnList = new ArrayList<>();
+
+        GitlabService gitlabService = userService.createGitlabService(userId);
+        Configuration userConfig = userService.getConfiguration(userId, projectId);
+        String targetBranch = userConfig.getTargetBranch();
+        List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
+        List<CommentWrapper> MRComments = gitlabService.getMRCommentsByAuthor(projectId, targetBranch, userService.getStart(userId),
+                                                                                 userService.getEnd(userId), aliases);
+
+        //date iterator from https://stackoverflow.com/questions/4534924/how-to-iterate-through-range-of-dates-in-java
+        Calendar start = Calendar.getInstance();
+        start.setTime(userService.getStart(userId));
+        Calendar end = Calendar.getInstance();
+        end.setTime(userService.getEnd(userId));
+
+        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
+        // but the next day will not.
+        end.set(Calendar.HOUR_OF_DAY, 0);
+        end.set(Calendar.MINUTE, 0);
+        end.set(Calendar.SECOND, 0);
+        end.add(Calendar.DAY_OF_MONTH,1);
+
+        for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+
+            int wordsPerDay = 0;
+            int wordsPerDayOnOwn = 0;
+            int wordsPerDayOnOthers = 0;
+
+            // Keep track of a list of MRComments on this date to remove from the list of mergeRequests
+            // because a mergeRequest can only be on one date. This will slightly improve efficiency.
+            List<CommentWrapper> MRCommentsOnThisDate = new ArrayList<CommentWrapper>();
+
+            for(CommentWrapper MRComment : MRComments) {
+
+                Date MRCommentDate = MRComment.getNote().getCreatedAt();
+
+                if(isSameDay(MRCommentDate, date)) {
+
+                    wordsPerDay++;
+                    if(MRComment.getIsSameAuthor()) {
+                        wordsPerDayOnOwn++;
+                    }
+                    else {
+                        wordsPerDayOnOthers++;
+                    }
+                    MRCommentsOnThisDate.add(MRComment);
+
+                }
+
+            }
+
+            MRComments.removeAll(MRCommentsOnThisDate);
+            CodeReviewGraphDTO codeReviewGraphDTO = new CodeReviewGraphDTO(date, wordsPerDay, wordsPerDayOnOwn, wordsPerDayOnOthers);
+            returnList.add(codeReviewGraphDTO);
+        }
+
         return returnList;
     }
 
-    public List<IssueGraphDTO> getIssueGraphDetails(String userId) {
+    public List<IssueGraphDTO> getIssueGraphDetails(String userId, String memberId, int projectId) {
         // TODO: real implementation after comments is supported
         List<IssueGraphDTO> returnList = new ArrayList<>();
         return returnList;
