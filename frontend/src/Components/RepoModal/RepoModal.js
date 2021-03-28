@@ -16,7 +16,7 @@ import { allMembersHaveAliases, noMembersHaveAliases } from './RepoModalMapAlias
 import { createMappingContainingPastAliases } from './RepoModalMapAliasTable/Utils/createMappingContainingPastAliases';
 import { createInitialAliasIdPairs } from './RepoModalMapAliasTable/Utils/createInitialAliasIdPairs';
 import { sameAliasIdPairs } from './RepoModalMapAliasTable/Utils/sameAliasIdPairs';
-import RepoModalDateTimePicker from "./RepoModalDateTimePicker";
+import RepoModalDateTimePicker from './RepoModalDateTimePicker';
 
 const RepoModal = (props) => {
     const { name, id, members, aliases, configs, databaseMapping, status, toggleModal, start, end } = props || {};    

@@ -3,7 +3,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Form, Row, Col } from 'react-bootstrap';
 
-import { modal } from "Constants/constants";
+import { modal } from 'Constants/constants';
 
 const RepoModalDateTimePicker = (props) => {
 
