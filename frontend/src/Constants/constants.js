@@ -13,6 +13,8 @@ const dev = {
     PROJECT_MAPPING_API_URL: 'http://localhost:8080/api/v1/members/mapping',
     CONFIGURATION_FILES_URL: 'http://localhost:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://localhost:8080/api/v1/users/configuration/',
+    START_URL: 'http://localhost:8080/api/v1/users/start/',
+    END_URL: 'http://localhost:8080/api/v1/users/end/'
 };
 
 const prod = {
@@ -30,12 +32,15 @@ const prod = {
     PROJECT_MAPPING_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members/mapping',
     CONFIGURATION_FILES_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration/',
+    START_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/start/',
+    END_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/end/',
 };
 
 export const config = process.env.NODE_ENV === 'development' ? dev : prod;
 
 export const modal = {
     CONFIG : "Configuration:",
+    DATES : "Dates:",
     CONFIG_OPTION : "Default Configuration",
     START_DATE : "Start Date:",
     END_DATE : "End Date:"

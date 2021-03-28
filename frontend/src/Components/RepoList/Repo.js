@@ -7,6 +7,8 @@ import getMembersAndAliasesFromGitLab from 'Utils/getMembersAndAliasesFromGitLab
 import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
 import getConfigurations from 'Utils/getConfigurations';
 import { useUserState } from 'UserContext';
+import getEnd from 'Utils/getEnd';
+import getStart from 'Utils/getStart';
 
 const Repo = (props) => {
     const { repo } = props || {};
@@ -17,6 +19,8 @@ const Repo = (props) => {
     const [members, setMembers] = useState([]);
     const [aliases, setAliases] = useState([]);
     const [databaseMapping, setDatabaseMapping] = useState([]);
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
     const username = useUserState();
     
     const handleShow = () => {
@@ -34,6 +38,12 @@ const Repo = (props) => {
         getConfigurations(username).then((data) => {
             setConfigs(data);
         });
+        getStart(username).then((data) => {
+            setStartDate(data);
+        });
+        getEnd(username).then((data) => {
+            setEndDate(data);
+        });
         setShow(true);
     }
 
@@ -47,7 +57,9 @@ const Repo = (props) => {
                 <Button variant="dark" onClick={handleShow}> Analyze </Button>
             </td>
             {(isLoadingGitLabCall || isLoadingDatabaseCall) ? <Spinner animation="border" className="spinner" /> :
-             show && <RepoModal name={repo?.projectName} id={repo?.projectId} members={members} aliases={aliases} databaseMapping={databaseMapping} createdAt={repo?.createdAt} configs={configs} status={show} toggleModal={handleClose}/>}
+             show && <RepoModal name={repo?.projectName} id={repo?.projectId} members={members} 
+                        aliases={aliases} databaseMapping={databaseMapping} createdAt={repo?.createdAt} 
+                        configs={configs} status={show} toggleModal={handleClose} start = {startDate} end = {endDate}/>}
         </tr>
     );
 };
