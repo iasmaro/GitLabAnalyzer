@@ -478,7 +478,7 @@ public class GitlabService {
         }
 
         List<Commit> filteredCommits = new ArrayList<>();
-        for(Commit commit: commits){
+        for(Commit commit : commits){
             if(!isMergedMRCommits(commit.getMessage())){
                 filteredCommits.add(commit);
             }
@@ -557,7 +557,7 @@ public class GitlabService {
         List<CommentIssueWrapper> issueComments = getIssueComments(projectId, start, end);
 
         List<CommentIssueWrapper> filteredIssueComments = new ArrayList<>();
-        for(CommentIssueWrapper comment: issueComments){
+        for(CommentIssueWrapper comment : issueComments){
             if(alias.contains(comment.getAuthor())){
                 filteredIssueComments.add(comment);
             }
@@ -597,7 +597,7 @@ public class GitlabService {
         List<CommentMRWrapper> MRComments = getMRComments(projectId, targetBranch, start, end);
 
         List<CommentMRWrapper> filteredMRComments = new ArrayList<>();
-        for(CommentMRWrapper comment: MRComments){
+        for(CommentMRWrapper comment : MRComments){
             if(alias.contains(comment.getAuthor())){
                 filteredMRComments.add(comment);
             }
