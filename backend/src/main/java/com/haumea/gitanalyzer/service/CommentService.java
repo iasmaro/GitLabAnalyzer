@@ -30,8 +30,6 @@ public class CommentService {
     public List<CommentDTO> getMergeRequestComments(String userId, int projectId, String memberId) {
         GitlabService gitlabService = userService.createGitlabService(userId);
         Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
-        List<String> alias = getAliasForMember(memberId);
-
 
         List<CommentWrapper> commentWrappers = gitlabService.getMRCommentsByAuthor(
                 projectId,
@@ -40,6 +38,27 @@ public class CommentService {
                 userService.getEnd(userId),
                 getAliasForMember(memberId));
 
+
+
+        return convertCommentWrappersToDTOs(commentWrappers);
+
+    }
+
+    public List<CommentDTO> getIssueComments(String userId, int projectId, String memberId) {
+
+        GitlabService gitlabService = userService.createGitlabService(userId);
+        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
+
+        List<CommentWrapper> commentWrappers = gitlabService.getIssueCommentsByAuthor(
+                projectId,
+                userService.getStart(userId),
+                userService.getEnd(userId),
+                getAliasForMember(memberId));
+
+        return convertCommentWrappersToDTOs(commentWrappers);
+    }
+
+    private List<CommentDTO> convertCommentWrappersToDTOs(List<CommentWrapper> commentWrappers) {
         List<CommentDTO> commentDTOS = new ArrayList<>();
 
         for(CommentWrapper current : commentWrappers) {
@@ -55,12 +74,7 @@ public class CommentService {
         }
 
         return commentDTOS;
-
     }
-//
-//    public List<CommentDTO> getIssueComments(String userId, int projectId, String memberId) {
-//
-//    }
 
 
 
