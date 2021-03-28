@@ -285,7 +285,7 @@ public class UserRepository {
                     .and("configurations.fileName").is(fileName));
             Update update = new Update();
             update.pull("configurations", new BasicDBObject("fileName", fileName));
-            if(user.get().getActiveConfig().equals(fileName)){
+            if(user.get().getActiveConfig() != null && user.get().getActiveConfig().equals(fileName)){
                 update.unset("activeConfig");
             }
             mongoTemplate.updateFirst(query, update, User.class);
