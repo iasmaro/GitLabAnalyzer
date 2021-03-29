@@ -7,13 +7,28 @@ import saveConfig from "Utils/saveConfig";
 import './ConfigForm.css';
 
 const ConfigForm = (props) => {
-    const { username, toggleModal } = props || {};
+    const { username, toggleModal, setMessage } = props || {};
 
     const [state, setstate] = useState(initialConfigState);
     const [inputList, setInputList] = useState([{ FILE_EXTENSION: state.FILE_EXTENSION, SINGLE_COMMENT: state.SINGLE_COMMENT, MULTI_START_COMMENT: state.MULTI_LINE_COMMENT_START, MULTI_END_COMMENT: state.MULTI_LINE_COMMENT_END, WEIGHT: state.WEIGHT }]);
 
-    const handleInputChange = event =>{
-        const {name, value} = event.target
+    const displayAlert = (successful) => {
+        let snackbar = document.getElementById("config-snackbar");
+        if (successful) {
+            setMessage("Successfully created configuration");
+            snackbar.style = 'background-color:green';
+        }
+        else {
+            setMessage("There was an error creating the configuration");
+            snackbar.style = 'background-color:red';
+        }
+        snackbar.className = "show";
+        setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+        setTimeout(function () { setMessage(""); }, 3000);
+    }
+
+    const handleInputChange = event => {
+        const { name, value } = event.target
         setstate({
             ...state,
             [name]: value
@@ -65,10 +80,12 @@ const ConfigForm = (props) => {
             [(state.FILE_EXTENSION).replace(".","")] : [singleComments, multiComments]
         }
 
-        saveConfig(commentTypes, editFactor, username, fileFactor, state.CONFIGURATION_NAME);
-        if (toggleModal) {
-            toggleModal();
-        }
+        saveConfig(commentTypes, editFactor, username, fileFactor, state.CONFIGURATION_NAME).then(response => {
+            if (toggleModal) {
+                toggleModal();
+            }
+            displayAlert(response);
+        });
     };
 
 
@@ -340,4 +357,3 @@ const ConfigForm = (props) => {
 }
 
 export default ConfigForm
-
