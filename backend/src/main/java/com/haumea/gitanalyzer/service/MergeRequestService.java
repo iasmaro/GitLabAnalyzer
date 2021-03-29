@@ -194,7 +194,7 @@ public class MergeRequestService {
         Date updatedDate = mergeRequest.getUpdatedAt();
         String mergeRequestLink = mergeRequest.getWebUrl();
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
+        Configuration configuration = userService.getConfiguration(userId);
 
         List<DiffDTO> mergeRequestDiffs = getMergeRequestDiffs(mergeRequestWrapper.getMergeRequestDiff(), configuration);
 
@@ -243,7 +243,7 @@ public class MergeRequestService {
 
         GitlabService gitlabService = userService.createGitlabService(userId);
 
-        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
+        Configuration activeConfiguration = userService.getConfiguration(userId);
 
         List<MergeRequestWrapper> mergeRequestsList = getMergeRequestWrapper(
                 gitlabService,
@@ -279,7 +279,7 @@ public class MergeRequestService {
 
         GitlabService gitlabService = userService.createGitlabService(userId);
 
-        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
+        Configuration activeConfiguration = userService.getConfiguration(userId);
 
         List<String> alias = getAliasForMember(memberId);
 

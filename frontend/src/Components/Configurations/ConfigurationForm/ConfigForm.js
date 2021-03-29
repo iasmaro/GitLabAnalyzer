@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Col, Row, Container, Button, Table } from 'react-bootstrap';
 
-import {ConfigLabels, initialConfigState} from 'Constants/constants'
-import FormattedDateTimePicker from "Components/DateTimePicker/FormattedDateTimePicker";
+import { ConfigLabels, initialConfigState } from 'Constants/constants';
 import saveConfig from "Utils/saveConfig";
 
 import './ConfigForm.css';
@@ -11,8 +10,6 @@ const ConfigForm = (props) => {
     const { username, toggleModal } = props || {};
 
     const [state, setstate] = useState(initialConfigState);
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
     const [inputList, setInputList] = useState([{ FILE_EXTENSION: state.FILE_EXTENSION, SINGLE_COMMENT: state.SINGLE_COMMENT, MULTI_START_COMMENT: state.MULTI_LINE_COMMENT_START, MULTI_END_COMMENT: state.MULTI_LINE_COMMENT_END, WEIGHT: state.WEIGHT }]);
 
     const handleInputChange = event =>{
@@ -33,7 +30,7 @@ const ConfigForm = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const editFact = {
+        const editFactor = {
             addLine: state.ADD_NEW_LINE,
             delLine: state.DELETE_LINE,
             movLine: state.MOVE_LINE,
@@ -41,7 +38,7 @@ const ConfigForm = (props) => {
             spaceChange: state.SPACING
         }
 
-        const fileFact = {
+        const fileFactor = {
             JAVA: state.JAVA,
             JS: state.JS,
             TS: state.TS,
@@ -68,7 +65,7 @@ const ConfigForm = (props) => {
             [(state.FILE_EXTENSION).replace(".","")] : [singleComments, multiComments]
         }
 
-        saveConfig(commentTypes, editFact, username, startDate, endDate, fileFact, state.CONFIGURATION_NAME);
+        saveConfig(commentTypes, editFactor, username, fileFactor, state.CONFIGURATION_NAME);
         if (toggleModal) {
             toggleModal();
         }
@@ -95,27 +92,6 @@ const ConfigForm = (props) => {
                                             name = "CONFIGURATION_NAME"
                                             onChange = {handleInputChange}
                                             required
-                                        />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                        <Table hover className="ConfigTable">
-                            <thead>
-                                <tr>
-                                    <th className='ConfigTitle'>
-                                        {ConfigLabels.DATE_TIME}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <FormattedDateTimePicker 
-                                            startName={ConfigLabels.START_DATE} 
-                                            endName={ConfigLabels.END_DATE} 
-                                            setStartDate={setStartDate} 
-                                            setEndDate={setEndDate}
                                         />
                                     </td>
                                 </tr>
