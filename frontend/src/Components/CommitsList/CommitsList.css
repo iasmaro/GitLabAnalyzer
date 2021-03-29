@@ -39,3 +39,25 @@
 .tooltip .tooltip-inner {
     max-width: 100%; 
 }
+
+thead th.default {
+    cursor: pointer;
+}
+  
+thead th.ascending {
+    cursor: pointer;
+}
+  
+thead th.descending {
+    cursor: pointer;
+}
+  
+thead th.ascending::after {
+    content: '↑';
+    display: inline-block;
+}
+  
+thead th.descending::after {
+    content: '↓';
+    display: inline-block;
+}

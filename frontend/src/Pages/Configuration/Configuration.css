@@ -41,22 +41,22 @@
 
 thead th.default {
     cursor: pointer;
-  }
+}
   
-  thead th.ascending {
+thead th.ascending {
     cursor: pointer;
-  }
-  
-  thead th.descending {
+}
+
+thead th.descending {
     cursor: pointer;
-  }
+}
   
-  thead th.ascending::after {
+thead th.ascending::after {
     content: '↑';
     display: inline-block;
-  }
+}
   
-  thead th.descending::after {
+thead th.descending::after {
     content: '↓';
     display: inline-block;
-  }
+}
