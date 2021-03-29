@@ -219,8 +219,63 @@ public class GraphService {
     }
 
     public List<IssueGraphDTO> getIssueGraphDetails(String userId, String memberId, int projectId) {
-        // TODO: real implementation after comments is supported
+
         List<IssueGraphDTO> returnList = new ArrayList<>();
+
+        GitlabService gitlabService = userService.createGitlabService(userId);
+        Configuration userConfig = userService.getConfiguration(userId);
+        String targetBranch = userConfig.getTargetBranch();
+        List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
+        List<CommentWrapper> IssueComments = gitlabService.getIssueCommentsByAuthor(projectId, userService.getStart(userId),
+                                                                                    userService.getEnd(userId), aliases);
+
+        //date iterator from https://stackoverflow.com/questions/4534924/how-to-iterate-through-range-of-dates-in-java
+        Calendar start = Calendar.getInstance();
+        start.setTime(userService.getStart(userId));
+        Calendar end = Calendar.getInstance();
+        end.setTime(userService.getEnd(userId));
+
+        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
+        // but the next day will not.
+        end.set(Calendar.HOUR_OF_DAY, 0);
+        end.set(Calendar.MINUTE, 0);
+        end.set(Calendar.SECOND, 0);
+        end.add(Calendar.DAY_OF_MONTH,1);
+
+        for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+
+            int wordsPerDay = 0;
+            int wordsPerDayOnOwn = 0;
+            int wordsPerDayOnOthers = 0;
+
+            // Keep track of a list of IssueComments on this date to remove from the list of mergeRequests
+            // because a mergeRequest can only be on one date. This will slightly improve efficiency.
+            List<CommentWrapper> IssueCommentsOnThisDate = new ArrayList<CommentWrapper>();
+
+            for(CommentWrapper IssueComment : IssueComments) {
+
+                Date IssueCommentDate = IssueComment.getNote().getCreatedAt();
+
+                if(isSameDay(IssueCommentDate, date)) {
+
+                    wordsPerDay++;
+                    if(IssueComment.getIsSameAuthor()) {
+                        wordsPerDayOnOwn++;
+                    }
+                    else {
+                        wordsPerDayOnOthers++;
+                    }
+                    IssueCommentsOnThisDate.add(IssueComment);
+
+                }
+
+            }
+
+            IssueComments.removeAll(IssueCommentsOnThisDate);
+            IssueGraphDTO issueGraphDTO = new IssueGraphDTO(date, wordsPerDay, wordsPerDayOnOwn, wordsPerDayOnOthers);
+            returnList.add(issueGraphDTO);
+        }
+
         return returnList;
     }
 }
