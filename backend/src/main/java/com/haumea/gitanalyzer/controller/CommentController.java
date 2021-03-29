@@ -33,8 +33,6 @@ public class CommentController {
                                                  @RequestParam @NotNull int projectId,
                                                  @PathVariable @NotBlank String memberId) {
 
-        System.out.println("Endpoint being called");
-
         return commentService.getIssueComments(userId, projectId, memberId);
     }
 

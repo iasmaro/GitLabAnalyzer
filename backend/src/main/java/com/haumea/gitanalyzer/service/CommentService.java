@@ -30,11 +30,6 @@ public class CommentService {
     public List<CommentDTO> getMergeRequestComments(String userId, int projectId, String memberId) {
         GitlabService gitlabService = userService.createGitlabService(userId);
         Configuration activeConfiguration = userService.getConfiguration(userId);
-
-        System.out.println("Before exception");
-
-        System.out.println("date is: " +  userService.getStart(userId));
-
         List<CommentWrapper> commentWrappers = gitlabService.getMRCommentsByAuthor(
                 projectId,
                 activeConfiguration.getTargetBranch(),
@@ -57,8 +52,6 @@ public class CommentService {
                 userService.getStart(userId),
                 userService.getEnd(userId),
                 getAliasForMember(memberId));
-
-        System.out.println("service being called");
 
 
         return convertCommentWrappersToDTOs(commentWrappers);
