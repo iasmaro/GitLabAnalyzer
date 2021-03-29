@@ -2,11 +2,9 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
-
+import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
 import './MergeRequestList.css';
 import MergeRequest from './MergeRequest';
-import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
-
 
 const MergeRequestList = (props) => {
     const { mergerequests, setCommit, setCodeDiffs } = props || {};
@@ -38,7 +36,6 @@ const MergeRequestList = (props) => {
                             <th className={getClassNamesFor(sortConfig, 'linesRemoved')} onClick={() => requestSortObject('linesRemoved')}>Lines -</th>
                         </tr>
                     </thead>
-                    {console.log(mergerequests)}
                     <tbody>
                         {!mergerequests?.length ? (
                             <td colSpan='8' >{message.NO_MERGE_REQUEST}</td>
