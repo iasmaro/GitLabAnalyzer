@@ -7,7 +7,7 @@ import { modal } from 'Constants/constants';
 
 const RepoModalDateTimePicker = (props) => {
 
-    const {startName, endName, startDate, endDate, setStartDate, setEndDate} = props || {};
+    const { startName, endName, startDate, endDate, setStartDate, setEndDate } = props || {};
 
     const [selectedStartDate, setSelectedStartDate] = useState(startDate);
     const [selectedEndDate, setSelectedEndDate] = useState(endDate);
@@ -23,7 +23,7 @@ const RepoModalDateTimePicker = (props) => {
     };
 
     return (
-        <Row className='configuration'>
+        <Row className='dates'>
             <Col lg='2'>
                 {modal.DATES}
             </Col>

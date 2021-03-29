@@ -67,8 +67,6 @@ export const message = {
 
 export const ConfigLabels = {
     CONFIGURATION_NAME: "Configuration Name:",
-    START_DATE: "Start Date:",
-    END_DATE: "End Date:",
     ADD_NEW_LINE: "Add New Line:",
     DELETE_LINE: "Delete Line:",
     SPACING: "Spacing Change:",
@@ -98,7 +96,6 @@ export const ConfigLabels = {
     SINGLE_COMMENT: "Enter Single Line Comment",
     MULTI_START_COMMENT: "Enter Start of Multi-line Comment",
     MULTI_END_COMMENT: "Enter End of Multi-line Comment",
-    DATE_TIME: "Date & Time"
 }
 
 export const initialConfigState = {

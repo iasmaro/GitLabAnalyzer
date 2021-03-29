@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Col, Row, Container, Button, Table } from 'react-bootstrap';
 
-import {ConfigLabels, initialConfigState} from 'Constants/constants';
+import { ConfigLabels, initialConfigState } from 'Constants/constants';
 import saveConfig from "Utils/saveConfig";
 
 import './ConfigForm.css';
@@ -30,7 +30,7 @@ const ConfigForm = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const editFact = {
+        const editFactor = {
             addLine: state.ADD_NEW_LINE,
             delLine: state.DELETE_LINE,
             movLine: state.MOVE_LINE,
@@ -38,7 +38,7 @@ const ConfigForm = (props) => {
             spaceChange: state.SPACING
         }
 
-        const fileFact = {
+        const fileFactor = {
             JAVA: state.JAVA,
             JS: state.JS,
             TS: state.TS,
@@ -65,7 +65,7 @@ const ConfigForm = (props) => {
             [(state.FILE_EXTENSION).replace(".","")] : [singleComments, multiComments]
         }
 
-        saveConfig(commentTypes, editFact, username, fileFact, state.CONFIGURATION_NAME);
+        saveConfig(commentTypes, editFactor, username, fileFactor, state.CONFIGURATION_NAME);
         if (toggleModal) {
             toggleModal();
         }

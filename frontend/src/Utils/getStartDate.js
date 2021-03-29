@@ -1,6 +1,6 @@
 import { config } from 'Constants/constants';
 
-const getStart = async (username) => {
+const getStartDate = async (username) => {
     const response = await fetch(`${config.START_URL}?userId=${username}`);
     const data = await response.json();
     if (response.ok) {
@@ -9,4 +9,4 @@ const getStart = async (username) => {
     return null;
 }
 
-export default getStart;
+export default getStartDate;

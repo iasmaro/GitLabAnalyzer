@@ -26,8 +26,8 @@ const RepoModal = (props) => {
     const mapping = createMappingContainingPastAliases(aliases, members, databaseMapping);
     const [redirect, setRedirect] = useState(false);
     const [showError, setShowError] = useState(false);
-    const [startDate, setStartDate] = useState(start ? start : new Date());
-    const [endDate, setEndDate] = useState(end ? end : new Date());
+    const [startDate, setStartDate] = useState(start || new Date());
+    const [endDate, setEndDate] = useState(end || new Date());
     const username = useUserState();
 
     const createApiMappingFromLocalMapping = (mapping) => {

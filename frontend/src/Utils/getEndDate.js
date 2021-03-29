@@ -1,6 +1,6 @@
 import { config } from 'Constants/constants';
 
-const getEnd = async (username) => {
+const getEndDate = async (username) => {
     const response = await fetch(`${config.END_URL}?userId=${username}`);
     const data = await response.json();
     if (response.ok) {
@@ -9,4 +9,4 @@ const getEnd = async (username) => {
     return null;
 }
 
-export default getEnd;
+export default getEndDate;
