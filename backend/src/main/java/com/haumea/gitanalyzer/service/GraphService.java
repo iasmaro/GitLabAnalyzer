@@ -50,7 +50,7 @@ public class GraphService {
         List<CommitGraphDTO> returnList = new ArrayList<>();
 
         GitlabService gitlabService = userService.createGitlabService(userId);
-        Configuration userConfig = userService.getConfiguration(userId, projectId);
+        Configuration userConfig = userService.getConfiguration(userId);
         List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
         List<CommitWrapper> allCommits =  gitlabService.getFilteredCommitsWithDiffByAuthor(projectId, userConfig.getTargetBranch(),
                                                                                   userService.getStart(userId), userService.getEnd(userId), aliases);
@@ -106,7 +106,7 @@ public class GraphService {
         List<MergeRequestGraphDTO> returnList = new ArrayList<>();
 
         GitlabService gitlabService = userService.createGitlabService(userId);
-        Configuration userConfig = userService.getConfiguration(userId, projectId);
+        Configuration userConfig = userService.getConfiguration(userId);
         List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
         List<MergeRequestWrapper> allMergeRequests =  gitlabService.getFilteredMergeRequestsWithDiffByAuthor(projectId, userConfig.getTargetBranch(),
                                                                                                              userService.getStart(userId), userService.getEnd(userId), aliases);
@@ -162,7 +162,7 @@ public class GraphService {
         List<CodeReviewGraphDTO> returnList = new ArrayList<>();
 
         GitlabService gitlabService = userService.createGitlabService(userId);
-        Configuration userConfig = userService.getConfiguration(userId, projectId);
+        Configuration userConfig = userService.getConfiguration(userId);
         String targetBranch = userConfig.getTargetBranch();
         List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
         List<CommentWrapper> MRComments = gitlabService.getMRCommentsByAuthor(projectId, targetBranch, userService.getStart(userId),
