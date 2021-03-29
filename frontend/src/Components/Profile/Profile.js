@@ -16,17 +16,38 @@ const Profile = (props) => {
     const [token, setToken] = useState(givenToken);
     const [gitlabServer, setGitlabServer] = useState(givenGitlabServer);
     const [isInvalid, setInvalid] = useState(false);
+    const [message, setMessage] = useState("");
+
+    const displayMessage = (successful) => {
+        let snackbar = document.getElementById("profile-snackbar");
+        if (successful) {
+            setMessage("Successfully updated profile");
+            snackbar.style = 'color:green';
+        }
+        else {
+            setMessage("There was an error updating the profile");
+            snackbar.style = 'color:red';
+        }
+        snackbar.className = "show";
+        setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+    }
+
     const handleSubmit = (event) => {
-        const invalid = gitlabServer.substring(0,7) !== SCHEME.HTTP && gitlabServer.substring(0,8) !== SCHEME.HTTPS;
+        const invalid = gitlabServer.substring(0, 7) !== SCHEME.HTTP && gitlabServer.substring(0, 8) !== SCHEME.HTTPS;
         setInvalid(invalid);
         event.preventDefault();
         if (!invalid) {
             if (givenToken || givenGitlabServer) {
-                updateUser(username, token, gitlabServer);
+                updateUser(username, token, gitlabServer).then(response => {
+                    displayMessage(response);
+                });
             } else {
-                saveUser(username, token, gitlabServer);
+                saveUser(username, token, gitlabServer).then(response => {
+                    displayMessage(response);
+                });
             }
         }
+
     }
 
     const handleTokenChange = (event) => {
@@ -43,18 +64,18 @@ const Profile = (props) => {
                     <Form.Label className="profile-title">Access Tokens for: {username}@sfu.ca</Form.Label>
                 </Col>
             </Row>
-            <Form className="profile-form" onSubmit={handleSubmit}>                
+            <Form className="profile-form" onSubmit={handleSubmit}>
                 <Row>
                     <Col sm="9">
                         <Form.Label>Access token</Form.Label>
-                        <Form.Control required type="text" placeholder={givenToken ? token : tokenPlaceHolder} value={token} onChange={handleTokenChange}/>
+                        <Form.Control required type="text" placeholder={givenToken ? token : tokenPlaceHolder} value={token} onChange={handleTokenChange} />
                     </Col>
                 </Row>
                 <Row>
                     <Col sm="9">
                         <Form.Group>
                             <Form.Label>GitLab server</Form.Label>
-                            <Form.Control required type="text" isInvalid={isInvalid} placeholder={givenGitlabServer ? gitlabServer : serverPlaceHolder} value={gitlabServer} onChange={handleGitlabServerChange}/>
+                            <Form.Control required type="text" isInvalid={isInvalid} placeholder={givenGitlabServer ? gitlabServer : serverPlaceHolder} value={gitlabServer} onChange={handleGitlabServerChange} />
                             <Form.Control.Feedback type="invalid">
                                 URL must start with either http:// or https://
                             </Form.Control.Feedback>
@@ -67,6 +88,7 @@ const Profile = (props) => {
                     </Col>
                 </Row>
             </Form>
+            <div id="profile-snackbar">{message}</div>
         </>
     )
 }

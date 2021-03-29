@@ -3,7 +3,7 @@ import { config } from 'Constants/constants';
 const updateUser = async (username, token, gitlabServer, startDate, endDate, activeConfiguration = "") => {
     const URL = `${config.USERS_API_URL}`;
 
-    fetch(URL, { 
+    const response = await fetch(URL, { 
         method: "PUT",
         headers: { "Content-type": "application/json"},
         body: JSON.stringify({
@@ -15,6 +15,8 @@ const updateUser = async (username, token, gitlabServer, startDate, endDate, act
             end: endDate,
         })
     });
+
+    return response.ok;
 }
 
 export default updateUser;
