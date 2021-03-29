@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown, DropdownButton, Row, Col } from 'react-bootstrap';
 
-import { modal } from "Constants/constants";
+import { modal } from 'Constants/constants';
 
 import { useUserState } from 'UserContext';
 import updateUser from 'Utils/updateUser';

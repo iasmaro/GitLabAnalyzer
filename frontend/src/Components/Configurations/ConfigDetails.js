@@ -15,19 +15,6 @@ const ConfigDetails = (props) => {
                 </thead>
                 <thead>
                     <tr>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{configInfo?.start}</td>
-                        <td>{configInfo?.end}</td>
-                    </tr>
-                </tbody>
-
-                <thead>
-                    <tr>
                         <th>Code Modifications</th>
                         <th>Weight</th>
                     </tr>
