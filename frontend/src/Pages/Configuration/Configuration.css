@@ -54,11 +54,9 @@ thead th.default {
   thead th.ascending::after {
     content: '↑';
     display: inline-block;
-    margin-left: 1em;
   }
   
   thead th.descending::after {
     content: '↓';
     display: inline-block;
-    margin-left: 1em;
   }
