@@ -29,7 +29,11 @@ public class CommentService {
 
     public List<CommentDTO> getMergeRequestComments(String userId, int projectId, String memberId) {
         GitlabService gitlabService = userService.createGitlabService(userId);
-        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
+        Configuration activeConfiguration = userService.getConfiguration(userId);
+
+        System.out.println("Before exception");
+
+        System.out.println("date is: " +  userService.getStart(userId));
 
         List<CommentWrapper> commentWrappers = gitlabService.getMRCommentsByAuthor(
                 projectId,
@@ -47,13 +51,15 @@ public class CommentService {
     public List<CommentDTO> getIssueComments(String userId, int projectId, String memberId) {
 
         GitlabService gitlabService = userService.createGitlabService(userId);
-        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
 
         List<CommentWrapper> commentWrappers = gitlabService.getIssueCommentsByAuthor(
                 projectId,
                 userService.getStart(userId),
                 userService.getEnd(userId),
                 getAliasForMember(memberId));
+
+        System.out.println("service being called");
+
 
         return convertCommentWrappersToDTOs(commentWrappers);
     }

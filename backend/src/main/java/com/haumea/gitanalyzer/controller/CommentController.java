@@ -28,10 +28,12 @@ public class CommentController {
         return commentService.getMergeRequestComments(userId, projectId, memberId);
     }
 
-    @GetMapping("/mergeRequests/members/{memberId}")
+    @GetMapping("/issues/members/{memberId}")
     public List<CommentDTO> getCommentsForIssues(@RequestParam @NotBlank String userId,
                                                  @RequestParam @NotNull int projectId,
                                                  @PathVariable @NotBlank String memberId) {
+
+        System.out.println("Endpoint being called");
 
         return commentService.getIssueComments(userId, projectId, memberId);
     }
