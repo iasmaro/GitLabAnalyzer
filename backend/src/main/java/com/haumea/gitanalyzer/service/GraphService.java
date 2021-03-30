@@ -34,6 +34,16 @@ public class GraphService {
         this.mergeRequestService = mergeRequestService;
     }
 
+    // Counting number of words in string function from https://www.java67.com/2016/09/3-ways-to-count-words-in-java-string.html
+    public static int countWordsUsingSplit(String input) {
+        if (input == null || input.isEmpty()) {
+            return 0;
+        }
+
+        String[] words = input.split("\\s+");
+        return words.length;
+    }
+
     // checking if two dates are the same day function from https://www.baeldung.com/java-check-two-dates-on-same-day
     public static boolean isSameDay(Date date1, Date date2) {
         LocalDate localDate1 = date1.toInstant()
@@ -197,12 +207,12 @@ public class GraphService {
 
                 if(isSameDay(MRCommentDate, date)) {
 
-                    wordsPerDay++;
+                    wordsPerDay = wordsPerDay + countWordsUsingSplit(MRComment.getNote().getBody());
                     if(MRComment.getIsSameAuthor()) {
-                        wordsPerDayOnOwn++;
+                        wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(MRComment.getNote().getBody());
                     }
                     else {
-                        wordsPerDayOnOthers++;
+                        wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(MRComment.getNote().getBody());
                     }
                     MRCommentsOnThisDate.add(MRComment);
 
@@ -258,12 +268,12 @@ public class GraphService {
 
                 if(isSameDay(IssueCommentDate, date)) {
 
-                    wordsPerDay++;
+                    wordsPerDay = wordsPerDay + countWordsUsingSplit(IssueComment.getNote().getBody());
                     if(IssueComment.getIsSameAuthor()) {
-                        wordsPerDayOnOwn++;
+                        wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(IssueComment.getNote().getBody());
                     }
                     else {
-                        wordsPerDayOnOthers++;
+                        wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(IssueComment.getNote().getBody());
                     }
                     IssueCommentsOnThisDate.add(IssueComment);
 
