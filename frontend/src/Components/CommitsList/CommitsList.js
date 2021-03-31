@@ -12,7 +12,7 @@ const CommitsList = (props) => {
 
     useEffect(() => {
         setSelectedRowIndex(-1);
-    }, commits);
+    }, [commits]);
 
     const handleClick = (diffs, index) => {
         if(setCodeDiffs) {

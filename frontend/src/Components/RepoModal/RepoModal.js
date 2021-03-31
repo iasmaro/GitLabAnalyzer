@@ -65,7 +65,7 @@ const RepoModal = (props) => {
             projectId: id,
         }
         if (startDate !== start || endDate !== end) {
-            updateUser(username, '', '', startDate, endDate);
+            updateUser(username, '', '', '', startDate, endDate);
         }
         return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
     }
