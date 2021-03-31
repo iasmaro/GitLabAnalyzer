@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 
 import { message } from 'Constants/constants';
@@ -8,16 +8,22 @@ import './CommitsList.css';
 
 const CommitsList = (props) => {
     const { commits, setCodeDiffs } = props || {};
+    const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
 
-    const handleClick = (diffs) => {
+    useEffect(() => {
+        setSelectedRowIndex(-1);
+    }, commits);
+
+    const handleClick = (diffs, index) => {
         if(setCodeDiffs) {
             setCodeDiffs(diffs);
         }
+        setSelectedRowIndex(index);
     }
 
     return (
         <div className = 'commits-list-container'>
-            <Table striped bordered hover variant="light">
+            <Table bordered hover variant="light">
                 <thead>
                         <tr>
                             <th colSpan='6' className='commitTitle'>Commits</th>
@@ -37,8 +43,13 @@ const CommitsList = (props) => {
                         <td colSpan='4' >{message.NO_COMMITS}</td>
                     )
                     :
-                    commits.map((commit, i) => (
-                        <Commit key={i} commit={commit} handleClick={handleClick} />
+                    commits.map((commit, index) => (
+                        <Commit 
+                            key={index} 
+                            commit={commit} 
+                            handleClick={handleClick} 
+                            index={index}
+                            selected={index === selectedRowIndex}/>
                     ))}
 
                 </tbody>

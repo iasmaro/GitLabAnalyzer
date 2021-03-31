@@ -20,6 +20,11 @@
     cursor: pointer;
 }
 
+.commit-selected {
+    cursor: pointer;
+    background-color: #eaeaeb;
+}
+
 .lines-added {
     color: green;
 }

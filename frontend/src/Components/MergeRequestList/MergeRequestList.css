@@ -2,6 +2,11 @@
     cursor: pointer;
 }
 
+.merge-request-selected {
+    cursor: pointer;
+    background-color: #eaeaeb;
+}
+
 .merge-request-list-container {
     font-family: 'Roboto', sans-serif;
     background-color: #acbed8;
