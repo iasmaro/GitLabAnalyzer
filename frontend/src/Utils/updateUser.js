@@ -1,6 +1,6 @@
 import { config } from 'Constants/constants';
 
-const updateUser = async (username, token, gitlabServer, activeConfiguration = "", startDate, endDate) => {
+const updateUser = async (username, token, gitlabServer, startDate, endDate, activeConfiguration = "") => {
     const URL = `${config.USERS_API_URL}`;
 
     const response = await fetch(URL, { 
