@@ -1,24 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 
 import { message } from 'Constants/constants';
 
 import Repo from './Repo';
 import './RepoList.css';
+import RepoSearchBar from './RepoSearchBar';
+import { utcToLocal } from 'Components/Utils/formatDates';
 
 const RepoList = (props) => {
     const { repos } = props || {};
+    const [searchWord, setSearchWord] = useState('');
+
+    const filterRepos = ((repo)=>{
+        if (searchWord === '') {
+            return repo
+        } else if (repo?.projectName.toLowerCase().includes(searchWord.toLowerCase())) {
+            return repo
+        }
+        else if (utcToLocal(repo?.updatedAt).toLowerCase().includes(searchWord.toLowerCase())) {
+            return repo
+        }
+    });
 
     return (
         <div className = 'list-container'>
-            <Table striped bordered hover variant="light">
+            <Table striped borderless hover variant="light">
                 <thead>
-                    <tr>
-                    <th colSpan='3' className='repoTitle'>Repositories</th>
+                    <tr className='table-header'>
+                        <th colSpan='2' className='repoTitle'>Repositories</th>
+                        <th colSpan='1' className='repoTitle'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord}></RepoSearchBar></th>
                     </tr>
                 </thead>
                 <thead>
-                    <tr className="repo-headers">
+                    <tr className='repo-headers'>
                         <th>Name</th>
                         <th>Last Modified</th>
                         <th></th>
@@ -36,7 +51,7 @@ const RepoList = (props) => {
                         </tr>
                     )
                     :
-                    repos.map((repo) => (
+                    repos.filter((repo)=>filterRepos(repo)).map((repo) => (
                         <Repo key={repo?.projectId} repo={repo}/>
                     ))}
                 </tbody>
