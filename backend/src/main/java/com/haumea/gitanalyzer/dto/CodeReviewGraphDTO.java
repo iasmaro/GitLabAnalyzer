@@ -6,13 +6,13 @@ public class CodeReviewGraphDTO {
     private Date date;
     private int wordsPerDay;
     private int wordsPerDayOnOwn;
-    private int wordsPerDayOnOthers;
+    private int wordsPerDayOnOtherMergeRequests;
 
-    public CodeReviewGraphDTO(Date date, int wordsPerDay, int wordsPerDayOnOwn, int wordsPerDayOnOthers) {
+    public CodeReviewGraphDTO(Date date, int wordsPerDay, int wordsPerDayOnOwn, int wordsPerDayOnOtherMergeRequests) {
         this.date = date;
         this.wordsPerDay = wordsPerDay;
         this.wordsPerDayOnOwn = wordsPerDayOnOwn;
-        this.wordsPerDayOnOthers = wordsPerDayOnOthers;
+        this.wordsPerDayOnOtherMergeRequests = wordsPerDayOnOtherMergeRequests;
     }
 
     public Date getDate() {
@@ -27,8 +27,8 @@ public class CodeReviewGraphDTO {
         return wordsPerDayOnOwn;
     }
 
-    public int getWordsPerDayOnOthers() {
-        return wordsPerDayOnOthers;
+    public int getWordsPerDayOnOtherMergeRequests() {
+        return wordsPerDayOnOtherMergeRequests;
     }
 
 }

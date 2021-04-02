@@ -6,13 +6,13 @@ public class IssueGraphDTO {
     private Date date;
     private int wordsPerDay;
     private int wordsPerDayOnOwn;
-    private int wordsPerDayOnOthers;
+    private int wordsPerDayOnOtherIssues;
 
-    public IssueGraphDTO(Date date, int wordsPerDay, int wordsPerDayOnOwn, int wordsPerDayOnOthers) {
+    public IssueGraphDTO(Date date, int wordsPerDay, int wordsPerDayOnOwn, int wordsPerDayOnOtherIssues) {
         this.date = date;
         this.wordsPerDay = wordsPerDay;
         this.wordsPerDayOnOwn = wordsPerDayOnOwn;
-        this.wordsPerDayOnOthers = wordsPerDayOnOthers;
+        this.wordsPerDayOnOtherIssues = wordsPerDayOnOtherIssues;
     }
 
     public Date getDate() {
@@ -27,7 +27,7 @@ public class IssueGraphDTO {
         return wordsPerDayOnOwn;
     }
 
-    public int getWordsPerDayOnOthers() {
-        return wordsPerDayOnOthers;
+    public int getWordsPerDayOnOtherIssues() {
+        return wordsPerDayOnOtherIssues;
     }
 }

@@ -45,14 +45,14 @@ public class GraphService {
     }
 
     // checking if two dates are the same day function from https://www.baeldung.com/java-check-two-dates-on-same-day
-    public static boolean isSameDay(Date date1, Date date2) {
-        LocalDate localDate1 = date1.toInstant()
+    public static boolean isSameDay(Date firstDate, Date secondDate) {
+        LocalDate firstLocalDate = firstDate.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
-        LocalDate localDate2 = date2.toInstant()
+        LocalDate secondLocalDate = secondDate.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
-        return localDate1.isEqual(localDate2);
+        return firstLocalDate.isEqual(secondLocalDate);
     }
 
     public List<CommitGraphDTO> getCommitGraphDetails(String userId, String memberId, int projectId) {
