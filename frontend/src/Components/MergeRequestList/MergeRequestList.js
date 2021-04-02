@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 import { Table } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
