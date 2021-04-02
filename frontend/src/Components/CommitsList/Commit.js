@@ -6,9 +6,10 @@ import { utcToLocal } from 'Components/Utils/formatDates';
 import './CommitsList.css';
 
 const Commit = (props) => {
-    const { commit, handleClick } = props || {};
+    const { commit, handleClick, selected, index } = props || {};
+    const commitRowClass = selected ? 'commit-selected' : 'commit';
     return (
-        <tr onClick={() => handleClick(commit?.commitDiffs)} className='commit'>
+        <tr className={commitRowClass} onClick={() => handleClick(commit?.commitDiffs, index)} >
             <td>{utcToLocal(commit?.commitDate)}</td>
             <td>
                 <OverlayTrigger
