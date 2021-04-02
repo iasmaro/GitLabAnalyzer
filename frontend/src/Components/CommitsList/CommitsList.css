@@ -20,6 +20,11 @@
     cursor: pointer;
 }
 
+.commit-selected {
+    cursor: pointer;
+    background-color: #eaeaeb;
+}
+
 .lines-added {
     color: green;
 }
@@ -38,4 +43,28 @@
 
 .tooltip .tooltip-inner {
     max-width: 100%; 
+}
+
+thead th.default {
+    cursor: pointer;
+}
+  
+thead th.ascending {
+    cursor: pointer;
+}
+  
+thead th.descending {
+    cursor: pointer;
+}
+  
+thead th.ascending::after {
+    content: '↑';
+    display: inline-block;
+    margin-left: 8px;
+}
+  
+thead th.descending::after {
+    content: '↓';
+    display: inline-block;
+    margin-left: 8px;
 }
