@@ -3,7 +3,7 @@ import { config } from 'Constants/constants';
 const saveConfig = async (languages, ConfigFileWeights, username, langaugeWeights, configName) => {
     const URL = `${config.SAVE_CONFIG_URL}?userId=${username}`;
 
-    fetch(URL, { 
+    const response = await fetch(URL, { 
         method: "POST",
         headers: { "Content-type": "application/json"},
         body: JSON.stringify({
@@ -19,6 +19,7 @@ const saveConfig = async (languages, ConfigFileWeights, username, langaugeWeight
             targetBranch: 'master'
         })
     });
+    return response.ok;
 }
 
 export default saveConfig;

@@ -1,15 +1,72 @@
 .profile-title {
-    background-color: #747474;
-    text-align: center;
-    padding: 10px 20px;
-    border-radius: 3px;
+  background-color: #747474;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 3px;
 }
 
 .profile-form {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 label {
-    margin-top: 0.5rem;
-    margin-bottom: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+/* Adapted from https://www.w3schools.com/howto/howto_js_snackbar.asp */
+#profile-snackbar {
+  font-size: 18px;
+  visibility: hidden;
+  margin: 10px 0px;
+}
+
+#profile-snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
 }
