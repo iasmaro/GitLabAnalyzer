@@ -2,12 +2,14 @@ import React from 'react';
 import { Table, Badge, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
+import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
 
 import Repo from './Repo';
 import './RepoList.css';
 
 const RepoList = (props) => {
     const { repos } = props || {};
+    const { items, requestSortObject, sortConfig  } = useSortableDataObject(repos);
     const namespaceTooltip = <Tooltip>Namespace refers to the user name, group name, or subgroup name associated with the repository.</Tooltip>;
 
     return (
@@ -20,15 +22,15 @@ const RepoList = (props) => {
                 </thead>
                 <thead>
                     <tr className="repo-headers">
-                        <th>Repo</th>
-                        <th>Namespace {' '}
+                        <th className={getClassNamesFor(sortConfig, 'projectName')} onClick={() => requestSortObject('projectName')}>Name</th>
+                        <th className={getClassNamesFor(sortConfig, 'namespace')} onClick={() => requestSortObject('namespace')}>Namespace {' '}
                             <OverlayTrigger placement='right' overlay={namespaceTooltip}>
                                 <Badge pill variant="dark">
                                     i
                                 </Badge>
                             </OverlayTrigger>
                         </th>
-                        <th>Last Modified</th>
+                        <th className={getClassNamesFor(sortConfig, 'updatedAt')} onClick={() => requestSortObject('updatedAt')}>Last Modified</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -44,7 +46,7 @@ const RepoList = (props) => {
                         </tr>
                     )
                     :
-                    repos.map((repo) => (
+                    items.map((repo) => (
                         <Repo key={repo?.projectId} repo={repo}/>
                     ))}
                 </tbody>
