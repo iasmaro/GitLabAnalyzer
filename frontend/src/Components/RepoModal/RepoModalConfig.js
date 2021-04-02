@@ -18,7 +18,7 @@ const RepoModalConfig = (props) => {
             deleteActiveConfig(username);
         }
         else {
-            updateUser(username, '', '', configuration);
+            updateUser(username, '', '', '', '', configuration);
         }
         setConfig(configuration);
     };
