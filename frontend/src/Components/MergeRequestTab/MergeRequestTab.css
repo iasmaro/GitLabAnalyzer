@@ -22,12 +22,12 @@
     display: inline-block;
     position: absolute;
     top: 4.4em;
-    margin-right: 1.3em;
-    min-width: 55.5%;
+    right: 1.3em;
+    width: 55.5%;
 }
 
 .expanded {
-    min-width: 94.85%;
+    width: 94.85%;
 }
 
 .mrs-top {

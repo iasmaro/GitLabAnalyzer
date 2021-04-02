@@ -20,7 +20,7 @@ const MergeRequestTab = (props) => {
     }
 
     return (
-        <div className="merge-request-tab">
+        <div className="commits-tab">
             {!expand && <div className="commits-left">
                 <CommitsList {...props} setCodeDiffs={setCodeDiffs} />
             </div>}
