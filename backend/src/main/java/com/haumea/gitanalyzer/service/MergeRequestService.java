@@ -124,6 +124,7 @@ public class MergeRequestService {
         int spaceLinesAdded = 0;
         double MRScore = 0.0;
         Map<String, Double> fileTypeScoresMap = new HashMap<>();
+        ScoreDTO roundObject = new ScoreDTO();
 
         for (DiffDTO diffDTO : diffDTOList) {
 
@@ -136,7 +137,7 @@ public class MergeRequestService {
             spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
 
             double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
-            fileTypeScore = diffDTO.getScoreDTO().roundScore(fileTypeScore);
+            fileTypeScore = roundObject.roundScore(fileTypeScore);
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
