@@ -10,9 +10,6 @@ import './ConfigForm.css';
 const NewFileTypeCofig = (props) => {
     const { handleInputChange, handleDeleteClick, index, inputList } = props || {};
 
-    const state = inputList[index] || {};
-    console.log(inputList)
-
     return (
          <tr className="merge-request" >
             <td>
@@ -51,7 +48,7 @@ const NewFileTypeCofig = (props) => {
                 <Form.Control 
                     placeholder={ConfigLabels.FILE_WEIGHT} 
                     name = "WEIGHT"
-                    value = {inputList.FILE_WEIGHT}
+                    value = {inputList.WEIGHT}
                     onChange = {(e) => handleInputChange(e, index)}
                 />
             </td>
