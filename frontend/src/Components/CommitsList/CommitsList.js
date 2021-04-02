@@ -22,6 +22,7 @@ const CommitsList = (props) => {
                 <thead>
                         <tr>
                             <th colSpan='6' className='commitTitle'>Commits</th>
+                            <th colSpan='2' className='mrTitle'>Total Commits: {commits?.length || 0}</th>
                         </tr>
                 </thead>
                 <thead>
