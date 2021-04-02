@@ -3,11 +3,11 @@ import { Table, Badge, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
 import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
+import { utcToLocal } from 'Components/Utils/formatDates';
 
 import Repo from './Repo';
-import './RepoList.css';
 import RepoSearchBar from './RepoSearchBar';
-import { utcToLocal } from 'Components/Utils/formatDates';
+import './RepoList.css';
 
 const RepoList = (props) => {
     const { repos } = props || {};
@@ -32,7 +32,7 @@ const RepoList = (props) => {
                 <thead>
                     <tr className='table-header'>
                         <th colSpan='2' className='repoTitle'>Repositories</th>
-                        <th colSpan='1' className='repoTitle'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord}></RepoSearchBar></th>
+                        <th colSpan='2' className='repoTitle'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord}></RepoSearchBar></th>
                     </tr>
                 </thead>
                 <thead>
