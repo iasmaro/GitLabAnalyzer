@@ -19,24 +19,38 @@ const ConfigForm = (props) => {
     const [endDate, setEndDate] = useState(new Date());
     const [inputList, setInputList] = useState([{ FILE_EXTENSION: state.FILE_EXTENSION, SINGLE_COMMENT: state.SINGLE_COMMENT, MULTI_START_COMMENT: state.MULTI_LINE_COMMENT_START, MULTI_END_COMMENT: state.MULTI_LINE_COMMENT_END, WEIGHT: state.WEIGHT }]);
 
-    const handleInputChange = event =>{
+    
+    const handleInputChange = event => {
         const {name, value} = event.target
         setstate({
             ...state,
-            [name]: value
+            [name]: value,
         })
+        
+    };
+    
+    const handleChange = (event, index) => {
+        const { name, value } = event.target;
+        const updatedInputList = inputList.slice();
+        updatedInputList[index][name] = value;
+        setInputList(updatedInputList);
+    };
 
-    }
-
-    const handleAddClick = (event) => {
-        event.preventDefault();
+    const handleAddClick = () => {
         setInputList([...inputList, { 
             FILE_EXTENSION: state.FILE_EXTENSION, SINGLE_COMMENT: state.SINGLE_COMMENT, MULTI_START_COMMENT: state.MULTI_LINE_COMMENT_START, MULTI_END_COMMENT: state.MULTI_LINE_COMMENT_END, WEIGHT: state.WEIGHT 
         }]);
     };
 
+    const handleDeleteClick = (index) => {
+        let updatedInputList = inputList.slice();
+        updatedInputList.splice(index, 1);
+        setInputList(updatedInputList);
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
+
         const editFact = {
             addLine: state.ADD_NEW_LINE,
             delLine: state.DELETE_LINE,
@@ -55,21 +69,24 @@ const ConfigForm = (props) => {
             XML: state.XML,
             CPP: state.CPP,
             C: state.C,
-            [(state.FILE_EXTENSION).replace(".","")] : state.WEIGHT
         }
 
-        const singleComments = {
-            endType: '',
-            startType: state.SINGLE_COMMENT
-        }
+        const commentTypes = {};
 
-        const multiComments = {
-            endType: state.MULTI_END_COMMENT,
-            startType: state.MULTI_START_COMMENT
-        }
-
-        const commentTypes = {
-            [(state.FILE_EXTENSION).replace(".","")] : [singleComments, multiComments]
+        for (let input of inputList) {
+            const extension = ((input.FILE_EXTENSION).replace(".","")).toUpperCase();
+            if (extension?.length) {
+                fileFact[extension] = input.WEIGHT;
+                const singleComments = {
+                    endType: '',
+                    startType: input.SINGLE_COMMENT
+                }
+                const multiComments = {
+                    endType: input.MULTI_END_COMMENT,
+                    startType: input.MULTI_START_COMMENT
+                }
+                commentTypes[extension] = [singleComments, multiComments];
+            }
         }
 
         saveConfig(commentTypes, editFact, username, startDate, endDate, fileFact, state.CONFIGURATION_NAME);
@@ -77,7 +94,7 @@ const ConfigForm = (props) => {
             toggleModal();
         }
     };
-    
+
     return (
         <>
             <Container fluid className="ConfigContainer">
@@ -173,7 +190,7 @@ const ConfigForm = (props) => {
                         <Table hover className="ConfigTable">
                             <thead>
                                 <tr>
-                                    <th colSpan='6' className='ConfigTitle'> 
+                                    <th colSpan='7' className='ConfigTitle'> 
                                         {ConfigLabels.NEW_FILE}
                                     </th>
                                 </tr>
@@ -185,16 +202,21 @@ const ConfigForm = (props) => {
                                     <th>{ConfigLabels.MULTI_LINE_COMMENT_START}</th>
                                     <th>{ConfigLabels.MULTI_LINE_COMMENT_END}</th>
                                     <th>{ConfigLabels.WEIGHT}</th>
-                                    <th></th>
+                                    <th><Button size='md' block onClick={handleAddClick}>+</Button></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {!inputList?.length ? (
-                                    <td colSpan={6} ></td>
+                                    <td colSpan={7} ></td>
                                 )
                                 :
-                                inputList.map((inputList) => (
-                                    <NewFileTypeCofig state={state} handleInputChange={handleInputChange} key={inputList?.FILE_EXTENSION} inputList={inputList} handleAddClick={handleAddClick}/>
+                                inputList.map((inputList, index) => (
+                                    <NewFileTypeCofig
+                                        handleInputChange={handleChange}
+                                        key={index}
+                                        inputList={inputList}
+                                        index={index}
+                                        handleDeleteClick={handleDeleteClick} />
                                 ))}
                             </tbody>
                         </Table>
