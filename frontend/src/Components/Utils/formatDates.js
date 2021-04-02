@@ -1,6 +1,6 @@
 export function utcToLocal(utcString) {
     var localDate = new Date(utcString);
-    var currentDate = new Date();
+    const currentDate = new Date();
     if (!isNaN(localDate.getTime())) {
         if (localDate.getFullYear() < currentDate.getFullYear()) {
             return localDate.toLocaleDateString('en-US', {month: "short"}) + ' ' +

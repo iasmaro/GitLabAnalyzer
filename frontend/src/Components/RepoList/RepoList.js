@@ -8,6 +8,7 @@ import './RepoList.css';
 
 const RepoList = (props) => {
     const { repos } = props || {};
+    const namespaceTooltip = <Tooltip>Namespace refers to the user name, group name, or subgroup name associated with the repository.</Tooltip>;
 
     return (
         <div className = 'list-container'>
@@ -21,14 +22,7 @@ const RepoList = (props) => {
                     <tr className="repo-headers">
                         <th>Repo</th>
                         <th>Namespace {' '}
-                            <OverlayTrigger
-                                placement='right'
-                                overlay={
-                                    <Tooltip>
-                                        Namespace refers to the user name, group name, or subgroup name associated with the repository.
-                                    </Tooltip>
-                                }
-                            >
+                            <OverlayTrigger placement='right' overlay={namespaceTooltip}>
                                 <Badge pill variant="dark">
                                     i
                                 </Badge>
