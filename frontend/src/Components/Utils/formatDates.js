@@ -1,5 +1,5 @@
 export function utcToLocal(utcString) {
-    var localDate = new Date(utcString);
+    const localDate = new Date(utcString);
     const currentDate = new Date();
     if (!isNaN(localDate.getTime())) {
         if (localDate.getFullYear() < currentDate.getFullYear()) {
