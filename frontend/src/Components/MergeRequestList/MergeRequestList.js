@@ -22,7 +22,7 @@ const MergeRequestList = (props) => {
                 <Table striped bordered hover variant='light'>
                     <thead>
                         <tr>
-                            <th colSpan='6' className='mrTitle'>Merge Requests</th>
+                            <th colSpan='5' className='mrTitle'>Merge Requests</th>
                             <th colSpan='2' className='mrTitle'>Total Merge Requests: {mergerequests?.length || 0}</th>
                         </tr>
                     </thead>
