@@ -21,7 +21,8 @@ const CommitsList = (props) => {
             <Table striped bordered hover variant="light">
                 <thead>
                         <tr>
-                            <th colSpan='6' className='commitTitle'>Commits</th>
+                            <th colSpan='4' className='commitTitle'>Commits</th>
+                            <th colSpan='2' className='mrTitle'>Total Commits: {commits?.length || 0}</th>
                         </tr>
                 </thead>
                 <thead>
@@ -36,7 +37,7 @@ const CommitsList = (props) => {
                 </thead>
                 <tbody>
                     {!commits?.length ? (
-                        <td colSpan='4' >{message.NO_COMMITS}</td>
+                        <td colSpan='6' >{message.NO_COMMITS}</td>
                     )
                     :
                     items.map((commit, i) => (
