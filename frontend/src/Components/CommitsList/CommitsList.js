@@ -21,7 +21,7 @@ const CommitsList = (props) => {
             <Table striped bordered hover variant="light">
                 <thead>
                         <tr>
-                            <th colSpan='6' className='commitTitle'>Commits</th>
+                            <th colSpan='5' className='commitTitle'>Commits</th>
                             <th colSpan='2' className='mrTitle'>Total Commits: {commits?.length || 0}</th>
                         </tr>
                 </thead>
