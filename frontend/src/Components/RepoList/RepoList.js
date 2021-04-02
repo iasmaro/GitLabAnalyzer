@@ -18,10 +18,13 @@ const RepoList = (props) => {
     const filterRepos = ((repo)=>{
         if (searchWord === '') {
             return repo
-        } else if (repo?.projectName.toLowerCase().includes(searchWord.toLowerCase())) {
+        } else if (repo?.projectName && repo?.projectName.toLowerCase().includes(searchWord.toLowerCase())) {
             return repo
         }
-        else if (utcToLocal(repo?.updatedAt).toLowerCase().includes(searchWord.toLowerCase())) {
+        else if (repo?.namespace && repo?.namespace.toLowerCase().includes(searchWord.toLowerCase())) {
+            return repo
+        }
+        else if (repo?.updatedAt && utcToLocal(repo?.updatedAt).toLowerCase().includes(searchWord.toLowerCase())) {
             return repo
         }
     });
