@@ -3,10 +3,15 @@ import { Form, Button} from 'react-bootstrap';
 
 import {ConfigLabels} from 'Constants/constants';
 
+// import DeleteNewFileConfig from './DeleteNewFileConfig'
+
 import './ConfigForm.css';
 
 const NewFileTypeCofig = (props) => {
-    const { handleInputChange, state, handleAddClick} = props || {};
+    const { handleInputChange, handleDeleteClick, index, inputList } = props || {};
+
+    const state = inputList[index] || {};
+    console.log(inputList)
 
     return (
          <tr className="merge-request" >
@@ -14,42 +19,45 @@ const NewFileTypeCofig = (props) => {
                 <Form.Control 
                     placeholder={ConfigLabels.NEW_FILE_EXTENSION} 
                     name = "FILE_EXTENSION"
-                    defaultValue = {state.FILE_EXTENSION}
-                    onChange = {handleInputChange}
+                    value = {inputList.FILE_EXTENSION}
+                    onChange = {(e) => handleInputChange(e, index)}
                 />
             </td>
             <td>
                 <Form.Control 
                     placeholder={ConfigLabels.SINGLE_COMMENT}
                     name = "SINGLE_COMMENT"
-                    onChange = {handleInputChange} 
+                    value = {inputList.SINGLE_COMMENT}
+                    onChange = {(e) => handleInputChange(e, index)} 
                 />
             </td>
             <td>
                 <Form.Control 
                     placeholder={ConfigLabels.MULTI_START_COMMENT} 
                     name = "MULTI_START_COMMENT"
-                    onChange = {handleInputChange}
+                    value = {inputList.MULTI_START_COMMENT}
+                    onChange = {(e) => handleInputChange(e, index)}
                 />
             </td>
             <td>
                 <Form.Control 
                     placeholder={ConfigLabels.MULTI_END_COMMENT} 
                     name = "MULTI_END_COMMENT"
-                    onChange = {handleInputChange}
+                    value = {inputList.MULTI_END_COMMENT}
+                    onChange = {(e) => handleInputChange(e, index)}
                 />
             </td>
             <td>
                 <Form.Control 
                     placeholder={ConfigLabels.FILE_WEIGHT} 
                     name = "WEIGHT"
-                    onChange = {handleInputChange}
+                    value = {inputList.FILE_WEIGHT}
+                    onChange = {(e) => handleInputChange(e, index)}
                 />
             </td>
             <td>
-                <Button type="submit" size='md' block onClick={handleAddClick}>+</Button>
+                <Button variant="danger" size='md' block onClick={() => handleDeleteClick(index)}>-</Button>
             </td>
-           
         </tr>
     );
 };
