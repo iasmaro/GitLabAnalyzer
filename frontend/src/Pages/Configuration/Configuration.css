@@ -43,6 +43,30 @@
     z-index: 2;
 }
 
+thead th.default {
+    cursor: pointer;
+}
+  
+thead th.ascending {
+    cursor: pointer;
+}
+
+thead th.descending {
+    cursor: pointer;
+}
+  
+thead th.ascending::after {
+    content: '↑';
+    display: inline-block;
+    margin-left: 8px;
+}
+  
+thead th.descending::after {
+    content: '↓';
+    display: inline-block;
+    margin-left: 8px;
+}
+
 /* Adapted from https://www.w3schools.com/howto/howto_js_snackbar.asp */
 #config-snackbar {
     visibility: hidden;

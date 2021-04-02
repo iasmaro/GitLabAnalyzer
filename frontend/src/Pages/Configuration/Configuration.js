@@ -10,6 +10,7 @@ import { useUserState } from 'UserContext';
 import deleteConfig from 'Utils/deleteConfig';
 
 import ConfigDefault from 'Components/Configurations/ConfigDefault';
+import { useSortableDataArray, getClassNamesFor } from 'Utils/sortTables';
 import { defaultConfig } from 'Mocks/mockConfigs.js';
 import './Configuration.css';
 
@@ -21,6 +22,7 @@ const ConfigurationPage = () => {
     const [updateConfigs, setUpdateConfigs] = useState(false);
     const [configInfo, setConfigInfo] = useState();
     const [configs, setConfigs] = useState([]);
+    const { items, requestSortArray, sortConfig  } = useSortableDataArray(configs);
     const [message, setMessage] = useState("");
     const username = useUserState();
 
@@ -71,7 +73,7 @@ const ConfigurationPage = () => {
                 <Table striped bordered hover variant="light">
                     <thead>
                         <tr>
-                            <th colSpan='3' className='configTitle'>
+                            <th colSpan='3' className={getClassNamesFor(sortConfig)} onClick={() => requestSortArray(configs)}>
                                 Configurations
                             <Button variant="info" onClick={handleShow} className="new-config-button">+</Button>
                             </th>
@@ -79,7 +81,7 @@ const ConfigurationPage = () => {
                     </thead>
                     <tbody>
                         <ConfigDefault defaultConfig={defaultConfig} handleClick={handleClick} />
-                        {!isLoadingConfigs && configs?.length > 0 && configs.map((config) => (
+                        {!isLoadingConfigs && configs?.length > 0 && items.map((config) => (
                             <Config key={config} config={config} handleClick={handleClick} handleDelete={handleDelete} />
                         ))}
                     </tbody>

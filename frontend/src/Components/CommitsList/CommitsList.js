@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 
 import { message } from 'Constants/constants';
-
+import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
 import Commit from './Commit';
 import './CommitsList.css';
 
 const CommitsList = (props) => {
     const { commits, setCodeDiffs } = props || {};
     const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
+    const { items, requestSortObject, sortConfig  } = useSortableDataObject(commits);
 
     useEffect(() => {
         setSelectedRowIndex(-1);
@@ -26,24 +27,26 @@ const CommitsList = (props) => {
             <Table bordered hover variant="light">
                 <thead>
                         <tr>
-                            <th colSpan='6' className='commitTitle'>Commits</th>
+                            <th colSpan='4' className='commitTitle'>Commits</th>
+                            <th colSpan='2' className='mrTitle'>Total Commits: {commits?.length || 0}</th>
                         </tr>
                 </thead>
                 <thead>
                     <tr className='commits-headers'>
-                        <th>Date</th>
-                        <th>Message</th>
-                        <th>Score</th>
-                        <th>Author</th>
-                        <th colSpan='2'>Lines Changed</th>
+                        <th className={getClassNamesFor(sortConfig, 'commitDate')} onClick={() => requestSortObject('commitDate')}>Date</th>
+                        <th className={getClassNamesFor(sortConfig, 'commitMessage')} onClick={() => requestSortObject('commitMessage')}>Message</th>
+                        <th className={getClassNamesFor(sortConfig, 'commitScore')} onClick={() => requestSortObject('commitScore')}>Score</th>
+                        <th className={getClassNamesFor(sortConfig, 'commitAuthor')} onClick={() => requestSortObject('commitAuthor')}>Author</th>
+                        <th className={getClassNamesFor(sortConfig, 'linesAdded')} onClick={() => requestSortObject('linesAdded')}>Lines +</th>
+                        <th className={getClassNamesFor(sortConfig, 'linesRemoved')} onClick={() => requestSortObject('linesRemoved')}>Lines -</th>
                     </tr>
                 </thead>
                 <tbody>
                     {!commits?.length ? (
-                        <td colSpan='4' >{message.NO_COMMITS}</td>
+                        <td colSpan='6' >{message.NO_COMMITS}</td>
                     )
                     :
-                    commits.map((commit, index) => (
+                    items.map((commit, index) => (
                         <Commit 
                             key={index} 
                             commit={commit} 
