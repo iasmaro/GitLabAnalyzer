@@ -42,29 +42,34 @@ public class ReportService {
         // TODO: Check in database
         Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId = new HashMap<>();
         Map<String, List<CommitDTO>> commitListByMemberId = new HashMap<>();
-        Map<String, List<CommentDTO>> commentListByMemberId = new HashMap<>();
+        Map<String, List<CommentDTO>> MRCommentListByMemberId = new HashMap<>();
+        Map<String, List<CommentDTO>> issueCommentListByMemberId = new HashMap<>();
         List<String> userList = new ArrayList<>();
 
         userList.add(userId);
-
-        List<MergeRequestDTO> allMergeRequestList = mergeRequestService.getAllMergeRequests(userId, projectId);
 
         List<String> memberList = memberService.getMembers(userId, projectId);
 
         for(String member : memberList) {
 
             List<MergeRequestDTO> mergeRequestDTOs = mergeRequestService.getAllMergeRequestsForMember(userId, projectId, member);
-            List<CommitDTO> commitDTOs = commitService.getCommitsForSelectedMemberAndDate(userId, projectId, member);
-            List<CommentDTO> commentDTOs = commentService.getMergeRequestComments(userId, projectId, member);
+            List<CommitDTO> commits = commitService.getCommitsForSelectedMemberAndDate(userId, projectId, member);
+            List<CommentDTO> MRComments = commentService.getMergeRequestComments(userId, projectId, member);
+            List<CommentDTO> issueComments = commentService.getMergeRequestComments(userId, projectId, member);
 
             mergeRequestListByMemberId.put(member, mergeRequestDTOs);
-            commitListByMemberId.put(member, commitDTOs);
-            commentListByMemberId.put(member, commentDTOs);
+            commitListByMemberId.put(member, commits);
+            MRCommentListByMemberId.put(member, MRComments);
+            issueCommentListByMemberId.put(member, issueComments);
 
         }
 
-        return new ReportDTO(allMergeRequestList, mergeRequestListByMemberId, commitListByMemberId, commentListByMemberId, userList, projectId);
-
+        return new ReportDTO(
+                mergeRequestListByMemberId,
+                commitListByMemberId,
+                MRCommentListByMemberId,
+                issueCommentListByMemberId,
+                userList);
     }
 
     public void saveReport(ReportDTO reportDTO) {

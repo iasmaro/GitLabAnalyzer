@@ -5,25 +5,26 @@ import java.util.Map;
 
 public class ReportDTO {
 
-    private List<MergeRequestDTO> allMergeRequestList;
-
     private Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId;
     private Map<String, List<CommitDTO>> commitListByMemberId;
-    private Map<String, List<CommentDTO>> commentListByMemberId;
+    private Map<String, List<CommentDTO>> MRCommentListByMemberId;
+    private Map<String, List<CommentDTO>> issueCommentListByMemberId;
     private List<String> userList;
     private int projectId;
 
-    public ReportDTO(List<MergeRequestDTO> allMergeRequestList, Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId, Map<String, List<CommitDTO>> commitListByMemberId, Map<String, List<CommentDTO>> commentListByMemberId, List<String> userList, int projectId) {
-        this.allMergeRequestList = allMergeRequestList;
+    public ReportDTO(Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId,
+                     Map<String, List<CommitDTO>> commitListByMemberId,
+                     Map<String, List<CommentDTO>> MRCommentListByMemberId,
+                     Map<String, List<CommentDTO>> issueCommentListByMemberId,
+                     List<String> userList,
+                     int projectId) {
+
         this.mergeRequestListByMemberId = mergeRequestListByMemberId;
         this.commitListByMemberId = commitListByMemberId;
-        this.commentListByMemberId = commentListByMemberId;
+        this.MRCommentListByMemberId = MRCommentListByMemberId;
+        this.issueCommentListByMemberId = issueCommentListByMemberId;
         this.userList = userList;
         this.projectId = projectId;
-    }
-
-    public List<MergeRequestDTO> getAllMergeRequestList() {
-        return allMergeRequestList;
     }
 
     public Map<String, List<MergeRequestDTO>> getMergeRequestListByMemberId() {
@@ -34,8 +35,12 @@ public class ReportDTO {
         return commitListByMemberId;
     }
 
-    public Map<String, List<CommentDTO>> getCommentListByMemberId() {
-        return commentListByMemberId;
+    public Map<String, List<CommentDTO>> getMRCommentListByMemberId() {
+        return MRCommentListByMemberId;
+    }
+
+    public Map<String, List<CommentDTO>> getIssueCommentListByMemberId() {
+        return issueCommentListByMemberId;
     }
 
     public List<String> getUserList() {
