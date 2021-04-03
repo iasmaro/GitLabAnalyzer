@@ -1,18 +1,18 @@
 const dev = {
     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://localhost:3000/',
-    AUTHENTICATION_API_URL: 'http://localhost:8080/api/v1/users/userId?url=http://localhost:3000/',
-    REPOS_API_URL: 'http://localhost:8080/api/v1/projects',
-    MR_API_URL: 'http://localhost:8080/api/v1/mergeRequests/member/',
-    MR_COMMITS_API_URL: 'http://localhost:8080/api/v1/commits/mergeRequests/',
-    COMMITS_API_URL: 'http://localhost:8080/api/v1/commits/members/',
-    USERS_TOKEN_API_URL: 'http://localhost:8080/api/v1/users/token',
-    USERS_API_URL: 'http://localhost:8080/api/v1/users',
-    PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
-    SAVE_CONFIG_URL: 'http://localhost:8080/api/v1/users/configuration',
-    PROJECT_ALIAS_API_URL: 'http://localhost:8080/api/v1/members/alias',
-    PROJECT_MAPPING_API_URL: 'http://localhost:8080/api/v1/members/mapping',
-    CONFIGURATION_FILES_URL: 'http://localhost:8080/api/v1/users/configuration',
-    CONFIGURATION_FILE_INFO_URL: 'http://localhost:8080/api/v1/users/configuration/',
+    AUTHENTICATION_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/userId?url=http://localhost:3000/',
+    REPOS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/projects',
+    MR_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/mergeRequests/member/',
+    MR_COMMITS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/commits/mergeRequests/',
+    COMMITS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/commits/members/',
+    USERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users',
+    USERS_TOKEN_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/token',
+    PROJECT_MEMBERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members',
+    SAVE_CONFIG_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
+    PROJECT_ALIAS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members/alias',
+    PROJECT_MAPPING_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members/mapping',
+    CONFIGURATION_FILES_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
+    CONFIGURATION_FILE_INFO_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration/',
 };
 
 const prod = {
@@ -31,7 +31,6 @@ const prod = {
     CONFIGURATION_FILES_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration/',
 };
-
 export const config = process.env.NODE_ENV === 'development' ? dev : prod;
 
 export const modal = {
@@ -98,11 +97,11 @@ export const ConfigLabels = {
 
 export const initialConfigState = {
     CONFIGURATION_NAME: '',
-    ADD_NEW_LINE : '+1.0',
-    DELETE_LINE : '+0.2',
-    SPACING : '+0',
-    SYNTAX : '+0.2',
-    MOVE_LINE : '+0.5',
+    ADD_NEW_LINE : '1.0',
+    DELETE_LINE : '0.2',
+    SPACING : '0',
+    SYNTAX : '0.2',
+    MOVE_LINE : '0.5',
     JAVA: '1.0',
     JS: '0.3',
     TS: '0.2',
