@@ -233,4 +233,3 @@ const ConfigForm = (props) => {
 }
 
 export default ConfigForm
-
