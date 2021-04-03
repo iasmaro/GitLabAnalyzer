@@ -79,7 +79,7 @@ public class UserController {
     @DeleteMapping("/activeConfig")
     public void deleteActiveConfig(@RequestParam @NotBlank String userId) {
 
-        userService.delateActiveConfig(userId);
+        userService.deleteActiveConfig(userId);
 
     }
 
