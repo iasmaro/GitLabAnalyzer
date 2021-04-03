@@ -2,7 +2,7 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.DiffDTO;
-import com.haumea.gitanalyzer.dto.DiffScoreDTO;
+import com.haumea.gitanalyzer.dto.ScoreDTO;
 import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
@@ -23,18 +23,10 @@ public class CommitService {
     private final UserService userService;
     private final MemberService memberService;
 
-    private int linesAdded;
-    private int linesRemoved;
-    private double commitScore;
-
     @Autowired
     public CommitService(UserService userService, MemberService memberService) {
         this.userService = userService;
         this.memberService = memberService;
-
-        this.linesAdded = 0;
-         this.linesRemoved = 0;
-        this.commitScore = 0.0;
     }
 
     private List<String> getAliasForMember(String memberId) {
@@ -70,10 +62,6 @@ public class CommitService {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
-        this.linesAdded = 0;
-        this.linesRemoved = 0;
-        this.commitScore = 0.0;
-
         List<DiffDTO> commitDiffs = new ArrayList<>();
 
         for(Diff diff : codeDiffs) {
@@ -88,7 +76,7 @@ public class CommitService {
 
             List<CommentType> commentTypes = configuration.getCommentTypes().getOrDefault(diffExtension, createDefaultCommentTypes());
 
-            DiffScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
+            ScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
                     diff.getDeletedFile(),
                     addLine,
                     deleteLine,
@@ -103,24 +91,43 @@ public class CommitService {
                     diff.getDiff(),
                     scoreDTO);
 
-            this.linesAdded = this.linesAdded + scoreDTO.getLinesAdded();
-            this.linesRemoved = this.linesRemoved + scoreDTO.getLinesRemoved();
-            this.commitScore = this.commitScore + scoreDTO.getDiffScore();
-
 
             commitDiffs.add(diffDTO);
         }
 
+        diffScoreCalculator.clearMoveLineLists();
+
         return commitDiffs;
     }
 
-    //Source: Andrew's IndividualDiffScoreCalculator
-    private double roundScore(double commitScore) {
+    private ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
 
-        BigDecimal roundedScore = new BigDecimal(Double.toString(commitScore));
-        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
+        int linesAdded = 0;
+        int linesRemoved = 0;
+        int linesMoved = 0;
+        int spaceLinesAdded = 0;
+        double commitScore = 0.0;
+        Map<String, Double> fileTypeScoresMap = new HashMap<>();
 
-        return roundedScore.doubleValue();
+        for (DiffDTO diffDTO : diffDTOList) {
+
+            String diffExtension = diffDTO.getExtension();
+
+            linesAdded = linesAdded + diffDTO.getLinesAdded();
+            linesRemoved = linesRemoved + diffDTO.getLinesRemoved();
+            commitScore = commitScore + diffDTO.getDiffScore();
+            linesMoved = linesMoved + diffDTO.getLinesMoved();
+            spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
+
+            double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
+            fileTypeScore = diffDTO.getScoreDTO().roundScore(fileTypeScore);
+            fileTypeScoresMap.put(diffExtension, fileTypeScore);
+        }
+
+        ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore, linesMoved, spaceLinesAdded);
+        commitScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
+
+        return commitScoreDTO;
     }
 
     private List<CommitDTO> convertCommitWrappersToDTOs(List<CommitWrapper> wrapperList, Configuration configuration) {
@@ -133,9 +140,17 @@ public class CommitService {
 
             List<DiffDTO> commitDiffs = getCommitDiffs(currentCommit.getNewCode(), configuration);
 
-            double roundedCommitScore = roundScore(this.commitScore);
+            ScoreDTO commitStats = getCommitStats(commitDiffs);
 
-            CommitDTO newDTO = new CommitDTO(commit.getMessage(), commit.getCommittedDate(), commit.getAuthorName(), roundedCommitScore, commitDiffs, this.linesAdded, this.linesRemoved);
+            CommitDTO newDTO = new CommitDTO(commit.getMessage(),
+                    commit.getCommittedDate(),
+                    commit.getAuthorName(),
+                    commit.getWebUrl(),
+                    commitStats.getScore(),
+                    commitStats.getScoreByFileTypes(),
+                    commitDiffs,
+                    commitStats.getLinesAdded(),
+                    commitStats.getLinesRemoved());
 
             commitDTOList.add(newDTO);
         }
@@ -152,14 +167,14 @@ public class CommitService {
 
         List<CommitWrapper> mergeRequestCommits = gitlabService.getMergeRequestCommitsWithDiffByAuthor(projectId, mergeRequestId, alias);
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
+        Configuration configuration = userService.getConfiguration(userId);
 
         return convertCommitWrappersToDTOs(mergeRequestCommits, configuration);
     }
 
     public List<CommitDTO> getCommitsForSelectedMemberAndDate(String userId, int projectId, String memberId) {
 
-        Configuration activeConfiguration = userService.getConfiguration(userId, projectId);
+        Configuration activeConfiguration = userService.getConfiguration(userId);
 
         GitlabService gitlabService = userService.createGitlabService(userId);
         List<CommitWrapper> filteredCommits;
@@ -168,8 +183,8 @@ public class CommitService {
 
         filteredCommits = gitlabService.getFilteredCommitsWithDiffByAuthor(projectId,
                 activeConfiguration.getTargetBranch(),
-                activeConfiguration.getStart(),
-                activeConfiguration.getEnd(),
+                userService.getStart(userId),
+                userService.getEnd(userId),
                 alias);
 
         return convertCommitWrappersToDTOs(filteredCommits, activeConfiguration);
@@ -184,7 +199,7 @@ public class CommitService {
 
         filteredCommits = gitlabService.getOrphanFilteredCommitsWithDiffByAuthor(projectId, targetBranch, start, end, alias);
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
+        Configuration configuration = userService.getConfiguration(userId);
 
         return convertCommitWrappersToDTOs(filteredCommits, configuration);
 
@@ -197,7 +212,7 @@ public class CommitService {
 
         mergeRequestCommits = gitlabService.getMergeRequestCommitsWithDiff(projectId, mergeRequestId);
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
+        Configuration configuration = userService.getConfiguration(userId);
 
         return convertCommitWrappersToDTOs(mergeRequestCommits, configuration);
     }
@@ -209,7 +224,7 @@ public class CommitService {
 
         dummyMergeRequestCommits = gitlabService.getOrphanFilteredCommitsWithDiff(projectId, targetBranch, start, end);
 
-        Configuration configuration = userService.getConfiguration(userId, projectId);
+        Configuration configuration = userService.getConfiguration(userId);
 
         return convertCommitWrappersToDTOs(dummyMergeRequestCommits, configuration);
 

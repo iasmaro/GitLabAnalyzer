@@ -10,6 +10,7 @@ import { useUserState } from 'UserContext';
 import deleteConfig from 'Utils/deleteConfig';
 
 import ConfigDefault from 'Components/Configurations/ConfigDefault';
+import { useSortableDataArray, getClassNamesFor } from 'Utils/sortTables';
 import { defaultConfig } from 'Mocks/mockConfigs.js';
 import './Configuration.css';
 
@@ -21,6 +22,8 @@ const ConfigurationPage = () => {
     const [updateConfigs, setUpdateConfigs] = useState(false);
     const [configInfo, setConfigInfo] = useState();
     const [configs, setConfigs] = useState([]);
+    const { items, requestSortArray, sortConfig  } = useSortableDataArray(configs);
+    const [message, setMessage] = useState("");
     const username = useUserState();
 
     const handleClick = (config) => {
@@ -64,31 +67,32 @@ const ConfigurationPage = () => {
     }, [username, updateConfigs]);
 
     return (
-    <div className = 'configs-list-container'>
-        <div className="configs-left">
-            <Table striped bordered hover variant="light">
-                <thead>
-                    <tr>
-                        <th colSpan='3' className='configTitle'>
-                            Configurations
+        <div className='configs-list-container'>
+            <div id="config-snackbar">{message}</div>
+            <div className="configs-left">
+                <Table striped bordered hover variant="light">
+                    <thead>
+                        <tr>
+                            <th colSpan='3' className={getClassNamesFor(sortConfig)} onClick={() => requestSortArray(configs)}>
+                                Configurations
                             <Button variant="info" onClick={handleShow} className="new-config-button">+</Button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <ConfigDefault defaultConfig={defaultConfig} handleClick={handleClick}/>
-                    {!isLoadingConfigs && configs?.length > 0 && configs.map((config) => (
-                        <Config key={config} config={config} handleClick={handleClick} handleDelete={handleDelete} />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ConfigDefault defaultConfig={defaultConfig} handleClick={handleClick} />
+                        {!isLoadingConfigs && configs?.length > 0 && items.map((config) => (
+                            <Config key={config} config={config} handleClick={handleClick} handleDelete={handleDelete} />
                         ))}
-                </tbody>
-            </Table>
+                    </tbody>
+                </Table>
+            </div>
+            {show && <ConfigModal status={show} toggleModal={handleClose} setMessage={setMessage} />}
+            <div className="configs-right">
+                {selectedConfig && isLoadingConfigInfo && <Spinner animation="border" className="right-spinner" />}
+                {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} />}
+            </div>
         </div>
-        {show && <ConfigModal status={show} toggleModal={handleClose}/>}
-        <div className="configs-right">
-            {selectedConfig && isLoadingConfigInfo && <Spinner animation="border" className="right-spinner" />}
-            {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} />}
-        </div>
-    </div>
     )
 }
 

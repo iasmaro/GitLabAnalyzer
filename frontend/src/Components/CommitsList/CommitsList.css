@@ -20,10 +20,51 @@
     cursor: pointer;
 }
 
+.commit-selected {
+    cursor: pointer;
+    background-color: #eaeaeb;
+}
+
 .lines-added {
     color: green;
 }
 
 .lines-removed {
     color: red;
+}
+
+.commits-headers th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #fff;
+}
+
+.tooltip .tooltip-inner {
+    max-width: 100%; 
+}
+
+thead th.default {
+    cursor: pointer;
+}
+  
+thead th.ascending {
+    cursor: pointer;
+}
+  
+thead th.descending {
+    cursor: pointer;
+}
+  
+thead th.ascending::after {
+    content: '↑';
+    display: inline-block;
+    margin-left: 8px;
+}
+  
+thead th.descending::after {
+    content: '↓';
+    display: inline-block;
+    margin-left: 8px;
 }

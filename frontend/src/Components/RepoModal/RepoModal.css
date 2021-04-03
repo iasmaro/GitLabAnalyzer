@@ -26,6 +26,11 @@
     margin: 20px;
 }
 
+.dates {
+    align-items: center;
+    margin: 20px;
+}
+
 .students {
     align-items: center;
     margin: 20px;
@@ -45,4 +50,9 @@
 .dropdown-toggle:hover {
     background-color: #636363;
     border-color: white;
+}
+
+.error-message {
+    color: red;
+    margin: 0 35px;
 }

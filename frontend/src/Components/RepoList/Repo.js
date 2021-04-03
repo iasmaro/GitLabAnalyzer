@@ -7,6 +7,8 @@ import getMembersAndAliasesFromGitLab from 'Utils/getMembersAndAliasesFromGitLab
 import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
 import getConfigurations from 'Utils/getConfigurations';
 import { useUserState } from 'UserContext';
+import getEndDate from 'Utils/getEndDate';
+import getStartDate from 'Utils/getStartDate';
 
 const Repo = (props) => {
     const { repo } = props || {};
@@ -17,6 +19,8 @@ const Repo = (props) => {
     const [members, setMembers] = useState([]);
     const [aliases, setAliases] = useState([]);
     const [databaseMapping, setDatabaseMapping] = useState([]);
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
     const username = useUserState();
     
     const handleShow = () => {
@@ -34,6 +38,12 @@ const Repo = (props) => {
         getConfigurations(username).then((data) => {
             setConfigs(data);
         });
+        getStartDate(username).then((data) => {
+            setStartDate(data);
+        });
+        getEndDate(username).then((data) => {
+            setEndDate(data);
+        });
         setShow(true);
     }
 
@@ -42,12 +52,24 @@ const Repo = (props) => {
     return (
         <tr>
             <td>{repo?.projectName}</td>
+            <td>{repo?.namespace}</td>
             <td>{utcToLocal(repo?.updatedAt)}</td>
             <td>
                 <Button variant="dark" onClick={handleShow}> Analyze </Button>
             </td>
             {(isLoadingGitLabCall || isLoadingDatabaseCall) ? <Spinner animation="border" className="spinner" /> :
-             show && <RepoModal name={repo?.projectName} id={repo?.projectId} members={members} aliases={aliases} databaseMapping={databaseMapping} createdAt={repo?.createdAt} configs={configs} status={show} toggleModal={handleClose}/>}
+             show && <RepoModal 
+                        name={repo?.projectName} 
+                        id={repo?.projectId} 
+                        members={members} 
+                        aliases={aliases} 
+                        databaseMapping={databaseMapping} 
+                        createdAt={repo?.createdAt} 
+                        configs={configs} 
+                        status={show} 
+                        toggleModal={handleClose} 
+                        start={startDate} 
+                        end={endDate}/>}
         </tr>
     );
 };

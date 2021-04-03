@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -61,6 +62,20 @@ public class UserController {
 
     }
 
+    @GetMapping("/start")
+    public Date getStart(@RequestParam @NotBlank String userId) {
+
+        return userService.getStart(userId);
+
+    }
+
+    @GetMapping("/end")
+    public Date getEnd(@RequestParam @NotBlank String userId) {
+
+        return userService.getEnd(userId);
+
+    }
+
     @DeleteMapping("/activeConfig")
     public void deleteActiveConfig(@RequestParam @NotBlank String userId) {
 
@@ -102,8 +117,7 @@ public class UserController {
     }
 
     @GetMapping("/configuration/default")
-    public Configuration getDefaultConfiguration(@RequestParam @NotBlank String userId,
-                                                 @RequestParam @NotNull Integer projectId){
-        return userService.createDefaultConfig(userId, projectId);
+    public Configuration getDefaultConfiguration(){
+        return userService.createDefaultConfig();
     }
 }

@@ -2,6 +2,11 @@
     cursor: pointer;
 }
 
+.merge-request-selected {
+    cursor: pointer;
+    background-color: #eaeaeb;
+}
+
 .merge-request-list-container {
     font-family: 'Roboto', sans-serif;
     background-color: #acbed8;
@@ -27,4 +32,40 @@
 
 .lines-removed {
     color: red;
+}
+
+.mr-headers th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #fff;
+}
+
+.tooltip .tooltip-inner {
+    max-width: 100%; 
+}
+
+thead th.default {
+    cursor: pointer;
+}
+  
+thead th.ascending {
+    cursor: pointer;
+}
+  
+thead th.descending {
+    cursor: pointer;
+}
+  
+thead th.ascending::after {
+    content: '↑';
+    display: inline-block;
+    margin-left: 8px;
+}
+  
+thead th.descending::after {
+    content: '↓';
+    display: inline-block;
+    margin-left: 8px;
 }

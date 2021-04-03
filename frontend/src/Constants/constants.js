@@ -1,18 +1,20 @@
 const dev = {
     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://localhost:3000/',
-    AUTHENTICATION_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/userId?url=http://localhost:3000/',
-    REPOS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/projects',
-    MR_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/mergeRequests/member/',
-    MR_COMMITS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/commits/mergeRequests/',
-    COMMITS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/commits/members/',
-    USERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users',
-    USERS_TOKEN_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/token',
-    PROJECT_MEMBERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members',
-    SAVE_CONFIG_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
-    PROJECT_ALIAS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members/alias',
-    PROJECT_MAPPING_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members/mapping',
-    CONFIGURATION_FILES_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
-    CONFIGURATION_FILE_INFO_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration/',
+    AUTHENTICATION_API_URL: 'http://localhost:8080/api/v1/users/userId?url=http://localhost:3000/',
+    REPOS_API_URL: 'http://localhost:8080/api/v1/projects',
+    MR_API_URL: 'http://localhost:8080/api/v1/mergeRequests/member/',
+    MR_COMMITS_API_URL: 'http://localhost:8080/api/v1/commits/mergeRequests/',
+    COMMITS_API_URL: 'http://localhost:8080/api/v1/commits/members/',
+    USERS_TOKEN_API_URL: 'http://localhost:8080/api/v1/users/token',
+    USERS_API_URL: 'http://localhost:8080/api/v1/users',
+    PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
+    SAVE_CONFIG_URL: 'http://localhost:8080/api/v1/users/configuration',
+    PROJECT_ALIAS_API_URL: 'http://localhost:8080/api/v1/members/alias',
+    PROJECT_MAPPING_API_URL: 'http://localhost:8080/api/v1/members/mapping',
+    CONFIGURATION_FILES_URL: 'http://localhost:8080/api/v1/users/configuration',
+    CONFIGURATION_FILE_INFO_URL: 'http://localhost:8080/api/v1/users/configuration/',
+    START_URL: 'http://localhost:8080/api/v1/users/start/',
+    END_URL: 'http://localhost:8080/api/v1/users/end/'
 };
 
 const prod = {
@@ -30,11 +32,16 @@ const prod = {
     PROJECT_MAPPING_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members/mapping',
     CONFIGURATION_FILES_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration/',
+    START_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/start/',
+    END_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/end/',
 };
+
+
 export const config = process.env.NODE_ENV === 'development' ? dev : prod;
 
 export const modal = {
     CONFIG : "Configuration:",
+    DATES : "Dates:",
     CONFIG_OPTION : "Default Configuration",
     START_DATE : "Start Date:",
     END_DATE : "End Date:"
@@ -61,8 +68,6 @@ export const message = {
 
 export const ConfigLabels = {
     CONFIGURATION_NAME: "Configuration Name:",
-    START_DATE: "Start Date:",
-    END_DATE: "End Date:",
     ADD_NEW_LINE: "Add New Line:",
     DELETE_LINE: "Delete Line:",
     SPACING: "Spacing Change:",
@@ -92,8 +97,8 @@ export const ConfigLabels = {
     SINGLE_COMMENT: "Enter Single Line Comment",
     MULTI_START_COMMENT: "Enter Start of Multi-line Comment",
     MULTI_END_COMMENT: "Enter End of Multi-line Comment",
-    DATE_TIME: "Date & Time"
 }
+
 
 export const initialConfigState = {
     CONFIGURATION_NAME: '',

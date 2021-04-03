@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown, DropdownButton, Row, Col } from 'react-bootstrap';
 
-import { modal } from "Constants/constants";
+import { modal } from 'Constants/constants';
 
 import { useUserState } from 'UserContext';
 import updateUser from 'Utils/updateUser';
@@ -9,15 +9,16 @@ import deleteActiveConfig from 'Utils/deleteActiveConfig';
 
 const RepoModalConfig = (props) => {
     
-    const {defaultConfig, configs, config, setConfig} = props;
+    const {defaultConfig, configs, config, setConfig, setShowError} = props;
     const username = useUserState();
 
     const selectConfig = (configuration) => {
+        setShowError(false);
         if (configuration === 'default') {
             deleteActiveConfig(username);
         }
         else {
-            updateUser(username, '', '', configuration);
+            updateUser(username, '', '', '', '', configuration);
         }
         setConfig(configuration);
     };
