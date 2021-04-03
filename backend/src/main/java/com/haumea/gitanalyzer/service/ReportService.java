@@ -69,7 +69,8 @@ public class ReportService {
                 commitListByMemberId,
                 MRCommentListByMemberId,
                 issueCommentListByMemberId,
-                userList);
+                userList,
+                projectId);
     }
 
     public void saveReport(ReportDTO reportDTO) {
