@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.UserRepository;
 import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
+import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.ProjectWrapper;
 import com.haumea.gitanalyzer.model.Configuration;
@@ -63,7 +64,7 @@ public class UserService {
         return userRepository.getEnd(userId);
     }
 
-    public void delateActiveConfig(String userId){
+    public void deleteActiveConfig(String userId){
         userRepository.deleteActiveConfig(userId);
     }
 
@@ -122,6 +123,7 @@ public class UserService {
         return configuration;
 
     }
+
 
     public User saveConfiguration(String userId, Configuration configuration) {
         return userRepository.saveConfiguration(userId, configuration);
