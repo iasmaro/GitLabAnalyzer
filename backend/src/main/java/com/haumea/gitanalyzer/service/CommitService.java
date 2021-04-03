@@ -55,7 +55,7 @@ public class CommitService {
         return defaultCommentTypes;
     }
 
-    private List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs, Configuration configuration) {
+    public List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs, Configuration configuration) {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
@@ -97,7 +97,8 @@ public class CommitService {
         return commitDiffs;
     }
 
-    private ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
+
+    public ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
         int linesRemoved = 0;

@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useUserState } from 'UserContext';
 import AnalyzerTabs from 'Components/AnalyzerTabs/AnalyzerTabs';
 import AnalysisDropDown from 'Components/AnalyzerInfo/AnalysisDropDown';
+import AnalysisSpecifications from 'Components/AnalyzerInfo/AnalysisSpecifications';
 import analyzeAll from 'Utils/analyzeAll';
 import getProjectMembers from 'Utils/getProjectMembers';
 
@@ -14,7 +15,7 @@ const Analysis = (props) => {
     const { location } = props || {};
     const { state } = location || {};
     const { data } = state || {};
-    const { projectId } = data || {};
+    const { projectId, configuration, startDate, endDate, namespace, projectName } = data || {};
     const [isLoading, setIsLoading] = useState(true);
     const [mergeRequests, setMergeRequests] = useState();
     const [commits, setCommits] = useState();
@@ -53,6 +54,7 @@ const Analysis = (props) => {
 
     return (
         <div className="analysis-page">
+            <AnalysisSpecifications startDate={startDate} endDate={endDate} configuration={configuration} namespace={namespace} projectName={projectName} />
             <div className="analysis-header">
                 <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
             </div>
