@@ -36,7 +36,6 @@ const prod = {
     END_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/end/',
 };
 
-
 export const config = process.env.NODE_ENV === 'development' ? dev : prod;
 
 export const modal = {
