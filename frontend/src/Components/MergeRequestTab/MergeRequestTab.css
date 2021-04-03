@@ -23,11 +23,11 @@
     position: absolute;
     top: 4.4em;
     right: 1.3em;
-    width: 55.5%;
+    width: 56.6%;
 }
 
 .expanded {
-    width: 94.85%;
+    width: 95.5%;
 }
 
 .mrs-top {
@@ -51,13 +51,12 @@
 }
 
 .expand-button {
-    margin-top: 20em;
-
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-    width: 3em;
-    height: 3em;
-    padding: 6px 0px;
-    border-radius: 1.5em;
+    margin-top: 1em;
+    margin-left: 0.1em;
+    margin-right: 0em;
+    width: 2em;
+    height: 2em;
+    padding: 4px 0px;
+    border-radius: 1.0em;
     text-align: center;
 }
