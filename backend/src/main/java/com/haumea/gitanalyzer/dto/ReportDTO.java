@@ -11,13 +11,15 @@ public class ReportDTO {
     private Map<String, List<CommitDTO>> commitListByMemberId;
     private Map<String, List<CommentDTO>> commentListByMemberId;
     private List<String> userList;
+    private int projectId;
 
-    public ReportDTO(List<MergeRequestDTO> allMergeRequestList, Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId, Map<String, List<CommitDTO>> commitListByMemberId, Map<String, List<CommentDTO>> commentListByMemberId, List<String> userList) {
+    public ReportDTO(List<MergeRequestDTO> allMergeRequestList, Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId, Map<String, List<CommitDTO>> commitListByMemberId, Map<String, List<CommentDTO>> commentListByMemberId, List<String> userList, int projectId) {
         this.allMergeRequestList = allMergeRequestList;
         this.mergeRequestListByMemberId = mergeRequestListByMemberId;
         this.commitListByMemberId = commitListByMemberId;
         this.commentListByMemberId = commentListByMemberId;
         this.userList = userList;
+        this.projectId = projectId;
     }
 
     public List<MergeRequestDTO> getAllMergeRequestList() {

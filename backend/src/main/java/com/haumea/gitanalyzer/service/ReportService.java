@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.service;
 
+import com.haumea.gitanalyzer.dao.ReportRepository;
 import com.haumea.gitanalyzer.dto.CommentDTO;
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
@@ -15,6 +16,7 @@ import java.util.Map;
 @Service
 public class ReportService {
 
+    private final ReportRepository reportRepository;
     private final MergeRequestService mergeRequestService;
     private final CommitService commitService;
     private final CommentService commentService;
@@ -22,7 +24,12 @@ public class ReportService {
     private final MemberService memberService;
 
     @Autowired
-    public ReportService(MergeRequestService mergeRequestService, CommitService commitService, CommentService commentService, MemberService memberService) {
+    public ReportService(ReportRepository reportRepository,
+                         MergeRequestService mergeRequestService,
+                         CommitService commitService,
+                         CommentService commentService,
+                         MemberService memberService) {
+        this.reportRepository = reportRepository;
         this.mergeRequestService = mergeRequestService;
         this.commitService = commitService;
         this.commentService = commentService;
@@ -31,6 +38,8 @@ public class ReportService {
 
     public ReportDTO getReportForRepository(String userId, int projectId) {
 
+
+        // TODO: Check in database
         Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId = new HashMap<>();
         Map<String, List<CommitDTO>> commitListByMemberId = new HashMap<>();
         Map<String, List<CommentDTO>> commentListByMemberId = new HashMap<>();
@@ -54,8 +63,12 @@ public class ReportService {
 
         }
 
-        return new ReportDTO(allMergeRequestList, mergeRequestListByMemberId, commitListByMemberId, commentListByMemberId, userList);
+        return new ReportDTO(allMergeRequestList, mergeRequestListByMemberId, commitListByMemberId, commentListByMemberId, userList, projectId);
 
+    }
+
+    public void saveReport(ReportDTO reportDTO) {
+        reportRepository.saveReportToDatabase(reportDTO);
     }
 
 }

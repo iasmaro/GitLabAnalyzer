@@ -1,6 +1,9 @@
 package com.haumea.gitanalyzer.gitlab;
 
+import com.haumea.gitanalyzer.dao.MemberRepository;
+import com.haumea.gitanalyzer.dao.ReportRepository;
 import org.gitlab4j.api.GitLabApiException;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -128,29 +131,31 @@ public class Main {
 //
 //        test.testScoreCalculator(27200);
 
-        test.testGetIssueComments(
-                25516,
-                createDateFromString("2021-01-07T00:00:00-08:00"),
-                createDateFromString("2021-02-22T02:30:00-08:00"));
+//        test.testGetIssueComments(
+//                25516,
+//                createDateFromString("2021-01-07T00:00:00-08:00"),
+//                createDateFromString("2021-02-22T02:30:00-08:00"));
+//
+//        test.testGetIssueCommentsByAuthor(
+//                25516,
+//                createDateFromString("2021-01-07T00:00:00-08:00"),
+//                createDateFromString("2021-02-22T02:30:00-08:00"),
+//                new ArrayList<String>(Arrays.asList("tmbui")));
+//
+//        test.testGetMRComments(
+//                25516,
+//                "master",
+//                createDateFromString("2021-01-07T00:00:00-08:00"),
+//                createDateFromString("2021-02-22T02:30:00-08:00"));
+//
+//        test.testGetMRCommentsByAuthor(
+//                25516,
+//                "master",
+//                createDateFromString("2021-01-07T00:00:00-08:00"),
+//                createDateFromString("2021-02-22T02:30:00-08:00"),
+//                new ArrayList<String>(Arrays.asList("tmbui")));
 
-        test.testGetIssueCommentsByAuthor(
-                25516,
-                createDateFromString("2021-01-07T00:00:00-08:00"),
-                createDateFromString("2021-02-22T02:30:00-08:00"),
-                new ArrayList<String>(Arrays.asList("tmbui")));
 
-        test.testGetMRComments(
-                25516,
-                "master",
-                createDateFromString("2021-01-07T00:00:00-08:00"),
-                createDateFromString("2021-02-22T02:30:00-08:00"));
-
-        test.testGetMRCommentsByAuthor(
-                25516,
-                "master",
-                createDateFromString("2021-01-07T00:00:00-08:00"),
-                createDateFromString("2021-02-22T02:30:00-08:00"),
-                new ArrayList<String>(Arrays.asList("tmbui")));
 
 
     }
