@@ -4,10 +4,7 @@ import com.haumea.gitanalyzer.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ReportService {
@@ -17,14 +14,16 @@ public class ReportService {
     private final CommentService commentService;
     private final GraphService graphService;
 
+    private final UserService userService;
     private final MemberService memberService;
 
     @Autowired
-    public ReportService(MergeRequestService mergeRequestService, CommitService commitService, CommentService commentService, GraphService graphService, MemberService memberService) {
+    public ReportService(MergeRequestService mergeRequestService, CommitService commitService, CommentService commentService, GraphService graphService, UserService userService, MemberService memberService) {
         this.mergeRequestService = mergeRequestService;
         this.commitService = commitService;
         this.commentService = commentService;
         this.graphService = graphService;
+        this.userService = userService;
         this.memberService = memberService;
     }
 
@@ -44,6 +43,9 @@ public class ReportService {
         List<String> userList = new ArrayList<>();
 
         userList.add(userId);
+
+        Date start = userService.getStart(userId);
+        Date end = userService.getEnd(userId);
 
         List<String> memberList = memberService.getMembers(userId, projectId);
 
@@ -75,6 +77,8 @@ public class ReportService {
 
         return new ReportDTO(
                 projectId,
+                start,
+                end,
                 mergeRequestListByMemberId,
                 commitListByMemberId,
                 MRCommentListByMemberId,

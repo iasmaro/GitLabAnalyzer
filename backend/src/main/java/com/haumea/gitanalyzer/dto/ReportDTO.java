@@ -1,11 +1,15 @@
 package com.haumea.gitanalyzer.dto;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class ReportDTO {
 
     int projectId;
+    Date start;
+    Date end;
+
     private Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId;
     private Map<String, List<CommitDTO>> commitListByMemberId;
 
@@ -20,6 +24,8 @@ public class ReportDTO {
     private List<String> userList;
 
     public ReportDTO(int projectId,
+                     Date start,
+                     Date end,
                      Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId,
                      Map<String, List<CommitDTO>> commitListByMemberId,
                      Map<String, List<CommentDTO>> MRCommentListByMemberId,
@@ -30,6 +36,8 @@ public class ReportDTO {
                      Map<String, List<IssueGraphDTO>> issueGraphListByMemberId,
                      List<String> userList) {
         this.projectId = projectId;
+        this.start = start;
+        this.end = end;
         this.mergeRequestListByMemberId = mergeRequestListByMemberId;
         this.commitListByMemberId = commitListByMemberId;
         this.MRCommentListByMemberId = MRCommentListByMemberId;
@@ -40,6 +48,15 @@ public class ReportDTO {
         this.issueGraphListByMemberId = issueGraphListByMemberId;
         this.userList = userList;
     }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
 
     public int getProjectId() {
         return projectId;
