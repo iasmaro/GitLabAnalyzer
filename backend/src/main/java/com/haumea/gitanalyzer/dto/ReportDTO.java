@@ -17,7 +17,6 @@ public class ReportDTO {
     private Map<String, List<CodeReviewGraphDTO>> codeReviewGraphListByMemberId;
     private Map<String, List<IssueGraphDTO>> issueGraphListByMemberId;
 
-
     private List<String> userList;
 
     public ReportDTO(int projectId,
@@ -81,5 +80,4 @@ public class ReportDTO {
     public List<String> getUserList() {
         return userList;
     }
-
 }
