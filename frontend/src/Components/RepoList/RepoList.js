@@ -3,7 +3,7 @@ import { Table, Badge, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
 import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
-import { utcToLocal } from 'Components/Utils/formatDates';
+import filterRepos from 'Utils/filterRepos'
 
 import Repo from './Repo';
 import RepoSearchBar from './RepoSearchBar';
@@ -14,20 +14,6 @@ const RepoList = (props) => {
     const [searchWord, setSearchWord] = useState('');
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(repos);
     const namespaceTooltip = <Tooltip>Namespace refers to the user name, group name, or subgroup name associated with the repository.</Tooltip>;
-
-    const filterRepos = ((repo)=>{
-        if (searchWord === '') {
-            return repo
-        } else if (repo?.projectName && repo?.projectName.toLowerCase().includes(searchWord.toLowerCase())) {
-            return repo
-        }
-        else if (repo?.namespace && repo?.namespace.toLowerCase().includes(searchWord.toLowerCase())) {
-            return repo
-        }
-        else if (repo?.updatedAt && utcToLocal(repo?.updatedAt).toLowerCase().includes(searchWord.toLowerCase())) {
-            return repo
-        }
-    });
     
     return (
         <div className = 'list-container'>
@@ -64,7 +50,7 @@ const RepoList = (props) => {
                         </tr>
                     )
                     :
-                    items.filter((repo)=>filterRepos(repo)).map((repo) => (
+                    items.filter((repo)=>filterRepos(repo, searchWord)).map((repo) => (
                         <Repo key={repo?.projectId} repo={repo}/>
                     ))}
                 </tbody>
