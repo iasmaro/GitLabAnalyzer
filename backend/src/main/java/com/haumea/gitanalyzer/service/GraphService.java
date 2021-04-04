@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GraphService {
@@ -69,41 +66,24 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
-        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
-        // but the next day will not.
-        end.set(Calendar.HOUR_OF_DAY, 0);
-        end.set(Calendar.MINUTE, 0);
-        end.set(Calendar.SECOND, 0);
-        end.add(Calendar.DAY_OF_MONTH,1);
+        int currentCount = 0;
 
-        for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+        // loop from end date to start date because gitlab Service returns them sorted descending
+        for(Date date = end.getTime(); end.after(start); end.add(Calendar.DATE, -1), date = end.getTime()) {
 
             int numberOfCommits = 0;
             double totalScore = 0.0;
 
-            // Keep track of a list of commits on this date to remove from the list of commits
-            // because a commit can only be on one date. This will slightly improve efficiency.
-            List<CommitWrapper> commitsOnThisDate = new ArrayList<CommitWrapper>();
-
-            for(CommitWrapper commit : allCommits) {
-
-                Date commitDate = commit.getCommitData().getCommittedDate();
-
-                if(isSameDay(commitDate, date)) {
-
-                    numberOfCommits++;
-                    List<DiffDTO> commitDiffs = commitService.getCommitDiffs(commit.getNewCode(), userConfig);
-                    ScoreDTO commitStats = commitService.getCommitStats(commitDiffs);
-                    totalScore = totalScore + commitStats.getScore();
-                    commitsOnThisDate.add(commit);
-
-                }
-
+            while(isSameDay(allCommits.get(currentCount).getCommitData().getCommittedDate(), date) && currentCount != allCommits.size() - 1) {
+                numberOfCommits++;
+                List<DiffDTO> commitDiffs = commitService.getCommitDiffs(allCommits.get(currentCount).getNewCode(), userConfig);
+                ScoreDTO commitStats = commitService.getCommitStats(commitDiffs);
+                totalScore = totalScore + commitStats.getScore();
+                currentCount++;
             }
 
-            allCommits.removeAll(commitsOnThisDate);
-            CommitGraphDTO commitGraphDTO = new CommitGraphDTO(date, numberOfCommits, totalScore);
-            returnList.add(commitGraphDTO);
+            CommitGraphDTO commitGraphDTO = new CommitGraphDTO (date,numberOfCommits, totalScore);
+            returnList.add(0, commitGraphDTO);
 
         }
         return returnList;
