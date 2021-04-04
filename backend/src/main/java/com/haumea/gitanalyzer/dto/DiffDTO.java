@@ -11,6 +11,7 @@ public class DiffDTO {
     private int linesRemoved;
     private int linesMoved;
     private int spaceLinesAdded;
+    private int syntaxLinesAdded;
 
     private double diffScore;
 
@@ -23,6 +24,7 @@ public class DiffDTO {
         this.linesRemoved = scoreDTO.getLinesRemoved();
         this.linesMoved = scoreDTO.getLinesMoved();
         this.spaceLinesAdded = scoreDTO.getSpaceLinesAdded();
+        this.syntaxLinesAdded = scoreDTO.getSyntaxLinesAdded();
         this.diffScore = scoreDTO.getScore();
     }
 
@@ -56,6 +58,10 @@ public class DiffDTO {
 
     public int getSpaceLinesAdded() {
         return spaceLinesAdded;
+    }
+
+    public int getSyntaxLinesAdded() {
+        return syntaxLinesAdded;
     }
 
     public double getDiffScore() {
