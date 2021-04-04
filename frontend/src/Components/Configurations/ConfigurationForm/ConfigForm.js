@@ -33,7 +33,7 @@ const ConfigForm = (props) => {
 
     
     const handleInputChange = event => {
-        const {name, value} = event.target
+        const { name, value } = event.target
         setstate({
             ...state,
             [name]: value,

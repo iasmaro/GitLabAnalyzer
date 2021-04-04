@@ -1,10 +1,7 @@
 import React from 'react';
 import { Form, Button} from 'react-bootstrap';
 
-import {ConfigLabels} from 'Constants/constants';
-
-// import DeleteNewFileConfig from './DeleteNewFileConfig'
-
+import { ConfigLabels } from 'Constants/constants';
 import './ConfigForm.css';
 
 const NewFileTypeCofig = (props) => {

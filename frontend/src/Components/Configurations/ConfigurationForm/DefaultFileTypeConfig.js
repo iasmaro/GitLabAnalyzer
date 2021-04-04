@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
-import {ConfigLabels} from 'Constants/constants';
+import { ConfigLabels } from 'Constants/constants';
 
 import './ConfigForm.css';
 
