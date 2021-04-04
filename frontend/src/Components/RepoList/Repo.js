@@ -69,7 +69,8 @@ const Repo = (props) => {
                         status={show} 
                         toggleModal={handleClose} 
                         start={startDate} 
-                        end={endDate}/>}
+                        end={endDate}
+                        namespace={repo?.namespace}/>}
         </tr>
     );
 };

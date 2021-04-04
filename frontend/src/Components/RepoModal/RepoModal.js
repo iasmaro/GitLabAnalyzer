@@ -19,7 +19,7 @@ import { sameAliasIdPairs } from './RepoModalMapAliasTable/Utils/sameAliasIdPair
 import RepoModalDateTimePicker from './RepoModalDateTimePicker';
 
 const RepoModal = (props) => {
-    const { name, id, members, aliases, configs, databaseMapping, status, toggleModal, start, end } = props || {};    
+    const { name, id, members, aliases, configs, databaseMapping, status, toggleModal, start, end, namespace } = props || {};    
     const [config, setConfig] = useState("Select a configuration");
     const [aliasIdPairs, setAliasIdPairs] = useState(createInitialAliasIdPairs(aliases, members, databaseMapping)); 
     const databaseAliasIdPairs = createInitialAliasIdPairs(aliases, members, databaseMapping);
@@ -63,6 +63,10 @@ const RepoModal = (props) => {
         const data = {
             configuration: config,
             projectId: id,
+            startDate: startDate,
+            endDate: endDate,
+            namespace: namespace,
+            projectName: name
         }
         if (startDate !== start || endDate !== end) {
             updateUser(username, '', '', startDate, endDate);

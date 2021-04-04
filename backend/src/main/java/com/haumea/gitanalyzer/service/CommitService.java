@@ -12,9 +12,6 @@ import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -58,7 +55,7 @@ public class CommitService {
         return defaultCommentTypes;
     }
 
-    private List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs, Configuration configuration) {
+    public List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs, Configuration configuration) {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
@@ -100,14 +97,17 @@ public class CommitService {
         return commitDiffs;
     }
 
-    private ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
+
+    public ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
         int linesRemoved = 0;
         int linesMoved = 0;
         int spaceLinesAdded = 0;
+        int syntaxLinesAdded = 0;
         double commitScore = 0.0;
         Map<String, Double> fileTypeScoresMap = new HashMap<>();
+        ScoreDTO roundObject = new ScoreDTO();
 
         for (DiffDTO diffDTO : diffDTOList) {
 
@@ -118,13 +118,14 @@ public class CommitService {
             commitScore = commitScore + diffDTO.getDiffScore();
             linesMoved = linesMoved + diffDTO.getLinesMoved();
             spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
+            syntaxLinesAdded = syntaxLinesAdded + diffDTO.getSyntaxLinesAdded();
 
             double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
-            fileTypeScore = diffDTO.getScoreDTO().roundScore(fileTypeScore);
+            fileTypeScore = roundObject.roundScore(fileTypeScore);
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
-        ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore, linesMoved, spaceLinesAdded);
+        ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, commitScore, linesMoved, spaceLinesAdded, syntaxLinesAdded);
         commitScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
 
         return commitScoreDTO;

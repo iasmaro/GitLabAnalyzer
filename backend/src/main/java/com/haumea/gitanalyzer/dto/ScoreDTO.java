@@ -10,6 +10,7 @@ public class ScoreDTO {
     private int linesRemoved;
     private int linesMoved;
     private int spaceLinesAdded;
+    private int syntaxLinesAdded;
     private double score;
     private Map<String, Double> scoreByFileTypes;
 
@@ -22,13 +23,14 @@ public class ScoreDTO {
         this.spaceLinesAdded = 0;
     }
 
-    public ScoreDTO(int linesAdded, int linesRemoved, double score, int linesMoved, int spaceLinesAdded) {
+    public ScoreDTO(int linesAdded, int linesRemoved, double score, int linesMoved, int spaceLinesAdded, int syntaxLinesAdded) {
 
         this.linesAdded = linesAdded;
         this.linesRemoved = linesRemoved;
         this.score = this.roundScore(score);
         this.linesMoved = linesMoved;
         this.spaceLinesAdded = spaceLinesAdded;
+        this.syntaxLinesAdded = syntaxLinesAdded;
     }
 
     public double roundScore(double score) {
@@ -53,6 +55,10 @@ public class ScoreDTO {
 
     public int getSpaceLinesAdded() {
         return spaceLinesAdded;
+    }
+
+    public int getSyntaxLinesAdded() {
+        return syntaxLinesAdded;
     }
 
     public double getScore() {

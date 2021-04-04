@@ -14,9 +14,6 @@ import org.gitlab4j.api.models.MergeRequest;
 import org.gitlab4j.api.models.MergeRequestDiff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -73,7 +70,7 @@ public class MergeRequestService {
         return defaultCommentTypes;
     }
 
-    private List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff, Configuration configuration) {
+    public List<DiffDTO> getMergeRequestDiffs(MergeRequestDiff mergeRequestDiff, Configuration configuration) {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
@@ -116,14 +113,17 @@ public class MergeRequestService {
         return mergeRequestDiffs;
     }
 
-    private ScoreDTO getMergeRequestStats(List<DiffDTO> diffDTOList) {
+
+    public ScoreDTO getMergeRequestStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
         int linesRemoved = 0;
         int linesMoved = 0;
         int spaceLinesAdded = 0;
+        int syntaxLinesAdded = 0;
         double MRScore = 0.0;
         Map<String, Double> fileTypeScoresMap = new HashMap<>();
+        ScoreDTO roundObject = new ScoreDTO();
 
         for (DiffDTO diffDTO : diffDTOList) {
 
@@ -134,13 +134,14 @@ public class MergeRequestService {
             MRScore = MRScore + diffDTO.getDiffScore();
             linesMoved = linesMoved + diffDTO.getLinesMoved();
             spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
+            syntaxLinesAdded = syntaxLinesAdded + diffDTO.getSyntaxLinesAdded();
 
             double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
-            fileTypeScore = diffDTO.getScoreDTO().roundScore(fileTypeScore);
+            fileTypeScore = roundObject.roundScore(fileTypeScore);
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
-        ScoreDTO mergeRequestScoreDTO = new ScoreDTO(linesAdded, linesRemoved, MRScore, linesMoved, spaceLinesAdded);
+        ScoreDTO mergeRequestScoreDTO = new ScoreDTO(linesAdded, linesRemoved, MRScore, linesMoved, spaceLinesAdded, syntaxLinesAdded);
         mergeRequestScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
 
         return mergeRequestScoreDTO;
