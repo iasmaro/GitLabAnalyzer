@@ -66,12 +66,15 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
-        // set start date to 23:59:59 of previous day. This will guarantee the start day will be iterated through
-        // but the next day will not.
-        start.set(Calendar.HOUR_OF_DAY, 23);
+        // set start date to 16:59:59 PST of previous day == 23:59:59 GMT. This will guarantee the start day will be iterated through
+        // but the previous day will not.
+        start.set(Calendar.HOUR_OF_DAY, 16);
         start.set(Calendar.MINUTE, 59);
         start.set(Calendar.SECOND, 59);
         start.add(Calendar.DAY_OF_MONTH,-1);
+
+        // daylight savings
+        end.set(Calendar.HOUR_OF_DAY, 15);
 
         int currentCount = 0;
 
