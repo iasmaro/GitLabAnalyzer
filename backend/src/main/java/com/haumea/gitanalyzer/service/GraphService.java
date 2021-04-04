@@ -81,7 +81,7 @@ public class GraphService {
             int numberOfCommits = 0;
             double totalScore = 0.0;
 
-            while(isSameDay(allCommits.get(currentCount).getCommitData().getCommittedDate(), date) && currentCount != allCommits.size() - 1) {
+            while(currentCount != allCommits.size() && isSameDay(allCommits.get(currentCount).getCommitData().getCommittedDate(), date)) {
                 numberOfCommits++;
                 List<DiffDTO> commitDiffs = commitService.getCommitDiffs(allCommits.get(currentCount).getNewCode(), userConfig);
                 ScoreDTO commitStats = commitService.getCommitStats(commitDiffs);
