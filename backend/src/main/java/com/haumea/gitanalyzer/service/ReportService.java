@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.service;
 
+import com.haumea.gitanalyzer.dao.ReportRepository;
 import com.haumea.gitanalyzer.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import java.util.*;
 @Service
 public class ReportService {
 
+    private final ReportRepository reportRepository;
     private final MergeRequestService mergeRequestService;
     private final CommitService commitService;
     private final CommentService commentService;
@@ -18,7 +20,8 @@ public class ReportService {
     private final MemberService memberService;
 
     @Autowired
-    public ReportService(MergeRequestService mergeRequestService, CommitService commitService, CommentService commentService, GraphService graphService, UserService userService, MemberService memberService) {
+    public ReportService(ReportRepository reportRepository, MergeRequestService mergeRequestService, CommitService commitService, CommentService commentService, GraphService graphService, UserService userService, MemberService memberService) {
+        this.reportRepository = reportRepository;
         this.mergeRequestService = mergeRequestService;
         this.commitService = commitService;
         this.commentService = commentService;
@@ -89,5 +92,9 @@ public class ReportService {
                 issueGraphListByMemberId,
                 userList);
 
+    }
+
+    public void saveReport(ReportDTO reportDTO) {
+        reportRepository.saveReportToDatabase(reportDTO);
     }
 }

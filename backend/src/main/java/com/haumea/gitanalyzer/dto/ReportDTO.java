@@ -1,15 +1,22 @@
 package com.haumea.gitanalyzer.dto;
 
+import lombok.NoArgsConstructor;
+import nonapi.io.github.classgraph.json.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
+@Document(collection = "Reports")
 public class ReportDTO {
+    @Id
+    private int projectId;
+    private Date start;
+    private Date end;
 
-    int projectId;
-    Date start;
-    Date end;
-
+//    @NotBlank
     private Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId;
     private Map<String, List<CommitDTO>> commitListByMemberId;
 
@@ -23,6 +30,8 @@ public class ReportDTO {
 
     private List<String> userList;
 
+
+    @PersistenceConstructor
     public ReportDTO(int projectId,
                      Date start,
                      Date end,
