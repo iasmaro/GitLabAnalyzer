@@ -80,9 +80,6 @@ public class GraphService {
 
         int currentCount = 0;
 
-        System.out.println(start.getTime());
-        System.out.println(end.getTime());
-
         // loop from end date to start date because gitlab Service returns them sorted descending
         for(Date date = end.getTime(); end.after(start); end.add(Calendar.DATE, -1), date = end.getTime()) {
 
@@ -177,12 +174,17 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
-        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
+        // set end date to 17:00:00 PST == 00:00:00 GMT of next day. This will guarantee the end day will be iterated through
         // but the next day will not.
-        end.set(Calendar.HOUR_OF_DAY, 0);
+        end.set(Calendar.HOUR_OF_DAY, 17);
         end.set(Calendar.MINUTE, 0);
         end.set(Calendar.SECOND, 0);
-        end.add(Calendar.DAY_OF_MONTH,1);
+
+        // set start time to avoid problems with daylight savings
+        start.set(Calendar.HOUR_OF_DAY, 15);
+        start.set(Calendar.MINUTE, 59);
+        start.set(Calendar.SECOND, 59);
+
 
         for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
@@ -238,12 +240,16 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
-        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
+        // set end date to 17:00:00 PST == 00:00:00 GMT of next day. This will guarantee the end day will be iterated through
         // but the next day will not.
-        end.set(Calendar.HOUR_OF_DAY, 0);
+        end.set(Calendar.HOUR_OF_DAY, 17);
         end.set(Calendar.MINUTE, 0);
         end.set(Calendar.SECOND, 0);
-        end.add(Calendar.DAY_OF_MONTH,1);
+
+        // set start time to avoid problems with daylight savings
+        start.set(Calendar.HOUR_OF_DAY, 15);
+        start.set(Calendar.MINUTE, 59);
+        start.set(Calendar.SECOND, 59);
 
         for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
