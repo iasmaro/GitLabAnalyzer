@@ -21,7 +21,7 @@ const RepoList = (props) => {
                 <thead>
                     <tr className='table-header'>
                         <th colSpan='2' className='repoTitle'>Repositories</th>
-                        <th colSpan='2' className='repoTitle'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord}></RepoSearchBar></th>
+                        <th colSpan='2' className='repoTitle'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord} /></th>
                     </tr>
                 </thead>
                 <thead>
