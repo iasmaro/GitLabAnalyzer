@@ -8,8 +8,9 @@ import './MergeRequestList.css';
 const MergeRequest = (props) => {
     const { mergerequest, handleClick, selected, index } = props || {};
     const mergeRequestRowClass = selected ? 'merge-request-selected' : 'merge-request';
-    const dummyTooltip = <Tooltip>Dummy refers to all the commits that were made directly to the master. 
-        These commits have no associated merge requests, hence MR score is not applicable.</Tooltip>;
+    const dummyTooltip = <Tooltip>
+        Dummy refers to all the commits that were made directly to the master. These commits have no associated merge requests, hence MR score is not applicable.
+        </Tooltip>;
 
     return (
         <tr className={mergeRequestRowClass} onClick={() => {handleClick(mergerequest?.commitDTOList, mergerequest?.mergeRequestDiffs, index)}} >
