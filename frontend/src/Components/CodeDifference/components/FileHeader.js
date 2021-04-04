@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 
 import './FileHeader.css';
+import FileHeaderModal from './FileHeaderModal';
 
 
 const FileHeader = (props) => {
     const { isOpen, fileName, linesAdded, linesRemoved, diffScore } = props || {};
+
+    const[showScore, setShowScore] = useState(false);
+
+    const handleShow = () => setShow(true);
+    const handleClose = () => {
+        setShow(false);
+        setTimeout(() => {
+            setShowScore(!showScore);
+        }, 200);
+    }
+    const [show, setShow] = useState(false);
 
     return (
         <>
@@ -21,9 +33,12 @@ const FileHeader = (props) => {
                     <span>-{linesRemoved}</span>
                 </div>
                 <div className="file-score">
-                    <span> Score: </span>
-                    <span>{diffScore}</span>
+                    <Button variant="info" onClick={handleShow} size='sm' className="code-diff-score">
+                        <span> Score: </span>
+                        <span>{diffScore}</span>
+                    </Button>
                 </div>
+                {show && <FileHeaderModal status={show} fileName={fileName} toggleModal={handleClose} />}
             </div>
         </>         
     );
