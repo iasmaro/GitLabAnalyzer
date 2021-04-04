@@ -38,6 +38,7 @@ public class IndividualDiffScoreCalculator {
     private int numberOfLinesRemoved;
     private int numberOfLinesMoved;
     private int numberOfSpaceLinesAdded;
+    private int numberOfSyntaxLinesAdded;
 
     public IndividualDiffScoreCalculator() {
 
@@ -85,10 +86,11 @@ public class IndividualDiffScoreCalculator {
         this.numberOfLinesRemoved = 0;
         this.numberOfLinesMoved = 0;
         this.numberOfSpaceLinesAdded = 0;
+        this.numberOfSyntaxLinesAdded = 0;
 
 
         if(isFileDeleted) {
-            return new ScoreDTO(0, 0, 0.0, 0, 0);
+            return new ScoreDTO(0, 0, 0.0, 0, 0, 0);
         }
         else {
             double score;
@@ -107,7 +109,8 @@ public class IndividualDiffScoreCalculator {
                     numberOfLinesRemoved,
                     fileTypeMultiplier * roundedScore.doubleValue(),
                     numberOfLinesMoved,
-                    numberOfSpaceLinesAdded);
+                    numberOfSpaceLinesAdded,
+                    numberOfSyntaxLinesAdded);
         }
     }
 
@@ -198,6 +201,7 @@ public class IndividualDiffScoreCalculator {
             }
             else if(lineWasAdded(line) == false && isSyntax(line) == true) {
                 lineScore = syntaxLineWeight;
+                this.numberOfSyntaxLinesAdded++;
             }
             else {
                 lineScore = deleteLineWeight;
@@ -310,6 +314,8 @@ public class IndividualDiffScoreCalculator {
                 addition = true;
                 removal = false;
                 lastLineSeen = line;
+
+                this.numberOfSyntaxLinesAdded++;
             }
             // normal line added
             else if(isLongComment == false && lineWasRemoved(line) == false) {

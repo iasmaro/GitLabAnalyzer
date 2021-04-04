@@ -69,3 +69,10 @@ thead th.descending::after {
     display: inline-block;
     margin-left: 8px;
 }
+
+.DummyBadge {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
