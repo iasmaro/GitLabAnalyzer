@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button} from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 
 import { ConfigLabels } from 'Constants/constants';
 import './ConfigForm.css';
