@@ -12,9 +12,6 @@ import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -58,7 +55,7 @@ public class CommitService {
         return defaultCommentTypes;
     }
 
-    private List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs, Configuration configuration) {
+    public List<DiffDTO> getCommitDiffs(List<Diff> codeDiffs, Configuration configuration) {
 
         IndividualDiffScoreCalculator diffScoreCalculator = new IndividualDiffScoreCalculator();
 
@@ -100,7 +97,8 @@ public class CommitService {
         return commitDiffs;
     }
 
-    private ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
+
+    public ScoreDTO getCommitStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
         int linesRemoved = 0;
@@ -108,6 +106,7 @@ public class CommitService {
         int spaceLinesAdded = 0;
         double commitScore = 0.0;
         Map<String, Double> fileTypeScoresMap = new HashMap<>();
+        ScoreDTO roundObject = new ScoreDTO();
 
         for (DiffDTO diffDTO : diffDTOList) {
 
@@ -120,7 +119,7 @@ public class CommitService {
             spaceLinesAdded = spaceLinesAdded + diffDTO.getSpaceLinesAdded();
 
             double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getDiffScore();
-            fileTypeScore = diffDTO.getScoreDTO().roundScore(fileTypeScore);
+            fileTypeScore = roundObject.roundScore(fileTypeScore);
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
