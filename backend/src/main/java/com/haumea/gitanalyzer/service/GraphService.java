@@ -73,10 +73,15 @@ public class GraphService {
         start.set(Calendar.SECOND, 59);
         start.add(Calendar.DAY_OF_MONTH,-1);
 
-        // daylight savings
+        // set end time to avoid problems with daylight savings
         end.set(Calendar.HOUR_OF_DAY, 15);
+        end.set(Calendar.MINUTE, 59);
+        end.set(Calendar.SECOND, 59);
 
         int currentCount = 0;
+
+        System.out.println(start.getTime());
+        System.out.println(end.getTime());
 
         // loop from end date to start date because gitlab Service returns them sorted descending
         for(Date date = end.getTime(); end.after(start); end.add(Calendar.DATE, -1), date = end.getTime()) {
