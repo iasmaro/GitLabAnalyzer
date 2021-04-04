@@ -66,6 +66,13 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
+        // set start date to 23:59:59 of previous day. This will guarantee the start day will be iterated through
+        // but the next day will not.
+        start.set(Calendar.HOUR_OF_DAY, 23);
+        start.set(Calendar.MINUTE, 59);
+        start.set(Calendar.SECOND, 59);
+        start.add(Calendar.DAY_OF_MONTH,-1);
+
         int currentCount = 0;
 
         // loop from end date to start date because gitlab Service returns them sorted descending
