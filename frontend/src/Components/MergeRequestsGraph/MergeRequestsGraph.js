@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { graphDateFormatter } from 'Components/Utils/graphDateFormatter';
 import Graph from 'Components/Graph/Graph';
 
 const MergeRequestsGraph = (props) => {
     const { MRsGraph } = props || {};
-
+    const [data, setData] = useState();
+    const [numbers, setNumbers] = useState();
+    const [scores, setScores] = useState();
     const [radioValue, setRadioValue] = useState('1');
     
     const radios = [
@@ -13,15 +15,19 @@ const MergeRequestsGraph = (props) => {
         { name: 'Scores', value: '2' },
     ];
     
-    const numbers = [ ["Date", "Number of MRs"] ];
-    const scores = [ ["Date", "MR Score"] ];
 
-    for (let MR of MRsGraph) {
-        numbers.push([graphDateFormatter(MR?.date), MR?.numberOfMergeRequests]);
-        scores.push([graphDateFormatter(MR?.date), MR?.mergeRequestScore]);
-    }
-
-    const [data, setData] = useState(numbers);
+    useEffect(() => {
+        const numberOfMRs = [ ['Date', 'Number of MRs'] ];
+        const scoresOfMRs = [ ['Date', 'MR Score'] ];
+        for (let MR of MRsGraph) {
+            numberOfMRs.push([graphDateFormatter(MR?.date), MR?.numberOfMergeRequests]);
+            scoresOfMRs.push([graphDateFormatter(MR?.date), MR?.mergeRequestScore]);
+        }
+        setNumbers(numberOfMRs);
+        setScores(scoresOfMRs);
+        setData(numberOfMRs);
+        setRadioValue('1')
+    }, [MRsGraph]);
 
     const handleAxisChange = (e) => {
         setRadioValue(e.currentTarget.value);

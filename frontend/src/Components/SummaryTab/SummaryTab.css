@@ -6,28 +6,29 @@
 .top-left {
     display: inline-block;
     width: 48%;
-    height: 48%;
+    height: 47%;
     margin: 1%;
+    margin-top: 0;
 }
 
 .top-right {
-    background-color: red;
     display: inline-block;
     width: 48%;
-    height: 48%;
+    height: 47%;
     margin: 1%;
+    margin-top: 0;
 }
 
 .bottom-left {
     display: inline-block;
     width: 48%;
-    height: 48%;
+    height: 47%;
     margin: 1%;
 }
 
 .bottom-right {
     display: inline-block;
     width: 48%;
-    height: 48%;
+    height: 47%;
     margin: 1%;
 }

@@ -46,6 +46,7 @@ export const date = {
 
 export const TABS = {
     SCORES: 'Scores',
+    SUMMARY: 'Summary',
     GRAPHS: 'Graphs',
     MERGE_REQUESTS: 'Merge Requests',
     COMMITS: 'Commits'

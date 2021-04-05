@@ -13,16 +13,16 @@ const SummaryTab = (props) => {
     return (
         <div className="summary-tab">
             <div className="top-left">
-                <CommitsGraph commitsGraph={commitsGraph} />
+                {commitsGraph && <CommitsGraph commitsGraph={commitsGraph} />}
             </div>
             <div className="top-right">
-                <MergeRequestsGraph MRsGraph={MRsGraph} />
+                {MRsGraph && <MergeRequestsGraph MRsGraph={MRsGraph} />}
             </div>
             <div className="bottom-left">
-                <ReviewsGraph codeReviewsGraph={codeReviewsGraph} />
+                {codeReviewsGraph && <ReviewsGraph codeReviewsGraph={codeReviewsGraph} />}
             </div>
             <div className="bottom-right">
-                <IssuesGraph issueCommentsGraph={issueCommentsGraph} />
+                {issueCommentsGraph && <IssuesGraph issueCommentsGraph={issueCommentsGraph} />}
             </div>
         </div>
     );

@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { graphDateFormatter } from 'Components/Utils/graphDateFormatter';
 import Graph from 'Components/Graph/Graph';
 
 const CommitsGraph = (props) => {
     const { commitsGraph } = props || {};
-
+    const [data, setData] = useState();
+    const [numbers, setNumbers] = useState();
+    const [scores, setScores] = useState();
     const [radioValue, setRadioValue] = useState('1');
     
     const radios = [
@@ -13,15 +15,19 @@ const CommitsGraph = (props) => {
         { name: 'Scores', value: '2' },
     ];
 
-    const numbers = [ ["Date", "Number of Commits"] ];
-    const scores = [ ["Date", "Commits Score"] ];
+    useEffect(() => {
+        const numberOfCommits = [ ['Date', 'Number of Commits'] ];
+        const scoresOfCommits = [ ['Date', 'Commits Score'] ];
+        for (let commit of commitsGraph) {
+            numberOfCommits.push([graphDateFormatter(commit.date), commit.numberOfCommits]);
+            scoresOfCommits.push([graphDateFormatter(commit.date), commit.totalCommitScore]);
+        }
+        setNumbers(numberOfCommits);
+        setScores(scoresOfCommits);
+        setData(numberOfCommits);
+        setRadioValue('1')
+    }, [commitsGraph]);
 
-    for (let commit of commitsGraph) {
-        numbers.push([graphDateFormatter(commit.date), commit.numberOfCommits]);
-        scores.push([graphDateFormatter(commit.date), commit.totalCommitScore]);
-    }
-
-    const [data, setData] = useState(numbers);
 
     const handleAxisChange = (e) => {
         setRadioValue(e.currentTarget.value);
