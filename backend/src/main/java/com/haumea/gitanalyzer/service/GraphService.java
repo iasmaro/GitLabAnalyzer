@@ -73,7 +73,7 @@ public class GraphService {
         start.set(Calendar.SECOND, 59);
         start.add(Calendar.DAY_OF_MONTH,-1);
 
-        // set end time to avoid problems with daylight savings
+        // set end time to avoid problems with daylight savings. This will also make sure end date is the right date in PST.
         end.set(Calendar.HOUR_OF_DAY, 15);
         end.set(Calendar.MINUTE, 59);
         end.set(Calendar.SECOND, 59);
@@ -180,7 +180,7 @@ public class GraphService {
         end.set(Calendar.MINUTE, 0);
         end.set(Calendar.SECOND, 0);
 
-        // set start time to avoid problems with daylight savings
+        // set start time to avoid problems with daylight savings. This will also make sure start date is the right date in PST.
         start.set(Calendar.HOUR_OF_DAY, 15);
         start.set(Calendar.MINUTE, 59);
         start.set(Calendar.SECOND, 59);
@@ -246,7 +246,7 @@ public class GraphService {
         end.set(Calendar.MINUTE, 0);
         end.set(Calendar.SECOND, 0);
 
-        // set start time to avoid problems with daylight savings
+        // set start time to avoid problems with daylight savings. This will also make sure start date is the right date in PST.
         start.set(Calendar.HOUR_OF_DAY, 15);
         start.set(Calendar.MINUTE, 59);
         start.set(Calendar.SECOND, 59);
