@@ -68,6 +68,7 @@ export const message = {
     TOKEN_NOT_SET: 'Please set your gitlab token in the Profile page',
     NO_REPOS: 'It seems that you do not have any repositories at this moment',
     NO_ALIASES: 'No aliases found',
+    NO_COMMENTS: 'No comments found for this user',
 };
 
 export const ConfigLabels = {

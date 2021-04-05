@@ -1,5 +1,7 @@
 import React from 'react';
 
+import IssueCommentsList from 'Components/CommentsList/IssueCommentsList';
+import MergeRequestCommentsList from 'Components/CommentsList/MergeRequestCommentsList';
 
 import './CommentsTab.css'
 
@@ -9,8 +11,8 @@ const CommentsTab = (props) => {
 
     return (
         <div className="comments-tab">
-            {console.log(issueComments)}
-            {console.log(mergeRequestComments)}
+            <MergeRequestCommentsList mergeRequestComments={mergeRequestComments}/>
+            <IssueCommentsList issueComments={issueComments} />
         </div>
     );
 }
