@@ -66,14 +66,14 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
-        // set start date to 16:59:59 PST of previous day == 23:59:59 GMT. This will guarantee the start day will be iterated through
+        // set start date to 23:59:59 of previous day. This will guarantee the start day will be iterated through
         // but the previous day will not.
-        start.set(Calendar.HOUR_OF_DAY, 16);
+        start.set(Calendar.HOUR_OF_DAY, 23);
         start.set(Calendar.MINUTE, 59);
         start.set(Calendar.SECOND, 59);
         start.add(Calendar.DAY_OF_MONTH,-1);
 
-        // set end time to avoid problems with daylight savings. This will also make sure end date is the right date in PST.
+        // set end time to avoid problems with daylight savings. This will also make sure all dates are correct in PST.
         end.set(Calendar.HOUR_OF_DAY, 15);
         end.set(Calendar.MINUTE, 59);
         end.set(Calendar.SECOND, 59);
@@ -174,17 +174,17 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
-        // set end date to 17:00:00 PST == 00:00:00 GMT of next day. This will guarantee the end day will be iterated through
+        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
         // but the next day will not.
-        end.set(Calendar.HOUR_OF_DAY, 17);
+        end.set(Calendar.HOUR_OF_DAY, 0);
         end.set(Calendar.MINUTE, 0);
         end.set(Calendar.SECOND, 0);
+        end.add(Calendar.DAY_OF_MONTH,1);
 
-        // set start time to avoid problems with daylight savings. This will also make sure start date is the right date in PST.
+        // set start time to avoid problems with daylight savings. This will also make sure all dates are correct in PST.
         start.set(Calendar.HOUR_OF_DAY, 15);
         start.set(Calendar.MINUTE, 59);
         start.set(Calendar.SECOND, 59);
-
 
         for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
@@ -240,13 +240,14 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
-        // set end date to 17:00:00 PST == 00:00:00 GMT of next day. This will guarantee the end day will be iterated through
+        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
         // but the next day will not.
-        end.set(Calendar.HOUR_OF_DAY, 17);
+        end.set(Calendar.HOUR_OF_DAY, 0);
         end.set(Calendar.MINUTE, 0);
         end.set(Calendar.SECOND, 0);
+        end.add(Calendar.DAY_OF_MONTH,1);
 
-        // set start time to avoid problems with daylight savings. This will also make sure start date is the right date in PST.
+        // set start time to avoid problems with daylight savings. This will also make sure all dates are correct in PST.
         start.set(Calendar.HOUR_OF_DAY, 15);
         start.set(Calendar.MINUTE, 59);
         start.set(Calendar.SECOND, 59);
