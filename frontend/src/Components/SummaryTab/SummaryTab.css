@@ -1,0 +1,33 @@
+.summary-tab {
+    height: 100%;
+    width: 100%;
+}
+
+.top-left {
+    display: inline-block;
+    width: 48%;
+    height: 48%;
+    margin: 1%;
+}
+
+.top-right {
+    background-color: red;
+    display: inline-block;
+    width: 48%;
+    height: 48%;
+    margin: 1%;
+}
+
+.bottom-left {
+    display: inline-block;
+    width: 48%;
+    height: 48%;
+    margin: 1%;
+}
+
+.bottom-right {
+    display: inline-block;
+    width: 48%;
+    height: 48%;
+    margin: 1%;
+}

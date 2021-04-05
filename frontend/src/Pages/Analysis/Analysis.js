@@ -19,6 +19,10 @@ const Analysis = (props) => {
     const { projectId, configuration, startDate, endDate, namespace, projectName } = data || {};
     const [isLoading, setIsLoading] = useState(true);
     const [mergeRequests, setMergeRequests] = useState();
+    const [commitsGraph, setCommitsGraph] = useState();
+    const [MRsGraph, setMRsGraph] = useState();
+    const [codeReviewsGraph, setCodeReviewsGraph] = useState();
+    const [issueCommentsGraph, setIssueCommentsGraph] = useState();
     const [commits, setCommits] = useState();
     const [members, setMembers] = useState([]);
     const [student, setStudent] = useState();
@@ -45,8 +49,12 @@ const Analysis = (props) => {
 
     useEffect(() => {
         if (analysis && student) {
-            setMergeRequests(analysis?.mergeRequestListByMemberId[student]);
-            setCommits(analysis?.commitListByMemberId[student]);
+            setMergeRequests(analysis.mergeRequestListByMemberId && analysis.mergeRequestListByMemberId[student]);
+            setCommits(analysis.commitListByMemberId && analysis.commitListByMemberId[student]);
+            setCommitsGraph(analysis.commitGraphListByMemberId && analysis.commitGraphListByMemberId[student]);
+            setMRsGraph(analysis.mrgraphListByMemberId && analysis.mrgraphListByMemberId[student]);
+            setCodeReviewsGraph(analysis.codeReviewGraphListByMemberId && analysis.codeReviewGraphListByMemberId[student]);
+            setIssueCommentsGraph(analysis.issueGraphListByMemberId && analysis.issueGraphListByMemberId[student]);
         }
     }, [student, analysis]);
     
@@ -71,7 +79,14 @@ const Analysis = (props) => {
                 <div className="analysis-header">
                     <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} />
                 </div>
-                <AnalyzerTabs mergerequests={mergeRequests} projectId={projectId} commits={commits} />
+                <AnalyzerTabs
+                    mergerequests={mergeRequests}
+                    projectId={projectId}
+                    commits={commits}
+                    commitsGraph={commitsGraph}
+                    MRsGraph={MRsGraph}
+                    codeReviewsGraph={codeReviewsGraph}
+                    issueCommentsGraph={issueCommentsGraph} />
             </>}
         </div>
     )
