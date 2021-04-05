@@ -12,11 +12,13 @@ import java.util.Map;
 @Document(collection = "Reports")
 public class ReportDTO {
     @Id
+    private String id;
+
+    @NotBlank
     private int projectId;
     private Date start;
     private Date end;
 
-//    @NotBlank
     private Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId;
     private Map<String, List<CommitDTO>> commitListByMemberId;
 

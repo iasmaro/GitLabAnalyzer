@@ -4,6 +4,7 @@ import com.haumea.gitanalyzer.dto.*;
 import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -13,22 +14,30 @@ import java.util.Map;
 //@Document(collection = "Reports")
 public class Report {
     @Id
+    private String id;
+
     private int projectId;
     private Date start;
     private Date end;
 
     @NotBlank
+    @Field
     private Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId;
+    @Field
     private Map<String, List<CommitDTO>> commitListByMemberId;
-
+    @Field
     private Map<String, List<CommentDTO>> MRCommentListByMemberId;
+    @Field
     private Map<String, List<CommentDTO>> issueCommentListByMemberId;
-
+    @Field
     private Map<String, List<CommitGraphDTO>> commitGraphListByMemberId;
+    @Field
     private Map<String, List<MergeRequestGraphDTO>> MRGraphListByMemberId;
+    @Field
     private Map<String, List<CodeReviewGraphDTO>> codeReviewGraphListByMemberId;
+    @Field
     private Map<String, List<IssueGraphDTO>> issueGraphListByMemberId;
-
+    @Field
     private List<String> userList;
 
 

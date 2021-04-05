@@ -97,4 +97,10 @@ public class ReportService {
     public void saveReport(ReportDTO reportDTO) {
         reportRepository.saveReportToDatabase(reportDTO);
     }
+
+    public ReportDTO checkIfInDb(String userId,int projectId) {
+        Optional<ReportDTO> reportDTO = reportRepository.findReportInDb(projectId, userService.getStart(userId), userService.getEnd(userId));
+
+        return reportDTO.get();
+    }
 }

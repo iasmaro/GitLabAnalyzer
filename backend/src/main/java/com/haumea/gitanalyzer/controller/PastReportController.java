@@ -1,10 +1,6 @@
 package com.haumea.gitanalyzer.controller;
 
-import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.ReportDTO;
-import com.haumea.gitanalyzer.gitlab.CommitWrapper;
-import com.haumea.gitanalyzer.gitlab.GitlabService;
-import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.service.ReportService;
 import com.haumea.gitanalyzer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @RestController
 @RequestMapping(path = "/api/v1/PastReports")
@@ -34,11 +28,12 @@ public class PastReportController {
 
 
     @GetMapping("/testdb")
-    public String testDB(@RequestParam @NotBlank String userId,
-                         @RequestParam @NotNull int projectId) throws ParseException {
+    public ReportDTO testDB(@RequestParam @NotBlank String userId,
+                            @RequestParam @NotNull int projectId) throws ParseException {
 
-        reportService.saveReport(reportService.getReportForRepository(userId, projectId));
+//        reportService.saveReport(reportService.getReportForRepository(userId, projectId));
 
-        return "test";
+        return reportService.checkIfInDb(userId, projectId);
+
     }
 }
