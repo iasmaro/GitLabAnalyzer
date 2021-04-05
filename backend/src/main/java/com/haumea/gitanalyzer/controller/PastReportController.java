@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1/PastReports")
@@ -27,13 +28,23 @@ public class PastReportController {
     }
 
 
-    @GetMapping("/testdb")
-    public ReportDTO testDB(@RequestParam @NotBlank String userId,
+    @GetMapping("/getReport")
+    public ReportDTO getReport(@RequestParam @NotBlank String userId,
                             @RequestParam @NotNull int projectId) throws ParseException {
 
-//        reportService.saveReport(reportService.getReportForRepository(userId, projectId));
+        Optional<ReportDTO> databaseReport = reportService.checkIfInDb(userId, projectId);
 
-        return reportService.checkIfInDb(userId, projectId);
+        if(databaseReport.isPresent()) {
+            return databaseReport.get();
+        }
+        else {
+            ReportDTO report = reportService.getReportForRepository(userId, projectId);
+            reportService.saveReport(report);
+
+            return report;
+        }
+
+
 
     }
 }
