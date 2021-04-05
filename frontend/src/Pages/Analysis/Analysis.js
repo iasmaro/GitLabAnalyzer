@@ -19,6 +19,8 @@ const Analysis = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [mergeRequests, setMergeRequests] = useState();
     const [commits, setCommits] = useState();
+    const [issueComments, setIssueComments] = useState();
+    const [mergeRequestComments, setmergeRequestComments] = useState();
     const [members, setMembers] = useState([]);
     const [student, setStudent] = useState();
     const [analysis, setAnalysis] = useState();
@@ -46,6 +48,12 @@ const Analysis = (props) => {
         activeAnalysis?.commits.then((data) => {
             setCommits(data);
         });
+        activeAnalysis?.issueComments.then((data) => {
+            setIssueComments(data);
+        });
+        activeAnalysis?.mergeRequestComments.then((data) => {
+            setmergeRequestComments(data);
+        });
     }, [student, analysis]);
     
     if (!data) {
@@ -58,7 +66,7 @@ const Analysis = (props) => {
             <div className="analysis-header">
                 <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
             </div>
-            {isLoading ? <Spinner animation="border" className="spinner" /> : <AnalyzerTabs mergerequests={mergeRequests} projectId={projectId} commits={commits} />}
+            {isLoading ? <Spinner animation="border" className="spinner" /> : <AnalyzerTabs mergerequests={mergeRequests} projectId={projectId} commits={commits} issueComments={issueComments} mergeRequestComments={mergeRequestComments}/>}
         </div>
     )
 }

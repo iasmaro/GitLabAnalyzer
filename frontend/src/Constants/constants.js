@@ -14,7 +14,9 @@ const dev = {
     CONFIGURATION_FILES_URL: 'http://localhost:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://localhost:8080/api/v1/users/configuration/',
     START_URL: 'http://localhost:8080/api/v1/users/start/',
-    END_URL: 'http://localhost:8080/api/v1/users/end/'
+    END_URL: 'http://localhost:8080/api/v1/users/end/',
+    ISSUE_COMMENTS_URL: 'http://localhost:8080/api/v1/comments/issues/members/',
+    MR_COMMENTS_URL: 'http://localhost:8080/api/v1/comments/mergeRequests/members/',
 };
 
 const prod = {
@@ -34,6 +36,8 @@ const prod = {
     CONFIGURATION_FILE_INFO_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration/',
     START_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/start/',
     END_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/end/',
+    ISSUE_COMMENTS_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/comments/issues/members/',
+    MR_COMMENTS_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/comments/mergeRequests/members/',
 };
 
 export const config = process.env.NODE_ENV === 'development' ? dev : prod;
@@ -54,7 +58,8 @@ export const TABS = {
     SCORES: 'Scores',
     GRAPHS: 'Graphs',
     MERGE_REQUESTS: 'Merge Requests',
-    COMMITS: 'Commits'
+    COMMITS: 'Commits',
+    COMMENTS: 'Comments'
 };
 
 export const message = {
