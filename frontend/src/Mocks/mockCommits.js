@@ -4,6 +4,7 @@ export const commits = [
         id: 'sdf31sc',
         message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         date: '2021-02-17T06:49:59.563Z',
+        commitMessage: 'Test Commit',
         author: 'johndoe'
     },
     {
