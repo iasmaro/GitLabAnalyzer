@@ -86,6 +86,7 @@ public class GraphService {
             int numberOfCommits = 0;
             double totalScore = 0.0;
 
+            // take advantage of the fact that commits are all sorted in descending order and only iterate through them once
             while(currentCount != allCommits.size() && isSameDay(allCommits.get(currentCount).getCommitData().getCommittedDate(), date)) {
                 numberOfCommits++;
                 List<DiffDTO> commitDiffs = commitService.getCommitDiffs(allCommits.get(currentCount).getNewCode(), userConfig);
@@ -117,41 +118,37 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
-        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
-        // but the next day will not.
-        end.set(Calendar.HOUR_OF_DAY, 0);
-        end.set(Calendar.MINUTE, 0);
-        end.set(Calendar.SECOND, 0);
-        end.add(Calendar.DAY_OF_MONTH,1);
+        // set start date to 23:59:59 of previous day. This will guarantee the start day will be iterated through
+        // but the previous day will not.
+        start.set(Calendar.HOUR_OF_DAY, 23);
+        start.set(Calendar.MINUTE, 59);
+        start.set(Calendar.SECOND, 59);
+        start.add(Calendar.DAY_OF_MONTH,-1);
 
-        for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+        // set end time to avoid problems with daylight savings. This will also make sure all dates are correct in PST.
+        end.set(Calendar.HOUR_OF_DAY, 15);
+        end.set(Calendar.MINUTE, 59);
+        end.set(Calendar.SECOND, 59);
+
+        int currentCount = 0;
+
+        // loop from end date to start date because gitlab Service returns them sorted descending
+        for(Date date = end.getTime(); end.after(start); end.add(Calendar.DATE, -1), date = end.getTime()) {
 
             int numberOfMergeRequests= 0;
             double totalScore = 0.0;
 
-            // Keep track of a list of mergeRequests on this date to remove from the list of mergeRequests
-            // because a mergeRequest can only be on one date. This will slightly improve efficiency.
-            List<MergeRequestWrapper> mergeRequestsOnThisDate = new ArrayList<MergeRequestWrapper>();
-
-            for(MergeRequestWrapper mergeRequest : allMergeRequests) {
-
-                Date mergeRequestDate = mergeRequest.getMergeRequestData().getMergedAt();
-
-                if(isSameDay(mergeRequestDate, date)) {
-
-                    numberOfMergeRequests++;
-                    List<DiffDTO> mergeRequestDiffs = mergeRequestService.getMergeRequestDiffs(mergeRequest.getMergeRequestDiff(), userConfig);
-                    ScoreDTO mergeRequestStats = mergeRequestService.getMergeRequestStats(mergeRequestDiffs );
-                    totalScore = totalScore + mergeRequestStats.getScore();
-                    mergeRequestsOnThisDate.add(mergeRequest);
-
-                }
-
+            // take advantage of the fact that mergeRequests are all sorted in descending order and only iterate through them once
+            while(currentCount != allMergeRequests.size() && isSameDay(allMergeRequests.get(currentCount).getMergeRequestData().getMergedAt(), date)) {
+                numberOfMergeRequests++;
+                List<DiffDTO> mergeRequestDiffs = mergeRequestService.getMergeRequestDiffs(allMergeRequests.get(currentCount).getMergeRequestDiff(), userConfig);
+                ScoreDTO mergeRequestStats = mergeRequestService.getMergeRequestStats(mergeRequestDiffs );
+                totalScore = totalScore + mergeRequestStats.getScore();
+                currentCount++;
             }
 
-            allMergeRequests.removeAll(mergeRequestsOnThisDate);
             MergeRequestGraphDTO mergeRequestGraphDTO = new MergeRequestGraphDTO(date, numberOfMergeRequests, totalScore);
-            returnList.add(mergeRequestGraphDTO);
+            returnList.add(0, mergeRequestGraphDTO);
         }
 
         return returnList;
