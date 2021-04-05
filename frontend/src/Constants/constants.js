@@ -98,13 +98,14 @@ export const ConfigLabels = {
     MULTI_END_COMMENT: "Enter End of Multi-line Comment",
 }
 
+
 export const initialConfigState = {
     CONFIGURATION_NAME: '',
-    ADD_NEW_LINE : '+1.0',
-    DELETE_LINE : '+0.2',
-    SPACING : '+0',
-    SYNTAX : '+0.2',
-    MOVE_LINE : '+0.5',
+    ADD_NEW_LINE : '1.0',
+    DELETE_LINE : '0.2',
+    SPACING : '0',
+    SYNTAX : '0.2',
+    MOVE_LINE : '0.5',
     JAVA: '1.0',
     JS: '0.3',
     TS: '0.2',
