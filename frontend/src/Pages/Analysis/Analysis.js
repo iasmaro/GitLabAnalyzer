@@ -29,6 +29,7 @@ const Analysis = (props) => {
     useEffect(() => {
         getProjectMembers(username, projectId).then((data) => {
             setMembers(data);
+            setStudent(data && data[0]);
         });
         getMembersAndAliasesFromDatabase(username, projectId).then((data) => {
             setDatabaseMembersAndAliases(data);
@@ -36,21 +37,17 @@ const Analysis = (props) => {
     }, [username, projectId]);
 
     useEffect(() => {
-        if (members.length > 0 && !analysis) {
-            setStudent(members[0]);
-            setAnalysis(analyzeAll(members, username, projectId));
-        }
-    }, [analysis, projectId, members, username]);
+        analyzeAll(username, projectId).then((data) => {
+            setAnalysis(data);
+            setIsLoading(false);
+        })
+    }, [projectId, username]);
 
     useEffect(() => {
-        const activeAnalysis = analysis && analysis[student];
-        activeAnalysis?.mergeRequests.then((data) => {
-            setMergeRequests(data);
-            setIsLoading(false);
-        });
-        activeAnalysis?.commits.then((data) => {
-            setCommits(data);
-        });
+        if (analysis && student) {
+            setMergeRequests(analysis?.mergeRequestListByMemberId[student]);
+            setCommits(analysis?.commitListByMemberId[student]);
+        }
     }, [student, analysis]);
     
     if (!data) {
@@ -64,12 +61,18 @@ const Analysis = (props) => {
                 <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
             </div>
             {isLoading ? <Spinner animation="border" className="spinner" /> : 
+            <>
                 <AnalyzerTabs 
                     mergerequests={mergeRequests} 
                     projectId={projectId} 
                     commits={commits} 
                     student={student} 
-                    databaseMembersAndAliases={databaseMembersAndAliases}/>}
+                    databaseMembersAndAliases={databaseMembersAndAliases}/>
+                <div className="analysis-header">
+                    <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} />
+                </div>
+                <AnalyzerTabs mergerequests={mergeRequests} projectId={projectId} commits={commits} />
+            </>}
         </div>
     )
 }
