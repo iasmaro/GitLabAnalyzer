@@ -25,6 +25,7 @@ public class Report {
     private Date end;
     private String configName;
 
+
     @NotBlank
     private Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId;
 

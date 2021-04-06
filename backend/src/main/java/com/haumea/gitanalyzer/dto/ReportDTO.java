@@ -1,6 +1,5 @@
 package com.haumea.gitanalyzer.dto;
 
-import lombok.NoArgsConstructor;
 import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,6 +18,8 @@ public class ReportDTO {
     private Date start;
     private Date end;
     private String configName;
+    private String projectName;
+    private String namespace;
 
 
 
@@ -49,7 +50,7 @@ public class ReportDTO {
                      Map<String, List<CodeReviewGraphDTO>> codeReviewGraphListByMemberId,
                      Map<String, List<IssueGraphDTO>> issueGraphListByMemberId,
                      List<String> userList,
-                     String configName) {
+                     String configName, String projectName, String namespace) {
         this.projectId = projectId;
         this.start = start;
         this.end = end;
@@ -63,6 +64,8 @@ public class ReportDTO {
         this.issueGraphListByMemberId = issueGraphListByMemberId;
         this.userList = userList;
         this.configName = configName;
+        this.projectName = projectName;
+        this.namespace = namespace;
     }
 
     public Date getStart() {
@@ -116,5 +119,13 @@ public class ReportDTO {
 
     public String getConfigName() {
         return configName;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public String getNamespace() {
+        return namespace;
     }
 }

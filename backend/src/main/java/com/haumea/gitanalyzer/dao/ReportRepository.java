@@ -22,12 +22,6 @@ public class ReportRepository {
     }
 
     public void saveReportToDatabase(ReportDTO newReport) {
-
-
-//        Report newDbReport = convertDTOToReport(newReport);
-//        findReportInDb(newDbReport);
-
-
         mongoTemplate.save(newReport);
 
     }
