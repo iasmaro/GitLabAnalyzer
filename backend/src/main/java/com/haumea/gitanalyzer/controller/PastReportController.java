@@ -1,8 +1,7 @@
 package com.haumea.gitanalyzer.controller;
 
-import com.haumea.gitanalyzer.dto.ReportDTO;
+import com.haumea.gitanalyzer.model.ReportDTO;
 import com.haumea.gitanalyzer.service.ReportService;
-import com.haumea.gitanalyzer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.text.ParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;

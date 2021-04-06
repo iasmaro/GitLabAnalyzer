@@ -1,6 +1,6 @@
 package com.haumea.gitanalyzer.dao;
 
-import com.haumea.gitanalyzer.dto.ReportDTO;
+import com.haumea.gitanalyzer.model.ReportDTO;
 import com.haumea.gitanalyzer.model.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;

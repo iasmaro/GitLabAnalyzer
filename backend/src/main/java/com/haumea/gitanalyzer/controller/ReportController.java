@@ -1,6 +1,6 @@
 package com.haumea.gitanalyzer.controller;
 
-import com.haumea.gitanalyzer.dto.ReportDTO;
+import com.haumea.gitanalyzer.model.ReportDTO;
 import com.haumea.gitanalyzer.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

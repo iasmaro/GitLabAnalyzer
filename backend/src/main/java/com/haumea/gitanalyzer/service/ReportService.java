@@ -3,6 +3,7 @@ package com.haumea.gitanalyzer.service;
 import com.haumea.gitanalyzer.dao.ReportRepository;
 import com.haumea.gitanalyzer.dto.*;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
+import com.haumea.gitanalyzer.model.ReportDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -97,7 +98,7 @@ public class ReportService {
                 userList,
                 userService.getActiveConfig(userId),
                 gitlabService.getSelectedProject(projectId).getName(),
-                gitlabService.getSelectedProject(projectId).getNameWithNamespace());
+                gitlabService.getSelectedProject(projectId).getNamespace().getName());
 
     }
 

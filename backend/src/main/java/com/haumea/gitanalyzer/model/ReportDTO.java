@@ -1,5 +1,6 @@
-package com.haumea.gitanalyzer.dto;
+package com.haumea.gitanalyzer.model;
 
+import com.haumea.gitanalyzer.dto.*;
 import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
