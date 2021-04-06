@@ -540,6 +540,7 @@ public class GitlabService {
                     String issueAuthor = issue.getAuthor().getUsername();
                     CommentWrapper commentWrapper = new CommentWrapper(
                             issue.getWebUrl(),
+                            issue.getTitle(),
                             note,
                             commentAuthor.equals(issueAuthor));
 
@@ -582,6 +583,7 @@ public class GitlabService {
                     String mergeRequestAuthor = mergeRequest.getAuthor().getUsername();
                     CommentWrapper commentWrapper = new CommentWrapper(
                             mergeRequest.getWebUrl(),
+                            mergeRequest.getTitle(),
                             note,
                             commentAuthor.equals(mergeRequestAuthor));
 

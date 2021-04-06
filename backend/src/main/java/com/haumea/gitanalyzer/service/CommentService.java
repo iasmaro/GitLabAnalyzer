@@ -64,6 +64,7 @@ public class CommentService {
 
             CommentDTO commentDTO = new CommentDTO(
                     current.getUrl(),
+                    current.getTitle(),
                     current.getNote().getBody(),
                     current.getIsSameAuthor(),
                     current.getNote().getCreatedAt().toString());
