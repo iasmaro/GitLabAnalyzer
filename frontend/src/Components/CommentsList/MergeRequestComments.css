@@ -1,0 +1,12 @@
+.merge-request-comments-container {
+    height: 100%;
+    position: relative;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+}
+
+.merge-request-comments-container::-webkit-scrollbar { 
+    display: none;
+}

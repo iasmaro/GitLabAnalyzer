@@ -11,8 +11,12 @@ const CommentsTab = (props) => {
 
     return (
         <div className="comments-tab">
-            <MergeRequestCommentsList mergeRequestComments={mergeRequestComments}/>
-            <IssueCommentsList issueComments={issueComments} />
+            <div className="comments-top">
+                <MergeRequestCommentsList mergeRequestComments={mergeRequestComments}/>
+            </div>
+            <div className="comments-bottom">
+                <IssueCommentsList issueComments={issueComments} />
+            </div>
         </div>
     );
 }

@@ -1,0 +1,20 @@
+.comments-top {
+    max-height: 25em;
+    margin: 0px 8px 8px 8px;
+    overflow-y: scroll;
+}
+
+.comments-top::-webkit-scrollbar { 
+    display: none;
+}
+
+.comments-bottom {
+    top: 50%;
+    height: 26em;
+    margin: 0px 8px 8px 8px;
+    overflow-y: scroll;
+}
+
+.comments-bottom::-webkit-scrollbar { 
+    display: none;
+}
