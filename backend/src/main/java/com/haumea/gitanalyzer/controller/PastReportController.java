@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -30,21 +32,27 @@ public class PastReportController {
 
     @GetMapping("/getReport")
     public ReportDTO getReport(@RequestParam @NotBlank String userId,
-                            @RequestParam @NotNull int projectId) throws ParseException {
+                            @RequestParam @NotNull int projectId)  {
 
         Optional<ReportDTO> databaseReport = reportService.checkIfInDb(userId, projectId);
+        ReportDTO report;
 
-        if(databaseReport.isPresent()) {
-            return databaseReport.get();
+
+
+        try {
+            report = databaseReport.get();
         }
-        else {
-            ReportDTO report = reportService.getReportForRepository(userId, projectId);
-            reportService.saveReport(report);
-
-            return report;
+        catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Report is not in database");
         }
 
+        return report;
+    }
 
-
+    // TODO: Once reports are linked to users make it return all the reports for a user
+    // returns whats in the database
+    @GetMapping("/allReports")
+    public List<ReportDTO> getAllReports() {
+        return reportService.getAllReports();
     }
 }

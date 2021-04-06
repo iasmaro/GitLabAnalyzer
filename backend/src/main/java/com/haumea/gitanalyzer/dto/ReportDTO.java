@@ -18,6 +18,9 @@ public class ReportDTO {
     private int projectId;
     private Date start;
     private Date end;
+    private String configName;
+
+
 
     private Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId;
     private Map<String, List<CommitDTO>> commitListByMemberId;
@@ -45,7 +48,8 @@ public class ReportDTO {
                      Map<String, List<MergeRequestGraphDTO>> MRGraphListByMemberId,
                      Map<String, List<CodeReviewGraphDTO>> codeReviewGraphListByMemberId,
                      Map<String, List<IssueGraphDTO>> issueGraphListByMemberId,
-                     List<String> userList) {
+                     List<String> userList,
+                     String configName) {
         this.projectId = projectId;
         this.start = start;
         this.end = end;
@@ -58,6 +62,7 @@ public class ReportDTO {
         this.codeReviewGraphListByMemberId = codeReviewGraphListByMemberId;
         this.issueGraphListByMemberId = issueGraphListByMemberId;
         this.userList = userList;
+        this.configName = configName;
     }
 
     public Date getStart() {
@@ -107,5 +112,9 @@ public class ReportDTO {
 
     public List<String> getUserList() {
         return userList;
+    }
+
+    public String getConfigName() {
+        return configName;
     }
 }

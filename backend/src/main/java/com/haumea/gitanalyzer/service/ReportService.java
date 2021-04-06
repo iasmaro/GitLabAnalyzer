@@ -52,6 +52,7 @@ public class ReportService {
 
         List<String> memberList = memberService.getMembers(userId, projectId);
 
+
         for(String member : memberList) {
 
             List<MergeRequestDTO> mergeRequestDTOs = mergeRequestService.getAllMergeRequestsForMember(userId, projectId, member);
@@ -90,7 +91,9 @@ public class ReportService {
                 MRGraphListByMemberId,
                 codeReviewGraphListByMemberId,
                 issueGraphListByMemberId,
-                userList);
+                userList,
+                userService.getActiveConfig(userId)
+        );
 
     }
 
@@ -100,6 +103,14 @@ public class ReportService {
 
     public Optional<ReportDTO> checkIfInDb(String userId,int projectId) {
 
-        return reportRepository.findReportInDb(projectId, userService.getStart(userId), userService.getEnd(userId));
+        return reportRepository.findReportInDb(
+                projectId,
+                userService.getStart(userId),
+                userService.getEnd(userId),
+                userService.getActiveConfig(userId));
+    }
+
+    public List<ReportDTO> getAllReports() {
+        return reportRepository.getAllReportsInDb();
     }
 }

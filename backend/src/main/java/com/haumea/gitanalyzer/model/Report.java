@@ -3,13 +3,17 @@ package com.haumea.gitanalyzer.model;
 import com.haumea.gitanalyzer.dto.*;
 import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+//import org.springframework.data.mongodb.core.mapping;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+/*
+   Backup report in case we need to add database specific fields inside
+
+ */
 
 //@Document(collection = "Reports")
 public class Report {
@@ -19,45 +23,46 @@ public class Report {
     private int projectId;
     private Date start;
     private Date end;
+    private String configName;
 
     @NotBlank
-    @Field
     private Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId;
-    @Field
+
     private Map<String, List<CommitDTO>> commitListByMemberId;
-    @Field
+
     private Map<String, List<CommentDTO>> MRCommentListByMemberId;
-    @Field
+
     private Map<String, List<CommentDTO>> issueCommentListByMemberId;
-    @Field
+
     private Map<String, List<CommitGraphDTO>> commitGraphListByMemberId;
-    @Field
+
     private Map<String, List<MergeRequestGraphDTO>> MRGraphListByMemberId;
-    @Field
+
     private Map<String, List<CodeReviewGraphDTO>> codeReviewGraphListByMemberId;
-    @Field
+
     private Map<String, List<IssueGraphDTO>> issueGraphListByMemberId;
-    @Field
+
     private List<String> userList;
 
 
 
     @PersistenceConstructor
     public Report(int projectId,
-                     Date start,
-                     Date end,
-                     Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId,
-                     Map<String, List<CommitDTO>> commitListByMemberId,
-                     Map<String, List<CommentDTO>> MRCommentListByMemberId,
-                     Map<String, List<CommentDTO>> issueCommentListByMemberId,
-                     Map<String, List<CommitGraphDTO>> commitGraphListByMemberId,
-                     Map<String, List<MergeRequestGraphDTO>> MRGraphListByMemberId,
-                     Map<String, List<CodeReviewGraphDTO>> codeReviewGraphListByMemberId,
-                     Map<String, List<IssueGraphDTO>> issueGraphListByMemberId,
-                     List<String> userList) {
+                  Date start,
+                  Date end,
+                  String configName, Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId,
+                  Map<String, List<CommitDTO>> commitListByMemberId,
+                  Map<String, List<CommentDTO>> MRCommentListByMemberId,
+                  Map<String, List<CommentDTO>> issueCommentListByMemberId,
+                  Map<String, List<CommitGraphDTO>> commitGraphListByMemberId,
+                  Map<String, List<MergeRequestGraphDTO>> MRGraphListByMemberId,
+                  Map<String, List<CodeReviewGraphDTO>> codeReviewGraphListByMemberId,
+                  Map<String, List<IssueGraphDTO>> issueGraphListByMemberId,
+                  List<String> userList) {
         this.projectId = projectId;
         this.start = start;
         this.end = end;
+        this.configName = configName;
         this.mergeRequestListByMemberId = mergeRequestListByMemberId;
         this.commitListByMemberId = commitListByMemberId;
         this.MRCommentListByMemberId = MRCommentListByMemberId;

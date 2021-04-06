@@ -1,9 +1,7 @@
 package com.haumea.gitanalyzer.dao;
 
 import com.haumea.gitanalyzer.dto.ReportDTO;
-import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.model.Report;
-import org.graalvm.compiler.nodes.calc.IntegerDivRemNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -38,7 +36,7 @@ public class ReportRepository {
                                 dtoReport.getProjectId(),
                                 dtoReport.getStart(),
                                 dtoReport.getEnd(),
-                                dtoReport.getMergeRequestListByMemberId(),
+                dtoReport.getConfigName(), dtoReport.getMergeRequestListByMemberId(),
                                 dtoReport.getCommitListByMemberId(),
                                 dtoReport.getMRCommentListByMemberId(),
                                 dtoReport.getIssueCommentListByMemberId(),
@@ -51,12 +49,14 @@ public class ReportRepository {
         return convertedReport;
     }
 
-    public Optional<ReportDTO> findReportInDb(int projectId, Date start, Date end) {
+    public Optional<ReportDTO> findReportInDb(int projectId, Date start, Date end, String configName) {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("projectId").is(projectId));
         query.addCriteria(Criteria.where("start").is(start));
         query.addCriteria(Criteria.where("end").is(end));
+        query.addCriteria(Criteria.where("configName").is(configName));
+
 
         ReportDTO databaseReport = mongoTemplate.findOne(query, ReportDTO.class);
 
@@ -71,7 +71,10 @@ public class ReportRepository {
 
         return Optional.ofNullable(databaseReport);
 
+    }
 
+    public List<ReportDTO> getAllReportsInDb() {
+        return mongoTemplate.findAll(ReportDTO.class);
     }
 
 
