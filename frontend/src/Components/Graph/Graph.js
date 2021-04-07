@@ -10,6 +10,16 @@ const Graph = (props) => {
         title,
         titleFontSize: 30,
         chartArea: { width: '90%', height: '50%' },
+        hAxis: {
+            textPosition: 'out',
+            slantedText: true,
+            slantedTextAngle: 90
+        },
+        vAxis: {
+            minValue: 0,
+            maxValue: 1,
+        },
+        theme: 'material',
         legend: "none"
     };
 
