@@ -112,7 +112,7 @@ const CodeDiffScoreBreakdown = (prop) => {
             </div>
             <div>
                 <Card className="code-diff-calculation-total">
-                    <Card.Header>Total</Card.Header>
+                    <Card.Header>Total Code Diff Score</Card.Header>
                     <Card.Body>
                         <Table className='table-breakdown'>
                             <tbody>
@@ -130,9 +130,9 @@ const CodeDiffScoreBreakdown = (prop) => {
                                         {parseFloat((configInfo.fileFactor[extension] || 1).toFixed(1)) * 
                                         (parseFloat(((configInfo.editFactor.spaceChange || 0) * spaceLinesAdded).toFixed(1)) + 
                                         parseFloat(((configInfo.editFactor.addLine) * (addLine-spaceLinesAdded-syntaxLinesAdded-linesMoved)).toFixed(1)) +
-                                        parseFloat((configInfo.editFactor.deleteLine*deleteLine).toFixed(2)) + 
-                                        parseFloat((configInfo.editFactor.moveLine*linesMoved).toFixed(2)) + 
-                                        parseFloat((configInfo.editFactor.syntaxLine*syntaxLinesAdded).toFixed(2)))}
+                                        parseFloat((configInfo.editFactor.deleteLine*deleteLine).toFixed(1)) + 
+                                        parseFloat((configInfo.editFactor.moveLine*linesMoved).toFixed(1)) + 
+                                        parseFloat((configInfo.editFactor.syntaxLine*syntaxLinesAdded).toFixed(1)))}
                                     </td>
 
                                 </tr>
