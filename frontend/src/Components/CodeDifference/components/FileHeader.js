@@ -33,25 +33,23 @@ const FileHeader = (props) => {
                 <div className="lines-removed">
                     <span>-{linesRemoved}</span>
                 </div>
-                <div className="file-score">
-                    <Button variant="info" onClick={handleShow} size='sm' className="code-diff-score">
-                        <span> Score: </span>
-                        <span>{diffScore}</span>
-                    </Button>
-                </div>
-                {show && <FileHeaderModal 
-                    status={show} 
-                    fileName={fileName} 
-                    toggleModal={handleClose}
-                    extension={extension}
-                    linesMoved={linesMoved}
-                    addLine={addLine}
-                    syntaxLinesAdded={syntaxLinesAdded}
-                    deleteLine={deleteLine}
-                    configInfo={configInfo}
-                    spaceLinesAdded={spaceLinesAdded}/>
-                }
             </div>
+            <Button variant="info" onClick={handleShow} size='md' className="code-diff-score">
+                <span> Score: </span>
+                <span>{diffScore}</span>
+            </Button>
+            {show && <FileHeaderModal 
+                status={show} 
+                fileName={fileName} 
+                toggleModal={handleClose}
+                extension={extension}
+                linesMoved={linesMoved}
+                addLine={addLine}
+                syntaxLinesAdded={syntaxLinesAdded}
+                deleteLine={deleteLine}
+                configInfo={configInfo}
+                spaceLinesAdded={spaceLinesAdded}/>
+            }
         </>         
     );
 };
