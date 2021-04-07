@@ -1,6 +1,8 @@
 .analysis-page {
     background-color: #acbed8;
     height: 100vh;
+    padding-left: 0.8em;
+    padding-right: 0.4em;
 }
 
 .spinner {
@@ -9,6 +11,6 @@
 
 .analysis-header {
     position: absolute;
-    right: 0px;
+    right: 0.7em;
     z-index: 2;
 }

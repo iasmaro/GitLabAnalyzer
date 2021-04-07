@@ -4,7 +4,7 @@
 .mrs-left {
     float: left;
     width: 40%;
-    padding: 10px;
+    padding: 10px 0 10px 0;
     overflow-y: scroll;
     overflow-x: scroll;
     height: 100%;
@@ -52,11 +52,18 @@
 
 .expand-button {
     margin-top: 1em;
-    margin-left: 0.1em;
-    margin-right: 0em;
+    margin-bottom: 1em;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
     width: 2em;
     height: 2em;
-    padding: 4px 0px;
-    border-radius: 1.0em;
+    padding: 4px 2px;
+    border-radius: 50%;
+    font-weight: bold;
     text-align: center;
+}
+
+.expand-button:focus {
+    outline-style: none;
+    border: 0;
 }
