@@ -8,7 +8,7 @@ const IssuesGraph = (props) => {
     const [data, setData] = useState();
     const [words, setWords] = useState();
     const [own, setOwn] = useState();
-    const [others, seOthers] = useState();
+    const [others, setOthers] = useState();
     const [radioValue, setRadioValue] = useState('1');
     
     const radios = [
@@ -29,7 +29,7 @@ const IssuesGraph = (props) => {
         }
         setWords(wordsPerDay);
         setOwn(ownIssues);
-        seOthers(othersIssues);
+        setOthers(othersIssues);
         setData(wordsPerDay);
         setRadioValue('1');
     }, [issueCommentsGraph])

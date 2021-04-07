@@ -8,7 +8,7 @@ const ReviewsGraph = (props) => {
     const [data, setData] = useState();
     const [words, setWords] = useState();
     const [own, setOwn] = useState();
-    const [others, seOthers] = useState();
+    const [others, setOthers] = useState();
     const [radioValue, setRadioValue] = useState('1');
     
     const radios = [
@@ -28,7 +28,7 @@ const ReviewsGraph = (props) => {
         }
         setWords(wordsPerDay);
         setOwn(ownMRs);
-        seOthers(othersMRs);
+        setOthers(othersMRs);
         setData(wordsPerDay);
         setRadioValue('1')
     }, [codeReviewsGraph]);
