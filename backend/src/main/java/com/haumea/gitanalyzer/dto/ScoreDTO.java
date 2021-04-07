@@ -33,7 +33,7 @@ public class ScoreDTO {
         this.linesMoved = linesMoved;
         this.spaceLinesAdded = spaceLinesAdded;
         this.syntaxLinesAdded = syntaxLinesAdded;
-        this.meaningfulLinesAdded = this.linesAdded - this.spaceLinesAdded - this.syntaxLinesAdded;
+        this.meaningfulLinesAdded = this.linesAdded - this.spaceLinesAdded - this.syntaxLinesAdded - this.linesMoved;
     }
 
     public double roundScore(double score) {
