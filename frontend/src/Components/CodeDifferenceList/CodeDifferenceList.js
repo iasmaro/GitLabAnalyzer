@@ -7,7 +7,7 @@ import './CodeDifferenceList.css';
 
 
 const CodeDifferenceList = (props) => {
-    const { diffs } = props || {};
+    const { diffs, configInfo } = props || {};
     const [view, setView] = useState('unified');
     const [collapse, setCollapse] = useState(0);
     const [expand, setExpand] = useState(0);
@@ -40,7 +40,7 @@ const CodeDifferenceList = (props) => {
                 <Button variant="dark" onClick={collapseAll} >Collapse All</Button>
             </div>
             <div className="code-diff-list">
-                {diffs.map((diff, i) => <CodeDifference key={i} diff={diff} view={view} expandAll={expand} collapseAll={collapse}  />)}
+                {diffs.map((diff, i) => <CodeDifference key={i} diff={diff} view={view} expandAll={expand} collapseAll={collapse}  configInfo={configInfo} />)}
             </div>
         </>
     );
