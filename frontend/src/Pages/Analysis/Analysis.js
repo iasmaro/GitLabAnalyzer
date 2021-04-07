@@ -9,6 +9,7 @@ import AnalysisSpecifications from 'Components/AnalyzerInfo/AnalysisSpecificatio
 import analyzeAll from 'Utils/analyzeAll';
 import getProjectMembers from 'Utils/getProjectMembers';
 import getConfigurationInfo from 'Utils/getConfigurationInfo';
+import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
 
 import './Analysis.css'
 
@@ -24,11 +25,15 @@ const Analysis = (props) => {
     const [student, setStudent] = useState();
     const [analysis, setAnalysis] = useState();
     const [configInfo, setConfigInfo] = useState();
+    const [databaseMembersAndAliases, setDatabaseMembersAndAliases] = useState([]);
     const username = useUserState();
 
     useEffect(() => {
         getProjectMembers(username, projectId).then((data) => {
             setMembers(data);
+        });
+        getMembersAndAliasesFromDatabase(username, projectId).then((data) => {
+            setDatabaseMembersAndAliases(data);
         });
     }, [username, projectId]);
 
@@ -67,7 +72,14 @@ const Analysis = (props) => {
             <div className="analysis-header">
                 <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
             </div>
-            {isLoading ? <Spinner animation="border" className="spinner" /> : <AnalyzerTabs mergerequests={mergeRequests} projectId={projectId} commits={commits} configInfo={configInfo} />}
+            {isLoading ? <Spinner animation="border" className="spinner" /> : 
+                <AnalyzerTabs 
+                    mergerequests={mergeRequests} 
+                    projectId={projectId} 
+                    commits={commits} 
+                    student={student} 
+                    databaseMembersAndAliases={databaseMembersAndAliases}
+                    configInfo={configInfo}/>}
         </div>
     )
 }
