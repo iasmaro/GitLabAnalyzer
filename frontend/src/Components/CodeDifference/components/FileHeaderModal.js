@@ -19,7 +19,7 @@ const FileHeaderModal = (prop) => {
                 scrollable={true}       
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>{fileName} Score Breakdown</Modal.Title>
+                    <Modal.Title>Code Diff Score Breakdown: {fileName}</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body className="repo-modal-body">
