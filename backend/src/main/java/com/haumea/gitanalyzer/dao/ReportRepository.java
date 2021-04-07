@@ -1,7 +1,6 @@
 package com.haumea.gitanalyzer.dao;
 
 import com.haumea.gitanalyzer.model.ReportDTO;
-import com.haumea.gitanalyzer.model.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -24,23 +23,6 @@ public class ReportRepository {
     public void saveReportToDatabase(ReportDTO newReport) {
         mongoTemplate.save(newReport);
 
-    }
-    private Report convertDTOToReport(ReportDTO dtoReport) {
-        Report convertedReport = new Report(
-                                dtoReport.getProjectId(),
-                                dtoReport.getStart(),
-                                dtoReport.getEnd(),
-                dtoReport.getConfigName(), dtoReport.getMergeRequestListByMemberId(),
-                                dtoReport.getCommitListByMemberId(),
-                                dtoReport.getMRCommentListByMemberId(),
-                                dtoReport.getIssueCommentListByMemberId(),
-                                dtoReport.getCommitGraphListByMemberId(),
-                                dtoReport.getMRGraphListByMemberId(),
-                                dtoReport.getCodeReviewGraphListByMemberId(),
-                                dtoReport.getIssueGraphListByMemberId(),
-                                dtoReport.getUserList());
-
-        return convertedReport;
     }
 
     public Optional<ReportDTO> findReportInDb(int projectId, Date start, Date end, String configName) {
