@@ -7,6 +7,7 @@ import java.util.Map;
 public class ScoreDTO {
 
     private int linesAdded;
+    private int meaningfulLinesAdded;
     private int linesRemoved;
     private int linesMoved;
     private int spaceLinesAdded;
@@ -21,6 +22,7 @@ public class ScoreDTO {
         this.score = 0.0;
         this.linesMoved = 0;
         this.spaceLinesAdded = 0;
+        this.meaningfulLinesAdded = 0;
     }
 
     public ScoreDTO(int linesAdded, int linesRemoved, double score, int linesMoved, int spaceLinesAdded, int syntaxLinesAdded) {
@@ -31,6 +33,7 @@ public class ScoreDTO {
         this.linesMoved = linesMoved;
         this.spaceLinesAdded = spaceLinesAdded;
         this.syntaxLinesAdded = syntaxLinesAdded;
+        this.meaningfulLinesAdded = this.linesAdded - this.spaceLinesAdded - this.syntaxLinesAdded - this.linesMoved;
     }
 
     public double roundScore(double score) {
@@ -43,6 +46,10 @@ public class ScoreDTO {
 
     public int getLinesAdded() {
         return linesAdded;
+    }
+
+    public int getMeaningfulLinesAdded() {
+        return meaningfulLinesAdded;
     }
 
     public int getLinesRemoved() {
