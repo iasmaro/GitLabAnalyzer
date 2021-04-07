@@ -7,6 +7,7 @@ import CodeDifferenceList from 'Components/CodeDifferenceList/CodeDifferenceList
 import './MergeRequestTab.css'
 
 const MergeRequestTab = (props) => {
+    const { configInfo } = props || {};
     const [commits, setCommits] = useState();
     const [diffs, setDiffs] = useState();
 
@@ -29,7 +30,7 @@ const MergeRequestTab = (props) => {
                 </div>
             </div>
             <div className="mrs-right">
-               {diffs && <CodeDifferenceList diffs={diffs} />}
+               {diffs && <CodeDifferenceList diffs={diffs} configInfo={configInfo} />}
             </div>
         </div>
     );
