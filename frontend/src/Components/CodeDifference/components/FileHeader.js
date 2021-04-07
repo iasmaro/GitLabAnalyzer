@@ -6,18 +6,19 @@ import FileHeaderModal from './FileHeaderModal';
 
 
 const FileHeader = (props) => {
-    const { isOpen, fileName, linesAdded, linesRemoved, diffScore } = props || {};
+    const { isOpen, fileName, linesAdded, linesRemoved, diffScore, extension, linesMoved, addLine, syntaxLinesAdded, deleteLine, configInfo, spaceLinesAdded } = props || {};
 
-    const[showScore, setShowScore] = useState(false);
+    const [showScore, setShowScore] = useState(false);
+    const [show, setShow] = useState(false);
 
     const handleShow = () => setShow(true);
+
     const handleClose = () => {
         setShow(false);
         setTimeout(() => {
             setShowScore(!showScore);
         }, 200);
-    }
-    const [show, setShow] = useState(false);
+    };
 
     return (
         <>
@@ -38,7 +39,18 @@ const FileHeader = (props) => {
                         <span>{diffScore}</span>
                     </Button>
                 </div>
-                {show && <FileHeaderModal status={show} fileName={fileName} toggleModal={handleClose} />}
+                {show && <FileHeaderModal 
+                    status={show} 
+                    fileName={fileName} 
+                    toggleModal={handleClose}
+                    extension={extension}
+                    linesMoved={linesMoved}
+                    addLine={addLine}
+                    syntaxLinesAdded={syntaxLinesAdded}
+                    deleteLine={deleteLine}
+                    configInfo={configInfo}
+                    spaceLinesAdded={spaceLinesAdded}/>
+                }
             </div>
         </>         
     );
