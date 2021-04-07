@@ -189,36 +189,27 @@ public class GraphService {
         start.set(Calendar.MINUTE, 59);
         start.set(Calendar.SECOND, 59);
 
+        int currentCount = 0;
+
         for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
             int wordsPerDay = 0;
             int wordsPerDayOnOwn = 0;
             int wordsPerDayOnOthers = 0;
 
-            // Keep track of a list of MRComments on this date to remove from the list of mergeRequests
-            // because a mergeRequest can only be on one date. This will slightly improve efficiency.
-            List<CommentWrapper> MRCommentsOnThisDate = new ArrayList<CommentWrapper>();
+            while(currentCount != MRComments.size() && isSameDay(MRComments.get(currentCount).getNote().getCreatedAt(), date)) {
+                wordsPerDay = wordsPerDay + countWordsUsingSplit(MRComments.get(currentCount).getNote().getBody());
 
-            for(CommentWrapper MRComment : MRComments) {
-
-                Date MRCommentDate = MRComment.getNote().getCreatedAt();
-
-                if(isSameDay(MRCommentDate, date)) {
-
-                    wordsPerDay = wordsPerDay + countWordsUsingSplit(MRComment.getNote().getBody());
-                    if(MRComment.getIsSameAuthor()) {
-                        wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(MRComment.getNote().getBody());
-                    }
-                    else {
-                        wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(MRComment.getNote().getBody());
-                    }
-                    MRCommentsOnThisDate.add(MRComment);
-
+                if(MRComments.get(currentCount).getIsSameAuthor()) {
+                    wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(MRComments.get(currentCount).getNote().getBody());
+                }
+                else {
+                    wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(MRComments.get(currentCount).getNote().getBody());
                 }
 
+                currentCount++;
             }
 
-            MRComments.removeAll(MRCommentsOnThisDate);
             CodeReviewGraphDTO codeReviewGraphDTO = new CodeReviewGraphDTO(date, wordsPerDay, wordsPerDayOnOwn, wordsPerDayOnOthers);
             returnList.add(codeReviewGraphDTO);
         }
@@ -255,36 +246,27 @@ public class GraphService {
         start.set(Calendar.MINUTE, 59);
         start.set(Calendar.SECOND, 59);
 
+        int currentCount = 0;
+
         for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
             int wordsPerDay = 0;
             int wordsPerDayOnOwn = 0;
             int wordsPerDayOnOthers = 0;
 
-            // Keep track of a list of IssueComments on this date to remove from the list of mergeRequests
-            // because a mergeRequest can only be on one date. This will slightly improve efficiency.
-            List<CommentWrapper> IssueCommentsOnThisDate = new ArrayList<CommentWrapper>();
+            while(currentCount != IssueComments.size() && isSameDay(IssueComments.get(currentCount).getNote().getCreatedAt(), date)) {
+                wordsPerDay = wordsPerDay + countWordsUsingSplit(IssueComments.get(currentCount).getNote().getBody());
 
-            for(CommentWrapper IssueComment : IssueComments) {
-
-                Date IssueCommentDate = IssueComment.getNote().getCreatedAt();
-
-                if(isSameDay(IssueCommentDate, date)) {
-
-                    wordsPerDay = wordsPerDay + countWordsUsingSplit(IssueComment.getNote().getBody());
-                    if(IssueComment.getIsSameAuthor()) {
-                        wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(IssueComment.getNote().getBody());
-                    }
-                    else {
-                        wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(IssueComment.getNote().getBody());
-                    }
-                    IssueCommentsOnThisDate.add(IssueComment);
-
+                if (IssueComments.get(currentCount).getIsSameAuthor()) {
+                    wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(IssueComments.get(currentCount).getNote().getBody());
+                }
+                else {
+                    wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(IssueComments.get(currentCount).getNote().getBody());
                 }
 
+                currentCount++;
             }
 
-            IssueComments.removeAll(IssueCommentsOnThisDate);
             IssueGraphDTO issueGraphDTO = new IssueGraphDTO(date, wordsPerDay, wordsPerDayOnOwn, wordsPerDayOnOthers);
             returnList.add(issueGraphDTO);
         }
