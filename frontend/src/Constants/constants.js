@@ -11,6 +11,8 @@ const dev = {
     PROJECT_MAPPING_API_URL: 'http://localhost:8080/api/v1/members/mapping',
     CONFIGURATION_FILES_URL: 'http://localhost:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://localhost:8080/api/v1/users/configuration/',
+    START_URL: 'http://localhost:8080/api/v1/users/start/',
+    END_URL: 'http://localhost:8080/api/v1/users/end/',
 };
 
 const prod = {
