@@ -7,7 +7,7 @@ import Commit from './Commit';
 import './CommitsList.css';
 
 const CommitsList = (props) => {
-    const { commits, setCodeDiffs } = props || {};
+    const { commits, setCodeDiffs, student, databaseMembersAndAliases } = props || {};
     const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(commits);
 
@@ -52,7 +52,9 @@ const CommitsList = (props) => {
                             commit={commit} 
                             handleClick={handleClick} 
                             index={index}
-                            selected={index === selectedRowIndex}/>
+                            selected={index === selectedRowIndex}
+                            student={student}
+                            databaseMembersAndAliases={databaseMembersAndAliases}/>
                     ))}
 
                 </tbody>

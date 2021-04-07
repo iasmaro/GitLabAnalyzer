@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import CommitsList from 'Components/CommitsList/CommitsList';
 import CodeDifferenceList from 'Components/CodeDifferenceList/CodeDifferenceList';
 
-import './CommitsTab.css'
+import './CommitsTab.css';
 
 const MergeRequestTab = (props) => {
     const [diffs, setDiffs] = useState();
