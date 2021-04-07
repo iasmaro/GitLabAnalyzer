@@ -1,14 +1,27 @@
-package com.haumea.gitanalyzer.dto;
+package com.haumea.gitanalyzer.model;
 
+import com.haumea.gitanalyzer.dto.*;
+import nonapi.io.github.classgraph.json.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
+@Document(collection = "Reports")
 public class ReportDTO {
+    @Id
+    private String id;
 
-    int projectId;
-    Date start;
-    Date end;
+    @NotBlank
+    private int projectId;
+    private Date start;
+    private Date end;
+    private String configName;
+    private String projectName;
+    private String namespace;
+    private String reportName;
 
     private Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId;
     private Map<String, List<CommitDTO>> commitListByMemberId;
@@ -23,6 +36,8 @@ public class ReportDTO {
 
     private List<String> userList;
 
+
+    @PersistenceConstructor
     public ReportDTO(int projectId,
                      Date start,
                      Date end,
@@ -34,7 +49,8 @@ public class ReportDTO {
                      Map<String, List<MergeRequestGraphDTO>> MRGraphListByMemberId,
                      Map<String, List<CodeReviewGraphDTO>> codeReviewGraphListByMemberId,
                      Map<String, List<IssueGraphDTO>> issueGraphListByMemberId,
-                     List<String> userList) {
+                     List<String> userList,
+                     String configName, String projectName, String namespace) {
         this.projectId = projectId;
         this.start = start;
         this.end = end;
@@ -47,6 +63,11 @@ public class ReportDTO {
         this.codeReviewGraphListByMemberId = codeReviewGraphListByMemberId;
         this.issueGraphListByMemberId = issueGraphListByMemberId;
         this.userList = userList;
+        this.configName = configName;
+        this.projectName = projectName;
+        this.namespace = namespace;
+
+        this.reportName = projectId + "_" + projectName + "_" + configName + "_" + start.toString() + "_" + end.toString();
     }
 
     public Date getStart() {
@@ -96,5 +117,21 @@ public class ReportDTO {
 
     public List<String> getUserList() {
         return userList;
+    }
+
+    public String getConfigName() {
+        return configName;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public String getReportName() {
+        return reportName;
     }
 }
