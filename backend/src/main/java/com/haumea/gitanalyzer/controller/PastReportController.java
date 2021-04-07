@@ -3,13 +3,12 @@ package com.haumea.gitanalyzer.controller;
 import com.haumea.gitanalyzer.model.ReportDTO;
 import com.haumea.gitanalyzer.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -20,22 +19,17 @@ public class PastReportController {
 
     private final ReportService reportService;
 
-
     @Autowired
     public PastReportController(ReportService reportService) {
         this.reportService = reportService;
 
     }
 
-
     @GetMapping("/getReport")
-    public ReportDTO getReport(@RequestParam @NotBlank String userId,
-                            @RequestParam @NotNull int projectId)  {
+    public ReportDTO getReport(@RequestParam @NotBlank String reportName)  {
 
-        Optional<ReportDTO> databaseReport = reportService.checkIfInDb(userId, projectId);
+        Optional<ReportDTO> databaseReport = reportService.checkIfInDbViaName(reportName);
         ReportDTO report;
-
-
 
         try {
             report = databaseReport.get();
@@ -52,5 +46,12 @@ public class PastReportController {
     @GetMapping("/allReports")
     public List<ReportDTO> getAllReports() {
         return reportService.getAllReports();
+    }
+
+    @DeleteMapping("/deleteReport")
+    public void deleteReport(@RequestParam @NotBlank String reportName) {
+
+        reportService.deleteReport(reportName);
+
     }
 }

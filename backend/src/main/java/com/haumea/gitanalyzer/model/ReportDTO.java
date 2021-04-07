@@ -21,8 +21,7 @@ public class ReportDTO {
     private String configName;
     private String projectName;
     private String namespace;
-
-
+    private String reportName;
 
     private Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId;
     private Map<String, List<CommitDTO>> commitListByMemberId;
@@ -67,6 +66,8 @@ public class ReportDTO {
         this.configName = configName;
         this.projectName = projectName;
         this.namespace = namespace;
+
+        this.reportName = projectId + "_" + projectName + "_" + configName + "_" + start.toString() + "_" + end.toString();
     }
 
     public Date getStart() {
@@ -128,5 +129,9 @@ public class ReportDTO {
 
     public String getNamespace() {
         return namespace;
+    }
+
+    public String getReportName() {
+        return reportName;
     }
 }

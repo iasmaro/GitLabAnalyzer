@@ -45,12 +45,7 @@ public class ReportRepository {
 
     public Optional<ReportDTO> findReportInDb(int projectId, Date start, Date end, String configName) {
 
-        Query query = new Query();
-        query.addCriteria(Criteria.where("projectId").is(projectId));
-        query.addCriteria(Criteria.where("start").is(start));
-        query.addCriteria(Criteria.where("end").is(end));
-        query.addCriteria(Criteria.where("configName").is(configName));
-
+        Query query = setQuery(projectId, start, end, configName);
 
         ReportDTO databaseReport = mongoTemplate.findOne(query, ReportDTO.class);
 
@@ -67,9 +62,36 @@ public class ReportRepository {
 
     }
 
+    public Optional<ReportDTO> findReportInDbViaName(String reportName) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("reportName").is(reportName));
+
+        ReportDTO databaseReport = mongoTemplate.findOne(query, ReportDTO.class);
+
+        return Optional.ofNullable(databaseReport);
+    }
+
+
+    private Query setQuery(int projectId, Date start, Date end, String configName) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("projectId").is(projectId));
+        query.addCriteria(Criteria.where("start").is(start));
+        query.addCriteria(Criteria.where("end").is(end));
+        query.addCriteria(Criteria.where("configName").is(configName));
+
+        return query;
+    }
+
     public List<ReportDTO> getAllReportsInDb() {
         return mongoTemplate.findAll(ReportDTO.class);
     }
 
 
+    public void deleteReportDTO(String reportName) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("reportName").is(reportName));
+
+        mongoTemplate.findAndRemove(query, ReportDTO.class);
+
+    }
 }

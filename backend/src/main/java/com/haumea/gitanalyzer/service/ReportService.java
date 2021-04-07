@@ -30,6 +30,7 @@ public class ReportService {
         this.graphService = graphService;
         this.userService = userService;
         this.memberService = memberService;
+
     }
 
     public ReportDTO getReportForRepository(String userId, int projectId) {
@@ -115,7 +116,15 @@ public class ReportService {
                 userService.getActiveConfig(userId));
     }
 
+    public Optional<ReportDTO> checkIfInDbViaName(String reportName) {
+        return reportRepository.findReportInDbViaName(reportName);
+    }
+
     public List<ReportDTO> getAllReports() {
         return reportRepository.getAllReportsInDb();
+    }
+
+    public void deleteReport(String reportName) {
+        reportRepository.deleteReportDTO(reportName);
     }
 }
