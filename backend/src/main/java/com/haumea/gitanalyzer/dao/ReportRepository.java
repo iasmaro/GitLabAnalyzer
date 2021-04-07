@@ -31,15 +31,6 @@ public class ReportRepository {
 
         ReportDTO databaseReport = mongoTemplate.findOne(query, ReportDTO.class);
 
-        if(databaseReport == null) {
-            System.out.println("report is null");
-        }
-
-
-        if(Optional.ofNullable(databaseReport).isPresent()) {
-            System.out.println("in database");
-        }
-
         return Optional.ofNullable(databaseReport);
 
     }

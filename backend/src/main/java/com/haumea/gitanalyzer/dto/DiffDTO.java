@@ -28,7 +28,6 @@ public class DiffDTO {
         this.spaceLinesAdded = scoreDTO.getSpaceLinesAdded();
         this.syntaxLinesAdded = scoreDTO.getSyntaxLinesAdded();
         this.diffScore = scoreDTO.getScore();
-
         this.scoreDTO = scoreDTO;
     }
 
