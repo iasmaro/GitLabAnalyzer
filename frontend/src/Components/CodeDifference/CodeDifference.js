@@ -13,7 +13,7 @@ import './syntaxHighlighter/prism.css';
 
 
 const CodeDifference = (props) => {
-    const { diff, view, collapseAll, expandAll } = props || {};
+    const { diff, view, collapseAll, expandAll, configInfo } = props || {};
     const [isActive, setIsActive] = useState('1');
 
     useEffect(() => {
@@ -37,6 +37,12 @@ const CodeDifference = (props) => {
     const linesRemoved = diff.codeDiff.match(/\n-/g)?.length || 0;
     const fileName = diff.newPath;
     const diffScore = diff.diffScore || 0;
+    const extension = diff.extension;
+    const linesMoved = diff.linesMoved || 0;
+    const addLine = diff.linesAdded || 0;
+    const syntaxLinesAdded = diff.syntaxLinesAdded || 0;
+    const deleteLine = diff.linesRemoved || 0;
+    const spaceLinesAdded = diff.spaceLinesAdded || 0;
 
     const language = getLanguageFromFile(fileName);
 
@@ -61,7 +67,20 @@ const CodeDifference = (props) => {
             <Card>
                 <Card.Header>
                     <Accordion.Toggle as="div" eventKey="1" onClick={handleClick} className="diff-toggle">
-                        <FileHeader isOpen={isOpen} linesAdded={linesAdded} linesRemoved={linesRemoved} fileName={fileName} diffScore={diffScore} />
+                        <FileHeader 
+                            isOpen={isOpen} 
+                            linesAdded={linesAdded} 
+                            linesRemoved={linesRemoved} 
+                            fileName={fileName} 
+                            diffScore={diffScore} 
+                            extension={extension}
+                            linesMoved={linesMoved}
+                            addLine={addLine}
+                            syntaxLinesAdded={syntaxLinesAdded}
+                            deleteLine={deleteLine}
+                            configInfo={configInfo}
+                            spaceLinesAdded={spaceLinesAdded}
+                        />
                     </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="1">
