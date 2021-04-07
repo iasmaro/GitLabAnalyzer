@@ -25,6 +25,15 @@
     background-color: #eaeaeb;
 }
 
+.author {
+    font-weight: lighter;
+    color: grey;
+}
+
+.author-highlighted {
+    font-weight: bold;
+}
+
 .lines-added {
     color: green;
 }

@@ -1,12 +1,15 @@
+.commits-tab {
+    width: 100%;
+    height: 100%;
+}
+
 .commits-left {
-    position: absolute;
-    left: 1em;
-    top: 5.9em;
-    width: 50%;
+    float: left;
+    width: 40%;
     padding: 10px;
     overflow-y: scroll;
     overflow-x: scroll;
-    height: 84.5%;
+    height: 50em;
 }
 
 .commits-left::-webkit-scrollbar { 
@@ -14,9 +17,17 @@
 }
 
 .commits-right {
+    overflow: auto;
+}
+
+.commits-code-diffs {
+    display: inline-block;
     position: absolute;
-    right: 0%;
-    top: 2.7em;
-    width: 50%;
-    padding: 10px;
+    top: 4.4em;
+    right: 1.3em;
+    width: 56.6%;
+}
+
+.expanded {
+    width: 95.5%;
 }

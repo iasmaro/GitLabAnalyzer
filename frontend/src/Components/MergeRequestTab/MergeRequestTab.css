@@ -1,9 +1,10 @@
+.merge-request-tab {
+    width: 100%;
+}
 .mrs-left {
-    position: absolute;
-    left: 1em;
-    top: 5.9em;
-    width: 50%;
-    padding: 10px;
+    float: left;
+    width: 40%;
+    padding: 10px 0 10px 0;
     overflow-y: scroll;
     overflow-x: scroll;
     height: 100%;
@@ -14,18 +15,19 @@
 }
 
 .mrs-right {
-    position: absolute;
-    right: 0%;
-    top: 2.7em;
-    width: 50%;
-    padding: 10px;
+    overflow: auto;
 }
 
-.bottom-spinner {
+.mr-code-diffs {
+    display: inline-block;
     position: absolute;
-    left: 45%;
-    bottom: 50%;
-    color: #fff;
+    top: 4.4em;
+    right: 1.3em;
+    width: 56.6%;
+}
+
+.expanded {
+    width: 95.5%;
 }
 
 .mrs-top {
@@ -38,13 +40,30 @@
 }
 
 .mrs-bottom {
-    position: absolute;
-    top: 45%;
-    width: 98%;
+    position: relative;
+    margin-top: 5em;
     height: 23.3em;
     overflow-y: scroll;
 }
 
 .mrs-bottom::-webkit-scrollbar { 
     display: none;
+}
+
+.expand-button {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+    width: 2em;
+    height: 2em;
+    padding: 4px 2px;
+    border-radius: 50%;
+    font-weight: bold;
+    text-align: center;
+}
+
+.expand-button:focus {
+    outline-style: none;
+    border: 0;
 }
