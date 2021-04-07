@@ -225,7 +225,7 @@ public class GraphService {
         Configuration userConfig = userService.getConfiguration(userId);
         String targetBranch = userConfig.getTargetBranch();
         List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
-        List<CommentWrapper> IssueComments = gitlabService.getIssueCommentsByAuthor(projectId, userService.getStart(userId),
+        List<CommentWrapper> issueComments = gitlabService.getIssueCommentsByAuthor(projectId, userService.getStart(userId),
                                                                                     userService.getEnd(userId), aliases);
 
         //date iterator from https://stackoverflow.com/questions/4534924/how-to-iterate-through-range-of-dates-in-java
@@ -254,14 +254,14 @@ public class GraphService {
             int wordsPerDayOnOwn = 0;
             int wordsPerDayOnOthers = 0;
 
-            while(currentCount != IssueComments.size() && isSameDay(IssueComments.get(currentCount).getNote().getCreatedAt(), date)) {
-                wordsPerDay = wordsPerDay + countWordsUsingSplit(IssueComments.get(currentCount).getNote().getBody());
+            while(currentCount != issueComments.size() && isSameDay(issueComments.get(currentCount).getNote().getCreatedAt(), date)) {
+                wordsPerDay = wordsPerDay + countWordsUsingSplit(issueComments.get(currentCount).getNote().getBody());
 
-                if (IssueComments.get(currentCount).getIsSameAuthor()) {
-                    wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(IssueComments.get(currentCount).getNote().getBody());
+                if (issueComments.get(currentCount).getIsSameAuthor()) {
+                    wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(issueComments.get(currentCount).getNote().getBody());
                 }
                 else {
-                    wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(IssueComments.get(currentCount).getNote().getBody());
+                    wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(issueComments.get(currentCount).getNote().getBody());
                 }
 
                 currentCount++;
