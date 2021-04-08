@@ -11,9 +11,10 @@ const MergeRequest = (props) => {
     const dummyTooltip = <Tooltip>
         Dummy refers to all the commits that were made directly to the master. These commits have no associated merge requests, hence MR score is not applicable.
         </Tooltip>;
+    const mergeRequestTitleDisplay = mergerequest?.mergeRequestTitle?.length > 40 ? mergerequest?.mergeRequestTitle?.slice(0, 40) + '...' : mergerequest?.mergeRequestTitle?.slice(0, 40);
 
     return (
-        <tr className={mergeRequestRowClass} onClick={() => {handleClick(mergerequest?.commitDTOList, mergerequest?.mergeRequestDiffs, index)}} >
+        <tr className={mergeRequestRowClass} onClick={() => {handleClick(mergerequest?.commitDTOList, mergerequest?.mergeRequestDiffs, index, mergerequest?.mergeRequestTitle)}} >
             <td>
                 {mergerequest?.mergeId !== -1 ? utcToLocal(mergerequest?.mergedDate) : 
                     <OverlayTrigger 
@@ -37,7 +38,7 @@ const MergeRequest = (props) => {
                             </Tooltip>
                         }
                     >
-                        <a href={mergerequest?.mergeRequestLink} target='_blank' rel='noreferrer'>{mergerequest?.mergeRequestTitle}</a>
+                        <a href={mergerequest?.mergeRequestLink} target='_blank' rel='noreferrer'>{mergeRequestTitleDisplay}</a>
                     </OverlayTrigger>}
             </td>
             <td>{mergerequest?.mergeId === -1 ? 'N/A' : mergerequest?.mrscore}</td>

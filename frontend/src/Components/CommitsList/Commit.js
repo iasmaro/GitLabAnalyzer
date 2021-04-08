@@ -10,9 +10,10 @@ const Commit = (props) => {
     const commitRowClass = selected ? 'commit-selected' : 'commit';
     const member = databaseMembersAndAliases?.find(mapping => mapping.memberId === student);
     const commitAuthorClass = member?.alias?.includes(commit?.commitAuthor) ? 'author-highlighted' : 'author';
+    const commitMessageDisplay = commit?.commitMessage?.length > 40 ? commit?.commitMessage?.slice(0, 40) + '...' : commit?.commitMessage?.slice(0, 40);
 
     return (
-        <tr className={commitRowClass} onClick={() => handleClick(commit?.commitDiffs, index)} >
+        <tr className={commitRowClass} onClick={() => handleClick(commit?.commitDiffs, index, commit?.commitMessage)} >
             <td>{utcToLocal(commit?.commitDate)}</td>
             <td>
                 <OverlayTrigger
@@ -23,7 +24,7 @@ const Commit = (props) => {
                         </Tooltip>
                     }
                 >
-                    <a href={commit?.commitLink} target='_blank' rel='noreferrer'>{commit?.commitMessage}</a>
+                    <a href={commit?.commitLink} target='_blank' rel='noreferrer'>{commitMessageDisplay}</a>
                 </OverlayTrigger>
             </td>
             <td>{commit?.commitScore}</td>
