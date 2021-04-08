@@ -13,7 +13,7 @@ import './AnalyzerTabs.css';
 const AnalyzerTabs = (props) => {
     const [key, setKey] = useState('merge-requests');
 
-    const { commits, mergerequests, configInfo } = props || {};
+    const { commits, mergerequests } = props || {};
     const numOfCommits = commits?.length || 0;
     const numOfMRs = mergerequests?.length || 0;
     const sumOfCommits = calculateCommitScore(commits);
@@ -31,11 +31,11 @@ const AnalyzerTabs = (props) => {
                     <Tabs activeKey={key} onSelect={(k) => changeTab(k)} >
                         <Tab eventKey={"merge-requests"} title={TABS.MERGE_REQUESTS}>
                             <Scores commitsScore={sumOfCommits} mrsScore={sumOfMRs} totalCommits={numOfCommits} totalMRs={numOfMRs} />
-                            <MergeRequestTab {...props} configInfo={configInfo} />
+                            <MergeRequestTab {...props} />
                         </Tab>
                         <Tab eventKey={"commits"} title={TABS.COMMITS}>
                             <Scores commitsScore={sumOfCommits} mrsScore={sumOfMRs} totalCommits={numOfCommits} totalMRs={numOfMRs} />
-                            <CommitsTab {...props} configInfo={configInfo} />
+                            <CommitsTab {...props} />
                         </Tab>
                     </Tabs>
                 </Col>

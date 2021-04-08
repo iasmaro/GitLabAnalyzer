@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 
 import './FileHeader.css';
@@ -6,19 +6,8 @@ import FileHeaderModal from './FileHeaderModal';
 
 
 const FileHeader = (props) => {
-    const { isOpen, fileName, linesAdded, linesRemoved, diffScore, extension, linesMoved, addLine, syntaxLinesAdded, deleteLine, configInfo, spaceLinesAdded } = props || {};
+    const { isOpen, fileName, linesAdded, linesRemoved, diffScore, extension, linesMoved, addLine, syntaxLinesAdded, deleteLine, configInfo, spaceLinesAdded, meaningfulLinesAdded, handleShow, handleClose, show } = props || {};
 
-    const [showScore, setShowScore] = useState(false);
-    const [show, setShow] = useState(false);
-
-    const handleShow = () => setShow(true);
-
-    const handleClose = () => {
-        setShow(false);
-        setTimeout(() => {
-            setShowScore(!showScore);
-        }, 200);
-    };
 
     return (
         <>
@@ -48,7 +37,8 @@ const FileHeader = (props) => {
                 syntaxLinesAdded={syntaxLinesAdded}
                 deleteLine={deleteLine}
                 configInfo={configInfo}
-                spaceLinesAdded={spaceLinesAdded}/>
+                spaceLinesAdded={spaceLinesAdded}
+                meaningfulLinesAdded={meaningfulLinesAdded}/>
             }
         </>         
     );

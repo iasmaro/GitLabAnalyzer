@@ -15,6 +15,7 @@ import './syntaxHighlighter/prism.css';
 const CodeDifference = (props) => {
     const { diff, view, collapseAll, expandAll, configInfo } = props || {};
     const [isActive, setIsActive] = useState('1');
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         if (collapseAll) {
@@ -43,6 +44,7 @@ const CodeDifference = (props) => {
     const syntaxLinesAdded = diff.syntaxLinesAdded || 0;
     const deleteLine = diff.linesRemoved || 0;
     const spaceLinesAdded = diff.spaceLinesAdded || 0;
+    const meaningfulLinesAdded = diff.meaningfulLinesAdded || 0;
 
     const language = getLanguageFromFile(fileName);
 
@@ -54,11 +56,19 @@ const CodeDifference = (props) => {
     };
 
     const handleClick = () => {
-        if (isActive === '1') {
-            setIsActive('0');
-        } else {
-            setIsActive('1');
+        if (!show){
+            if (isActive === '1') {
+                setIsActive('0');
+            } else {
+                setIsActive('1');
+            }
         }
+    };
+    
+    const handleShow = () => setShow(true);
+
+    const handleClose = () => {
+        setShow(false);
     };
 
     const isOpen = isActive === '1';
@@ -80,6 +90,10 @@ const CodeDifference = (props) => {
                             deleteLine={deleteLine}
                             configInfo={configInfo}
                             spaceLinesAdded={spaceLinesAdded}
+                            meaningfulLinesAdded={meaningfulLinesAdded}
+                            handleShow={handleShow}
+                            handleClose={handleClose}
+                            show={show}
                         />
                     </Accordion.Toggle>
                 </Card.Header>

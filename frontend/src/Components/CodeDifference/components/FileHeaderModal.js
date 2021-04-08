@@ -5,7 +5,7 @@ import CodeDiffScoreBreakdown from './CodeDiffScoreBreakdown';
 
 const FileHeaderModal = (prop) => {
 
-    const { status, toggleModal, fileName, extension, linesMoved, addLine, syntaxLinesAdded, deleteLine, configInfo, spaceLinesAdded } = prop || {};
+    const { status, toggleModal, fileName, extension, linesMoved, addLine, syntaxLinesAdded, deleteLine, configInfo, spaceLinesAdded, meaningfulLinesAdded } = prop || {};
 
     return (
         <>
@@ -31,6 +31,7 @@ const FileHeaderModal = (prop) => {
                         deleteLine={deleteLine}
                         configInfo={configInfo}
                         spaceLinesAdded={spaceLinesAdded}
+                        meaningfulLinesAdded={meaningfulLinesAdded}
                     />
                 </Modal.Body>
 
