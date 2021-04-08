@@ -1,20 +1,25 @@
-.comments-top {
-    max-height: 25em;
-    margin: 0px 8px 8px 8px;
+.comments-left {
+    float: left;
+    width: 50%;
+    padding: 0 10px;
     overflow-y: scroll;
+    overflow-x: scroll;
+    max-height: 52em;
 }
 
-.comments-top::-webkit-scrollbar { 
+.comments-left::-webkit-scrollbar { 
     display: none;
 }
 
-.comments-bottom {
-    top: 50%;
-    height: 26em;
-    margin: 0px 8px 8px 8px;
+.comments-right {
+    float: right;
+    width: 50%;
+    padding: 0 10px;
     overflow-y: scroll;
+    overflow-x: scroll;
+    max-height: 52em;
 }
 
-.comments-bottom::-webkit-scrollbar { 
+.comments-right::-webkit-scrollbar { 
     display: none;
 }

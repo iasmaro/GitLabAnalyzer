@@ -1,0 +1,24 @@
+.comment-row td {
+    text-align: middle !important;
+}
+
+td.is-own {
+    width: 10em;
+}
+
+td.creation-date {
+    width: 10em;
+}
+
+td.title {
+    width: 10em;
+}
+
+td.comment-description {
+    width: 25em;
+}
+
+td.word-count {
+    width: 10em;
+}
+

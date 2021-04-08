@@ -2,10 +2,10 @@ const filterComments = ((comment, isOwn) => {
     if (isOwn === 'All') {
         return comment
     } 
-    else if (isOwn === 'Is Own' && comment?.onOwnRequestOrIssue) {
+    else if (isOwn === 'Own' && comment?.onOwnRequestOrIssue) {
         return comment
     }
-    else if (isOwn === 'Is Other' && !comment?.onOwnRequestOrIssue) {
+    else if (isOwn === 'Other' && !comment?.onOwnRequestOrIssue) {
         return comment
     }
 });

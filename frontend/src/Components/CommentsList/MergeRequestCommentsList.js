@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
 import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
@@ -19,29 +19,28 @@ const MergeRequestCommentsList = (props) => {
 
     const handleClick = () => {
         if (isOwn === 'All') {
-            setIsOwn('Is Own');
+            setIsOwn('Own');
         }
-        else if (isOwn === 'Is Own') {
-            setIsOwn('Is Other');
+        else if (isOwn === 'Own') {
+            setIsOwn('Other');
         }
-        else if (isOwn === 'Is Other') {
+        else if (isOwn === 'Other') {
             setIsOwn('All');
         }
     }
 
     return (
-        <div className='merge-request-comments-container'>
-            <Table bordered hover variant='light'>
-                {console.log(mergeRequestComments)}
+
+            <Table className='merge-request-comments-table' borderless hover variant='light'>
                 <thead>
-                    <tr>
-                        <th colSpan='4' className='mrTitle'>Merge Request Comments</th>
-                        <th colSpan='1' className='mrTitle'>Total Comments: {mergeRequestComments?.length || 0}</th>
+                    <tr className='mr-table-header'>
+                        <th colSpan='3'>Merge Request Comments</th>
+                        <th colSpan='2'>Total Comments: {mergeRequestComments?.length || 0}</th>
                     </tr>
                 </thead>
                 <thead>
-                    <tr className='mr-headers'>
-                        <th><button onClick={handleClick}>{isOwn}</button></th>
+                    <tr className='mr-row-headers'>
+                        <th><Button variant='dark' onClick={handleClick}>{isOwn}</Button></th>
                         <th className={getClassNamesFor(sortConfig, 'creationDate')} onClick={() => requestSortObject('creationDate')}>Created At</th>
                         <th className={getClassNamesFor(sortConfig, 'url')} onClick={() => requestSortObject('url')}>Title</th>
                         <th className={getClassNamesFor(sortConfig, 'commentDescription')} onClick={() => requestSortObject('commentDescription')}>Comment</th>
@@ -58,7 +57,7 @@ const MergeRequestCommentsList = (props) => {
                     ))}
                 </tbody>
             </Table>
-        </div>
+
     )
 }
 

@@ -1,12 +1,23 @@
-.merge-request-comments-container {
+.merge-request-comments-table {
     height: 100%;
     position: relative;
-    overflow-y: scroll;
-    overflow-x: scroll;
     font-family: 'Roboto', sans-serif;
     text-align: center;
+    word-break: break-all;
+    width: 100%;
 }
 
-.merge-request-comments-container::-webkit-scrollbar { 
-    display: none;
+
+.mr-table-header th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0em;
+    background-color: rgb(245, 245, 245);
+}
+
+.mr-row-headers th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 3em;
+    background-color: rgb(245, 245, 245);
 }

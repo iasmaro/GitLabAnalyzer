@@ -1,12 +1,23 @@
-.issue-comments-container {
+.issue-comments-table {
     height: 100%;
     position: relative;
-    overflow-y: scroll;
-    overflow-x: scroll;
     font-family: 'Roboto', sans-serif;
     text-align: center;
+    word-break: break-all;
+    width: 100%;
 }
 
-.issue-comments-container::-webkit-scrollbar { 
-    display: none;
+
+.issue-table-headers th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0em;
+    background-color: rgb(245, 245, 245);
+}
+
+.issue-row-headers th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 3em;
+    background-color: rgb(245, 245, 245);
 }
