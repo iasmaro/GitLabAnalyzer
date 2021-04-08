@@ -1,0 +1,11 @@
+.graph {
+    height: 100%;
+    width: 100%;
+}
+
+.graph-switch {
+    float: right;
+    margin-top: 1.6em;
+    margin-right: 1em;
+    z-index: 1;
+}

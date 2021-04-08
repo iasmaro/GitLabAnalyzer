@@ -2,11 +2,9 @@ const dev = {
     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://localhost:3000/',
     AUTHENTICATION_API_URL: 'http://localhost:8080/api/v1/users/userId?url=http://localhost:3000/',
     REPOS_API_URL: 'http://localhost:8080/api/v1/projects',
-    MR_API_URL: 'http://localhost:8080/api/v1/mergeRequests/member/',
-    MR_COMMITS_API_URL: 'http://localhost:8080/api/v1/commits/mergeRequests/',
-    COMMITS_API_URL: 'http://localhost:8080/api/v1/commits/members/',
-    USERS_TOKEN_API_URL: 'http://localhost:8080/api/v1/users/token',
+    ANALYSIS_API_URL: 'http://localhost:8080/api/v1/reports',
     USERS_API_URL: 'http://localhost:8080/api/v1/users',
+    USERS_TOKEN_API_URL: 'http://localhost:8080/api/v1/users/token',
     PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
     SAVE_CONFIG_URL: 'http://localhost:8080/api/v1/users/configuration',
     PROJECT_ALIAS_API_URL: 'http://localhost:8080/api/v1/members/alias',
@@ -14,16 +12,14 @@ const dev = {
     CONFIGURATION_FILES_URL: 'http://localhost:8080/api/v1/users/configuration',
     CONFIGURATION_FILE_INFO_URL: 'http://localhost:8080/api/v1/users/configuration/',
     START_URL: 'http://localhost:8080/api/v1/users/start/',
-    END_URL: 'http://localhost:8080/api/v1/users/end/'
+    END_URL: 'http://localhost:8080/api/v1/users/end/',
 };
 
 const prod = {
     SFU_LOGIN_URL: 'https://cas.sfu.ca/cas/login?service=http://cmpt373-1211-11.cmpt.sfu.ca/',
     AUTHENTICATION_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/userId?url=http://cmpt373-1211-11.cmpt.sfu.ca/',
     REPOS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/projects',
-    MR_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/mergeRequests/member/',
-    MR_COMMITS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/commits/mergeRequests/',
-    COMMITS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/commits/members/',
+    ANALYSIS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/reports',
     USERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users',
     USERS_TOKEN_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/token',
     PROJECT_MEMBERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members',
@@ -52,6 +48,7 @@ export const date = {
 
 export const TABS = {
     SCORES: 'Scores',
+    SUMMARY: 'Summary',
     GRAPHS: 'Graphs',
     MERGE_REQUESTS: 'Merge Requests',
     COMMITS: 'Commits'
