@@ -40,6 +40,11 @@ public class IndividualDiffScoreCalculator {
     private int numberOfSpaceLinesAdded;
     private int numberOfSyntaxLinesAdded;
 
+    // num of code lines added and removed
+    // update removed and added lines to account for moves
+    // add num of comment lines
+    // account for the gitlab edge case
+
     public IndividualDiffScoreCalculator() {
 
         this.isLongComment = false;
@@ -160,7 +165,7 @@ public class IndividualDiffScoreCalculator {
 
                 line = line.trim();
 
-                if((line.length() > 1 || isSyntax(line)) && isComment(line) == false) {
+                if((line.length() > 1 || isSyntax(line)) && isComment(line) == false && isAutoGitlabLine(line) == false) {
                     removal = false;
                     addition = false;
                     lastLineSeen = line;
@@ -176,6 +181,16 @@ public class IndividualDiffScoreCalculator {
         }
 
         return diffScore;
+    }
+
+    /*
+      Gitlab adds a special line to the end of the files that doesn't show up in the syntax highlighting.
+      Most of the time this doesn't matter but there are times where it may interfere with the move line system as the
+      calculator views it as a piece of code and this tricks the calculator into thinking a piece of moved code
+
+     */
+    private boolean isAutoGitlabLine(String line) {
+        return line.equals("\\ No newline at end of file");
     }
 
 
