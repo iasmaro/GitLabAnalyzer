@@ -43,6 +43,7 @@ const Analysis = (props) => {
     useEffect(() => {
         analyzeAll(username, projectId).then((data) => {
             setAnalysis(data);
+            console.log(data);
             setIsLoading(false);
         })
     }, [projectId, username]);
@@ -70,12 +71,6 @@ const Analysis = (props) => {
             </div>
             {isLoading ? <Spinner animation="border" className="spinner" /> : 
             <>
-                <AnalyzerTabs 
-                    mergerequests={mergeRequests} 
-                    projectId={projectId} 
-                    commits={commits} 
-                    student={student} 
-                    databaseMembersAndAliases={databaseMembersAndAliases}/>
                 <div className="analysis-header">
                     <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} />
                 </div>
@@ -86,7 +81,9 @@ const Analysis = (props) => {
                     commitsGraph={commitsGraph}
                     MRsGraph={MRsGraph}
                     codeReviewsGraph={codeReviewsGraph}
-                    issueCommentsGraph={issueCommentsGraph} />
+                    issueCommentsGraph={issueCommentsGraph}
+                    student={student}
+                    databaseMembersAndAliases={databaseMembersAndAliases}/>
             </>}
         </div>
     )
