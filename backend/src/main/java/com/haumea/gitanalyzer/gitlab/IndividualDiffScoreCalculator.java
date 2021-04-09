@@ -2,7 +2,6 @@ package com.haumea.gitanalyzer.gitlab;
 
 
 import com.haumea.gitanalyzer.dto.ScoreDTO;
-import com.haumea.gitanalyzer.dto.LineChangeDTO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,13 +31,23 @@ public class IndividualDiffScoreCalculator {
 
     private List<String> removedLines;
     private List<String> addedLines;
-    private List<LineChangeDTO> lineChangeDTOS;
 
     private int numberOfLinesAdded;
     private int numberOfLinesRemoved;
+    private int meaningFullLinesAdded;
+    private int meaningFullLinesRemoved;
     private int numberOfLinesMoved;
     private int numberOfSpaceLinesAdded;
+    private int numberOfSpaceLinesRemoved;
     private int numberOfSyntaxLinesAdded;
+    private int numberOfSyntaxLinesRemoved;
+    private int numberOfCommentLinesAdded;
+    private int numberOfCommentLinesRemoved;
+
+    // num of code lines added and removed
+    // update removed and added lines to account for moves
+    // add num of comment lines
+    // account for the gitlab edge case
 
     public IndividualDiffScoreCalculator() {
 
@@ -47,7 +56,6 @@ public class IndividualDiffScoreCalculator {
 
         this.removedLines = new ArrayList<>(); // reset when finished
         this.addedLines = new ArrayList<>();
-        this.lineChangeDTOS = new ArrayList<>();
     }
 
     public void clearMoveLineLists() {
@@ -84,13 +92,24 @@ public class IndividualDiffScoreCalculator {
 
         this.numberOfLinesAdded = 0;
         this.numberOfLinesRemoved = 0;
+
+        this.meaningFullLinesAdded = 0;
+        this.meaningFullLinesRemoved = 0;
+
         this.numberOfLinesMoved = 0;
+
         this.numberOfSpaceLinesAdded = 0;
+        this.numberOfSpaceLinesRemoved = 0;
+
         this.numberOfSyntaxLinesAdded = 0;
+        this.numberOfSyntaxLinesRemoved = 0;
+
+        this.numberOfCommentLinesAdded = 0;
+        this.numberOfCommentLinesRemoved = 0;
 
 
         if(isFileDeleted) {
-            return new ScoreDTO(0, 0, 0.0, 0, 0, 0);
+            return new ScoreDTO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0);
         }
         else {
             double score;
@@ -104,14 +123,49 @@ public class IndividualDiffScoreCalculator {
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
+            // needed for debugging. will eliminate in future MR once a few scoring bugs are resolved
+            printValueOfLineTypes();
+
             return new ScoreDTO(
                     numberOfLinesAdded,
                     numberOfLinesRemoved,
-                    fileTypeMultiplier * roundedScore.doubleValue(),
-                    numberOfLinesMoved,
+                    meaningFullLinesAdded,
+                    meaningFullLinesRemoved,
+                    numberOfSyntaxLinesAdded,
+                    numberOfSyntaxLinesRemoved,
                     numberOfSpaceLinesAdded,
-                    numberOfSyntaxLinesAdded);
+                    numberOfSpaceLinesRemoved,
+                    numberOfLinesMoved,
+                    numberOfCommentLinesAdded,
+                    numberOfCommentLinesRemoved,
+                    roundedScore.doubleValue()
+                   );
         }
+    }
+
+
+    // needed for debugging. will eliminate in future MR once a few scoring bugs are resolved
+    private void printValueOfLineTypes() {
+        System.out.println("Lines added are: " + numberOfLinesAdded);
+        System.out.println("Code Lines added are: " + meaningFullLinesAdded);
+        System.out.println();
+        System.out.println("Lines removed are: "+ numberOfLinesRemoved);
+        System.out.println("Code lines removed are: "+ meaningFullLinesRemoved);
+        System.out.println();
+        System.out.println("Num of spaces added is: " + numberOfSpaceLinesAdded);
+        System.out.println("Num of spaces removed is: " + numberOfSpaceLinesRemoved);
+        System.out.println();
+        System.out.println("Num of syntax lines added is: " + numberOfSyntaxLinesAdded);
+        System.out.println("Num of syntax lines removed is: " + numberOfSyntaxLinesRemoved);
+        System.out.println();
+        System.out.println("Num of lines moved is: " + numberOfLinesMoved);
+        System.out.println();
+        System.out.println("Num of comment lines added: " + numberOfCommentLinesAdded);
+        System.out.println("Num of comment lines removed: " + numberOfCommentLinesRemoved);
+
+
+
+
     }
 
     private double analyzeDiff(String diff) throws IOException {
@@ -121,61 +175,65 @@ public class IndividualDiffScoreCalculator {
         // https://stackoverflow.com/questions/9259411/what-is-the-best-way-to-iterate-over-the-lines-of-a-java-string
         BufferedReader bufReader = new BufferedReader(new StringReader(diff));
         String line;
-        while((line=bufReader.readLine()) != null )
-        {
-            String originalLine = line;
-
-            LineChangeDTO lineChangeDTO;
-
+        while((line=bufReader.readLine()) != null ) {
+            String newLine = removesSpacesInString(line);
             double lineScore = 0.0;
 
-            if(line.charAt(0) == '+') {
-                lineScore = analyzeAddedLine(line);
-                diffScore = diffScore + lineScore;
-                this.numberOfLinesAdded++;
+            try {
+                if (newLine.charAt(0) == '+') {
+                    lineScore = analyzeAddedLine(newLine);
+                    diffScore = diffScore + lineScore;
+                    this.numberOfLinesAdded++;
+                } else if (newLine.charAt(0) == '-' && (newLine.trim().length() > 0) && !newLine.trim().equals("-")) {
 
+                    newLine = newLine.substring(1); // cutting out the -
+                    newLine = newLine.trim();
 
-                lineChangeDTO = new LineChangeDTO(originalLine, lineScore);
-                lineChangeDTOS.add(lineChangeDTO);
+                    lineScore = analyzeRemovedLine(newLine);
+                    diffScore = diffScore + lineScore;
+                    this.numberOfLinesRemoved++;
 
-            }
-            else if(line.charAt(0) == '-' && (line.trim().length() > 0) && !line.trim().equals("-")) {
+                    removedLines.add(newLine);
+                    lastLineSeen = newLine;
 
-                line = line.substring(1); // cutting out the -
-                line = line.trim();
+                } else if (newLine.trim().equals("-")) {
+                    this.numberOfSpaceLinesRemoved++;
+                    this.numberOfLinesRemoved++;
+                } else { // still need to process unchanged line to check whether a long comment was changed
+                    newLine = newLine.trim();
 
-                lineScore = analyzeRemovedLine(line);
-                diffScore = diffScore + lineScore;
-                this.numberOfLinesRemoved++;
+                    if ((newLine.length() > 1 || isSyntax(newLine)) && isComment(newLine) == false && isAutoGitlabLine(newLine) == false) {
+                        removal = false;
+                        addition = false;
+                        lastLineSeen = newLine;
+                    }
 
-                removedLines.add(line);
-
-                lineChangeDTO = new LineChangeDTO(originalLine, lineScore);
-                lineChangeDTOS.add(lineChangeDTO);
-
-                lastLineSeen = line;
-
-            }
-            else { // still need to process unchanged line to check whether a long comment was changed
-
-                line = line.trim();
-
-                if((line.length() > 1 || isSyntax(line)) && isComment(line) == false) {
-                    removal = false;
-                    addition = false;
-                    lastLineSeen = line;
-
-
+                    if (isLongComment == true) {
+                        checkForEndBrace(newLine);
+                    }
                 }
 
-                if(isLongComment == true) {
-                    checkForEndBrace(line);
-                }
+            } catch (IndexOutOfBoundsException e) {
+                // let the program keep running if "" is checked at index 0
             }
-
         }
 
         return diffScore;
+    }
+
+    private String removesSpacesInString(String line) {
+        return line.replaceAll("\\s+","");
+
+    }
+
+    /*
+      Gitlab adds a special line to the end of the files that doesn't show up in the syntax highlighting.
+      Most of the time this doesn't matter but there are times where it may interfere with the move line system as the
+      calculator views it as a piece of code and this tricks the calculator into thinking a piece of moved code
+
+     */
+    private boolean isAutoGitlabLine(String line) {
+        return line.equals("\\Nonewlineatendoffile");
     }
 
 
@@ -198,18 +256,28 @@ public class IndividualDiffScoreCalculator {
                 else if(lastLineSeen.equals(line) == true && addition == true) {
                     lineScore = calcFalseMoveLineScore(line);
                 }
+                if(isSyntax(line) == false) {
+                    this.meaningFullLinesAdded--;
+                }
+                else {
+                    this.numberOfSyntaxLinesAdded--;
+                }
+
             }
             else if(lineWasAdded(line) == false && isSyntax(line) == true) {
                 lineScore = syntaxLineWeight;
-                this.numberOfSyntaxLinesAdded++;
+                this.numberOfSyntaxLinesRemoved++;
             }
             else {
                 lineScore = deleteLineWeight;
-
+                this.meaningFullLinesRemoved++;
             }
 
             removal = true;
             addition = false;
+        }
+        else if(isComment(line) == true) {
+            this.numberOfCommentLinesRemoved++;
         }
 
         return lineScore;
@@ -287,6 +355,7 @@ public class IndividualDiffScoreCalculator {
 
             if(isComment(line)) {
                 lineScore = 0.0;
+                this.numberOfCommentLinesAdded++;
             }
             // moved line
             else if(isLongComment == false && lineWasRemoved(line) == true) {
@@ -298,11 +367,20 @@ public class IndividualDiffScoreCalculator {
                 else if(lastLineSeen.equals(line) == true && removal == false) {
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
+                // line was just removed before being added again. This is a false move and should not be counted
                 else if(lastLineSeen.equals(line) == true && removal == true) {
-                    lineScore = undoAddLineScore(line);
+                    lineScore = undoRemoveLineScore(line);
 
                     addition = true;
                     removal = false;
+                }
+                if(isSyntax(line) == false) {
+                    this.meaningFullLinesRemoved--;
+                }
+                else {
+                    // syntax lines removed -- if we add that var in
+
+                    this.numberOfSyntaxLinesRemoved--;
                 }
             }
             // line is a syntax line
@@ -327,6 +405,8 @@ public class IndividualDiffScoreCalculator {
                 removal = false;
                 lastLineSeen = line;
 
+                this.meaningFullLinesAdded++;
+
             }
 
 
@@ -337,12 +417,13 @@ public class IndividualDiffScoreCalculator {
             lastLineSeen = line;
         }
         else if(line.equals("+")){
-            numberOfSpaceLinesAdded++;
+            this.numberOfSpaceLinesAdded++;
+
         }
 
         return lineScore;
     }
-    private double undoAddLineScore(String line) {
+    private double undoRemoveLineScore(String line) {
         double lineScore = 0.0;
         if(isSyntax(line) == true) {
             lineScore = -syntaxLineWeight;
@@ -368,12 +449,10 @@ public class IndividualDiffScoreCalculator {
         String potentialEndOfComment = "";
 
         if(line.length() > longCommentEndBrace.length()) {
-
             potentialEndOfComment = line.substring(line.length()-longCommentEndBrace.length(), line.length());
         }
         else if(line.length() == longCommentEndBrace.length()) {
             potentialEndOfComment = line;
-
         }
 
         endOfLongComment(potentialEndOfComment);
