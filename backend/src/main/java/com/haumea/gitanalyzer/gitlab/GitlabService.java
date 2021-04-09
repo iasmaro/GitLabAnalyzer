@@ -6,6 +6,7 @@ import org.gitlab4j.api.*;
 import org.gitlab4j.api.models.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -524,7 +525,7 @@ public class GitlabService {
 
     }
 
-    public List<CommentWrapper> getIssueComments(Integer projectId, Date start, Date end){
+    public List<CommentWrapper> getIssueComments(Integer projectId, Date start, Date end) {
         IssueFilter issueFilter = new IssueFilter();
         issueFilter.setCreatedBefore(end);
         issueFilter.setCreatedAfter(start);
@@ -533,33 +534,38 @@ public class GitlabService {
 
         try{
             List<Issue> issues = issuesApi.getIssues(projectId, issueFilter);
-            for(Issue issue : issues){
+            for(Issue issue : issues) {
+
                 List<Note> issueNotes = notesApi.getIssueNotes(projectId, issue.getIid());
-                for(Note note : issueNotes){
+                for(Note note : issueNotes) {
+
                     String commentAuthor = note.getAuthor().getUsername();
                     String issueAuthor = issue.getAuthor().getUsername();
                     CommentWrapper commentWrapper = new CommentWrapper(
                             issue.getWebUrl(),
+                            issue.getTitle(),
                             note,
                             commentAuthor.equals(issueAuthor));
 
                     issueComments.add(commentWrapper);
                 }
             }
-        } catch (GitLabApiException e){
+        } catch (GitLabApiException e) {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
 
+        // sort issue comments so that comments endpoints will return them sorted. A sorted list will also help optimize graph creation
+        issueComments.sort(Comparator.comparing(o -> o.getNote().getCreatedAt()));
         return issueComments;
 
     }
 
-    public List<CommentWrapper> getIssueCommentsByAuthor(Integer projectId, Date start, Date end, List<String> alias){
+    public List<CommentWrapper> getIssueCommentsByAuthor(Integer projectId, Date start, Date end, List<String> alias) {
         List<CommentWrapper> issueComments = getIssueComments(projectId, start, end);
 
         List<CommentWrapper> filteredIssueComments = new ArrayList<>();
-        for(CommentWrapper comment : issueComments){
-            if(alias.contains(comment.getAuthor())){
+        for(CommentWrapper comment : issueComments) {
+            if(alias.contains(comment.getAuthor())) {
                 filteredIssueComments.add(comment);
             }
         }
@@ -575,13 +581,14 @@ public class GitlabService {
         List<CommentWrapper> MRComments = new ArrayList<>();
 
         try{
-            for(MergeRequest mergeRequest : mergeRequests){
+            for(MergeRequest mergeRequest : mergeRequests) {
                 List<Note> MRNotes = notesApi.getMergeRequestNotes(projectId, mergeRequest.getIid());
-                for(Note note : MRNotes){
+                for(Note note : MRNotes) {
                     String commentAuthor = note.getAuthor().getUsername();
                     String mergeRequestAuthor = mergeRequest.getAuthor().getUsername();
                     CommentWrapper commentWrapper = new CommentWrapper(
                             mergeRequest.getWebUrl(),
+                            mergeRequest.getTitle(),
                             note,
                             commentAuthor.equals(mergeRequestAuthor));
 
@@ -592,6 +599,8 @@ public class GitlabService {
             throw new GitLabRuntimeException(e.getLocalizedMessage());
         }
 
+        // sort MR comments so that comments endpoints will return them sorted. A sorted list will also help optimize graph creation
+        MRComments.sort(Comparator.comparing(o -> o.getNote().getCreatedAt()));
         return MRComments;
 
     }

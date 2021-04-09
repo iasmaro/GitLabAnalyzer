@@ -8,6 +8,7 @@ import AnalysisDropDown from 'Components/AnalyzerInfo/AnalysisDropDown';
 import AnalysisSpecifications from 'Components/AnalyzerInfo/AnalysisSpecifications';
 import analyzeAll from 'Utils/analyzeAll';
 import getProjectMembers from 'Utils/getProjectMembers';
+import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
 
 import './Analysis.css'
 
@@ -18,42 +19,48 @@ const Analysis = (props) => {
     const { projectId, configuration, startDate, endDate, namespace, projectName } = data || {};
     const [isLoading, setIsLoading] = useState(true);
     const [mergeRequests, setMergeRequests] = useState();
+    const [commitsGraph, setCommitsGraph] = useState();
+    const [MRsGraph, setMRsGraph] = useState();
+    const [codeReviewsGraph, setCodeReviewsGraph] = useState();
+    const [issueCommentsGraph, setIssueCommentsGraph] = useState();
     const [commits, setCommits] = useState();
     const [issueComments, setIssueComments] = useState();
-    const [mergeRequestComments, setmergeRequestComments] = useState();
+    const [mergeRequestComments, setMergeRequestComments] = useState();
     const [members, setMembers] = useState([]);
     const [student, setStudent] = useState();
     const [analysis, setAnalysis] = useState();
+    const [databaseMembersAndAliases, setDatabaseMembersAndAliases] = useState([]);
     const username = useUserState();
 
     useEffect(() => {
         getProjectMembers(username, projectId).then((data) => {
             setMembers(data);
+            setStudent(data && data[0]);
+        });
+        getMembersAndAliasesFromDatabase(username, projectId).then((data) => {
+            setDatabaseMembersAndAliases(data);
         });
     }, [username, projectId]);
 
     useEffect(() => {
-        if (members.length > 0 && !analysis) {
-            setStudent(members[0]);
-            setAnalysis(analyzeAll(members, username, projectId));
-        }
-    }, [analysis, projectId, members, username]);
+        analyzeAll(username, projectId).then((data) => {
+            setAnalysis(data);
+            console.log(data);
+            setIsLoading(false);
+        })
+    }, [projectId, username]);
 
     useEffect(() => {
-        const activeAnalysis = analysis && analysis[student];
-        activeAnalysis?.mergeRequests.then((data) => {
-            setMergeRequests(data);
-            setIsLoading(false);
-        });
-        activeAnalysis?.commits.then((data) => {
-            setCommits(data);
-        });
-        activeAnalysis?.issueComments.then((data) => {
-            setIssueComments(data);
-        });
-        activeAnalysis?.mergeRequestComments.then((data) => {
-            setmergeRequestComments(data);
-        });
+        if (analysis && student) {
+            setMergeRequests(analysis.mergeRequestListByMemberId && analysis.mergeRequestListByMemberId[student]);
+            setCommits(analysis.commitListByMemberId && analysis.commitListByMemberId[student]);
+            setCommitsGraph(analysis.commitGraphListByMemberId && analysis.commitGraphListByMemberId[student]);
+            setMRsGraph(analysis.mrgraphListByMemberId && analysis.mrgraphListByMemberId[student]);
+            setCodeReviewsGraph(analysis.codeReviewGraphListByMemberId && analysis.codeReviewGraphListByMemberId[student]);
+            setIssueCommentsGraph(analysis.issueGraphListByMemberId && analysis.issueGraphListByMemberId[student]);
+            setIssueComments(analysis.issueCommentListByMemberId && analysis.issueCommentListByMemberId[student]);
+            setMergeRequestComments(analysis.mrcommentListByMemberId && analysis.mrcommentListByMemberId[student]);
+        }
     }, [student, analysis]);
     
     if (!data) {
@@ -66,7 +73,24 @@ const Analysis = (props) => {
             <div className="analysis-header">
                 <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
             </div>
-            {isLoading ? <Spinner animation="border" className="spinner" /> : <AnalyzerTabs mergerequests={mergeRequests} projectId={projectId} commits={commits} issueComments={issueComments} mergeRequestComments={mergeRequestComments}/>}
+            {isLoading ? <Spinner animation="border" className="spinner" /> : 
+            <>
+                <div className="analysis-header">
+                    <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} />
+                </div>
+                <AnalyzerTabs
+                    mergerequests={mergeRequests}
+                    projectId={projectId}
+                    commits={commits}
+                    commitsGraph={commitsGraph}
+                    MRsGraph={MRsGraph}
+                    codeReviewsGraph={codeReviewsGraph}
+                    issueCommentsGraph={issueCommentsGraph}
+                    student={student}
+                    databaseMembersAndAliases={databaseMembersAndAliases}
+                    issueComments={issueComments}
+                    mergeRequestComments={mergeRequestComments}/>
+            </>}
         </div>
     )
 }
