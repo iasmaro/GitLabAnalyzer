@@ -12,6 +12,7 @@ const MergeRequestTab = (props) => {
     const [commits, setCommits] = useState();
     const [diffs, setDiffs] = useState();
     const [expand, setExpand] = useState(false);
+    const [diffsTitle, setDiffsTitle] = useState();
 
     const setCommit = (commitList) => {
         setCommits(commitList);
@@ -29,16 +30,16 @@ const MergeRequestTab = (props) => {
         <div className="merge-request-tab">
             {!expand && <div className="mrs-left">
                 <div className="mrs-top">
-                    <MergeRequestList {...props} setCommit={setCommit} setCodeDiffs={setCodeDiffs} />
+                    <MergeRequestList {...props} setCommit={setCommit} setCodeDiffs={setCodeDiffs} setDiffsTitle={setDiffsTitle} />
                 </div>
                 <div className="mrs-bottom">
-                    {commits && <CommitsList {...props} commits={commits} setCodeDiffs={setCodeDiffs} />}
+                    {commits && <CommitsList {...props} commits={commits} setCodeDiffs={setCodeDiffs} setDiffsTitle={setDiffsTitle}/>}
                 </div>
             </div>}
             {diffs && <div className="mrs-right">
                 <Button className="expand-button" onClick={handleExpand}>{expand ? '>' : '<'}</Button>
                 <div className={`mr-code-diffs ${expand ? 'expanded' : ''}`}>
-                    <CodeDifferenceList diffs={diffs} />
+                    <CodeDifferenceList diffs={diffs} diffsTitle={diffsTitle}/>
                 </div>
             </div>}
         </div>
