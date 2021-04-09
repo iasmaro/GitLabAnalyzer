@@ -25,7 +25,7 @@ public class IndividualDiffScoreCalculator {
     private boolean addition;
     private boolean removal;
 
-    String lastLineSeen;
+    private String lastLineSeen;
 
     private String longCommentEndBrace;
 
@@ -229,7 +229,7 @@ public class IndividualDiffScoreCalculator {
     /*
       Gitlab adds a special line to the end of the files that doesn't show up in the syntax highlighting.
       Most of the time this doesn't matter but there are times where it may interfere with the move line system as the
-      calculator views it as a piece of code and this tricks the calculator into thinking a piece of moved code
+      calculator views it as a piece of code and this tricks the calculator into thinking a piece of code moved
 
      */
     private boolean isAutoGitlabLine(String line) {
@@ -244,16 +244,19 @@ public class IndividualDiffScoreCalculator {
             // line was moved
             if(lineWasAdded(line) == true) {
                 // move went over non identical code
-                if(lastLineSeen.equals(line) == false) {
+                if(lastLineSeen.equals(line) == false && lineWasAdded(lastLineSeen) == false) {
                     lineScore = calcMovedLineScoreOnRemoveSide(line);
                 }
                 // move went over code where the prev line scanned was identical
-                else if(lastLineSeen.equals(line) == true && addition == false) {
+                else if(lastLineSeen.equals(line) == true && addition == false  && lineWasAdded(lastLineSeen) == false) {
                     lineScore = calcMovedLineScoreOnRemoveSide(line);
 
                 }
                 // false move, the move didn't change the order of the code
-                else if(lastLineSeen.equals(line) == true && addition == true) {
+//                else if(lastLineSeen.equals(line) == true && addition == true) {
+//                    lineScore = calcFalseMoveLineScore(line);
+//                }
+                else {
                     lineScore = calcFalseMoveLineScore(line);
                 }
                 if(isSyntax(line) == false) {
@@ -360,20 +363,36 @@ public class IndividualDiffScoreCalculator {
             // moved line
             else if(isLongComment == false && lineWasRemoved(line) == true) {
                 /// normal case where line is moved from one area to another over different code
-                if(lastLineSeen.equals(line) == false) {
+                if(lastLineSeen.equals(line) == false && lineWasRemoved(lastLineSeen) == false) {
+
+                    System.out.println("In first case: " + lastLineSeen);
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
                 // case where line is moved from one area to another where prev line scanned was the same
-                else if(lastLineSeen.equals(line) == true && removal == false) {
+                else if(lastLineSeen.equals(line) == true && removal == false && lineWasRemoved(lastLineSeen) == false) {
+                    System.out.println("In second case: " + lastLineSeen);
+                    lineScore = calcMovedLineScoreOnAddSide(line);
+                }
+                else if(lastLineSeen.equals(line) == false && removal == false && lineWasRemoved(lastLineSeen) == true) {
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
                 // line was just removed before being added again. This is a false move and should not be counted
-                else if(lastLineSeen.equals(line) == true && removal == true) {
+//                else if(lastLineSeen.equals(line) == true && removal == true) {
+//                    lineScore = undoRemoveLineScore(line);
+//
+//                    addition = true;
+//                    removal = false;
+//                }
+                else {
+                    System.out.println("In third case: " + line + " " + lastLineSeen);
+
                     lineScore = undoRemoveLineScore(line);
 
                     addition = true;
                     removal = false;
+
                 }
+
                 if(isSyntax(line) == false) {
                     this.meaningFullLinesRemoved--;
                 }
@@ -418,7 +437,6 @@ public class IndividualDiffScoreCalculator {
         }
         else if(line.equals("+")){
             this.numberOfSpaceLinesAdded++;
-
         }
 
         return lineScore;
