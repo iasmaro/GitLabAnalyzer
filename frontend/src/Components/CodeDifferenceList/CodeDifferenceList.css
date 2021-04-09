@@ -1,3 +1,8 @@
+.diffs-title-button {
+    background-color: rgb(227, 226, 226);
+    color: black;
+}
+
 .button-container {
     float: right;
     padding: 0.2em 0.2em 0.2em 0.2em;

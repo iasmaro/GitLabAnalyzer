@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Popover, OverlayTrigger } from 'react-bootstrap';
 
+import './CodeDifferenceList.css';
+
 const DiffsTitle = (props) => {
     const { diffsTitle } = props || {};
     const diffsTitleDisplay = diffsTitle?.length > 100 ? diffsTitle?.slice(0, 100) + '...' : diffsTitle?.slice(0, 100);
@@ -16,7 +18,7 @@ const DiffsTitle = (props) => {
 
     return (
         <OverlayTrigger placement="bottom" overlay={popover}>
-            <Button variant="secondary" size="lg" block>{diffsTitleDisplay}</Button>
+            <Button variant="secondary" size="lg" className="diffs-title-button" block>{diffsTitleDisplay}</Button>
         </OverlayTrigger>
     );
 };
