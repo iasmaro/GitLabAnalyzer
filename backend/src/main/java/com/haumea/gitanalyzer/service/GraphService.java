@@ -293,4 +293,8 @@ public class GraphService {
     public void updateCommitGraph(String userId, int projectId, Date start, Date end, String configName, Date commitDate, double difference) {
         reportService.updateCommitGraph(userId, projectId, start, end, configName, commitDate, difference);
     }
+
+    public void updateMRGraph(String userId, int projectId, Date start, Date end, String configName, Date commitDate, double difference) {
+        reportService.updateMRGraph(userId, projectId, start, end, configName, commitDate, difference);
+    }
 }

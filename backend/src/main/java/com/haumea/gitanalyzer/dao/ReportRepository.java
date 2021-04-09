@@ -1,6 +1,7 @@
 package com.haumea.gitanalyzer.dao;
 
 import com.haumea.gitanalyzer.dto.CommitGraphDTO;
+import com.haumea.gitanalyzer.dto.MergeRequestGraphDTO;
 import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.model.ReportDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +72,7 @@ public class ReportRepository {
 
     }
 
-    public void findCommitDTOInDb(String userId, int projectId, Date start, Date end, String configName, Date commitDate) {
+    public void findCommitGraphDTOInDb(String userId, int projectId, Date start, Date end, String configName, Date commitDate) {
         Query query = new Query();
         query.addCriteria(Criteria.where("projectId").is(projectId));
         query.addCriteria(Criteria.where("start").is(start));
@@ -86,6 +87,25 @@ public class ReportRepository {
             ReportDTO reportDTO = findReportInDb(projectId, start, end, configName).get();
             Map<String, List<CommitGraphDTO>> commitGraphs = reportDTO.getCommitGraphListByMemberId();
             List<CommitGraphDTO> commitGraph = commitGraphs.get(userId);
+
+        }
+
+    }
+
+    public void findMRGraphDTOInDb(String userId, int projectId, Date start, Date end, String configName, Date commitDate) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("projectId").is(projectId));
+        query.addCriteria(Criteria.where("start").is(start));
+        query.addCriteria(Criteria.where("end").is(end));
+        query.addCriteria(Criteria.where("configName").is(configName));
+    }
+    public void updateMRGraph(String userId, int projectId, Date start, Date end, String configName, Date commitDate, double difference) {
+
+        if(findReportInDb(projectId, start, end, configName).isPresent()) {
+
+            ReportDTO reportDTO = findReportInDb(projectId, start, end, configName).get();
+            Map<String, List<MergeRequestGraphDTO>> MRGraphs = reportDTO.getMRGraphListByMemberId();
+            List<MergeRequestGraphDTO> MRGraph = MRGraphs.get(userId);
 
         }
 
