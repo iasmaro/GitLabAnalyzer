@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { utcToLocal } from 'Components/Utils/formatDates';
 
 import './Comment.css';
@@ -13,7 +13,18 @@ const Comment = (props) => {
             <td className='title'>
                 <a href={url} target='_blank' rel='noreferrer'>View</a>
             </td>
-            <td className='comment-description'>{commentDescription.length < 100 ? (commentDescription) : (commentDescription.slice(0,100) + '...')}</td>
+            <td className='comment-description'>{commentDescription.length < 100 ? commentDescription : 
+                (<OverlayTrigger
+                    placement="top"
+                    overlay={
+                        <Tooltip className='tooltip'>
+                            {commentDescription}
+                        </Tooltip>
+                    }
+                >
+                    <p>{commentDescription.slice(0, 100) + '...'}</p>
+                </OverlayTrigger>)}
+            </td>
             <td className='word-count'>{commentDescription.match(/(\w+)/g).length}</td>
         </tr>
     );
