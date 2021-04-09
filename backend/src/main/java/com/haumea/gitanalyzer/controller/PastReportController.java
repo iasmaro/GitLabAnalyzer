@@ -54,4 +54,12 @@ public class PastReportController {
         reportService.deleteReport(reportName);
 
     }
+
+    @PutMapping("/updateScore/mrDiff")
+    public void updateScoreForMRDiff(@RequestParam @NotBlank String reportName,
+                                     @RequestParam @NotNull int diffID,
+                                     @RequestParam @NotNull double newScore) {
+
+
+    }
 }
