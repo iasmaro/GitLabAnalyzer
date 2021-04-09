@@ -20,6 +20,8 @@ const Repo = (props) => {
     const [showAliasMappingModal, setShowAliasMappingModal] = useState(false);
     const [isLoadingGitLabCall, setIsLoadingGitLabCall] = useState(false);
     const [isLoadingDatabaseCall, setIsLoadingDatabaseCall] = useState(false);
+    const [isLoadingStartDate, setIsLoadingStartDate] = useState(false);
+    const [isLoadingEndDate, setIsLoadingEndDate] = useState(false);
     const [members, setMembers] = useState([]);
     const [aliases, setAliases] = useState([]);
     const [databaseMapping, setDatabaseMapping] = useState([]);
@@ -28,14 +30,18 @@ const Repo = (props) => {
     const username = useUserState();
     
     const handleShowAnalyzeModal = () => {
+        setIsLoadingStartDate(true);
+        setIsLoadingEndDate(true);
         getConfigurations(username).then((data) => {
             setConfigs(data);
         });
         getStartDate(username).then((data) => {
             setStartDate(data);
+            setIsLoadingStartDate(false);
         });
         getEndDate(username).then((data) => {
             setEndDate(data);
+            setIsLoadingEndDate(false);
         });
         setShowAnalyzeModal(true);
     }
@@ -65,12 +71,13 @@ const Repo = (props) => {
             <td>{repo?.namespace}</td>
             <td>{utcToLocal(repo?.updatedAt)}</td>
             <td>
-                <Button variant="dark" onClick={handleShowAnalyzeModal}> Analyze </Button>
+                <Button variant="dark" className='repo-list-button' onClick={handleShowAnalyzeModal}> Analyze </Button>
             </td>
             <td>
-                <Button variant="secondary" className='button' onClick={handleShowAliasMappingModal}> Map Aliases </Button>
+                <Button variant="secondary" className='repo-list-button' onClick={handleShowAliasMappingModal}> Map Aliases </Button>
             </td>
-            { showAnalyzeModal && <RepoAnalyzeModal 
+            { (isLoadingStartDate || isLoadingEndDate) ? <Spinner animation="border" className="spinner" /> :
+             showAnalyzeModal && <RepoAnalyzeModal 
                                         name={repo?.projectName} 
                                         id={repo?.projectId}                                         
                                         configs={configs} 
