@@ -425,20 +425,24 @@ public class TestGitLabService {
 
             System.out.println("Commit is: " + commit.getCommitData().getMessage());
 
-            for (Diff diff : commit.getNewCode()) {
-
-                System.out.println("diff is: ");
-                System.out.println(diff.getDiff());
-
-                ScoreDTO score = calculator.calculateDiffScore(diff.getDiff(), false,
-                        1.0,
-                        0.2, 0.2, 0.5, 1.0, commentTypes);
-
-                System.out.println("score is: " + score.getScore());
-
+            if(commit.getCommitData().getMessage().equalsIgnoreCase("c05-RemoveSpaces - on branch b04-Whitespace")) {
                 System.out.println();
 
+                for (Diff diff : commit.getNewCode()) {
 
+                    System.out.println("diff is: ");
+                    System.out.println(diff.getDiff());
+
+                    ScoreDTO score = calculator.calculateDiffScore(diff.getDiff(), false,
+                            1.0,
+                            0.2, 0.2, 0.5, 1.0, commentTypes);
+
+                    System.out.println("score is: " + score.getScore());
+
+                    System.out.println();
+
+
+                }
             }
 
             calculator.clearMoveLineLists();
