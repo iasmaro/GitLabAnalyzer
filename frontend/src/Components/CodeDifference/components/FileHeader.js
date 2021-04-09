@@ -6,7 +6,24 @@ import FileHeaderModal from './FileHeaderModal';
 
 
 const FileHeader = (props) => {
-    const { isOpen, fileName, linesAdded, linesRemoved, diffScore, extension, linesMoved, addLine, syntaxLinesAdded, deleteLine, configInfo, spaceLinesAdded, meaningfulLinesAdded, handleShow, handleClose, show } = props || {};
+    const { 
+        isOpen, 
+        fileName, 
+        linesAdded, 
+        linesRemoved, 
+        diffScore, 
+        extension, 
+        linesMoved, 
+        addLine, 
+        syntaxLinesAdded, 
+        deleteLine, 
+        configInfo, 
+        spaceLinesAdded, 
+        meaningfulLinesAdded,
+        commentsLinesAdded, 
+        handleShow, 
+        handleClose, 
+        show } = props || {};
 
 
     return (
@@ -38,7 +55,9 @@ const FileHeader = (props) => {
                 deleteLine={deleteLine}
                 configInfo={configInfo}
                 spaceLinesAdded={spaceLinesAdded}
-                meaningfulLinesAdded={meaningfulLinesAdded}/>
+                meaningfulLinesAdded={meaningfulLinesAdded}
+                commentsLinesAdded={commentsLinesAdded}
+                linesRemoved={linesRemoved}/>
             }
         </>         
     );
