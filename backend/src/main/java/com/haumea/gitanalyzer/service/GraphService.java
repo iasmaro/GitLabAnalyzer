@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.service;
 
+import com.haumea.gitanalyzer.dao.ReportRepository;
 import com.haumea.gitanalyzer.dto.*;
 import com.haumea.gitanalyzer.gitlab.CommentWrapper;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
@@ -23,13 +24,15 @@ public class GraphService {
     private final MemberService memberService;
     private final CommitService commitService;
     private final MergeRequestService mergeRequestService;
+    private final ReportService reportService;
 
     @Autowired
-    public GraphService(UserService userService, MemberService memberService, CommitService commitService, MergeRequestService mergeRequestService) {
+    public GraphService(UserService userService, MemberService memberService, CommitService commitService, MergeRequestService mergeRequestService, ReportService reportService) {
         this.userService = userService;
         this.memberService = memberService;
         this.commitService = commitService;
         this.mergeRequestService = mergeRequestService;
+        this.reportService = reportService;
     }
 
     // Counting number of words in string function from https://www.java67.com/2016/09/3-ways-to-count-words-in-java-string.html
@@ -285,5 +288,9 @@ public class GraphService {
         }
 
         return returnList;
+    }
+
+    public void updateCommitGraph(String userId, int projectId, Date start, Date end, String configName, Date commitDate, double difference) {
+        reportService.updateCommitGraph(userId, projectId, start, end, configName, commitDate, difference);
     }
 }

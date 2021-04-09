@@ -127,4 +127,8 @@ public class ReportService {
     public void deleteReport(String reportName) {
         reportRepository.deleteReportDTO(reportName);
     }
+
+    public void updateCommitGraph(String userId, int projectId, Date start, Date end, String configName, Date commitDate, double difference) {
+        reportRepository.updateCommitGraph(userId, projectId, start, end, configName, commitDate, difference);
+    }
 }
