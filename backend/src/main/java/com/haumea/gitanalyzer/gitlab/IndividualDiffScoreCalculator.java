@@ -197,7 +197,8 @@ public class IndividualDiffScoreCalculator {
                     lastLineSeen = newLine;
 
                 } else if (newLine.trim().equals("-")) {
-                    numberOfSpaceLinesRemoved++;
+                    this.numberOfSpaceLinesRemoved++;
+                    this.numberOfLinesRemoved++;
                 } else { // still need to process unchanged line to check whether a long comment was changed
                     newLine = newLine.trim();
 
@@ -416,7 +417,8 @@ public class IndividualDiffScoreCalculator {
             lastLineSeen = line;
         }
         else if(line.equals("+")){
-            numberOfSpaceLinesAdded++;
+            this.numberOfSpaceLinesAdded++;
+
         }
 
         return lineScore;
