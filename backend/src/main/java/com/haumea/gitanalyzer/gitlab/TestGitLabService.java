@@ -425,7 +425,6 @@ public class TestGitLabService {
 
             System.out.println("Commit is: " + commit.getCommitData().getMessage());
 
-            if(commit.getCommitData().getMessage().equalsIgnoreCase("c05-RemoveSpaces - on branch b04-Whitespace")) {
                 System.out.println();
 
                 for (Diff diff : commit.getNewCode()) {
@@ -443,7 +442,7 @@ public class TestGitLabService {
 
 
                 }
-            }
+
 
             calculator.clearMoveLineLists();
         }

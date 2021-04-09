@@ -2,7 +2,6 @@ package com.haumea.gitanalyzer.gitlab;
 
 
 import com.haumea.gitanalyzer.dto.ScoreDTO;
-import com.haumea.gitanalyzer.dto.LineChangeDTO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,7 +31,6 @@ public class IndividualDiffScoreCalculator {
 
     private List<String> removedLines;
     private List<String> addedLines;
-    private List<LineChangeDTO> lineChangeDTOS;
 
     private int numberOfLinesAdded;
     private int numberOfLinesRemoved;
@@ -58,7 +56,6 @@ public class IndividualDiffScoreCalculator {
 
         this.removedLines = new ArrayList<>(); // reset when finished
         this.addedLines = new ArrayList<>();
-        this.lineChangeDTOS = new ArrayList<>();
     }
 
     public void clearMoveLineLists() {
@@ -126,7 +123,7 @@ public class IndividualDiffScoreCalculator {
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            printValueOfLineTypes();
+//            printValueOfLineTypes();
 
             return new ScoreDTO(
                     numberOfLinesAdded,
@@ -140,7 +137,7 @@ public class IndividualDiffScoreCalculator {
                     numberOfLinesMoved,
                     numberOfCommentLinesAdded,
                     numberOfCommentLinesRemoved,
-                    score
+                    roundedScore.doubleValue()
                    );
         }
     }
@@ -177,9 +174,9 @@ public class IndividualDiffScoreCalculator {
         String line;
         while((line=bufReader.readLine()) != null )
         {
-            String originalLine = line;
+            String newLine = removesSpacesInString(line);
 
-            LineChangeDTO lineChangeDTO;
+            System.out.println(newLine);
 
             double lineScore = 0.0;
 
@@ -187,9 +184,6 @@ public class IndividualDiffScoreCalculator {
                 lineScore = analyzeAddedLine(line);
                 diffScore = diffScore + lineScore;
                 this.numberOfLinesAdded++;
-
-                lineChangeDTO = new LineChangeDTO(originalLine, lineScore);
-                lineChangeDTOS.add(lineChangeDTO);
             }
             else if(line.charAt(0) == '-' && (line.trim().length() > 0) && !line.trim().equals("-")) {
 
@@ -201,10 +195,6 @@ public class IndividualDiffScoreCalculator {
                 this.numberOfLinesRemoved++;
 
                 removedLines.add(line);
-
-                lineChangeDTO = new LineChangeDTO(originalLine, lineScore);
-                lineChangeDTOS.add(lineChangeDTO);
-
                 lastLineSeen = line;
 
             }
@@ -229,6 +219,11 @@ public class IndividualDiffScoreCalculator {
         }
 
         return diffScore;
+    }
+
+    private String removesSpacesInString(String line) {
+        return line.replaceAll("\\s+","");
+
     }
 
     /*
