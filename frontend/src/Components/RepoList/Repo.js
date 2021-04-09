@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 
-import RepoModal from 'Components/RepoModal/RepoModal';
+import RepoAnalyzeModal from 'Components/RepoAnalyzeModal/RepoAnalyzeModal';
+import RepoMapAliasModal from 'Components/RepoMapAliasModal/RepoMapAliasModal';
 import { utcToLocal } from 'Components/Utils/formatDates';
 import getMembersAndAliasesFromGitLab from 'Utils/getMembersAndAliasesFromGitLab';
 import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
@@ -10,10 +11,13 @@ import { useUserState } from 'UserContext';
 import getEndDate from 'Utils/getEndDate';
 import getStartDate from 'Utils/getStartDate';
 
+import './RepoList.css';
+
 const Repo = (props) => {
     const { repo } = props || {};
     const [configs, setConfigs] = useState([]);
-    const [show, setShow] = useState(false);
+    const [showAnalyzeModal, setShowAnalyzeModal] = useState(false);
+    const [showAliasMappingModal, setShowAliasMappingModal] = useState(false);
     const [isLoadingGitLabCall, setIsLoadingGitLabCall] = useState(false);
     const [isLoadingDatabaseCall, setIsLoadingDatabaseCall] = useState(false);
     const [members, setMembers] = useState([]);
@@ -23,7 +27,20 @@ const Repo = (props) => {
     const [endDate, setEndDate] = useState();
     const username = useUserState();
     
-    const handleShow = () => {
+    const handleShowAnalyzeModal = () => {
+        getConfigurations(username).then((data) => {
+            setConfigs(data);
+        });
+        getStartDate(username).then((data) => {
+            setStartDate(data);
+        });
+        getEndDate(username).then((data) => {
+            setEndDate(data);
+        });
+        setShowAnalyzeModal(true);
+    }
+
+    const handleShowAliasMappingModal = () => {
         setIsLoadingGitLabCall(true);
         setIsLoadingDatabaseCall(true);
         getMembersAndAliasesFromGitLab(username, repo.projectId).then((data) => {
@@ -35,19 +52,12 @@ const Repo = (props) => {
             setDatabaseMapping(data);
             setIsLoadingDatabaseCall(false);
         });
-        getConfigurations(username).then((data) => {
-            setConfigs(data);
-        });
-        getStartDate(username).then((data) => {
-            setStartDate(data);
-        });
-        getEndDate(username).then((data) => {
-            setEndDate(data);
-        });
-        setShow(true);
+        setShowAliasMappingModal(true);
     }
 
-    const handleClose = () => setShow(false);
+    const handleCloseAnalyzeModal = () => setShowAnalyzeModal(false);
+
+    const handleCloseAliasMappingModal = () => setShowAliasMappingModal(false);
 
     return (
         <tr>
@@ -55,22 +65,29 @@ const Repo = (props) => {
             <td>{repo?.namespace}</td>
             <td>{utcToLocal(repo?.updatedAt)}</td>
             <td>
-                <Button variant="dark" onClick={handleShow}> Analyze </Button>
+                <Button variant="dark" onClick={handleShowAnalyzeModal}> Analyze </Button>
             </td>
-            {(isLoadingGitLabCall || isLoadingDatabaseCall) ? <Spinner animation="border" className="spinner" /> :
-             show && <RepoModal 
-                        name={repo?.projectName} 
-                        id={repo?.projectId} 
-                        members={members} 
-                        aliases={aliases} 
-                        databaseMapping={databaseMapping} 
-                        createdAt={repo?.createdAt} 
-                        configs={configs} 
-                        status={show} 
-                        toggleModal={handleClose} 
-                        start={startDate} 
-                        end={endDate}
-                        namespace={repo?.namespace}/>}
+            <td>
+                <Button variant="secondary" className='button' onClick={handleShowAliasMappingModal}> Map Aliases </Button>
+            </td>
+            { showAnalyzeModal && <RepoAnalyzeModal 
+                                        name={repo?.projectName} 
+                                        id={repo?.projectId}                                         
+                                        configs={configs} 
+                                        status={showAnalyzeModal} 
+                                        toggleModal={handleCloseAnalyzeModal} 
+                                        start={startDate} 
+                                        end={endDate}
+                                        namespace={repo?.namespace} />}
+
+            { (isLoadingGitLabCall || isLoadingDatabaseCall) ? <Spinner animation="border" className="spinner" /> :
+             showAliasMappingModal && <RepoMapAliasModal 
+                                        name={repo?.projectName} 
+                                        members={members} 
+                                        aliases={aliases} 
+                                        databaseMapping={databaseMapping} 
+                                        status={showAliasMappingModal} 
+                                        toggleModal={handleCloseAliasMappingModal} />}
         </tr>
     );
 };
