@@ -13,7 +13,7 @@ const IssueCommentsList = (props) => {
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(issueComments);
     const [isOwn, setIsOwn] = useState('All');
 
-    issueComments.forEach(element => {
+    issueComments?.forEach(element => {
         element.wordCount = element.commentDescription.match(/(\w+)/g).length;
     });
     

@@ -13,7 +13,7 @@ const MergeRequestCommentsList = (props) => {
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(mergeRequestComments);
     const [isOwn, setIsOwn] = useState('All')
 
-    mergeRequestComments.forEach(element => {
+    mergeRequestComments?.forEach(element => {
         element.wordCount = element.commentDescription.match(/(\w+)/g).length;
     });
 
