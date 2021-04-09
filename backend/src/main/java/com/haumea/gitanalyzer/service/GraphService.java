@@ -1,6 +1,5 @@
 package com.haumea.gitanalyzer.service;
 
-import com.haumea.gitanalyzer.dao.ReportRepository;
 import com.haumea.gitanalyzer.dto.*;
 import com.haumea.gitanalyzer.gitlab.CommentWrapper;
 import com.haumea.gitanalyzer.gitlab.CommitWrapper;
