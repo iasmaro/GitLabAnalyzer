@@ -52,7 +52,7 @@ const IssueCommentsList = (props) => {
                 )
                 :
                 items.filter((comment) => filterComments(comment, isOwn)).map((comment) => (
-                    <Comment creationDate={comment?.creationDate} onOwnRequestOrIssue={comment?.onOwnRequestOrIssue} url={comment?.url} commentDescription={comment?.commentDescription}/>
+                    <Comment creationDate={comment?.creationDate} onOwnRequestOrIssue={comment?.onOwnRequestOrIssue} url={comment?.url} commentDescription={comment?.commentDescription} isMR={false}/>
                 ))}
             </tbody>
         </Table>
