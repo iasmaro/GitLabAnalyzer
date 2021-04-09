@@ -97,7 +97,7 @@ public class ReportService {
                 codeReviewGraphListByMemberId,
                 issueGraphListByMemberId,
                 userList,
-                userService.getActiveConfig(userId),
+                userService.getConfiguration(userId).getFileName(),
                 gitlabService.getSelectedProject(projectId).getName(),
                 gitlabService.getSelectedProject(projectId).getNamespace().getName());
 
@@ -113,7 +113,7 @@ public class ReportService {
                 projectId,
                 userService.getStart(userId),
                 userService.getEnd(userId),
-                userService.getActiveConfig(userId));
+                userService.getConfiguration(userId).getFileName());
     }
 
     public Optional<ReportDTO> checkIfInDbViaName(String reportName) {

@@ -30,6 +30,11 @@ public class GraphController {
         this.graphService = graphService;
     }
 
+    /* The following endpoints return Dates in UTC, but are actually accurate in PST. This was done so that the front
+    end can easily extract the date and information without having to convert anything.
+    Ex: Dec 6 16:20 UTC == Dec 6 PST. Dec 6 3:20 UTC == Dec 6 PST. 
+     */
+
     @GetMapping("/commit")
 
     public List<CommitGraphDTO> getCommitGraphDetails(@RequestParam @NotBlank String userId,

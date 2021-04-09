@@ -1,15 +1,12 @@
-import getMergeRequests from 'Utils/getMergeRequests';
-import getAllCommits from 'Utils/getAllCommits';
+import { config } from 'Constants/constants';
 
-const analyzeAll = (students, username, projectId) => {
-    const analysis = {};
-    for (let student of students) {
-        analysis[student] = {
-            commits: getAllCommits(username, student, projectId),
-            mergeRequests: getMergeRequests(username, student, projectId),
-        };
+const analyzeAll = async (username, projectId) => {
+    const response = await fetch(`${config.ANALYSIS_API_URL}?projectId=${projectId}&userId=${username}`);
+    const data = await response.json();
+    if (response.ok) {
+        return data;
     }
-    return analysis;
+    return null
 }
 
 export default analyzeAll;

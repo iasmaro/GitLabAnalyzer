@@ -3,6 +3,7 @@ import { Col, Row, Tabs, Tab } from 'react-bootstrap';
 
 import { TABS } from 'Constants/constants';
 import MergeRequestTab from 'Components/MergeRequestTab/MergeRequestTab';
+import SummaryTab from 'Components/SummaryTab/SummaryTab';
 import CommitsTab from 'Components/CommitsTab/CommitsTab';
 import Scores from 'Components/Scores/Scores';
 
@@ -11,7 +12,7 @@ import calculateMrScore from './utils/calculateMrScore';
 import './AnalyzerTabs.css';
 
 const AnalyzerTabs = (props) => {
-    const [key, setKey] = useState('merge-requests');
+    const [key, setKey] = useState('summary');
 
     const { commits, mergerequests } = props || {};
     const numOfCommits = commits?.length || 0;
@@ -28,12 +29,16 @@ const AnalyzerTabs = (props) => {
         <Tab.Container>
             <Row className="tab-container" >
                 <Col>
-                    <Tabs activeKey={key} onSelect={(k) => changeTab(k)} >
-                        <Tab eventKey={"merge-requests"} title={TABS.MERGE_REQUESTS}>
+                    <Tabs activeKey={key} onSelect={(k) => changeTab(k)} data-testid="tabs" >
+                        <Tab eventKey={"summary"} title={TABS.SUMMARY}>
+                            <Scores commitsScore={sumOfCommits} mrsScore={sumOfMRs} totalCommits={numOfCommits} totalMRs={numOfMRs} />
+                            <SummaryTab {...props} />
+                        </Tab>
+                        <Tab eventKey={"merge-requests"} title={TABS.MERGE_REQUESTS} data-testid="merge-request-tab">
                             <Scores commitsScore={sumOfCommits} mrsScore={sumOfMRs} totalCommits={numOfCommits} totalMRs={numOfMRs} />
                             <MergeRequestTab {...props} />
                         </Tab>
-                        <Tab eventKey={"commits"} title={TABS.COMMITS}>
+                        <Tab eventKey={"commits"} title={TABS.COMMITS} data-testid="commits-tab">
                             <Scores commitsScore={sumOfCommits} mrsScore={sumOfMRs} totalCommits={numOfCommits} totalMRs={numOfMRs} />
                             <CommitsTab {...props} />
                         </Tab>
