@@ -37,14 +37,14 @@ const CodeDifference = (props) => {
     const linesAdded = diff.codeDiff.match(/\n\+/g)?.length || 0;
     const linesRemoved = diff.codeDiff.match(/\n-/g)?.length || 0;
     const fileName = diff.newPath;
-    const diffScore = diff.diffScore || 0;
+    const diffScore = diff.scoreDTO.score || 0;
     const extension = diff.extension;
-    const linesMoved = diff.linesMoved || 0;
-    const addLine = diff.linesAdded || 0;
-    const syntaxLinesAdded = diff.syntaxLinesAdded || 0;
-    const deleteLine = diff.linesRemoved || 0;
-    const spaceLinesAdded = diff.spaceLinesAdded || 0;
-    const meaningfulLinesAdded = diff.meaningfulLinesAdded || 0;
+    const linesMoved = diff.scoreDTO.linesMoved || 0;
+    const syntaxLinesAdded = diff.scoreDTO.syntaxLinesAdded || 0;
+    const spaceLinesAdded = diff.scoreDTO.spaceLinesAdded || 0;
+    const meaningfullLinesAdded = diff.scoreDTO.meaningFullLinesAdded || 0;
+    const meaningfullLinesRemoved = diff.scoreDTO.meaningfullLinesRemoved || 0;
+    const commentsLinesAdded = diff.scoreDTO.commentLinesAdded || 0;
 
     const language = getLanguageFromFile(fileName);
 
@@ -85,12 +85,13 @@ const CodeDifference = (props) => {
                             diffScore={diffScore} 
                             extension={extension}
                             linesMoved={linesMoved}
-                            addLine={addLine}
+                            addLine={linesAdded}
                             syntaxLinesAdded={syntaxLinesAdded}
-                            deleteLine={deleteLine}
+                            deleteLine={meaningfullLinesRemoved}
                             configInfo={configInfo}
                             spaceLinesAdded={spaceLinesAdded}
-                            meaningfulLinesAdded={meaningfulLinesAdded}
+                            meaningfulLinesAdded={meaningfullLinesAdded}
+                            commentsLinesAdded = {commentsLinesAdded}
                             handleShow={handleShow}
                             handleClose={handleClose}
                             show={show}
