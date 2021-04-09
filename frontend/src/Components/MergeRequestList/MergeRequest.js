@@ -48,7 +48,7 @@ const MergeRequest = (props) => {
             </td>
             <td>{mergerequest.mergeId === -1 ? 'N/A' : mergerequest.mrscore}</td>
             <td>{mergerequest.sumOfCommitScore}</td>
-            <td>{mergerequest.commitDTOList.length}</td>
+            <td>{mergerequest.commitDTOList?.length}</td>
             <td className='lines-added'>{mergerequest.mergeId === -1 ? 'N/A' : ['+', mergerequest.linesAdded].join('')}</td>
             <td className='lines-removed'>{mergerequest.mergeId === -1 ? 'N/A' : ['-', mergerequest.linesRemoved].join('')}</td>
         </tr>
