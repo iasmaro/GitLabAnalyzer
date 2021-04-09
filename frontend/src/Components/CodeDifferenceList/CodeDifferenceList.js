@@ -3,11 +3,12 @@ import Button from 'react-bootstrap/Button'
 
 import CodeDifference from 'Components/CodeDifference/CodeDifference';
 
+import DiffsTitle from './DiffsTitle'
 import './CodeDifferenceList.css';
 
 
 const CodeDifferenceList = (props) => {
-    const { diffs } = props || {};
+    const { diffs, diffsTitle } = props || {};
     const [view, setView] = useState('unified');
     const [collapse, setCollapse] = useState(0);
     const [expand, setExpand] = useState(0);
@@ -39,8 +40,9 @@ const CodeDifferenceList = (props) => {
                 <Button variant="dark" onClick={expandAll} >Expand All</Button>
                 <Button variant="dark" onClick={collapseAll} >Collapse All</Button>
             </div>
+            <DiffsTitle diffsTitle={diffsTitle} />
             <div className="code-diff-list">
-                {diffs.map((diff, i) => <CodeDifference key={i} diff={diff} view={view} expandAll={expand} collapseAll={collapse}  />)}
+                {diffs.map((diff, i) => <CodeDifference key={i} diff={diff} view={view} expandAll={expand} collapseAll={collapse} />)}
             </div>
         </>
     );
