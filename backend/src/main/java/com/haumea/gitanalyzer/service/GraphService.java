@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GraphService {
@@ -69,41 +66,40 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
-        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
-        // but the next day will not.
-        end.set(Calendar.HOUR_OF_DAY, 0);
-        end.set(Calendar.MINUTE, 0);
-        end.set(Calendar.SECOND, 0);
-        end.add(Calendar.DAY_OF_MONTH,1);
+        // set start date to 23:59:59 of previous day. This will guarantee the start day will be iterated through
+        // but the previous day will not.
+        start.set(Calendar.HOUR_OF_DAY, 23);
+        start.set(Calendar.MINUTE, 59);
+        start.set(Calendar.SECOND, 59);
+        start.add(Calendar.DAY_OF_MONTH,-1);
 
-        for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+        // set end time to avoid problems with daylight savings. This will also make sure all dates are correct in PST.
+        end.set(Calendar.HOUR_OF_DAY, 15);
+        end.set(Calendar.MINUTE, 59);
+        end.set(Calendar.SECOND, 59);
+
+        int currentCount = 0;
+
+        // loop from end date to start date because gitlab Service returns them sorted descending
+        for(Date date = end.getTime(); end.after(start); end.add(Calendar.DATE, -1), date = end.getTime()) {
 
             int numberOfCommits = 0;
             double totalScore = 0.0;
 
-            // Keep track of a list of commits on this date to remove from the list of commits
-            // because a commit can only be on one date. This will slightly improve efficiency.
-            List<CommitWrapper> commitsOnThisDate = new ArrayList<CommitWrapper>();
-
-            for(CommitWrapper commit : allCommits) {
-
-                Date commitDate = commit.getCommitData().getCommittedDate();
-
-                if(isSameDay(commitDate, date)) {
-
-                    numberOfCommits++;
-                    List<DiffDTO> commitDiffs = commitService.getCommitDiffs(commit.getNewCode(), userConfig);
-                    ScoreDTO commitStats = commitService.getCommitStats(commitDiffs);
-                    totalScore = totalScore + commitStats.getScore();
-                    commitsOnThisDate.add(commit);
-
-                }
-
+            // take advantage of the fact that commits are all sorted in descending order and only iterate through them once
+            while(currentCount != allCommits.size() && isSameDay(allCommits.get(currentCount).getCommitData().getCommittedDate(), date)) {
+                numberOfCommits++;
+                List<DiffDTO> commitDiffs = commitService.getCommitDiffs(allCommits.get(currentCount).getNewCode(), userConfig);
+                ScoreDTO commitStats = commitService.getCommitStats(commitDiffs);
+                totalScore = totalScore + commitStats.getScore();
+                currentCount++;
             }
 
-            allCommits.removeAll(commitsOnThisDate);
-            CommitGraphDTO commitGraphDTO = new CommitGraphDTO(date, numberOfCommits, totalScore);
-            returnList.add(commitGraphDTO);
+            // round to 1 decimal place to avoid weird floating point bug
+            totalScore = Math.round(totalScore * 10.0) / 10.0;
+
+            CommitGraphDTO commitGraphDTO = new CommitGraphDTO (date,numberOfCommits, totalScore);
+            returnList.add(0, commitGraphDTO);
 
         }
         return returnList;
@@ -125,41 +121,40 @@ public class GraphService {
         Calendar end = Calendar.getInstance();
         end.setTime(userService.getEnd(userId));
 
-        // set end date to 00:00:00 of next day. This will guarantee the end day will be iterated through
-        // but the next day will not.
-        end.set(Calendar.HOUR_OF_DAY, 0);
-        end.set(Calendar.MINUTE, 0);
-        end.set(Calendar.SECOND, 0);
-        end.add(Calendar.DAY_OF_MONTH,1);
+        // set start date to 23:59:59 of previous day. This will guarantee the start day will be iterated through
+        // but the previous day will not.
+        start.set(Calendar.HOUR_OF_DAY, 23);
+        start.set(Calendar.MINUTE, 59);
+        start.set(Calendar.SECOND, 59);
+        start.add(Calendar.DAY_OF_MONTH,-1);
 
-        for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+        // set end time to avoid problems with daylight savings. This will also make sure all dates are correct in PST.
+        end.set(Calendar.HOUR_OF_DAY, 15);
+        end.set(Calendar.MINUTE, 59);
+        end.set(Calendar.SECOND, 59);
+
+        int currentCount = 0;
+
+        // loop from end date to start date because gitlab Service returns them sorted descending
+        for(Date date = end.getTime(); end.after(start); end.add(Calendar.DATE, -1), date = end.getTime()) {
 
             int numberOfMergeRequests= 0;
             double totalScore = 0.0;
 
-            // Keep track of a list of mergeRequests on this date to remove from the list of mergeRequests
-            // because a mergeRequest can only be on one date. This will slightly improve efficiency.
-            List<MergeRequestWrapper> mergeRequestsOnThisDate = new ArrayList<MergeRequestWrapper>();
-
-            for(MergeRequestWrapper mergeRequest : allMergeRequests) {
-
-                Date mergeRequestDate = mergeRequest.getMergeRequestData().getMergedAt();
-
-                if(isSameDay(mergeRequestDate, date)) {
-
-                    numberOfMergeRequests++;
-                    List<DiffDTO> mergeRequestDiffs = mergeRequestService.getMergeRequestDiffs(mergeRequest.getMergeRequestDiff(), userConfig);
-                    ScoreDTO mergeRequestStats = mergeRequestService.getMergeRequestStats(mergeRequestDiffs );
-                    totalScore = totalScore + mergeRequestStats.getScore();
-                    mergeRequestsOnThisDate.add(mergeRequest);
-
-                }
-
+            // take advantage of the fact that mergeRequests are all sorted in descending order and only iterate through them once
+            while(currentCount != allMergeRequests.size() && isSameDay(allMergeRequests.get(currentCount).getMergeRequestData().getMergedAt(), date)) {
+                numberOfMergeRequests++;
+                List<DiffDTO> mergeRequestDiffs = mergeRequestService.getMergeRequestDiffs(allMergeRequests.get(currentCount).getMergeRequestDiff(), userConfig);
+                ScoreDTO mergeRequestStats = mergeRequestService.getMergeRequestStats(mergeRequestDiffs );
+                totalScore = totalScore + mergeRequestStats.getScore();
+                currentCount++;
             }
 
-            allMergeRequests.removeAll(mergeRequestsOnThisDate);
+            // round to 1 decimal place to avoid weird floating point bug
+            totalScore = Math.round(totalScore * 10.0) / 10.0;
+
             MergeRequestGraphDTO mergeRequestGraphDTO = new MergeRequestGraphDTO(date, numberOfMergeRequests, totalScore);
-            returnList.add(mergeRequestGraphDTO);
+            returnList.add(0, mergeRequestGraphDTO);
         }
 
         return returnList;
@@ -189,36 +184,32 @@ public class GraphService {
         end.set(Calendar.SECOND, 0);
         end.add(Calendar.DAY_OF_MONTH,1);
 
+        // set start time to avoid problems with daylight savings. This will also make sure all dates are correct in PST.
+        start.set(Calendar.HOUR_OF_DAY, 15);
+        start.set(Calendar.MINUTE, 59);
+        start.set(Calendar.SECOND, 59);
+
+        int currentCount = 0;
+
         for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
             int wordsPerDay = 0;
             int wordsPerDayOnOwn = 0;
             int wordsPerDayOnOthers = 0;
 
-            // Keep track of a list of MRComments on this date to remove from the list of mergeRequests
-            // because a mergeRequest can only be on one date. This will slightly improve efficiency.
-            List<CommentWrapper> MRCommentsOnThisDate = new ArrayList<CommentWrapper>();
+            while(currentCount != MRComments.size() && isSameDay(MRComments.get(currentCount).getNote().getCreatedAt(), date)) {
+                wordsPerDay = wordsPerDay + countWordsUsingSplit(MRComments.get(currentCount).getNote().getBody());
 
-            for(CommentWrapper MRComment : MRComments) {
-
-                Date MRCommentDate = MRComment.getNote().getCreatedAt();
-
-                if(isSameDay(MRCommentDate, date)) {
-
-                    wordsPerDay = wordsPerDay + countWordsUsingSplit(MRComment.getNote().getBody());
-                    if(MRComment.getIsSameAuthor()) {
-                        wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(MRComment.getNote().getBody());
-                    }
-                    else {
-                        wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(MRComment.getNote().getBody());
-                    }
-                    MRCommentsOnThisDate.add(MRComment);
-
+                if(MRComments.get(currentCount).getIsSameAuthor()) {
+                    wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(MRComments.get(currentCount).getNote().getBody());
+                }
+                else {
+                    wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(MRComments.get(currentCount).getNote().getBody());
                 }
 
+                currentCount++;
             }
 
-            MRComments.removeAll(MRCommentsOnThisDate);
             CodeReviewGraphDTO codeReviewGraphDTO = new CodeReviewGraphDTO(date, wordsPerDay, wordsPerDayOnOwn, wordsPerDayOnOthers);
             returnList.add(codeReviewGraphDTO);
         }
@@ -234,7 +225,7 @@ public class GraphService {
         Configuration userConfig = userService.getConfiguration(userId);
         String targetBranch = userConfig.getTargetBranch();
         List<String> aliases = memberService.getAliasesForSelectedMember(memberId);
-        List<CommentWrapper> IssueComments = gitlabService.getIssueCommentsByAuthor(projectId, userService.getStart(userId),
+        List<CommentWrapper> issueComments = gitlabService.getIssueCommentsByAuthor(projectId, userService.getStart(userId),
                                                                                     userService.getEnd(userId), aliases);
 
         //date iterator from https://stackoverflow.com/questions/4534924/how-to-iterate-through-range-of-dates-in-java
@@ -250,36 +241,32 @@ public class GraphService {
         end.set(Calendar.SECOND, 0);
         end.add(Calendar.DAY_OF_MONTH,1);
 
+        // set start time to avoid problems with daylight savings. This will also make sure all dates are correct in PST.
+        start.set(Calendar.HOUR_OF_DAY, 15);
+        start.set(Calendar.MINUTE, 59);
+        start.set(Calendar.SECOND, 59);
+
+        int currentCount = 0;
+
         for(Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 
             int wordsPerDay = 0;
             int wordsPerDayOnOwn = 0;
             int wordsPerDayOnOthers = 0;
 
-            // Keep track of a list of IssueComments on this date to remove from the list of mergeRequests
-            // because a mergeRequest can only be on one date. This will slightly improve efficiency.
-            List<CommentWrapper> IssueCommentsOnThisDate = new ArrayList<CommentWrapper>();
+            while(currentCount != issueComments.size() && isSameDay(issueComments.get(currentCount).getNote().getCreatedAt(), date)) {
+                wordsPerDay = wordsPerDay + countWordsUsingSplit(issueComments.get(currentCount).getNote().getBody());
 
-            for(CommentWrapper IssueComment : IssueComments) {
-
-                Date IssueCommentDate = IssueComment.getNote().getCreatedAt();
-
-                if(isSameDay(IssueCommentDate, date)) {
-
-                    wordsPerDay = wordsPerDay + countWordsUsingSplit(IssueComment.getNote().getBody());
-                    if(IssueComment.getIsSameAuthor()) {
-                        wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(IssueComment.getNote().getBody());
-                    }
-                    else {
-                        wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(IssueComment.getNote().getBody());
-                    }
-                    IssueCommentsOnThisDate.add(IssueComment);
-
+                if (issueComments.get(currentCount).getIsSameAuthor()) {
+                    wordsPerDayOnOwn = wordsPerDayOnOwn + countWordsUsingSplit(issueComments.get(currentCount).getNote().getBody());
+                }
+                else {
+                    wordsPerDayOnOthers = wordsPerDayOnOthers + countWordsUsingSplit(issueComments.get(currentCount).getNote().getBody());
                 }
 
+                currentCount++;
             }
 
-            IssueComments.removeAll(IssueCommentsOnThisDate);
             IssueGraphDTO issueGraphDTO = new IssueGraphDTO(date, wordsPerDay, wordsPerDayOnOwn, wordsPerDayOnOthers);
             returnList.add(issueGraphDTO);
         }

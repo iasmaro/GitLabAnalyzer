@@ -5,7 +5,7 @@ export const useSortableDataObject = (items, config = null) => {
     const [sortConfig, setSortConfig] = useState(config);
     
     const sortedItems = useMemo(() => {
-        let sortableItems = [...items];
+        let sortableItems = items && [...items];
         if (sortConfig !== null) {
             sortableItems.sort((a, b) => {
                 if (a[sortConfig.key] < b[sortConfig.key]) {

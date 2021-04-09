@@ -44,7 +44,6 @@ public class ReportRepository {
         return Optional.ofNullable(databaseReport);
     }
 
-
     private Query setQuery(int projectId, Date start, Date end, String configName) {
         Query query = new Query();
         query.addCriteria(Criteria.where("projectId").is(projectId));
