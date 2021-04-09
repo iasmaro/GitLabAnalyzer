@@ -123,7 +123,8 @@ public class IndividualDiffScoreCalculator {
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-//            printValueOfLineTypes();
+            // needed for debugging. will eliminate in future MR once a few scoring bugs are resolved
+            printValueOfLineTypes();
 
             return new ScoreDTO(
                     numberOfLinesAdded,
@@ -142,6 +143,8 @@ public class IndividualDiffScoreCalculator {
         }
     }
 
+
+    // needed for debugging. will eliminate in future MR once a few scoring bugs are resolved
     private void printValueOfLineTypes() {
         System.out.println("Lines added are: " + numberOfLinesAdded);
         System.out.println("Code Lines added are: " + meaningFullLinesAdded);
@@ -172,50 +175,46 @@ public class IndividualDiffScoreCalculator {
         // https://stackoverflow.com/questions/9259411/what-is-the-best-way-to-iterate-over-the-lines-of-a-java-string
         BufferedReader bufReader = new BufferedReader(new StringReader(diff));
         String line;
-        while((line=bufReader.readLine()) != null )
-        {
+        while((line=bufReader.readLine()) != null ) {
             String newLine = removesSpacesInString(line);
-
-            System.out.println(newLine);
-
             double lineScore = 0.0;
 
-            if(line.charAt(0) == '+') {
-                lineScore = analyzeAddedLine(line);
-                diffScore = diffScore + lineScore;
-                this.numberOfLinesAdded++;
-            }
-            else if(line.charAt(0) == '-' && (line.trim().length() > 0) && !line.trim().equals("-")) {
+            try {
+                if (newLine.charAt(0) == '+') {
+                    lineScore = analyzeAddedLine(newLine);
+                    diffScore = diffScore + lineScore;
+                    this.numberOfLinesAdded++;
+                } else if (newLine.charAt(0) == '-' && (newLine.trim().length() > 0) && !newLine.trim().equals("-")) {
 
-                line = line.substring(1); // cutting out the -
-                line = line.trim();
+                    newLine = newLine.substring(1); // cutting out the -
+                    newLine = newLine.trim();
 
-                lineScore = analyzeRemovedLine(line);
-                diffScore = diffScore + lineScore;
-                this.numberOfLinesRemoved++;
+                    lineScore = analyzeRemovedLine(newLine);
+                    diffScore = diffScore + lineScore;
+                    this.numberOfLinesRemoved++;
 
-                removedLines.add(line);
-                lastLineSeen = line;
+                    removedLines.add(newLine);
+                    lastLineSeen = newLine;
 
-            }
-            else if(line.trim().equals("-")) {
-                numberOfSpaceLinesRemoved++;
-            }
-            else { // still need to process unchanged line to check whether a long comment was changed
+                } else if (newLine.trim().equals("-")) {
+                    numberOfSpaceLinesRemoved++;
+                } else { // still need to process unchanged line to check whether a long comment was changed
+                    newLine = newLine.trim();
 
-                line = line.trim();
+                    if ((newLine.length() > 1 || isSyntax(newLine)) && isComment(newLine) == false && isAutoGitlabLine(newLine) == false) {
+                        removal = false;
+                        addition = false;
+                        lastLineSeen = newLine;
+                    }
 
-                if((line.length() > 1 || isSyntax(line)) && isComment(line) == false && isAutoGitlabLine(line) == false) {
-                    removal = false;
-                    addition = false;
-                    lastLineSeen = line;
+                    if (isLongComment == true) {
+                        checkForEndBrace(newLine);
+                    }
                 }
 
-                if(isLongComment == true) {
-                    checkForEndBrace(line);
-                }
+            } catch (IndexOutOfBoundsException e) {
+                // let the program keep running if "" is checked at index 0
             }
-
         }
 
         return diffScore;
@@ -233,7 +232,7 @@ public class IndividualDiffScoreCalculator {
 
      */
     private boolean isAutoGitlabLine(String line) {
-        return line.equals("\\ No newline at end of file");
+        return line.equals("\\Nonewlineatendoffile");
     }
 
 
