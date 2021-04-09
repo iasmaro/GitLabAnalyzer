@@ -3,7 +3,7 @@ import { Button, Popover, OverlayTrigger } from 'react-bootstrap';
 
 const DiffsTitle = (props) => {
     const { diffsTitle } = props || {};
-    const diffsTitleDisplay = diffsTitle?.length > 100 ? diffsTitle.slice(0, 100) + '...' : diffsTitle.slice(0, 100);
+    const diffsTitleDisplay = diffsTitle?.length > 100 ? diffsTitle?.slice(0, 100) + '...' : diffsTitle?.slice(0, 100);
 
 
     const popover = (

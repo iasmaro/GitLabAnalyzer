@@ -15,7 +15,7 @@ const Commit = (props) => {
     const commitRowClass = selected ? 'commit-selected' : 'commit';
     const member = databaseMembersAndAliases?.find(mapping => mapping.memberId === student);
     const commitAuthorClass = member?.alias?.includes(commit.commitAuthor) ? 'author-highlighted' : 'author';
-    const commitMessageDisplay = commit.commitMessage?.length > 40 ? commit.commitMessage.slice(0, 40) + '...' : commit.commitMessage.slice(0, 40);
+    const commitMessageDisplay = commit.commitMessage?.length > 40 ? commit.commitMessage?.slice(0, 40) + '...' : commit.commitMessage?.slice(0, 40);
 
     return (
         <tr className={commitRowClass} onClick={() => handleClick(commit.commitDiffs, index, commit.commitMessage)} >
