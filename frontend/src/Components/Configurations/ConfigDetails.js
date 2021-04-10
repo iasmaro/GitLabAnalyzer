@@ -3,6 +3,7 @@ import { Table } from 'react-bootstrap';
 
 import './ConfigDetails.css'
 import ConfigFileWeights from './ConfigFileWeights';
+
 const ConfigDetails = (props) => {
     const { configInfo } = props || {};
     return (

@@ -24,21 +24,16 @@ const ConfigurationPage = () => {
     const [configs, setConfigs] = useState([]);
     const { items, requestSortArray, sortConfig  } = useSortableDataArray(configs);
     const [message, setMessage] = useState("");
+    const [show, setShow] = useState(false);
+    const [edit, setEdit] = useState(false);
     const username = useUserState();
 
     const handleClick = (config) => {
-        if (config.fileName === "default") {
-            setConfigInfo(config)
+        getConfigurationInfo(username, config).then((data) => {
+            setConfigInfo(data);
             setSelectedConfig(config);
             setIsLoadingConfigInfo(false);
-        }
-        else {
-            getConfigurationInfo(username, config).then((data) => {
-                setConfigInfo(data);
-                setSelectedConfig(config);
-                setIsLoadingConfigInfo(false);
-            });
-        }
+        });
     }
 
     const handleDelete = (config) => {
@@ -51,13 +46,26 @@ const ConfigurationPage = () => {
     }
 
     const handleShow = () => setShow(true);
+    const handleEdit = (config) => {
+        getConfigurationInfo(username, config).then((data) => {
+            setConfigInfo(data);
+            setSelectedConfig(config);
+            setIsLoadingConfigInfo(false);
+            setConfigInfo(data);
+            setEdit(true);
+            setShow(true);
+        });
+    }
     const handleClose = () => {
         setShow(false);
+        if (edit) {
+            handleClick(selectedConfig);
+        }
+        setEdit(false);
         setTimeout(() => {
             setUpdateConfigs(!updateConfigs);
         }, 200);
     }
-    const [show, setShow] = useState(false);
 
     useEffect(() => {
         getConfigurations(username).then((data) => {
@@ -82,12 +90,12 @@ const ConfigurationPage = () => {
                     <tbody>
                         <ConfigDefault defaultConfig={defaultConfig} handleClick={handleClick} />
                         {!isLoadingConfigs && configs?.length > 0 && items.map((config) => (
-                            <Config key={config} config={config} handleClick={handleClick} handleDelete={handleDelete} />
+                            <Config key={config} config={config} handleClick={handleClick} handleDelete={handleDelete} handleEdit={handleEdit} />
                         ))}
                     </tbody>
                 </Table>
             </div>
-            {show && <ConfigModal status={show} toggleModal={handleClose} setMessage={setMessage} />}
+            {show && <ConfigModal status={show} toggleModal={handleClose} setMessage={setMessage} configInfo={edit && configInfo} />}
             <div className="configs-right">
                 {selectedConfig && isLoadingConfigInfo && <Spinner animation="border" className="right-spinner" />}
                 {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} />}
