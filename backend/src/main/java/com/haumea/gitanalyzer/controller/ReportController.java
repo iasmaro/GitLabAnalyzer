@@ -44,33 +44,4 @@ public class ReportController {
 
     }
 
-    @PutMapping("updateCommitGraph")
-    public void updateCommitGraph(@NotBlank @RequestParam String reportName,
-                                  @NotBlank @RequestParam String memberId,
-                                  @NotNull @RequestParam double difference) {
-
-        Date date = new Date();
-        Calendar start = Calendar.getInstance();
-        start.setTime(date);
-        start.add(Calendar.DAY_OF_MONTH,-10);
-        Date commitDate = start.getTime();
-
-        reportService.updateCommitGraph(reportName, memberId, commitDate, difference);
-    }
-
-    @PutMapping("updateMRGraph")
-    public void updateMR(@NotBlank @RequestParam String reportName,
-                         @NotBlank @RequestParam String memberId,
-                         @NotNull @RequestParam double difference) {
-
-        Date date = new Date();
-        Calendar start = Calendar.getInstance();
-        start.setTime(date);
-        start.add(Calendar.DAY_OF_MONTH,-10);
-        Date MRDate = start.getTime();
-
-        reportService.updateMRGraph(reportName, memberId, MRDate, difference);
-    }
-
-
 }

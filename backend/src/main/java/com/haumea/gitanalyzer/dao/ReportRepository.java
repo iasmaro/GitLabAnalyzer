@@ -100,10 +100,7 @@ public class ReportRepository {
 
     public void updateMRGraph(String reportName, String memberId, Date MRDate, Date start, double oldScore, double difference) {
 
-        System.out.println("Start date is: " + start);
-        System.out.println("MR date is: " + MRDate);
         long MRGraphDTOIndex = betweenDates(start, MRDate);
-        System.out.println("Index is " + MRGraphDTOIndex);
 
         Query query = new Query();
         query.addCriteria(Criteria.where("reportName").is(reportName));
