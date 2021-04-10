@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -47,8 +48,13 @@ public class ReportController {
     public void updateCommitGraph(@NotBlank @RequestParam String userId,
                                   @NotBlank @RequestParam String reportName,
                                   @NotBlank @RequestParam String memberId,
-                                  @NotNull @RequestParam Date commitDate,
                                   @NotNull @RequestParam double difference) {
+
+        Date date = new Date();
+        Calendar start = Calendar.getInstance();
+        start.setTime(date);
+        start.add(Calendar.DAY_OF_MONTH,-10);
+        Date commitDate = start.getTime();
 
         reportService.updateCommitGraph(userId, reportName, memberId, commitDate, difference);
     }

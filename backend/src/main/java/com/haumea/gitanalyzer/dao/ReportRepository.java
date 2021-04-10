@@ -80,7 +80,10 @@ public class ReportRepository {
 
     public void updateCommitGraph(String reportName, String memberId, Date commitDate, Date start, double oldScore, double difference) {
 
-        long commitGraphDTOIndex = betweenDates(start, commitDate);
+        System.out.println("Start date is:" + start);
+        System.out.println("CommitDate is" + commitDate);
+        long commitGraphDTOIndex = betweenDates(start, commitDate) + 1;
+        System.out.println("Index is" + commitGraphDTOIndex);
 
 
         Query query = new Query();

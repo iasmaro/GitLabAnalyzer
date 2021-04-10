@@ -7,6 +7,8 @@ import com.haumea.gitanalyzer.model.ReportDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -129,10 +131,18 @@ public class ReportService {
     }
 
 
+    // checking if two dates are the same day function from https://www.baeldung.com/java-check-two-dates-on-same-day
+    public static boolean isSameDay(Date firstDate, Date secondDate) {
+        LocalDate firstLocalDate = firstDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        LocalDate secondLocalDate = secondDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        return firstLocalDate.isEqual(secondLocalDate);
+    }
 
     public void updateCommitGraph(String userId, String reportName, String memberId, Date commitDate, double difference) {
-
-        Date start = userService.getStart(userId);
 
         double oldScore = 0;
 
@@ -143,12 +153,14 @@ public class ReportService {
         date.set(Calendar.SECOND, 59);
         Date convertedCommitDate = date.getTime();
 
-
         ReportDTO reportDTO = reportRepository.findReportInDbViaName(reportName).get();
+        Date start = reportDTO.getStart();
         Map<String, List<CommitGraphDTO>> CommitGraphMap = reportDTO.getCommitGraphListByMemberId();
         List<CommitGraphDTO> commitGraphDTOs = CommitGraphMap.get(memberId);
         for(CommitGraphDTO commitGraphDTO : commitGraphDTOs) {
-            if(commitGraphDTO.getDate() == convertedCommitDate) {
+            if(isSameDay(commitGraphDTO.getDate(), convertedCommitDate)) {
+                System.out.println("commitgraphDTO date" + commitGraphDTO.getDate());
+                System.out.println("commitgraphDTO score" + commitGraphDTO.getTotalCommitScore());
                 oldScore = commitGraphDTO.getTotalCommitScore();
             }
         }
