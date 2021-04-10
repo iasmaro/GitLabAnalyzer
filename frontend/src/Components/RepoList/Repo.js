@@ -71,10 +71,10 @@ const Repo = (props) => {
             <td>{repo?.namespace}</td>
             <td>{utcToLocal(repo?.updatedAt)}</td>
             <td>
-                <Button variant="dark" className='repo-list-button' onClick={handleShowAnalyzeModal}> Analyze </Button>
+                <Button variant="outline-dark" className='repo-list-button' onClick={handleShowAliasMappingModal}> Map Aliases </Button>
             </td>
             <td>
-                <Button variant="secondary" className='repo-list-button' onClick={handleShowAliasMappingModal}> Map Aliases </Button>
+                <Button variant="dark" className='repo-list-button' onClick={handleShowAnalyzeModal}> Analyze </Button>
             </td>
             { (isLoadingStartDate || isLoadingEndDate) ? <Spinner animation="border" className="spinner" /> :
              showAnalyzeModal && <RepoAnalyzeModal 
