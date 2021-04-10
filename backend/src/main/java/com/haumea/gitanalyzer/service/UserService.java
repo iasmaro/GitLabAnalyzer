@@ -145,8 +145,11 @@ public class UserService {
         return userRepository.deleteConfiguration(userId, fileName);
     }
 
-    public void addReport(String userId,String reportName) {
+    public void addReport(String userId, String reportName) {
         userRepository.addReportToUser(userId, reportName);
     }
 
+    public void deleteReport(String userId, String reportName) {
+        userRepository.deleteReportFromUserList(userId, reportName);
+    }
 }

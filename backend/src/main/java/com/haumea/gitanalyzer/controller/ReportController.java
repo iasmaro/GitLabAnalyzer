@@ -39,7 +39,10 @@ public class ReportController {
         else {
             ReportDTO report = reportService.getReportForRepository(userId, projectId);
             reportService.saveReport(report);
-            userService.addReport(userId, report.getReportName());
+
+            for(String currentUser : report.getUserList()) {
+                userService.addReport(currentUser, report.getReportName());
+            }
 
 
             return report;

@@ -85,7 +85,12 @@ public class UserRepository {
         Update update = new Update();
 
         List<String> reports = user.getReportNames();
-        reports.add(reportName);
+        if(reports.contains(reportName)) {
+            throw new IllegalArgumentException("The report already exists!");
+        }
+        else {
+            reports.add(reportName);
+        }
 
         update.set("reportNames", reports);
 
@@ -135,6 +140,27 @@ public class UserRepository {
         mongoTemplate.updateFirst(query, update, User.class);
 
     }
+
+    public void deleteReportFromUserList(String userId, String reportName) {
+        User user = findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+        Update update = new Update();
+
+        List<String> reports = user.getReportNames();
+        if(reports.remove(reportName)) {
+            update.set("reportNames", reports);
+        }
+        else {
+            throw new ResourceNotFoundException("Report name doesn't exist in user report list");
+        }
+
+        if(mongoTemplate.findAndModify(query, update, User.class) == null) {
+            throw new ResourceNotFoundException("User not found!");
+        }
+    }
+
 
     public String getActiveConfig(String userId) throws ResourceNotFoundException {
 

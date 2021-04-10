@@ -116,8 +116,20 @@ public class ReportService {
                 userService.getConfiguration(userId).getFileName());
     }
 
-    public Optional<ReportDTO> checkIfInDbViaName(String reportName) {
-        return reportRepository.findReportInDbViaName(reportName);
+    public ReportDTO checkIfInDbViaName(String reportName) {
+
+        Optional<ReportDTO> databaseReport = reportRepository.findReportInDbViaName(reportName);
+        ReportDTO report;
+
+        try {
+            report = databaseReport.get();
+        }
+        catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Report is not in database");
+        }
+
+        return report;
+
     }
 
     public List<ReportDTO> getAllReports() {
@@ -125,6 +137,16 @@ public class ReportService {
     }
 
     public void deleteReport(String reportName) {
+
         reportRepository.deleteReportDTO(reportName);
     }
+
+    public void giveUserAccessToReport(String userId, String reportName) {
+        reportRepository.giveUserAccess(userId, reportName);
+    }
+
+    public void revokeUserAccessToReport(String userId, String reportName) {
+        reportRepository.revokeUserAccess(userId, reportName);
+    }
+
 }

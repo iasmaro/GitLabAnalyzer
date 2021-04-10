@@ -1,10 +1,13 @@
 package com.haumea.gitanalyzer.dao;
 
+import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.model.ReportDTO;
+import com.haumea.gitanalyzer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -64,6 +67,51 @@ public class ReportRepository {
         query.addCriteria(Criteria.where("reportName").is(reportName));
 
         mongoTemplate.findAndRemove(query, ReportDTO.class);
-
     }
+
+    public void giveUserAccess(String userId, String reportName) {
+        ReportDTO report = findReportInDbViaName(reportName).orElseThrow(() -> new ResourceNotFoundException("Report not found in Database"));
+        List<String> userList = report.getUserList();
+
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("reportName").is(report.getReportName()));
+        Update update = new Update();
+
+
+        if(userList.contains(userId)) {
+            throw new IllegalArgumentException("User already has access");
+        }
+        else {
+            userList.add(userId);
+        }
+
+        update.set("userList", userList);
+
+        if(mongoTemplate.findAndModify(query, update, ReportDTO.class) == null) {
+            throw new ResourceNotFoundException("User access not given");
+        }
+    }
+
+    public void revokeUserAccess(String userId, String reportName) {
+        ReportDTO report = findReportInDbViaName(reportName).orElseThrow(() -> new ResourceNotFoundException("Report not found in Database"));
+        List<String> userList = report.getUserList();
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("reportName").is(report.getReportName()));
+        Update update = new Update();
+
+        if(userList.remove(userId)) {
+            update.set("userList", userList);
+        }
+        else {
+            throw new ResourceNotFoundException("User doesn't exist in report access list");
+        }
+
+        if(mongoTemplate.findAndModify(query, update, ReportDTO.class) == null) {
+            throw new ResourceNotFoundException("User access not revoked");
+        }
+    }
+
+
 }
