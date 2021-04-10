@@ -80,7 +80,7 @@ public class ReportRepository {
         query.addCriteria(Criteria.where("reportName").is(reportName));
 
         Update update = new Update();
-        update.set("commitGraphListByMember."
+        update.set("commitGraphListByMemberId."
                 + memberId
                 + "."
                 + commitGraphDTOIndex
