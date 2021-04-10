@@ -2,6 +2,7 @@ package com.haumea.gitanalyzer.dao;
 
 import com.haumea.gitanalyzer.dto.DiffDTO;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
+import com.haumea.gitanalyzer.dto.ScoreDTO;
 import com.haumea.gitanalyzer.model.ReportDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -75,7 +76,7 @@ public class ReportRepository {
 
     }
 
-    public void modifyDiffScoreInDB(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
+    private void modifyDiffScoreInDB(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
 
         Query query = getReportNameQuery(reportName);
 
@@ -103,7 +104,7 @@ public class ReportRepository {
         return modifiedDiff.getScoreDTO().getScore();
     }
 
-    private void updateMRScore(MergeRequestDTO modifiedMR, int diffIndex, double newDiffScore) {
+    private double getNewMRScore(MergeRequestDTO modifiedMR, int diffIndex, double newDiffScore) {
 
         double MRScore = modifiedMR.getMRScore();
         double originalDiffScore = getDiffScoreOfMR(modifiedMR, diffIndex);
@@ -111,6 +112,24 @@ public class ReportRepository {
 
         MRScore = MRScore + difference;
 
+        ScoreDTO roundObject = new ScoreDTO();
+
+        return roundObject.roundScore(MRScore);
+    }
+
+    private void updateMRScoreInDB(String reportName, String memberId, int mergeIndex, double newMRScore) {
+        Query query = getReportNameQuery(reportName);
+
+        String MRScorePath = "mergeRequestListByMemberId."
+                + memberId
+                + "."
+                + mergeIndex
+                + ".MRScore";
+
+        Update update = new Update();
+        update.set(MRScorePath, newMRScore);
+
+        mongoTemplate.updateFirst(query, update, ReportDTO.class);
     }
 
     public void updateDBWithNewDiffSCoreOfMR(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
@@ -122,10 +141,10 @@ public class ReportRepository {
             modifyDiffScoreInDB(reportName, memberId, mergeIndex, diffIndex, newDiffScore);
 
             ReportDTO modifiedReport = OptionalReportDTO.get();
-
             MergeRequestDTO modifiedMR = getModifiedMergeRequestByMemberId(modifiedReport, memberId, mergeIndex);
 
-            updateMRScore(modifiedMR, diffIndex, newDiffScore);
+            double newMRScore = getNewMRScore(modifiedMR, diffIndex, newDiffScore);
+            updateMRScoreInDB(reportName, memberId, mergeIndex, newMRScore);
 
         }
         else {

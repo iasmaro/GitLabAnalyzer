@@ -130,7 +130,7 @@ public class ReportService {
     
     public void updateScoreForMRDiff(String reportName, String memberId, int mergeIndex, int diffIndex, double newScore) {
 
-        reportRepository.modifyDiffScoreInDB(reportName, memberId, mergeIndex, diffIndex, newScore);
+        reportRepository.updateDBWithNewDiffSCoreOfMR(reportName, memberId, mergeIndex, diffIndex, newScore);
 
     }
 }
