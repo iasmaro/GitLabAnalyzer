@@ -5,13 +5,13 @@ import { utcToLocal } from 'Components/Utils/formatDates';
 import './Comment.css';
 
 const Comment = (props) => {
-    const { creationDate, onOwnRequestOrIssue, url, commentDescription, isMR } = props || {};
+    const { creationDate, onOwnRequestOrIssue, title, url, commentDescription, isMR } = props || {};
     return (
         <tr className='comment-row'>
             {isMR ? <td className='is-own'>{onOwnRequestOrIssue ? ("Own MR") : ("Other's MR")}</td> : <td className='is-own'>{onOwnRequestOrIssue ? ("Own Issue") : ("Other's Issue")}</td>}
             <td className='creation-date'>{utcToLocal(creationDate)}</td>
             <td className='title'>
-                <a href={url} target='_blank' rel='noreferrer'>View</a>
+                <a href={url} target='_blank' rel='noreferrer'>{title}</a>
             </td>
             <td className='comment-description'>{commentDescription.length < 100 ? commentDescription : 
                 (<OverlayTrigger
