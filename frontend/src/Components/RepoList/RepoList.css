@@ -75,3 +75,7 @@ thead th.descending::after {
   display: inline-block;
   margin-left: 8px;
 }
+
+.repo-list-button {
+  min-width: 7.2em;
+}

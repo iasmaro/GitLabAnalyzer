@@ -8,7 +8,7 @@ import ConfigForm from 'Components/Configurations/ConfigurationForm/ConfigForm';
 
 const ConfigModal = (prop) => {
 
-    const {status, toggleModal, setMessage} = prop || {};
+    const { status, toggleModal, setMessage, configInfo } = prop || {};
 
     const username = useUserState();
 
@@ -23,19 +23,17 @@ const ConfigModal = (prop) => {
                 size="xl"
                 className="custom-modal"
             >
-        
-            <Modal.Header closeButton>
-                <Modal.Title>{ConfigLabels.CONFIGURATION_FORM}</Modal.Title>
-            </Modal.Header>
+                <Modal.Header closeButton>
+                    <Modal.Title>{ConfigLabels.CONFIGURATION_FORM}</Modal.Title>
+                </Modal.Header>
 
-            <Modal.Body className="repo-modal-body">
-                <ConfigForm username={username} toggleModal={toggleModal} setMessage={setMessage}/>
-            </Modal.Body>
+                <Modal.Body className="repo-modal-body">
+                    <ConfigForm username={username} toggleModal={toggleModal} setMessage={setMessage} configInfo={configInfo}/>
+                </Modal.Body>
 
-            <Modal.Footer>
-                <Button onClick={toggleModal} variant="secondary">Cancel</Button>
-            </Modal.Footer>
-
+                <Modal.Footer>
+                    <Button onClick={toggleModal} variant="secondary">Cancel</Button>
+                </Modal.Footer>
             </Modal>
         </>
 

@@ -7,7 +7,7 @@ import { useUserState } from 'UserContext';
 import updateUser from 'Utils/updateUser';
 import deleteActiveConfig from 'Utils/deleteActiveConfig';
 
-const RepoModalConfig = (props) => {
+const RepoAnalyzeModalConfig = (props) => {
     
     const {defaultConfig, configs, config, setConfig, setShowError} = props;
     const username = useUserState();
@@ -40,4 +40,4 @@ const RepoModalConfig = (props) => {
     );
 };
 
-export default RepoModalConfig;
+export default RepoAnalyzeModalConfig;
