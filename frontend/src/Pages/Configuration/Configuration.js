@@ -46,9 +46,15 @@ const ConfigurationPage = () => {
     }
 
     const handleShow = () => setShow(true);
-    const handleEdit = () => {
-        setEdit(true);
-        setShow(true);
+    const handleEdit = (config) => {
+        getConfigurationInfo(username, config).then((data) => {
+            setConfigInfo(data);
+            setSelectedConfig(config);
+            setIsLoadingConfigInfo(false);
+            setConfigInfo(data);
+            setEdit(true);
+            setShow(true);
+        });
     }
     const handleClose = () => {
         setShow(false);
@@ -84,7 +90,7 @@ const ConfigurationPage = () => {
                     <tbody>
                         <ConfigDefault defaultConfig={defaultConfig} handleClick={handleClick} />
                         {!isLoadingConfigs && configs?.length > 0 && items.map((config) => (
-                            <Config key={config} config={config} handleClick={handleClick} handleDelete={handleDelete} />
+                            <Config key={config} config={config} handleClick={handleClick} handleDelete={handleDelete} handleEdit={handleEdit} />
                         ))}
                     </tbody>
                 </Table>
@@ -92,7 +98,7 @@ const ConfigurationPage = () => {
             {show && <ConfigModal status={show} toggleModal={handleClose} setMessage={setMessage} configInfo={edit && configInfo} />}
             <div className="configs-right">
                 {selectedConfig && isLoadingConfigInfo && <Spinner animation="border" className="right-spinner" />}
-                {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} handleEdit={handleEdit} />}
+                {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} />}
             </div>
         </div>
     )

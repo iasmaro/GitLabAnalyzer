@@ -17,8 +17,3 @@
 .file-weightings td {
     min-width: 75px;
 }
-
-button.edit-config-btn {
-    float: right;
-    margin-bottom: 0.5em;
-}

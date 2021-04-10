@@ -39,8 +39,16 @@
 }
 
 .delete-config-button {
-    float: right;
-    z-index: 2;
+    z-index: 1;
+}
+
+button.edit-config-btn {
+    background-color: #ffa807;
+    color: #fff !important;
+}
+
+.config-button {
+    text-align: center;
 }
 
 thead th.default {
