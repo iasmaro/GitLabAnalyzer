@@ -91,22 +91,20 @@ public class ReportRepository {
 
     }
 
-    public void findMRGraphDTOInDb(String memberId, int projectId, Date start, Date end, String configName, Date commitDate) {
+    public void updateMRGraph(String reportName, String memberId, int commitGraphDTOIndex, double oldScore, double difference) {
+
         Query query = new Query();
-        query.addCriteria(Criteria.where("projectId").is(projectId));
-        query.addCriteria(Criteria.where("start").is(start));
-        query.addCriteria(Criteria.where("end").is(end));
-        query.addCriteria(Criteria.where("configName").is(configName));
-    }
-    public void updateMRGraph(String memberId, int projectId, Date start, Date end, String configName, Date commitDate, double difference) {
+        query.addCriteria(Criteria.where("reportName").is(reportName));
 
-        if(findReportInDb(projectId, start, end, configName).isPresent()) {
+        Update update = new Update();
+        update.set("commitGraphListByMemberId."
+                        + memberId
+                        + "."
+                        + commitGraphDTOIndex
+                        + ".totalCommitScore",
+                oldScore + difference);
 
-            ReportDTO reportDTO = findReportInDb(projectId, start, end, configName).get();
-            Map<String, List<MergeRequestGraphDTO>> MRGraphs = reportDTO.getMRGraphListByMemberId();
-            List<MergeRequestGraphDTO> MRGraph = MRGraphs.get(memberId);
-
-        }
+        mongoTemplate.updateFirst(query, update, ReportDTO.class);
 
     }
 }

@@ -53,5 +53,15 @@ public class ReportController {
         reportService.updateCommitGraph(reportName, memberId, commitGraphDTOIndex, oldScore, difference);
     }
 
+    @PutMapping("updateMRGraph")
+    public void updateMR(@NotBlank @RequestParam String reportName,
+                         @NotBlank @RequestParam String memberId,
+                         @NotNull @RequestParam int MRGraphDTOIndex,
+                         @NotNull @RequestParam double oldScore,
+                         @NotNull @RequestParam double difference) {
+
+        reportService.updateMRGraph(reportName, memberId, MRGraphDTOIndex, oldScore, difference);
+    }
+
 
 }

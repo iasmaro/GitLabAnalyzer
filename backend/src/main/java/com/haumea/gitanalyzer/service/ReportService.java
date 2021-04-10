@@ -134,7 +134,7 @@ public class ReportService {
         reportRepository.updateCommitGraph(reportName, memberId, commitGraphDTOIndex, oldScore, difference);
     }
 
-    public void updateMRGraph(String memberId, int projectId, Date start, Date end, String configName, Date commitDate, double difference) {
-        reportRepository.updateMRGraph(memberId, projectId, start, end, configName, commitDate, difference);
+    public void updateMRGraph(String reportName, String memberId, int MRGraphDTOIndex, double oldScore, double difference) {
+        reportRepository.updateMRGraph(reportName, memberId, MRGraphDTOIndex, oldScore, difference);
     }
 }
