@@ -37,14 +37,14 @@ const CodeDifference = (props) => {
     const linesAdded = diff.codeDiff.match(/\n\+/g)?.length || 0;
     const linesRemoved = diff.codeDiff.match(/\n-/g)?.length || 0;
     const fileName = diff.newPath;
-    const diffScore = diff.scoreDTO.score || 0;
+    const diffScore = diff.scoreDTO?.score || 0;
     const extension = diff.extension;
-    const linesMoved = diff.scoreDTO.linesMoved || 0;
-    const syntaxLinesAdded = diff.scoreDTO.syntaxLinesAdded || 0;
-    const spaceLinesAdded = diff.scoreDTO.spaceLinesAdded || 0;
-    const meaningfullLinesAdded = diff.scoreDTO.meaningFullLinesAdded || 0;
-    const meaningfullLinesRemoved = diff.scoreDTO.meaningFullLinesRemoved;
-    const commentsLinesAdded = diff.scoreDTO.commentLinesAdded || 0;
+    const linesMoved = diff.scoreDTO?.linesMoved || 0;
+    const syntaxLinesAdded = diff.scoreDTO?.syntaxLinesAdded || 0;
+    const spaceLinesAdded = diff.scoreDTO?.spaceLinesAdded || 0;
+    const meaningfullLinesAdded = diff.scoreDTO?.meaningFullLinesAdded || 0;
+    const meaningfullLinesRemoved = diff.scoreDTO?.meaningFullLinesRemoved;
+    const commentsLinesAdded = diff.scoreDTO?.commentLinesAdded || 0;
 
     const language = getLanguageFromFile(fileName);
 

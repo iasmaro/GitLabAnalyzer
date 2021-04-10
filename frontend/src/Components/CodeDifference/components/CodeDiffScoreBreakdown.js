@@ -4,7 +4,7 @@ import { Table, Card } from 'react-bootstrap';
 import './codeDiffBreakdown.css';
 
 const CodeDiffScoreBreakdown = (prop) => {
-    const{ 
+    const { 
         extension, 
         linesMoved, 
         addLine, 
@@ -14,14 +14,18 @@ const CodeDiffScoreBreakdown = (prop) => {
         spaceLinesAdded, 
         meaningfulLinesAdded, 
         commentsLinesAdded,
-        linesRemoved } = prop || {}
+        linesRemoved } = prop || {};
+
+    if (!configInfo || !configInfo.fileFactor || !configInfo.editFactor) {
+        return null;
+    };
 
     const FileExtension = (configInfo.fileFactor[extension] || 1).toFixed(1);
-    const SpaceChange = ((configInfo.editFactor.spaceChange || 0) * spaceLinesAdded).toFixed(1);
-    const MeaningfulLine = ((configInfo.editFactor.addLine)*(meaningfulLinesAdded)).toFixed(1);
-    const DeleteLine = (configInfo.editFactor.deleteLine*deleteLine).toFixed(1);
-    const MoveLine = (configInfo.editFactor.moveLine*linesMoved).toFixed(1);
-    const SyntaxLine = (configInfo.editFactor.syntaxLine*syntaxLinesAdded).toFixed(1);
+    const SpaceChange = ((configInfo.editFactor.spaceChange || 0) *(spaceLinesAdded)).toFixed(1);
+    const MeaningfulLine = ((configInfo.editFactor.addLine || 1)*(meaningfulLinesAdded)).toFixed(1);
+    const DeleteLine = ((configInfo.editFactor.deleteLine || 0.2)*(deleteLine)).toFixed(1);
+    const MoveLine = ((configInfo.editFactor.moveLine || 0.5)*(linesMoved)).toFixed(1);
+    const SyntaxLine = ((configInfo.editFactor.syntaxLine || 0.2)*(syntaxLinesAdded)).toFixed(1);
     
     const codeDiffTotalScore = (
         parseFloat(FileExtension) * 
@@ -50,10 +54,10 @@ const CodeDiffScoreBreakdown = (prop) => {
                         <tbody>
                             <tr>
                                 <td>{configInfo.fileFactor[extension] || 1}</td>
-                                <td>{configInfo.editFactor.addLine}</td>
-                                <td>{configInfo.editFactor.deleteLine}</td>
-                                <td>{configInfo.editFactor.moveLine}</td>
-                                <td>{configInfo.editFactor.syntaxLine}</td>
+                                <td>{configInfo.editFactor.addLine || 1}</td>
+                                <td>{configInfo.editFactor.deleteLine || 0.2}</td>
+                                <td>{configInfo.editFactor.moveLine || 0.5}</td>
+                                <td>{configInfo.editFactor.syntaxLine || 0.2}</td>
                                 <td>{configInfo.editFactor.spaceChange || 0}</td>
                             </tr>
                         </tbody>
@@ -111,23 +115,23 @@ const CodeDiffScoreBreakdown = (prop) => {
                             </tr>
                             <tr>
                                 <th>meaningfulLinesAdded</th>
-                                <td>{configInfo.editFactor.addLine} * {meaningfulLinesAdded}</td>
+                                <td>{configInfo.editFactor.addLine || 1} * {meaningfulLinesAdded}</td>
                                 <td className='part-calc'>{MeaningfulLine}</td>
 
                             </tr>
                             <tr>
                                 <th>meaningfulLinesRemoved</th>
-                                <td>{configInfo.editFactor.deleteLine} * {deleteLine}</td>
+                                <td>{configInfo.editFactor.deleteLine || 0.2} * {deleteLine}</td>
                                 <td className='part-calc'>{DeleteLine}</td>
                             </tr>
                             <tr>
                                 <th>linesMoved</th>
-                                <td>{configInfo.editFactor.moveLine} * {linesMoved}</td>
+                                <td>{configInfo.editFactor.moveLine || 0.5} * {linesMoved}</td>
                                 <td className='part-calc'>{MoveLine}</td>
                             </tr>
                             <tr>
                                 <th>syntaxLinesAdded</th>
-                                <td>{configInfo.editFactor.syntaxLine} * {syntaxLinesAdded}</td>
+                                <td>{configInfo.editFactor.syntaxLine || 0.2} * {syntaxLinesAdded}</td>
                                 <td className='part-calc'>{SyntaxLine}</td>
                             </tr>
                             <tr>
