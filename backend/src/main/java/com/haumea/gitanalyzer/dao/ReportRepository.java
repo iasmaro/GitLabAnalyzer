@@ -12,10 +12,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.IOException;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Repository
 public class ReportRepository {
@@ -73,21 +73,30 @@ public class ReportRepository {
 
     }
 
+    // taken from: https://stackoverflow.com/questions/20165564/calculating-days-between-two-dates-with-java
+    public static long betweenDates(Date firstDate, Date secondDate) {
+        return ChronoUnit.DAYS.between(firstDate.toInstant(), secondDate.toInstant());
+    }
 
-    public void updateCommitGraph(String reportName, String memberId, int commitGraphDTOIndex, double oldScore, double difference) {
+    public void updateCommitGraph(String reportName, String memberId, Date commitDate, Date start, double oldScore, double difference) {
+
+        long commitGraphDTOIndex = betweenDates(start, commitDate);
+
 
         Query query = new Query();
         query.addCriteria(Criteria.where("reportName").is(reportName));
 
+
         Update update = new Update();
         update.set("commitGraphListByMemberId."
-                + memberId
-                + "."
-                + commitGraphDTOIndex
-                + ".totalCommitScore",
+                        + memberId
+                        + "."
+                        + commitGraphDTOIndex
+                        + ".totalCommitScore",
                 oldScore + difference);
 
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
+
 
     }
 

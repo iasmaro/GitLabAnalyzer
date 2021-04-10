@@ -44,13 +44,13 @@ public class ReportController {
     }
 
     @PutMapping("updateCommitGraph")
-    public void updateCommitGraph(@NotBlank @RequestParam String reportName,
+    public void updateCommitGraph(@NotBlank @RequestParam String userId,
+                                  @NotBlank @RequestParam String reportName,
                                   @NotBlank @RequestParam String memberId,
-                                  @NotNull @RequestParam int commitGraphDTOIndex,
-                                  @NotNull @RequestParam double oldScore,
+                                  @NotNull @RequestParam Date commitDate,
                                   @NotNull @RequestParam double difference) {
 
-        reportService.updateCommitGraph(reportName, memberId, commitGraphDTOIndex, oldScore, difference);
+        reportService.updateCommitGraph(userId, reportName, memberId, commitDate, difference);
     }
 
     @PutMapping("updateMRGraph")

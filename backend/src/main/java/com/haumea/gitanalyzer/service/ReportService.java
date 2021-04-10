@@ -130,8 +130,21 @@ public class ReportService {
 
 
 
-    public void updateCommitGraph(String reportName, String memberId, int commitGraphDTOIndex, double oldScore, double difference) {
-        reportRepository.updateCommitGraph(reportName, memberId, commitGraphDTOIndex, oldScore, difference);
+    public void updateCommitGraph(String userId, String reportName, String memberId, Date commitDate, double difference) {
+
+        Date start = userService.getStart(userId);
+
+        double oldScore = 0;
+
+        ReportDTO reportDTO = reportRepository.findReportInDbViaName(reportName).get();
+        Map<String, List<CommitGraphDTO>> CommitGraphMap = reportDTO.getCommitGraphListByMemberId();
+        List<CommitGraphDTO> commitGraphDTOs = CommitGraphMap.get(memberId);
+        for(CommitGraphDTO commitGraphDTO : commitGraphDTOs) {
+            if(commitGraphDTO.getDate() == commitDate) {
+                oldScore = commitGraphDTO.getTotalCommitScore();
+            }
+        }
+        reportRepository.updateCommitGraph(reportName, memberId, commitDate, start, oldScore, difference);
     }
 
     public void updateMRGraph(String reportName, String memberId, int MRGraphDTOIndex, double oldScore, double difference) {
