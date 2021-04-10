@@ -128,11 +128,13 @@ public class ReportService {
         reportRepository.deleteReportDTO(reportName);
     }
 
-    public void updateCommitGraph(String userId, int projectId, Date start, Date end, String configName, Date commitDate, double difference) {
-        reportRepository.updateCommitGraph(userId, projectId, start, end, configName, commitDate, difference);
+
+
+    public void updateCommitGraph(String reportName, String memberId, int commitGraphDTOIndex, double oldScore, double difference) {
+        reportRepository.updateCommitGraph(reportName, memberId, commitGraphDTOIndex, oldScore, difference);
     }
 
-    public void updateMRGraph(String userId, int projectId, Date start, Date end, String configName, Date commitDate, double difference) {
-        reportRepository.updateMRGraph(userId, projectId, start, end, configName, commitDate, difference);
+    public void updateMRGraph(String memberId, int projectId, Date start, Date end, String configName, Date commitDate, double difference) {
+        reportRepository.updateMRGraph(memberId, projectId, start, end, configName, commitDate, difference);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -23,7 +24,7 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @GetMapping
+    @GetMapping("updateCommitGraph")
     public ReportDTO getRepositoryReport(@NotBlank @RequestParam String userId,
                                          @NotNull @RequestParam int projectId) {
 
@@ -41,5 +42,16 @@ public class ReportController {
         }
 
     }
+
+    @PutMapping("updateCommitGraph")
+    public void updateCommitGraph(@NotBlank @RequestParam String reportName,
+                                  @NotBlank @RequestParam String memberId,
+                                  @NotNull @RequestParam int commitGraphDTOIndex,
+                                  @NotNull @RequestParam double oldScore,
+                                  @NotNull @RequestParam double difference) {
+
+        reportService.updateCommitGraph(reportName, memberId, commitGraphDTOIndex, oldScore, difference);
+    }
+
 
 }
