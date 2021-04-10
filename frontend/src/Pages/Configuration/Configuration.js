@@ -29,18 +29,11 @@ const ConfigurationPage = () => {
     const username = useUserState();
 
     const handleClick = (config) => {
-        if (config.fileName === "default") {
-            setConfigInfo(config)
+        getConfigurationInfo(username, config).then((data) => {
+            setConfigInfo(data);
             setSelectedConfig(config);
             setIsLoadingConfigInfo(false);
-        }
-        else {
-            getConfigurationInfo(username, config).then((data) => {
-                setConfigInfo(data);
-                setSelectedConfig(config);
-                setIsLoadingConfigInfo(false);
-            });
-        }
+        });
     }
 
     const handleDelete = (config) => {

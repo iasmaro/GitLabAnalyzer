@@ -22,11 +22,19 @@ const ConfigForm = (props) => {
     const displayAlert = (successful) => {
         let snackbar = document.getElementById("config-snackbar");
         if (successful) {
-            setMessage("Successfully created configuration");
+            if (configInfo) {
+                setMessage("Successfully modified configuration");
+            } else {
+                setMessage("Successfully created configuration");
+            }
             snackbar.style = 'background-color:green';
         }
         else {
-            setMessage("There was an error creating the configuration");
+            if (configInfo) {
+                setMessage("There was an error modifying the configuration");
+            } else {
+                setMessage("There was an error creating the configuration");
+            } 
             snackbar.style = 'background-color:red';
         }
         snackbar.className = "show";
