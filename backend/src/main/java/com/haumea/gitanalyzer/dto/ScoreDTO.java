@@ -20,17 +20,10 @@ public class ScoreDTO {
 
 
     private double score;
+    private double modifiedScore;
     private Map<String, Double> scoreByFileTypes;
 
     public ScoreDTO() {
-        this.meaningFullLinesRemoved = 0;
-
-        this.linesAdded = 0;
-        this.linesRemoved = 0;
-        this.score = 0.0;
-        this.linesMoved = 0;
-        this.spaceLinesAdded = 0;
-        this.meaningFullLinesAdded = 0;
     }
 
     public ScoreDTO(int linesAdded,
@@ -53,6 +46,7 @@ public class ScoreDTO {
         this.spaceLinesRemoved = spaceLinesRemoved;
         this.syntaxLinesRemoved = syntaxLinesRemoved;
         this.score = this.roundScore(score);
+        this.modifiedScore = -1;
         this.linesMoved = linesMoved;
         this.spaceLinesAdded = spaceLinesAdded;
         this.syntaxLinesAdded = syntaxLinesAdded;
@@ -126,6 +120,8 @@ public class ScoreDTO {
         return commentLinesRemoved;
     }
 
-
+    public double getModifiedScore() {
+        return modifiedScore;
+    }
 
 }
