@@ -14,7 +14,16 @@ const Comment = (props) => {
             }
             <td className='creation-date'>{utcToLocal(creationDate)}</td>
             <td className='title'>
-                <a href={url} target='_blank' rel='noreferrer'>{title}</a>
+                <OverlayTrigger
+                    placement='top'
+                    overlay={
+                        <Tooltip className='tooltip'>
+                            {url}
+                        </Tooltip>
+                    }
+                >
+                    <a href={url} target='_blank' rel='noreferrer'>{title}</a>
+                </OverlayTrigger>
             </td>
             <td className='comment-description'>
                 {commentDescription.length < 100 ? commentDescription : 
