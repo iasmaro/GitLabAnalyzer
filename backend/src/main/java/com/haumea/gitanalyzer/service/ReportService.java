@@ -136,11 +136,19 @@ public class ReportService {
 
         double oldScore = 0;
 
+        Calendar date = Calendar.getInstance();
+        date.setTime(commitDate);
+        date.set(Calendar.HOUR_OF_DAY, 15);
+        date.set(Calendar.MINUTE, 59);
+        date.set(Calendar.SECOND, 59);
+        Date convertedCommitDate = date.getTime();
+
+
         ReportDTO reportDTO = reportRepository.findReportInDbViaName(reportName).get();
         Map<String, List<CommitGraphDTO>> CommitGraphMap = reportDTO.getCommitGraphListByMemberId();
         List<CommitGraphDTO> commitGraphDTOs = CommitGraphMap.get(memberId);
         for(CommitGraphDTO commitGraphDTO : commitGraphDTOs) {
-            if(commitGraphDTO.getDate() == commitDate) {
+            if(commitGraphDTO.getDate() == convertedCommitDate) {
                 oldScore = commitGraphDTO.getTotalCommitScore();
             }
         }
