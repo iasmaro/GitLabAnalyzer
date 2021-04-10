@@ -184,7 +184,9 @@ public class ReportService {
         List<MergeRequestGraphDTO> MRGraphDTOs = MRGraphMap.get(memberId);
         for(MergeRequestGraphDTO MRGraphDTO : MRGraphDTOs) {
             if(isSameDay(MRGraphDTO.getDate(), convertedMRDate)) {
-                oldScore = MRGraphDTO.getMergeRequestScore();
+                System.out.println("MRGraphDTO date is: " + MRGraphDTO.getDate());
+                System.out.println("MRGraphDTO score is: " + MRGraphDTO.getTotalMergeRequestScore());
+                oldScore = MRGraphDTO.getTotalMergeRequestScore();
             }
         }
         reportRepository.updateMRGraph(reportName, memberId, convertedMRDate, start, oldScore, difference);

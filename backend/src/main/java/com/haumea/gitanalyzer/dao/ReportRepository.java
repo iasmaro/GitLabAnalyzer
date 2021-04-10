@@ -109,11 +109,11 @@ public class ReportRepository {
         query.addCriteria(Criteria.where("reportName").is(reportName));
 
         Update update = new Update();
-        update.set("commitGraphListByMemberId."
+        update.set("MRGraphListByMemberId."
                         + memberId
                         + "."
                         + MRGraphDTOIndex
-                        + ".totalCommitScore",
+                        + ".totalMergeRequestScore",
                 oldScore + difference);
 
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
