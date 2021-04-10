@@ -46,8 +46,6 @@ const CodeDifference = (props) => {
     const meaningfullLinesRemoved = diff.scoreDTO.meaningFullLinesRemoved;
     const commentsLinesAdded = diff.scoreDTO.commentLinesAdded || 0;
 
-    console.log(meaningfullLinesRemoved)
-
     const language = getLanguageFromFile(fileName);
 
     const files = parseDiff(diffText, {nearbySequences: 'zip'});
