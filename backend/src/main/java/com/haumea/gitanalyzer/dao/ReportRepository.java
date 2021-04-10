@@ -76,7 +76,20 @@ public class ReportRepository {
 
     }
 
-    //Overriding score section
+    public MergeRequestDTO getModifiedMergeRequestByMemberId(String reportName, String memberId, int mergeIndex) {
+
+        Optional<ReportDTO> reportDTO = findReportInDbViaName(reportName);
+
+        if(reportDTO.isPresent()) {
+            ReportDTO modifiedReport = reportDTO.get();
+
+            return modifiedReport.getMergeRequestListByMemberId().get(memberId).get(mergeIndex);
+        }
+        else {
+            throw new NoSuchElementException("Report is not found!");
+        }
+    }
+
     private void modifyDiffScoreInDB(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
 
         Query query = getReportNameQuery(reportName);
@@ -95,37 +108,6 @@ public class ReportRepository {
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
     }
 
-    private MergeRequestDTO getModifiedMergeRequestByMemberId(ReportDTO reportDTO, String memberId, int mergeIndex) {
-        return reportDTO.getMergeRequestListByMemberId().get(memberId).get(mergeIndex);
-    }
-
-    private DiffDTO getModifiedDiff(MergeRequestDTO modifiedMR, int diffIndex) {
-        return modifiedMR.getMergeRequestDiffs().get(diffIndex);
-    }
-
-    private double getDiffScoreOfMR(DiffDTO modifiedDiff) {
-        return modifiedDiff.getScoreDTO().getScore();
-    }
-
-    private double getNewScoresDifference(DiffDTO modifiedDiff, double newDiffScore) {
-
-        double modifiedDiffScore = modifiedDiff.getScoreDTO().getModifiedScore();
-
-        double originalDiffScore = (modifiedDiffScore != -1)?modifiedDiffScore:getDiffScoreOfMR(modifiedDiff);
-
-        return (newDiffScore - originalDiffScore);
-    }
-
-    private double getNewMRScore(MergeRequestDTO modifiedMR, double difference) {
-        double MRScore = modifiedMR.getMRScore();
-
-        MRScore = MRScore + difference;
-
-        ScoreDTO roundObject = new ScoreDTO();
-
-        return roundObject.roundScore(MRScore);
-    }
-
     private void updateMRScoreInDB(String reportName, String memberId, int mergeIndex, double newMRScore) {
         Query query = getReportNameQuery(reportName);
 
@@ -139,20 +121,6 @@ public class ReportRepository {
         update.set(MRScorePath, newMRScore);
 
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
-    }
-
-    private double getExtensionScore(MergeRequestDTO modifiedMR, String extension) {
-        return modifiedMR.getScoreByFileTypes().getOrDefault(extension, 0.0);
-    }
-
-    private double getNewExtensionScore(MergeRequestDTO modifiedMR, String extension, double difference) {
-        double extensionScore = getExtensionScore(modifiedMR, extension);
-
-        extensionScore = extensionScore + difference;
-
-        ScoreDTO roundObject = new ScoreDTO();
-
-        return roundObject.roundScore(extensionScore);
     }
 
     private void updateExtensionScoreInDB(String reportName, String memberId, int mergeIndex, String extension, double newExtensionScore) {
@@ -172,32 +140,14 @@ public class ReportRepository {
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
     }
 
-    public void updateDBWithNewDiffSCoreOfMR(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
+    public void updateDBWithNewDiffSCoreOfMR(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore, double newMRScore, String modifiedExtension, double newExtensionScore) {
 
-        Optional<ReportDTO> OptionalReportDTO = findReportInDbViaName(reportName);
+        modifyDiffScoreInDB(reportName, memberId, mergeIndex, diffIndex, newDiffScore);
 
-        if(OptionalReportDTO.isPresent()) {
+        updateMRScoreInDB(reportName, memberId, mergeIndex, newMRScore);
 
-            modifyDiffScoreInDB(reportName, memberId, mergeIndex, diffIndex, newDiffScore);
-
-            ReportDTO modifiedReport = OptionalReportDTO.get();
-            MergeRequestDTO modifiedMR = getModifiedMergeRequestByMemberId(modifiedReport, memberId, mergeIndex);
-            DiffDTO modifiedDiff = getModifiedDiff(modifiedMR, diffIndex);
-
-            double newScoreDifference = getNewScoresDifference(modifiedDiff, newDiffScore);
-
-            double newMRScore = getNewMRScore(modifiedMR, newScoreDifference);
-
-            updateMRScoreInDB(reportName, memberId, mergeIndex, newMRScore);
-
-            String modifiedExtension = modifiedDiff.getExtension();
-            double newExtensionScore = getNewExtensionScore(modifiedMR, modifiedExtension, newScoreDifference);
-
-            updateExtensionScoreInDB(reportName, memberId, mergeIndex, modifiedExtension, newExtensionScore);
-        }
-        else {
-            throw new NoSuchElementException("Report is not found!");
-        }
+        updateExtensionScoreInDB(reportName, memberId, mergeIndex, modifiedExtension, newExtensionScore);
 
     }
+
 }

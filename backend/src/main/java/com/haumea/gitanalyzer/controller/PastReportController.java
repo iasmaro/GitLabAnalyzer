@@ -3,12 +3,10 @@ package com.haumea.gitanalyzer.controller;
 import com.haumea.gitanalyzer.model.ReportDTO;
 import com.haumea.gitanalyzer.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -62,7 +60,7 @@ public class PastReportController {
                                      @RequestParam @NotNull int diffIndex,
                                      @RequestParam @NotNull double newScore) {
 
-        reportService.updateScoreForMRDiff(reportName, memberId, mergeIndex, diffIndex, newScore);
+        reportService.modifyDiffScoreOfMRDiff(reportName, memberId, mergeIndex, diffIndex, newScore);
 
     }
 }
