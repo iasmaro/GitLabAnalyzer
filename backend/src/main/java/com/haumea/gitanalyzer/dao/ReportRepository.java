@@ -1,10 +1,12 @@
 package com.haumea.gitanalyzer.dao;
 
+import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.model.ReportDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -58,12 +60,28 @@ public class ReportRepository {
         return mongoTemplate.findAll(ReportDTO.class);
     }
 
-
     public void deleteReportDTO(String reportName) {
         Query query = new Query();
         query.addCriteria(Criteria.where("reportName").is(reportName));
 
         mongoTemplate.findAndRemove(query, ReportDTO.class);
 
+    }
+
+    public void modifyScoreForMRDiff(String reportName, String memberId, int mergeIndex, int diffIndex, double newScore) {
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("reportName").is(reportName));
+
+        Update update = new Update();
+        update.set("mergeRequestListByMemberId."
+                + memberId
+                + "."
+                + mergeIndex
+                + ".mergeRequestDiffs."
+                + diffIndex
+                + ".scoreDTO.score",
+                newScore);
+        mongoTemplate.updateFirst(query, update, ReportDTO.class);
     }
 }

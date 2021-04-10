@@ -127,4 +127,10 @@ public class ReportService {
     public void deleteReport(String reportName) {
         reportRepository.deleteReportDTO(reportName);
     }
+    
+    public void updateScoreForMRDiff(String reportName, String memberId, int mergeIndex, int diffIndex, double newScore) {
+
+        reportRepository.modifyScoreForMRDiff(reportName, memberId, mergeIndex, diffIndex, newScore);
+
+    }
 }

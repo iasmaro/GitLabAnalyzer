@@ -57,9 +57,12 @@ public class PastReportController {
 
     @PutMapping("/updateScore/mrDiff")
     public void updateScoreForMRDiff(@RequestParam @NotBlank String reportName,
-                                     @RequestParam @NotNull int diffID,
+                                     @RequestParam @NotBlank String memberId,
+                                     @RequestParam @NotNull int mergeIndex,
+                                     @RequestParam @NotNull int diffIndex,
                                      @RequestParam @NotNull double newScore) {
 
+        reportService.updateScoreForMRDiff(reportName, memberId, mergeIndex, diffIndex, newScore);
 
     }
 }
