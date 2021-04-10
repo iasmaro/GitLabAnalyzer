@@ -43,8 +43,10 @@ const CodeDifference = (props) => {
     const syntaxLinesAdded = diff.scoreDTO.syntaxLinesAdded || 0;
     const spaceLinesAdded = diff.scoreDTO.spaceLinesAdded || 0;
     const meaningfullLinesAdded = diff.scoreDTO.meaningFullLinesAdded || 0;
-    const meaningfullLinesRemoved = diff.scoreDTO.meaningfullLinesRemoved || 0;
+    const meaningfullLinesRemoved = diff.scoreDTO.meaningFullLinesRemoved;
     const commentsLinesAdded = diff.scoreDTO.commentLinesAdded || 0;
+
+    console.log(meaningfullLinesRemoved)
 
     const language = getLanguageFromFile(fileName);
 
