@@ -119,6 +119,10 @@ public class ReportDTO {
         return userList;
     }
 
+    public void addUser(String userId) {
+        userList.add(userId);
+    }
+
     public String getConfigName() {
         return configName;
     }

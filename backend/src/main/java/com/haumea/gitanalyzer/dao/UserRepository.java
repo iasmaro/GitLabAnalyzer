@@ -77,6 +77,25 @@ public class UserRepository {
         return user;
     }
 
+    public void addReportToUser(String userId, String reportName) {
+        User user = findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(user.getUserId().get()));
+        Update update = new Update();
+
+        List<String> reports = user.getReportNames();
+        reports.add(reportName);
+
+        update.set("reportNames", reports);
+
+        if(mongoTemplate.findAndModify(query, update, User.class) == null) {
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+    }
+
+
     public String getPersonalAccessToken(String userId) throws ResourceNotFoundException {
 
         User user = findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
@@ -200,6 +219,8 @@ public class UserRepository {
 
     }
 
+
+
     public User deleteConfiguration(String userId, String fileName) throws ResourceNotFoundException {
 
         User user = findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
@@ -223,5 +244,6 @@ public class UserRepository {
 
         return user;
     }
+
 
 }
