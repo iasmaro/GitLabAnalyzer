@@ -85,13 +85,16 @@ public class ReportRepository {
         Query query = new Query();
         query.addCriteria(Criteria.where("reportName").is(reportName));
 
+        double newScore = oldScore + difference;
+        newScore = Math.round(newScore * 10.0) / 10.0;
+
         Update update = new Update();
         update.set("commitGraphListByMemberId."
                         + memberId
                         + "."
                         + commitGraphDTOIndex
                         + ".totalCommitScore",
-                oldScore + difference);
+                        newScore);
 
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
 
@@ -105,13 +108,16 @@ public class ReportRepository {
         Query query = new Query();
         query.addCriteria(Criteria.where("reportName").is(reportName));
 
+        double newScore = oldScore + difference;
+        newScore = Math.round(newScore * 10.0) / 10.0;
+
         Update update = new Update();
         update.set("MRGraphListByMemberId."
                         + memberId
                         + "."
                         + MRGraphDTOIndex
                         + ".totalMergeRequestScore",
-                oldScore + difference);
+                        newScore);
 
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
 

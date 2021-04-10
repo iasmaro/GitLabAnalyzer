@@ -25,7 +25,7 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @GetMapping("updateCommitGraph")
+    @GetMapping
     public ReportDTO getRepositoryReport(@NotBlank @RequestParam String userId,
                                          @NotNull @RequestParam int projectId) {
 
