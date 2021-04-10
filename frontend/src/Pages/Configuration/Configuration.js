@@ -24,6 +24,8 @@ const ConfigurationPage = () => {
     const [configs, setConfigs] = useState([]);
     const { items, requestSortArray, sortConfig  } = useSortableDataArray(configs);
     const [message, setMessage] = useState("");
+    const [show, setShow] = useState(false);
+    const [edit, setEdit] = useState(false);
     const username = useUserState();
 
     const handleClick = (config) => {
@@ -51,13 +53,20 @@ const ConfigurationPage = () => {
     }
 
     const handleShow = () => setShow(true);
+    const handleEdit = () => {
+        setEdit(true);
+        setShow(true);
+    }
     const handleClose = () => {
         setShow(false);
+        if (edit) {
+            handleClick(selectedConfig);
+        }
+        setEdit(false);
         setTimeout(() => {
             setUpdateConfigs(!updateConfigs);
         }, 200);
     }
-    const [show, setShow] = useState(false);
 
     useEffect(() => {
         getConfigurations(username).then((data) => {
@@ -87,10 +96,10 @@ const ConfigurationPage = () => {
                     </tbody>
                 </Table>
             </div>
-            {show && <ConfigModal status={show} toggleModal={handleClose} setMessage={setMessage} />}
+            {show && <ConfigModal status={show} toggleModal={handleClose} setMessage={setMessage} configInfo={edit && configInfo} />}
             <div className="configs-right">
                 {selectedConfig && isLoadingConfigInfo && <Spinner animation="border" className="right-spinner" />}
-                {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} />}
+                {selectedConfig && !isLoadingConfigInfo && <ConfigDetails configInfo={configInfo} handleEdit={handleEdit} />}
             </div>
         </div>
     )
