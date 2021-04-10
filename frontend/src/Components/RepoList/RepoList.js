@@ -21,7 +21,7 @@ const RepoList = (props) => {
                 <thead>
                     <tr className='table-header'>
                         <th colSpan='2' className='repoTitle'>Repositories</th>
-                        <th colSpan='2' className='repoTitle'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord} /></th>
+                        <th colSpan='3' className='repoTitle'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord} /></th>
                     </tr>
                 </thead>
                 <thead>
@@ -35,7 +35,7 @@ const RepoList = (props) => {
                             </OverlayTrigger>
                         </th>
                         <th className={getClassNamesFor(sortConfig, 'updatedAt')} onClick={() => requestSortObject('updatedAt')}>Last Modified</th>
-                        <th></th>
+                        <th colSpan='2'></th>
                     </tr>
                 </thead>
                 <tbody>
