@@ -142,13 +142,14 @@ public class ReportService {
         return firstLocalDate.isEqual(secondLocalDate);
     }
 
-    public void updateCommitGraph(String userId, String reportName, String memberId, Date commitDate, double difference) {
+    public void updateCommitGraph(String reportName, String memberId, Date commitDate, double difference) {
 
         double oldScore = 0;
 
+        // need to set time for commit date to make sure it gets counted when using betweenDates() in ReportRepository
         Calendar date = Calendar.getInstance();
         date.setTime(commitDate);
-        date.set(Calendar.HOUR_OF_DAY, 15);
+        date.set(Calendar.HOUR_OF_DAY, 23);
         date.set(Calendar.MINUTE, 59);
         date.set(Calendar.SECOND, 59);
         Date convertedCommitDate = date.getTime();
@@ -159,15 +160,33 @@ public class ReportService {
         List<CommitGraphDTO> commitGraphDTOs = CommitGraphMap.get(memberId);
         for(CommitGraphDTO commitGraphDTO : commitGraphDTOs) {
             if(isSameDay(commitGraphDTO.getDate(), convertedCommitDate)) {
-                System.out.println("commitgraphDTO date" + commitGraphDTO.getDate());
-                System.out.println("commitgraphDTO score" + commitGraphDTO.getTotalCommitScore());
                 oldScore = commitGraphDTO.getTotalCommitScore();
             }
         }
-        reportRepository.updateCommitGraph(reportName, memberId, commitDate, start, oldScore, difference);
+        reportRepository.updateCommitGraph(reportName, memberId, convertedCommitDate, start, oldScore, difference);
     }
 
-    public void updateMRGraph(String reportName, String memberId, int MRGraphDTOIndex, double oldScore, double difference) {
-        reportRepository.updateMRGraph(reportName, memberId, MRGraphDTOIndex, oldScore, difference);
+    public void updateMRGraph(String reportName, String memberId, Date MRDate, double difference) {
+
+        double oldScore = 0;
+
+        // need to set time for merge request date to make sure it gets counted when using betweenDates() in ReportRepository
+        Calendar date = Calendar.getInstance();
+        date.setTime(MRDate);
+        date.set(Calendar.HOUR_OF_DAY, 23);
+        date.set(Calendar.MINUTE, 59);
+        date.set(Calendar.SECOND, 59);
+        Date convertedMRDate = date.getTime();
+
+        ReportDTO reportDTO = reportRepository.findReportInDbViaName(reportName).get();
+        Date start = reportDTO.getStart();
+        Map<String, List<MergeRequestGraphDTO>> MRGraphMap = reportDTO.getMRGraphListByMemberId();
+        List<MergeRequestGraphDTO> MRGraphDTOs = MRGraphMap.get(memberId);
+        for(MergeRequestGraphDTO MRGraphDTO : MRGraphDTOs) {
+            if(isSameDay(MRGraphDTO.getDate(), convertedMRDate)) {
+                oldScore = MRGraphDTO.getMergeRequestScore();
+            }
+        }
+        reportRepository.updateMRGraph(reportName, memberId, convertedMRDate, start, oldScore, difference);
     }
 }

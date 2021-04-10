@@ -80,15 +80,10 @@ public class ReportRepository {
 
     public void updateCommitGraph(String reportName, String memberId, Date commitDate, Date start, double oldScore, double difference) {
 
-        System.out.println("Start date is:" + start);
-        System.out.println("CommitDate is" + commitDate);
-        long commitGraphDTOIndex = betweenDates(start, commitDate) + 1;
-        System.out.println("Index is" + commitGraphDTOIndex);
-
+        long commitGraphDTOIndex = betweenDates(start, commitDate);
 
         Query query = new Query();
         query.addCriteria(Criteria.where("reportName").is(reportName));
-
 
         Update update = new Update();
         update.set("commitGraphListByMemberId."
@@ -103,7 +98,12 @@ public class ReportRepository {
 
     }
 
-    public void updateMRGraph(String reportName, String memberId, int commitGraphDTOIndex, double oldScore, double difference) {
+    public void updateMRGraph(String reportName, String memberId, Date MRDate, Date start, double oldScore, double difference) {
+
+        System.out.println("Start date is: " + start);
+        System.out.println("MR date is: " + MRDate);
+        long MRGraphDTOIndex = betweenDates(start, MRDate);
+        System.out.println("Index is " + MRGraphDTOIndex);
 
         Query query = new Query();
         query.addCriteria(Criteria.where("reportName").is(reportName));
@@ -112,7 +112,7 @@ public class ReportRepository {
         update.set("commitGraphListByMemberId."
                         + memberId
                         + "."
-                        + commitGraphDTOIndex
+                        + MRGraphDTOIndex
                         + ".totalCommitScore",
                 oldScore + difference);
 
