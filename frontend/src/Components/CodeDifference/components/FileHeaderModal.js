@@ -3,28 +3,18 @@ import { Modal, Button } from 'react-bootstrap';
 
 import CodeDiffScoreBreakdown from './CodeDiffScoreBreakdown';
 
-const FileHeaderModal = (prop) => {
+const FileHeaderModal = (props) => {
 
     const { 
-        status, 
-        toggleModal, 
-        fileName, 
-        extension, 
-        linesMoved, 
-        addLine, 
-        syntaxLinesAdded, 
-        deleteLine, 
-        configInfo, 
-        spaceLinesAdded, 
-        meaningfulLinesAdded, 
-        commentsLinesAdded,
-        linesRemoved } = prop || {};
+        show, 
+        handleClose, 
+        fileName } = props || {};
 
     return (
         <>
             <Modal
-                show={status}
-                onHide={toggleModal}
+                show={show}
+                onHide={handleClose}
                 backdrop="static"
                 keyboard={false}
                 size="xl"
@@ -37,22 +27,11 @@ const FileHeaderModal = (prop) => {
                 </Modal.Header>
 
                 <Modal.Body className="repo-modal-body">
-                    <CodeDiffScoreBreakdown 
-                        extension={extension}
-                        linesMoved={linesMoved}
-                        addLine={addLine}
-                        syntaxLinesAdded={syntaxLinesAdded}
-                        deleteLine={deleteLine}
-                        configInfo={configInfo}
-                        spaceLinesAdded={spaceLinesAdded}
-                        meaningfulLinesAdded={meaningfulLinesAdded}
-                        commentsLinesAdded={commentsLinesAdded}
-                        linesRemoved={linesRemoved}
-                    />
+                    <CodeDiffScoreBreakdown {...props} />
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button onClick={toggleModal} variant="secondary">Close</Button>
+                    <Button onClick={handleClose} variant="secondary">Close</Button>
                 </Modal.Footer>
             </Modal>
         </>

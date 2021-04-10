@@ -11,18 +11,8 @@ const FileHeader = (props) => {
         fileName, 
         linesAdded, 
         linesRemoved, 
-        diffScore, 
-        extension, 
-        linesMoved, 
-        addLine, 
-        syntaxLinesAdded, 
-        deleteLine, 
-        configInfo, 
-        spaceLinesAdded, 
-        meaningfulLinesAdded,
-        commentsLinesAdded, 
-        handleShow, 
-        handleClose, 
+        diffScore,
+        handleShow,
         show } = props || {};
 
 
@@ -44,21 +34,7 @@ const FileHeader = (props) => {
                 <span> Score: </span>
                 <span>{diffScore}</span>
             </Button>
-            {show && <FileHeaderModal 
-                status={show} 
-                fileName={fileName} 
-                toggleModal={handleClose}
-                extension={extension}
-                linesMoved={linesMoved}
-                addLine={addLine}
-                syntaxLinesAdded={syntaxLinesAdded}
-                deleteLine={deleteLine}
-                configInfo={configInfo}
-                spaceLinesAdded={spaceLinesAdded}
-                meaningfulLinesAdded={meaningfulLinesAdded}
-                commentsLinesAdded={commentsLinesAdded}
-                linesRemoved={linesRemoved}/>
-            }
+            {show && <FileHeaderModal {...props}/>}
         </>         
     );
 };

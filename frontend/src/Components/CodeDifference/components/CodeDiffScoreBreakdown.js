@@ -20,20 +20,22 @@ const CodeDiffScoreBreakdown = (prop) => {
         return null;
     };
 
-    const FileExtension = (configInfo.fileFactor[extension] || 1).toFixed(1);
-    const SpaceChange = ((configInfo.editFactor.spaceChange || 0) *(spaceLinesAdded)).toFixed(1);
-    const MeaningfulLine = ((configInfo.editFactor.addLine || 1)*(meaningfulLinesAdded)).toFixed(1);
-    const DeleteLine = ((configInfo.editFactor.deleteLine || 0.2)*(deleteLine)).toFixed(1);
-    const MoveLine = ((configInfo.editFactor.moveLine || 0.5)*(linesMoved)).toFixed(1);
-    const SyntaxLine = ((configInfo.editFactor.syntaxLine || 0.2)*(syntaxLinesAdded)).toFixed(1);
+    const fileExtension = (configInfo.fileFactor[extension] || 1).toFixed(1);
+    const spaceChange = ((configInfo.editFactor.spaceChange || 0) *(spaceLinesAdded)).toFixed(1);
+    const meaningfulLineAdded = ((configInfo.editFactor.addLine || 1)*(meaningfulLinesAdded)).toFixed(1);
+    const removeLine = ((configInfo.editFactor.deleteLine || 0.2)*(deleteLine)).toFixed(1);
+    const moveLine = ((configInfo.editFactor.moveLine || 0.5)*(linesMoved)).toFixed(1);
+    const syntaxLine = ((configInfo.editFactor.syntaxLine || 0.2)*(syntaxLinesAdded)).toFixed(1);
+    const commentsLines = ((0)*(commentsLinesAdded)).toFixed(1);
     
     const codeDiffTotalScore = (
-        parseFloat(FileExtension) * 
-        (parseFloat(SpaceChange) + 
-        parseFloat(MeaningfulLine) +
-        parseFloat(DeleteLine) + 
-        parseFloat(MoveLine) + 
-        parseFloat(SyntaxLine)));
+        parseFloat(fileExtension) * 
+        (parseFloat(spaceChange) + 
+        parseFloat(meaningfulLineAdded) +
+        parseFloat(removeLine) + 
+        parseFloat(moveLine) + 
+        parseFloat(syntaxLine) +
+        parseFloat(commentsLines)));
 
     return(
         <>
@@ -111,38 +113,38 @@ const CodeDiffScoreBreakdown = (prop) => {
                             <tr>
                                 <th>fileType: {extension}</th>
                                 <td>{configInfo.fileFactor[extension] || 1}</td>
-                                <td className='part-calc'>{FileExtension}</td>
+                                <td className='part-calc'>{fileExtension}</td>
                             </tr>
                             <tr>
                                 <th>meaningfulLinesAdded</th>
                                 <td>{configInfo.editFactor.addLine || 1} * {meaningfulLinesAdded}</td>
-                                <td className='part-calc'>{MeaningfulLine}</td>
+                                <td className='part-calc'>{meaningfulLineAdded}</td>
 
                             </tr>
                             <tr>
                                 <th>meaningfulLinesRemoved</th>
                                 <td>{configInfo.editFactor.deleteLine || 0.2} * {deleteLine}</td>
-                                <td className='part-calc'>{DeleteLine}</td>
+                                <td className='part-calc'>{removeLine}</td>
                             </tr>
                             <tr>
                                 <th>linesMoved</th>
                                 <td>{configInfo.editFactor.moveLine || 0.5} * {linesMoved}</td>
-                                <td className='part-calc'>{MoveLine}</td>
+                                <td className='part-calc'>{moveLine}</td>
                             </tr>
                             <tr>
                                 <th>syntaxLinesAdded</th>
                                 <td>{configInfo.editFactor.syntaxLine || 0.2} * {syntaxLinesAdded}</td>
-                                <td className='part-calc'>{SyntaxLine}</td>
+                                <td className='part-calc'>{syntaxLine}</td>
                             </tr>
                             <tr>
                                 <th>commentsLinesAdded</th>
                                 <td>0 * {commentsLinesAdded}</td>
-                                <td className='part-calc'>0.0</td>
+                                <td className='part-calc'>{commentsLines}</td>
                             </tr>
                             <tr>
                                 <th>spaceLinesAdded</th>
                                 <td>{configInfo.editFactor.spaceChange || 0} * {spaceLinesAdded}</td>
-                                <td className='part-calc'>{SpaceChange}</td>
+                                <td className='part-calc'>{spaceChange}</td>
                             </tr>
                         </tbody>
                     </Table>
@@ -156,7 +158,7 @@ const CodeDiffScoreBreakdown = (prop) => {
                             <tr>
                                 <th>Total: </th>
                                 <td>
-                                    {FileExtension} * ({MeaningfulLine} + {DeleteLine} + {MoveLine} + {SyntaxLine} + {SpaceChange} + 0.0)
+                                    {fileExtension} * ({meaningfulLineAdded} + {removeLine} + {moveLine} + {syntaxLine} + {spaceChange} + {commentsLines})
                                 </td>
                                 <td className='part-calc'>
                                     {codeDiffTotalScore}
