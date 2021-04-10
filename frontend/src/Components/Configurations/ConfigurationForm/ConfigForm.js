@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Form, Col, Row, Container, Button, Table } from 'react-bootstrap';
 
 import { ConfigLabels } from 'Constants/constants';
-import saveConfig from "Utils/saveConfig";
-import editConfig from "Utils/editConfig";
+import saveConfig from 'Utils/saveConfig';
+import editConfig from 'Utils/editConfig';
 
 import setInitialState from './utils/setInitialState';
 import setInitialFileInputList from './utils/setInitialFileInputList';
