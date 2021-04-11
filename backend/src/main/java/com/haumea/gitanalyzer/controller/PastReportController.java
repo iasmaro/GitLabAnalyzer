@@ -75,4 +75,15 @@ public class PastReportController {
         reportService.modifyDiffScoreOfCommitInOneMR(reportName, memberId, mergeIndex, commitIndex, diffIndex, newScore);
 
     }
+
+    @PutMapping("updateScore/commit/commitDiff")
+    public void updateScoreForCommitDiff(@RequestParam @NotBlank String reportName,
+                                         @RequestParam @NotBlank String memberId,
+                                         @RequestParam @NotNull int commitIndex,
+                                         @RequestParam @NotNull int diffIndex,
+                                         @RequestParam @NotNull double newScore) {
+
+        reportService.modifyDiffScoreOfCommit(reportName, memberId, commitIndex, diffIndex, newScore);
+
+    }
 }

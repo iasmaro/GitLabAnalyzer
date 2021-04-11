@@ -244,8 +244,30 @@ public class ReportService {
 
     }
 
-    public void modifyDiffScoreOfCommit(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
+    public void modifyDiffScoreOfCommit(String reportName, String memberId, int commitIndex, int diffIndex, double newDiffScore) {
+        CommitDTO modifiedCommit = reportRepository.getModifiedCommitByMemberId(reportName, memberId, commitIndex);
+        DiffDTO modifiedDiff = modifiedCommit.getCommitDiffs().get(diffIndex);
 
+        double difference = getNewScoreDifference(modifiedDiff, newDiffScore);
+
+        double commitScore = getOriginalScore(modifiedCommit.getCommitScore(), modifiedDiff);
+
+        double newCommitScore = getNewScore(commitScore, difference);
+
+        String extension = modifiedDiff.getExtension();
+        double extensionScore = getExtensionScoreOfCommit(modifiedCommit, extension);
+        extensionScore = getOriginalScore(extensionScore, modifiedDiff);
+
+        double newExtensionScore = getNewScore(extensionScore, difference);
+
+        reportRepository.updateDBWithNewDiffScoreOfCommit(reportName,
+                                                          memberId,
+                                                          commitIndex,
+                                                          diffIndex,
+                                                          newDiffScore,
+                                                          newCommitScore,
+                                                          extension,
+                                                          newExtensionScore);
     }
 
 }
