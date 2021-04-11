@@ -195,7 +195,7 @@ public class ReportService {
         date.set(Calendar.SECOND, 59);
         Date convertedCommitDate = date.getTime();
 
-        ReportDTO reportDTO = reportRepository.findReportInDbViaName(reportName).get();
+        Report reportDTO = reportRepository.findReportInDbViaName(reportName).get();
         Date start = reportDTO.getStart();
         Map<String, List<CommitGraphDTO>> CommitGraphMap = reportDTO.getCommitGraphListByMemberId();
         List<CommitGraphDTO> commitGraphDTOs = CommitGraphMap.get(memberId);
