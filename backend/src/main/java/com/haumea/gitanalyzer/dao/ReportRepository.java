@@ -200,7 +200,7 @@ public class ReportRepository {
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
     }
 
-    public void updateDBWithNewDiffSCoreOfMR(String reportName,
+    public void updateDBWithNewDiffScoreOfMR(String reportName,
                                              String memberId,
                                              int mergeIndex,
                                              int diffIndex,

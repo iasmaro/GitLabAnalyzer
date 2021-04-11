@@ -245,7 +245,7 @@ public class ReportService {
 
         double newExtensionScore = getNewScore(extensionScore, difference);
 
-        reportRepository.updateDBWithNewDiffSCoreOfMR(reportName,
+        reportRepository.updateDBWithNewDiffScoreOfMR(reportName,
                                                       memberId,
                                                       mergeIndex,
                                                       diffIndex,
