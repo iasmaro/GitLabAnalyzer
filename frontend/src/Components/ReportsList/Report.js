@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import FormCheckInput from 'react-bootstrap/esm/FormCheckInput';
+import Checkbox from '@material-ui/core/Checkbox';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { Redirect } from "react-router-dom";
 
@@ -12,6 +12,7 @@ const Report = (props) => {
     const { report, addReport, removeReport, deleteReport, username } = props || {};
 
     const [redirect, setRedirect] = useState(false);
+    const [checked, setChecked] = useState(false);
 
     if (!report) {
         return null;
@@ -24,8 +25,9 @@ const Report = (props) => {
     const projectId = reportNameList[0];
     const configName = report.reportName?.replace(`${projectId}_`, '').replace(`${report.projectName}_`, '').replace(`_${startDate}`, '').replace(`_${endDate}`, '');
 
-    const handleChange = (e) => {
-        const isChecked = e?.target?.checked;
+    const handleChange = () => {
+        const isChecked = !checked;
+        setChecked(isChecked);
         if (isChecked) {
             addReport && addReport(report.reportName);
         } else {
@@ -38,14 +40,13 @@ const Report = (props) => {
     }
 
     if (redirect) {
-        const projectId = report.reportName?.split('_')[0];
         const data = {
             configuration: report.configName || configName,
             startDate: report.start,
             endDate: report.end,
             projectName: report.projectName,
             reportName: report.reportName,
-            projectId: projectId,
+            projectId: report.projectId || projectId,
             creator: report.creator
         }
 
@@ -57,7 +58,7 @@ const Report = (props) => {
     return (
         <tr>
             
-            <td><FormCheckInput onChange={handleChange} /></td>
+            <td><Checkbox checked={checked} onClick={handleChange} /></td>
             <td>{report.projectName}</td>
             <td>{utcToLocal(report.start)}</td>
             <td>{utcToLocal(report.end)}</td>
