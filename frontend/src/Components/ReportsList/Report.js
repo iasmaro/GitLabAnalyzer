@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import { AiOutlineDelete } from 'react-icons/ai';
@@ -9,10 +9,16 @@ import { utcToLocal } from 'Components/Utils/formatDates';
 import './ReportsList.css';
 
 const Report = (props) => {
-    const { report, addReport, removeReport, deleteReport, username } = props || {};
+    const { report, addReport, removeReport, deleteReport, username, uncheck } = props || {};
 
     const [redirect, setRedirect] = useState(false);
     const [checked, setChecked] = useState(false);
+    
+    useEffect(() => {
+        if (uncheck) {
+            setChecked(false);
+        }
+    }, [uncheck]);
 
     if (!report) {
         return null;

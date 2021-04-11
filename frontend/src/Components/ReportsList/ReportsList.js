@@ -22,6 +22,7 @@ const ReportsList = (props) => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showFailureMessage, setShowFailureMessage] = useState(false);
     const [selectedReports, setSelectedReports] = useState([]);
+    const [uncheck, setUncheck] = useState(0);
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(reportsList);
 
     const username = useUserState();
@@ -61,6 +62,8 @@ const ReportsList = (props) => {
             }
         });
         closeShareModal();
+        setUncheck(uncheck + 1);
+        setSelectedReports([]);
         if (anyFailed) {
             showFailure();
         } else {
@@ -127,7 +130,14 @@ const ReportsList = (props) => {
                         )
                         :
                         items.filter((report)=>filterRepos(report, searchWord)).map((report, key) => (
-                            <Report key={key} report={report} addReport={addReport} removeReport={removeReport} username={username} deleteReport={deleteReport} />
+                            <Report
+                                key={key}
+                                report={report}
+                                addReport={addReport}
+                                removeReport={removeReport}
+                                username={username}
+                                deleteReport={deleteReport}
+                                uncheck={uncheck} />
                         ))}
                     </tbody>
                 </Table>
