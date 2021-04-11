@@ -2,11 +2,7 @@ package com.haumea.gitanalyzer.dao;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
-import com.haumea.gitanalyzer.dto.CommitGraphDTO;
-import com.haumea.gitanalyzer.dto.MergeRequestGraphDTO;
-import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.model.ReportDTO;
-import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -18,10 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.io.IOException;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @Repository
 public class ReportRepository {
