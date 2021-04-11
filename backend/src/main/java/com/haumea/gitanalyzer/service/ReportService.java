@@ -163,7 +163,7 @@ public class ReportService {
                     report.getProjectName(),
                     report.getStart(),
                     report.getEnd(),
-                    report.getUserList().get(creator), report.getConfigName());
+                    report.getUserList().get(creator), report.getConfigName(), report.getProjectId());
 
             reports.add(reportData);
         }
