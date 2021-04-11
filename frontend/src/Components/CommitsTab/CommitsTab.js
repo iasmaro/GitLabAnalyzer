@@ -8,6 +8,7 @@ import CodeDifferenceList from 'Components/CodeDifferenceList/CodeDifferenceList
 import './CommitsTab.css';
 
 const CommitsTab = (props) => {
+    const { configInfo } = props || {};
     const [diffs, setDiffs] = useState();
     const [expand, setExpand] = useState(false);
     const [diffsTitle, setDiffsTitle] = useState();
@@ -28,7 +29,7 @@ const CommitsTab = (props) => {
             {diffs && <div className="commits-right">
                 <Button className="expand-button" onClick={handleExpand}>{expand ? '>' : '<'}</Button>
                 <div className={`commits-code-diffs ${expand ? 'expanded' : ''}`}>
-                {diffs && <CodeDifferenceList diffs={diffs} diffsTitle={diffsTitle}/>}
+                {diffs && <CodeDifferenceList diffs={diffs} diffsTitle={diffsTitle} configInfo={configInfo}/>}
                 </div>
             </div>}
         </div>
