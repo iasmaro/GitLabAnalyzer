@@ -30,7 +30,6 @@ public class PastReportController {
        return reportService.checkIfInDbViaName(reportName);
     }
 
-    // returns whats in the database
     @GetMapping("/allReports")
     public List<Report> getAllReports() {
         return reportService.getAllReports();
