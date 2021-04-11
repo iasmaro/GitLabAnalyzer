@@ -38,7 +38,7 @@
 }
 
 .repo-headers th {
-  width: 37.5%;
+  max-width: 25.5%;
   position: sticky;
   position: -webkit-sticky;
   top: 4em;
@@ -78,4 +78,11 @@ thead th.descending::after {
 
 .repo-list-button {
   min-width: 7.2em;
+}
+
+.spinner-repo-list {
+  color: #fff;
+  position: fixed;
+  top: 50%;
+  left: 50%;
 }

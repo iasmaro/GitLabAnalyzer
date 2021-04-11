@@ -10,7 +10,7 @@ import analyzeAll from 'Utils/analyzeAll';
 import getProjectMembers from 'Utils/getProjectMembers';
 import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
 
-import './Analysis.css'
+import './Analysis.css';
 
 const Analysis = (props) => {
     const { location } = props || {};
@@ -43,7 +43,6 @@ const Analysis = (props) => {
     useEffect(() => {
         analyzeAll(username, projectId).then((data) => {
             setAnalysis(data);
-            console.log(data);
             setIsLoading(false);
         })
     }, [projectId, username]);
