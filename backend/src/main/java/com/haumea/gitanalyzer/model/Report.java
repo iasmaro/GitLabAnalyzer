@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 @Document(collection = "Reports")
-public class ReportDTO {
+public class Report {
     @Id
     private String id;
 
@@ -38,19 +38,19 @@ public class ReportDTO {
 
 
     @PersistenceConstructor
-    public ReportDTO(int projectId,
-                     Date start,
-                     Date end,
-                     Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId,
-                     Map<String, List<CommitDTO>> commitListByMemberId,
-                     Map<String, List<CommentDTO>> MRCommentListByMemberId,
-                     Map<String, List<CommentDTO>> issueCommentListByMemberId,
-                     Map<String, List<CommitGraphDTO>> commitGraphListByMemberId,
-                     Map<String, List<MergeRequestGraphDTO>> MRGraphListByMemberId,
-                     Map<String, List<CodeReviewGraphDTO>> codeReviewGraphListByMemberId,
-                     Map<String, List<IssueGraphDTO>> issueGraphListByMemberId,
-                     List<String> userList,
-                     String configName, String projectName, String namespace) {
+    public Report(int projectId,
+                  Date start,
+                  Date end,
+                  Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId,
+                  Map<String, List<CommitDTO>> commitListByMemberId,
+                  Map<String, List<CommentDTO>> MRCommentListByMemberId,
+                  Map<String, List<CommentDTO>> issueCommentListByMemberId,
+                  Map<String, List<CommitGraphDTO>> commitGraphListByMemberId,
+                  Map<String, List<MergeRequestGraphDTO>> MRGraphListByMemberId,
+                  Map<String, List<CodeReviewGraphDTO>> codeReviewGraphListByMemberId,
+                  Map<String, List<IssueGraphDTO>> issueGraphListByMemberId,
+                  List<String> userList,
+                  String configName, String projectName, String namespace) {
         this.projectId = projectId;
         this.start = start;
         this.end = end;

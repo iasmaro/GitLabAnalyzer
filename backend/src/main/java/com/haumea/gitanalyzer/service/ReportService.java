@@ -4,8 +4,7 @@ import com.haumea.gitanalyzer.dao.ReportRepository;
 import com.haumea.gitanalyzer.dto.*;
 import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
-import com.haumea.gitanalyzer.model.ReportDTO;
-import com.haumea.gitanalyzer.model.User;
+import com.haumea.gitanalyzer.model.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,7 @@ public class ReportService {
 
     }
 
-    public ReportDTO getReportForRepository(String userId, int projectId) {
+    public Report getReportForRepository(String userId, int projectId) {
 
         Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId = new HashMap<>();
         Map<String, List<CommitDTO>> commitListByMemberId = new HashMap<>();
@@ -86,7 +85,7 @@ public class ReportService {
 
         GitlabService gitlabService = userService.createGitlabService(userId);
 
-        return new ReportDTO(
+        return new Report(
                 projectId,
                 start,
                 end,
@@ -105,11 +104,11 @@ public class ReportService {
 
     }
 
-    public void saveReport(ReportDTO reportDTO) {
+    public void saveReport(Report reportDTO) {
         reportRepository.saveReportToDatabase(reportDTO);
     }
 
-    public Optional<ReportDTO> checkIfInDb(String userId,int projectId) {
+    public Optional<Report> checkIfInDb(String userId, int projectId) {
 
         return reportRepository.findReportInDb(
                 projectId,
@@ -118,10 +117,10 @@ public class ReportService {
                 userService.getConfiguration(userId).getFileName());
     }
 
-    public ReportDTO checkIfInDbViaName(String reportName) {
+    public Report checkIfInDbViaName(String reportName) {
 
-        Optional<ReportDTO> databaseReport = reportRepository.findReportInDbViaName(reportName);
-        ReportDTO report;
+        Optional<Report> databaseReport = reportRepository.findReportInDbViaName(reportName);
+        Report report;
 
         try {
             report = databaseReport.get();
@@ -134,7 +133,7 @@ public class ReportService {
 
     }
 
-    public List<ReportDTO> getAllReports() {
+    public List<Report> getAllReports() {
         return reportRepository.getAllReportsInDb();
     }
 
@@ -157,7 +156,7 @@ public class ReportService {
         final int creator = 0; // creator is always at index 0 in user list
 
         for(String currentReport : reportNames) {
-            ReportDTO report = reportRepository.findReportInDbViaName(currentReport).orElseThrow(() -> new ResourceNotFoundException("Report doesn't exist in database"));
+            Report report = reportRepository.findReportInDbViaName(currentReport).orElseThrow(() -> new ResourceNotFoundException("Report doesn't exist in database"));
             ReportMetadataDTO reportData = new ReportMetadataDTO(
                     currentReport,
                     report.getProjectName(),

@@ -1,7 +1,7 @@
 package com.haumea.gitanalyzer.controller;
 
 import com.haumea.gitanalyzer.dto.ReportMetadataDTO;
-import com.haumea.gitanalyzer.model.ReportDTO;
+import com.haumea.gitanalyzer.model.Report;
 import com.haumea.gitanalyzer.service.ReportService;
 import com.haumea.gitanalyzer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1/PastReports")
@@ -27,28 +25,28 @@ public class PastReportController {
     }
 
     @GetMapping("/getReport")
-    public ReportDTO getReport(@RequestParam @NotBlank String reportName)  {
+    public Report getReport(@RequestParam @NotBlank String reportName)  {
 
        return reportService.checkIfInDbViaName(reportName);
     }
 
     // returns whats in the database
     @GetMapping("/allReports")
-    public List<ReportDTO> getAllReports() {
+    public List<Report> getAllReports() {
         return reportService.getAllReports();
     }
 
     @DeleteMapping("/deleteReport")
     public void deleteReport(@RequestParam @NotBlank String reportName) {
 
-        ReportDTO report = reportService.checkIfInDbViaName(reportName);
+        Report report = reportService.checkIfInDbViaName(reportName);
         reportService.deleteReport(reportName);
 
         for(String user : report.getUserList()) {
             userService.deleteReport(user, reportName);
         }
     }
-    
+
     @PutMapping("/addReportAccess")
     public void addReportAccess(@RequestParam @NotBlank String userId, @RequestParam @NotBlank String reportName) {
         reportService.giveUserAccessToReport(userId, reportName);

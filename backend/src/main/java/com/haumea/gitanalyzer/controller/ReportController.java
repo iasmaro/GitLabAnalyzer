@@ -1,6 +1,6 @@
 package com.haumea.gitanalyzer.controller;
 
-import com.haumea.gitanalyzer.model.ReportDTO;
+import com.haumea.gitanalyzer.model.Report;
 import com.haumea.gitanalyzer.service.ReportService;
 import com.haumea.gitanalyzer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +27,17 @@ public class ReportController {
     }
 
     @GetMapping
-    public ReportDTO getRepositoryReport(@NotBlank @RequestParam String userId,
-                                         @NotNull @RequestParam int projectId) {
+    public Report getRepositoryReport(@NotBlank @RequestParam String userId,
+                                      @NotNull @RequestParam int projectId) {
 
 
-        Optional<ReportDTO> databaseReport = reportService.checkIfInDb(userId, projectId);
+        Optional<Report> databaseReport = reportService.checkIfInDb(userId, projectId);
 
         if(databaseReport.isPresent()) {
             return databaseReport.get();
         }
         else {
-            ReportDTO report = reportService.getReportForRepository(userId, projectId);
+            Report report = reportService.getReportForRepository(userId, projectId);
             reportService.saveReport(report);
 
             for(String currentUser : report.getUserList()) {
