@@ -5,7 +5,7 @@ import { Form, Row, Col } from 'react-bootstrap';
 
 import { modal } from 'Constants/constants';
 
-const RepoModalDateTimePicker = (props) => {
+const RepoAnalyzeModalDateTimePicker = (props) => {
 
     const { startName, endName, startDate, endDate, setStartDate, setEndDate } = props || {};
 
@@ -51,4 +51,4 @@ const RepoModalDateTimePicker = (props) => {
     );
 }
 
-export default RepoModalDateTimePicker;
+export default RepoAnalyzeModalDateTimePicker;

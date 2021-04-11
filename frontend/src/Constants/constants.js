@@ -102,7 +102,6 @@ export const initialConfigState = {
     CONFIGURATION_NAME: '',
     ADD_NEW_LINE : '1.0',
     DELETE_LINE : '0.2',
-    SPACING : '0',
     SYNTAX : '0.2',
     MOVE_LINE : '0.5',
     JAVA: '1.0',
@@ -114,12 +113,17 @@ export const initialConfigState = {
     XML: '0.6',
     CPP: '0.1',
     C: '0.3',
+};
+
+export const initialFileInputList = {
     FILE_EXTENSION: '',
     SINGLE_COMMENT: '',
     MULTI_START_COMMENT: '',
     MULTI_END_COMMENT: '',
     WEIGHT: ''
 }
+
+export const DEFAULT_FILES = ['C', 'CPP', 'CSS', 'HTML', 'JAVA', 'JS', 'PY', 'TS', 'XML'];
     
 
 export const SCHEME = {

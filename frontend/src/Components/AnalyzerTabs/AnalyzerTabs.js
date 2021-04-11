@@ -24,6 +24,7 @@ const AnalyzerTabs = (props) => {
     const changeTab = (k) => {
         setKey(k);
     }
+    
 
     return (
         <Tab.Container>

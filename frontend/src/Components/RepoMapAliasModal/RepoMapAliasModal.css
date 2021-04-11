@@ -1,0 +1,21 @@
+.custom-modal {
+    font-family: 'Roboto', sans-serif;
+    min-width: 80%;
+}
+
+.modal-content {
+    background-color: white;
+}
+
+.modal-header{
+    margin: 10px 30px;
+}
+
+.repo-modal-body {
+    font-size: 18px;
+    padding: 20px;
+}
+
+.spinner {
+    margin: 60px;
+}

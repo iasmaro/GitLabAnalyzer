@@ -1,0 +1,31 @@
+.score-weight{
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    margin-bottom: 1em;
+}
+
+.code-diff-summary{
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    margin-bottom: 1em;
+}
+
+.code-diff-calculation{
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    margin-bottom: 1em;
+}
+
+.part-calc{
+    background-color: #D5D6D4;
+}
+
+.table-breakdown{
+    margin-bottom: 0em;
+}
+
+.code-diff-calculation-total{
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    margin-bottom: 1em;
+}

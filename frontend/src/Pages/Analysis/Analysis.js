@@ -8,6 +8,7 @@ import AnalysisDropDown from 'Components/AnalyzerInfo/AnalysisDropDown';
 import AnalysisSpecifications from 'Components/AnalyzerInfo/AnalysisSpecifications';
 import analyzeAll from 'Utils/analyzeAll';
 import getProjectMembers from 'Utils/getProjectMembers';
+import getConfigurationInfo from 'Utils/getConfigurationInfo';
 import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
 
 import './Analysis.css'
@@ -29,6 +30,7 @@ const Analysis = (props) => {
     const [members, setMembers] = useState([]);
     const [student, setStudent] = useState();
     const [analysis, setAnalysis] = useState();
+    const [configInfo, setConfigInfo] = useState();
     const [databaseMembersAndAliases, setDatabaseMembersAndAliases] = useState([]);
     const username = useUserState();
 
@@ -62,6 +64,13 @@ const Analysis = (props) => {
             setMergeRequestComments(analysis.mrcommentListByMemberId && analysis.mrcommentListByMemberId[student]);
         }
     }, [student, analysis]);
+
+    useEffect(() => {
+        getConfigurationInfo(username, configuration).then((data) => {
+            setConfigInfo(data);
+        });
+    },[username, configuration]);
+
     
     if (!data) {
         return(<Redirect to={{ pathname: '/' }} />);
@@ -89,7 +98,8 @@ const Analysis = (props) => {
                     student={student}
                     databaseMembersAndAliases={databaseMembersAndAliases}
                     issueComments={issueComments}
-                    mergeRequestComments={mergeRequestComments}/>
+                    mergeRequestComments={mergeRequestComments}
+                    configInfo={configInfo}/>
             </>}
         </div>
     )
