@@ -73,18 +73,16 @@ public class ReportRepository {
         ReportDTO report = findReportInDbViaName(reportName).orElseThrow(() -> new ResourceNotFoundException("Report not found in Database"));
         List<String> userList = report.getUserList();
 
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("reportName").is(report.getReportName()));
-        Update update = new Update();
-
-
         if(userList.contains(userId)) {
             throw new IllegalArgumentException("User already has access");
         }
         else {
             userList.add(userId);
         }
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("reportName").is(report.getReportName()));
+        Update update = new Update();
 
         update.set("userList", userList);
 

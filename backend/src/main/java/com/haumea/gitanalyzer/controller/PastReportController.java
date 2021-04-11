@@ -32,7 +32,6 @@ public class PastReportController {
        return reportService.checkIfInDbViaName(reportName);
     }
 
-    // TODO: Once reports are linked to users make it return all the reports for a user
     // returns whats in the database
     @GetMapping("/allReports")
     public List<ReportDTO> getAllReports() {
@@ -53,8 +52,9 @@ public class PastReportController {
     // make sure to pass in a correct report name as it will not check the report DB to see if it exists
     @PutMapping("/addReportAccess")
     public void addReportAccess(@RequestParam @NotBlank String userId, @RequestParam @NotBlank String reportName) {
-        userService.addReport(userId, reportName);
         reportService.giveUserAccessToReport(userId, reportName);
+        userService.addReport(userId, reportName);
+
     }
 
     @DeleteMapping("/revokeReportAccess")

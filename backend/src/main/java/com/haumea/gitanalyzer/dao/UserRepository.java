@@ -79,18 +79,20 @@ public class UserRepository {
 
     public void addReportToUser(String userId, String reportName) {
         User user = findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("userId").is(user.getUserId().get()));
-        Update update = new Update();
-
         List<String> reports = user.getReportNames();
+
         if(reports.contains(reportName)) {
             throw new IllegalArgumentException("The report already exists!");
         }
         else {
             reports.add(reportName);
         }
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(user.getUserId().get()));
+        Update update = new Update();
+
+
 
         update.set("reportNames", reports);
 
@@ -143,12 +145,12 @@ public class UserRepository {
 
     public void deleteReportFromUserList(String userId, String reportName) {
         User user = findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
+        List<String> reports = user.getReportNames();
 
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
         Update update = new Update();
 
-        List<String> reports = user.getReportNames();
         if(reports.remove(reportName)) {
             update.set("reportNames", reports);
         }
