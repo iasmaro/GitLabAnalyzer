@@ -48,8 +48,7 @@ public class PastReportController {
             userService.deleteReport(user, reportName);
         }
     }
-
-    // make sure to pass in a correct report name as it will not check the report DB to see if it exists
+    
     @PutMapping("/addReportAccess")
     public void addReportAccess(@RequestParam @NotBlank String userId, @RequestParam @NotBlank String reportName) {
         reportService.giveUserAccessToReport(userId, reportName);
