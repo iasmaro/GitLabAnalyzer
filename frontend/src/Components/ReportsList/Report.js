@@ -18,13 +18,6 @@ const Report = (props) => {
         return null;
     }
 
-    // temporary fix for getting the configuration name
-    const reportNameList = report.reportName?.split('_');
-    const endDate = reportNameList.pop();
-    const startDate = reportNameList.pop();
-    const projectId = reportNameList[0];
-    const configName = report.reportName?.replace(`${projectId}_`, '').replace(`${report.projectName}_`, '').replace(`_${startDate}`, '').replace(`_${endDate}`, '');
-
     const handleChange = () => {
         const isChecked = !checked;
         setChecked(isChecked);
@@ -41,12 +34,12 @@ const Report = (props) => {
 
     if (redirect) {
         const data = {
-            configuration: report.configName || configName,
+            configuration: report.configName,
             startDate: report.start,
             endDate: report.end,
             projectName: report.projectName,
             reportName: report.reportName,
-            projectId: report.projectId || projectId,
+            projectId: report.projectId,
             creator: report.creator
         }
 
@@ -62,7 +55,7 @@ const Report = (props) => {
             <td>{report.projectName}</td>
             <td>{utcToLocal(report.start)}</td>
             <td>{utcToLocal(report.end)}</td>
-            <td>{report.configName || configName}</td>
+            <td>{report.configName}</td>
             <td>{report.creator}</td>
             <td>
                 <Button variant="dark" onClick={viewReport}>View</Button>
