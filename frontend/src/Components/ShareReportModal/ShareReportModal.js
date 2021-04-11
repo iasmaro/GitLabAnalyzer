@@ -44,7 +44,7 @@ const ShareReportModal = (props) => {
                     value={userId}
                     onChange={handleChange}
                 />
-                {showError && <p className='error-message'>Please select a configuration</p>}
+                {showError && <p className='error-message'>Please add a user ID</p>}
             </Modal.Body>
 
             <Modal.Footer>
