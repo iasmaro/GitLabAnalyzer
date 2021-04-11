@@ -25,6 +25,8 @@ const Analysis = (props) => {
     const [codeReviewsGraph, setCodeReviewsGraph] = useState();
     const [issueCommentsGraph, setIssueCommentsGraph] = useState();
     const [commits, setCommits] = useState();
+    const [issueComments, setIssueComments] = useState();
+    const [mergeRequestComments, setMergeRequestComments] = useState();
     const [members, setMembers] = useState([]);
     const [student, setStudent] = useState();
     const [analysis, setAnalysis] = useState();
@@ -58,6 +60,8 @@ const Analysis = (props) => {
             setMRsGraph(analysis.mrgraphListByMemberId && analysis.mrgraphListByMemberId[student]);
             setCodeReviewsGraph(analysis.codeReviewGraphListByMemberId && analysis.codeReviewGraphListByMemberId[student]);
             setIssueCommentsGraph(analysis.issueGraphListByMemberId && analysis.issueGraphListByMemberId[student]);
+            setIssueComments(analysis.issueCommentListByMemberId && analysis.issueCommentListByMemberId[student]);
+            setMergeRequestComments(analysis.mrcommentListByMemberId && analysis.mrcommentListByMemberId[student]);
         }
     }, [student, analysis]);
 
@@ -93,6 +97,8 @@ const Analysis = (props) => {
                     issueCommentsGraph={issueCommentsGraph}
                     student={student}
                     databaseMembersAndAliases={databaseMembersAndAliases}
+                    issueComments={issueComments}
+                    mergeRequestComments={mergeRequestComments}
                     configInfo={configInfo}/>
             </>}
         </div>
