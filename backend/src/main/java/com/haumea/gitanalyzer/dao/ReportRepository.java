@@ -2,13 +2,8 @@ package com.haumea.gitanalyzer.dao;
 
 import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.model.Report;
-import com.haumea.gitanalyzer.dto.CommitGraphDTO;
-import com.haumea.gitanalyzer.dto.MergeRequestGraphDTO;
-import com.haumea.gitanalyzer.model.Member;
-import org.gitlab4j.api.models.Commit;
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
-import com.haumea.gitanalyzer.model.ReportDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -76,7 +71,7 @@ public class ReportRepository {
         return mongoTemplate.findAll(Report.class);
     }
 
-    public void deleteReportDTO(String reportName) {
+    public void deleteReport(String reportName) {
         Query query = getReportNameQuery(reportName);
 
         mongoTemplate.findAndRemove(query, Report.class);
@@ -176,10 +171,10 @@ public class ReportRepository {
 
     public MergeRequestDTO getModifiedMergeRequestByMemberId(String reportName, String memberId, int mergeIndex) {
 
-        Optional<ReportDTO> reportDTO = findReportInDbViaName(reportName);
+        Optional<Report> reportDTO = findReportInDbViaName(reportName);
 
         if(reportDTO.isPresent()) {
-            ReportDTO modifiedReport = reportDTO.get();
+            Report modifiedReport = reportDTO.get();
 
             return modifiedReport.getMergeRequestListByMemberId().get(memberId).get(mergeIndex);
         }
@@ -189,10 +184,10 @@ public class ReportRepository {
     }
 
     public CommitDTO getModifiedCommitByMemberId(String reportName, String memberId, int commitIndex) {
-        Optional<ReportDTO> reportDTO = findReportInDbViaName(reportName);
+        Optional<Report> reportDTO = findReportInDbViaName(reportName);
 
         if(reportDTO.isPresent()) {
-            ReportDTO modifiedReport = reportDTO.get();
+            Report modifiedReport = reportDTO.get();
 
             return modifiedReport.getCommitListByMemberId().get(memberId).get(commitIndex);
         }
@@ -219,7 +214,7 @@ public class ReportRepository {
         Update update = new Update();
         update.set(diffScorePath, newDiffScore);
 
-        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+        mongoTemplate.updateFirst(query, update, Report.class);
     }
 
     private void updateMRScore(String reportName, String mrPath, double newMRScore) {
@@ -231,7 +226,7 @@ public class ReportRepository {
         Update update = new Update();
         update.set(MRScorePath, newMRScore);
 
-        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+        mongoTemplate.updateFirst(query, update, Report.class);
     }
 
     private void updateExtensionScoreOfMR(String reportName, String mrPath, String extension, double newExtensionScore) {
@@ -245,7 +240,7 @@ public class ReportRepository {
         Update update = new Update();
         update.set(MRScorePath, newExtensionScore);
 
-        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+        mongoTemplate.updateFirst(query, update, Report.class);
     }
 
     public void updateDBWithNewDiffScoreOfMR(String reportName,
@@ -278,7 +273,7 @@ public class ReportRepository {
         Update update = new Update();
         update.set(diffScorePath, newDiffScore);
 
-        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+        mongoTemplate.updateFirst(query, update, Report.class);
     }
 
     private void updateCommitScore(String reportName, String path, double newCommitScore) {
@@ -289,7 +284,7 @@ public class ReportRepository {
         Update update = new Update();
         update.set(MRScorePath, newCommitScore);
 
-        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+        mongoTemplate.updateFirst(query, update, Report.class);
     }
 
     private void updateExtensionScoreOfCommit(String reportName, String path, String extension, double newExtensionScore) {
@@ -303,7 +298,7 @@ public class ReportRepository {
         Update update = new Update();
         update.set(MRScorePath, newExtensionScore);
 
-        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+        mongoTemplate.updateFirst(query, update, Report.class);
     }
 
     private void updateSumOfCommitScore(String reportName, String mrPath, double newSumOfCommitScore) {
@@ -315,7 +310,7 @@ public class ReportRepository {
         Update update = new Update();
         update.set(MRScorePath, newSumOfCommitScore);
 
-        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+        mongoTemplate.updateFirst(query, update, Report.class);
     }
 
     public void updateSumOfCommitScoreOnSharedMR(String reportName, String memberId, int mergeIndex, double newSumOfCommitScore) {
@@ -329,7 +324,7 @@ public class ReportRepository {
         Update update = new Update();
         update.set(MRScorePath, newSumOfCommitScore);
 
-        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+        mongoTemplate.updateFirst(query, update, Report.class);
     }
 
     public void updateDBWithNewDiffScoreOfOneCommitInMR(String reportName,

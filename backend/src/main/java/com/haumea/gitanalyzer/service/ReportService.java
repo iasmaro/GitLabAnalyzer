@@ -140,7 +140,7 @@ public class ReportService {
     }
 
     public void deleteReport(String reportName) {
-        reportRepository.deleteReportDTO(reportName);
+        reportRepository.deleteReport(reportName);
     }
 
     public void giveUserAccessToReport(String userId, String reportName) {
