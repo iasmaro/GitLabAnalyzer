@@ -20,7 +20,7 @@ const PastReports = () => {
     }, [username]);
 
     return (
-        <div className='dashboard'>
+        <div className='past-reports'>
             {isLoading ? <Spinner animation="border" className="spinner" /> : <ReportsList reports={repos}/>}
         </div>
     );

@@ -1,27 +1,27 @@
-.list-container {
-    display: inline;
+.report-list-container {
+    clear: both;
+    display: block;
     max-height: 80%;
     width: 80%;
-    position:fixed;
-    top: 10%;
-    bottom: 10%;
-    right: 10%;
-    left: 10%;
+    position: relative;
+    top: 5%;
+    float: right;
+    margin-right: 10%;
     overflow-y: scroll;
     overflow-x: scroll;
     padding: 0px 0px;
     scrollbar-width: none;
 }
 
-.list-container::-webkit-scrollbar { 
+.report-list-container::-webkit-scrollbar { 
     display: none;
 }
 
-.list-container td {
+.report-list-container td {
     vertical-align: middle;
 }
 
-.list-container input {
+.report-list-container input {
     position: sticky;
     position: -webkit-sticky;
     width: 100%;
@@ -38,11 +38,23 @@
 }
 
 .report-headers th {
-  width: 37.5%;
-  position: sticky;
-  position: -webkit-sticky;
-  top: 4em;
-  background-color: #fff;
+    width: 37.5%;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 4em;
+    background-color: #fff;
+}
+
+.report-headers .checkbox-header {
+    width: 5%;
+}
+
+.report-share-btn {
+    position: relative;
+    display: block;
+    top: 6%;
+    float: right;
+    margin-right: 10%;
 }
 
 .table-header th {
@@ -53,18 +65,18 @@
 }
 
 thead th {
-  cursor: pointer;
-  z-index: 1;
+    cursor: pointer;
+    z-index: 1;
 }
 
 thead th.ascending::after {
-  content: '↑';
-  display: inline-block;
-  margin-left: 8px;
+    content: '↑';
+    display: inline-block;
+    margin-left: 8px;
 }
 
 thead th.descending::after {
-  content: '↓';
-  display: inline-block;
-  margin-left: 8px;
+    content: '↓';
+    display: inline-block;
+    margin-left: 8px;
 }

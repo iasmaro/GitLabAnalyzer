@@ -1,10 +1,10 @@
-.dashboard {
+.past-reports {
     text-align: center;
     font-family: 'Roboto', sans-serif;
     height: 100vh;
+    width: 100%;
     background-color: #acbed8;
     color: #ffffff;
-    padding: 75px 350px;
     margin: 0;
     overflow: auto;
 }

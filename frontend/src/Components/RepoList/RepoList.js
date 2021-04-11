@@ -6,7 +6,7 @@ import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
 import filterRepos from 'Utils/filterRepos'
 
 import Repo from './Repo';
-import RepoSearchBar from './RepoSearchBar';
+import SearchBar from 'Components/SearchBar/SearchBar';
 import './RepoList.css';
 
 const RepoList = (props) => {
@@ -21,7 +21,7 @@ const RepoList = (props) => {
                 <thead>
                     <tr className='table-header'>
                         <th colSpan='2' className='repoTitle'>Repositories</th>
-                        <th colSpan='3' className='repoTitle'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord} /></th>
+                        <th colSpan='3' className='repoTitle'><SearchBar searchWord={searchWord} setSearchWord={setSearchWord} /></th>
                     </tr>
                 </thead>
                 <thead>

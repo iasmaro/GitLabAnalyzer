@@ -1,10 +1,10 @@
 import React from 'react';
 
-const RepoSearchBar = (props) => {
+const SearchBar = (props) => {
     const { searchWord, setSearchWord } = props || {};
     return (
         <input
-            className = "repo-search"
+            className = "search-bar"
             value={searchWord}
             placeholder={"Search..."}
             onChange={(e) => setSearchWord(e.target.value)}
@@ -12,4 +12,4 @@ const RepoSearchBar = (props) => {
     );
 }
 
-export default RepoSearchBar
+export default SearchBar
