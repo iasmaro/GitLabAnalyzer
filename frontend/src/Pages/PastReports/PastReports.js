@@ -8,19 +8,19 @@ import getReports from 'Utils/getReports';
 import './PastReports.css';
 
 const PastReports = () => {
-    const [repos, setRepos] = useState();
+    const [reports, setReports] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const username = useUserState();
     useEffect(() => {
         getReports(username).then((data) => {
-            setRepos(data);
+            setReports(data);
             setIsLoading(false);
         });
     }, [username]);
 
     return (
         <div className='past-reports'>
-            {isLoading ? <Spinner animation="border" className="spinner" /> : <ReportsList reports={repos}/>}
+            {isLoading ? <Spinner animation="border" className="spinner" /> : <ReportsList reports={reports}/>}
         </div>
     );
 }
