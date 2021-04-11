@@ -6,6 +6,7 @@ import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.model.Configuration;
+import com.haumea.gitanalyzer.utility.Round;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -96,7 +97,8 @@ public class GraphService {
             }
 
             // round to 1 decimal place to avoid weird floating point bug
-            totalScore = Math.round(totalScore * 10.0) / 10.0;
+            Round roundObject = new Round();
+            totalScore = roundObject.roundScore(totalScore);
 
             CommitGraphDTO commitGraphDTO = new CommitGraphDTO (date,numberOfCommits, totalScore);
             returnList.add(0, commitGraphDTO);
@@ -151,7 +153,8 @@ public class GraphService {
             }
 
             // round to 1 decimal place to avoid weird floating point bug
-            totalScore = Math.round(totalScore * 10.0) / 10.0;
+            Round roundObject = new Round();
+            totalScore = roundObject.roundScore(totalScore);
 
             MergeRequestGraphDTO mergeRequestGraphDTO = new MergeRequestGraphDTO(date, numberOfMergeRequests, totalScore);
             returnList.add(0, mergeRequestGraphDTO);

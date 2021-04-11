@@ -8,6 +8,7 @@ import com.haumea.gitanalyzer.gitlab.CommitWrapper;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.model.Configuration;
+import com.haumea.gitanalyzer.utility.Round;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Diff;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +107,7 @@ public class CommitService {
 
         double commitScore = 0.0;
         Map<String, Double> fileTypeScoresMap = new HashMap<>();
-        ScoreDTO roundObject = new ScoreDTO();
+        Round roundObject = new Round();
 
         for (DiffDTO diffDTO : diffDTOList) {
 
@@ -121,6 +122,8 @@ public class CommitService {
             fileTypeScore = roundObject.roundScore(fileTypeScore);
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
+
+        commitScore = roundObject.roundScore(commitScore);
 
         ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, 0, 0, 0, 0, 0, 0, linesMoved, 0, 0, commitScore);
         commitScoreDTO.setScoreByFileTypes(fileTypeScoresMap);

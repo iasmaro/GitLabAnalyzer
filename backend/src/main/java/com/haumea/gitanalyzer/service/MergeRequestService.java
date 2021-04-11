@@ -9,6 +9,7 @@ import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
 import com.haumea.gitanalyzer.model.Configuration;
+import com.haumea.gitanalyzer.utility.Round;
 import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.MergeRequest;
 import org.gitlab4j.api.models.MergeRequestDiff;
@@ -113,7 +114,6 @@ public class MergeRequestService {
         return mergeRequestDiffs;
     }
 
-
     public ScoreDTO getMergeRequestStats(List<DiffDTO> diffDTOList) {
 
         int linesAdded = 0;
@@ -121,7 +121,7 @@ public class MergeRequestService {
         int linesMoved = 0;
         double MRScore = 0.0;
         Map<String, Double> fileTypeScoresMap = new HashMap<>();
-        ScoreDTO roundObject = new ScoreDTO();
+        Round roundObject = new Round();
 
         for (DiffDTO diffDTO : diffDTOList) {
 
@@ -136,6 +136,8 @@ public class MergeRequestService {
             fileTypeScore = roundObject.roundScore(fileTypeScore);
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
+
+        MRScore = roundObject.roundScore(MRScore);
 
         ScoreDTO mergeRequestScoreDTO = new ScoreDTO(linesAdded, linesRemoved, 0,0,0,0,0,0,linesMoved, 0, 0, MRScore);
         mergeRequestScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
@@ -153,7 +155,9 @@ public class MergeRequestService {
 
         }
 
-        return sumOfCommitsScore;
+        Round roundObject = new Round();
+
+        return roundObject.roundScore(sumOfCommitsScore);
     }
 
     private void checkAndSetScoreForSharedMR(MergeRequestDTO mergeRequestDTO, List<String> alias) {
@@ -175,6 +179,9 @@ public class MergeRequestService {
         }
 
         if(isSharedMR) {
+            Round roundObject = new Round();
+            sumOfCommitScoreForSharedMR = roundObject.roundScore(sumOfCommitScoreForSharedMR);
+
             mergeRequestDTO.setSumOfCommitScoreOnSharedMR(sumOfCommitScoreForSharedMR);
         }
 
@@ -208,7 +215,7 @@ public class MergeRequestService {
                 updatedDate,
                 mergeRequestLink,
                 mergeRequestStats.getScore(),
-                mergeRequestStats.roundScore(sumOfCommitScore),
+                sumOfCommitScore,
                 mergeRequestStats.getScoreByFileTypes(),
                 mergeRequestDiffs,
                 mergeRequestStats.getLinesAdded(),
@@ -233,7 +240,7 @@ public class MergeRequestService {
         double sumOfCommitScore = getSumOfCommitsScore(commitDTOList);
         ScoreDTO scoreDTO = getMergeRequestStats(dummyMergeRequestDiffList);
 
-        return new MergeRequestDTO(mergeRequestIid, mergeRequestTitle, mergedDate, createdDate, mergedDate, "", 0.0, scoreDTO.roundScore(sumOfCommitScore), scoreDTO.getScoreByFileTypes(), dummyMergeRequestDiffList, 0, 0, commitDTOList);
+        return new MergeRequestDTO(mergeRequestIid, mergeRequestTitle, mergedDate, createdDate, mergedDate, "", 0.0, sumOfCommitScore, scoreDTO.getScoreByFileTypes(), dummyMergeRequestDiffList, 0, 0, commitDTOList);
     }
 
     public List<MergeRequestDTO> getAllMergeRequests(String userId, int projectId) {
