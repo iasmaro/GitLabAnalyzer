@@ -62,7 +62,7 @@ export const useSortableDataArray = (items, config = null) => {
 }
 
 export const getClassNamesFor = (sortConfig, name = null,) => {
-    if (name){
+    if (name) {
         if (!sortConfig) {
             return 'default';
         }

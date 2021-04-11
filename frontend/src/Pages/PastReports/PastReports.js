@@ -2,27 +2,28 @@ import React, { useState, useEffect } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 
 import { useUserState } from 'UserContext';
-import RepoList from 'Components/RepoList/RepoList';
+import ReportsList from 'Components/ReportsList/ReportsList';
 import getRepos from 'Utils/getRepos';
+import { reports } from 'Mocks/mockReports';
 
-import './Dashboard.css';
+import './PastReports.css';
 
-const Dashboard = () => {
+const PastReports = () => {
     const [repos, setRepos] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const username = useUserState();
     useEffect(() => {
         getRepos(username).then((data) => {
-            setRepos(data);
+            setRepos(reports);
             setIsLoading(false);
         });
     }, [username]);
 
     return (
         <div className='dashboard'>
-            {isLoading ? <Spinner animation="border" className="spinner" /> : <RepoList repos={repos}/>}
+            {isLoading ? <Spinner animation="border" className="spinner" /> : <ReportsList reports={repos}/>}
         </div>
     );
 }
 
-export default Dashboard;
+export default PastReports;

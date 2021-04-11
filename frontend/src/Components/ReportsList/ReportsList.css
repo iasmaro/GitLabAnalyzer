@@ -1,0 +1,81 @@
+.list-container {
+    display: inline;
+    max-height: 80%;
+    width: 80%;
+    position:fixed;
+    top: 10%;
+    bottom: 10%;
+    right: 10%;
+    left: 10%;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    padding: 0px 0px;
+    scrollbar-width: none;
+}
+
+.list-container::-webkit-scrollbar { 
+    display: none;
+}
+
+.list-container td {
+    vertical-align: middle;
+}
+
+.list-container input {
+    position: sticky;
+    position: -webkit-sticky;
+    width: 100%;
+    padding: 6px 12px;
+    box-sizing: border-box;  
+    border: 2px solid #000;
+    border-radius: 4px;
+}
+
+.repoTitle{
+    background-color: rgb(227, 226, 226);
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.repo-headers th {
+  width: 37.5%;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 4em;
+  background-color: #fff;
+}
+
+.table-header th {
+    width: 40%;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0em;
+}
+
+thead th.default {
+  cursor: pointer;
+}
+
+thead th.ascending {
+  cursor: pointer;
+}
+
+thead th.descending {
+  cursor: pointer;
+}
+
+thead th.ascending::after {
+  content: '↑';
+  display: inline-block;
+  margin-left: 8px;
+}
+
+thead th.descending::after {
+  content: '↓';
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.repo-list-button {
+  min-width: 7.2em;
+}
