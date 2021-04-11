@@ -9,13 +9,20 @@ import { utcToLocal } from 'Components/Utils/formatDates';
 import './ReportsList.css';
 
 const Report = (props) => {
-    const { report, addReport, removeReport, username } = props || {};
+    const { report, addReport, removeReport, deleteReport, username } = props || {};
 
     const [redirect, setRedirect] = useState(false);
 
     if (!report) {
         return null;
     }
+
+    // temporary fix for getting the configuration name
+    const reportNameList = report.reportName?.split('_');
+    const endDate = reportNameList.pop();
+    const startDate = reportNameList.pop();
+    const projectId = reportNameList[0];
+    const configName = report.reportName?.replace(`${projectId}_`, '').replace(`${report.projectName}_`, '').replace(`_${startDate}`, '').replace(`_${endDate}`, '');
 
     const handleChange = (e) => {
         const isChecked = e?.target?.checked;
@@ -33,7 +40,7 @@ const Report = (props) => {
     if (redirect) {
         const projectId = report.reportName?.split('_')[0];
         const data = {
-            configuration: report.configName,
+            configuration: report.configName || configName,
             startDate: report.start,
             endDate: report.end,
             projectName: report.projectName,
@@ -54,13 +61,13 @@ const Report = (props) => {
             <td>{report.projectName}</td>
             <td>{utcToLocal(report.start)}</td>
             <td>{utcToLocal(report.end)}</td>
-            <td>{report.configName}</td>
+            <td>{report.configName || configName}</td>
             <td>{report.creator}</td>
             <td>
                 <Button variant="dark" onClick={viewReport}>View</Button>
             </td>
             <td>
-                <Button variant="danger" disabled={!deletable}><AiOutlineDelete /></Button>
+                <Button variant="danger" disabled={!deletable} onClick={() => deleteReport && deleteReport(report.reportName)} ><AiOutlineDelete /></Button>
             </td>
         </tr>
     );

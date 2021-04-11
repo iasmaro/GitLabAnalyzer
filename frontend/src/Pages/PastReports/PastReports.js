@@ -3,8 +3,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import { useUserState } from 'UserContext';
 import ReportsList from 'Components/ReportsList/ReportsList';
-import getRepos from 'Utils/getRepos';
-import { reports } from 'Mocks/mockReports';
+import getReports from 'Utils/getReports';
 
 import './PastReports.css';
 
@@ -13,8 +12,8 @@ const PastReports = () => {
     const [isLoading, setIsLoading] = useState(true);
     const username = useUserState();
     useEffect(() => {
-        getRepos(username).then((data) => {
-            setRepos(reports);
+        getReports(username).then((data) => {
+            setRepos(data);
             setIsLoading(false);
         });
     }, [username]);

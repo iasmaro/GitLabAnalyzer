@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const ShareReportModal = (props) => {
-    const { status, toggleModal } = props || {};
+    const { status, toggleModal, shareReports } = props || {};
 
     const [userId, setUserId] = useState('');
     const [showError, setShowError] = useState(false);
@@ -15,7 +15,7 @@ const ShareReportModal = (props) => {
     const handleClick = () => {
         if (userId) {
             setShowError(false);
-            toggleModal && toggleModal();
+            shareReports && shareReports(userId);
         }
         else {
             setShowError(true);

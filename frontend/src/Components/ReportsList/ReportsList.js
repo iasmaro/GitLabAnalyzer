@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
 import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
-import { useUserState } from 'UserContext';
+import shareReport from 'Utils/shareReport';
 import filterRepos from 'Utils/filterRepos';
+import getReports from 'Utils/getReports';
+import deleteReportPermenantly from 'Utils/deleteReport';
+import { useUserState } from 'UserContext';
 import ShareReportModal from 'Components/ShareReportModal/ShareReportModal';
 
 import Report from './Report';
@@ -13,14 +16,19 @@ import './ReportsList.css';
 
 const ReportsList = (props) => {
     const { reports } = props || {};
+    const [reportsList, setReportsList] = useState();
     const [searchWord, setSearchWord] = useState('');
     const [show, setShow] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showFailureMessage, setShowFailureMessage] = useState(false);
     const [selectedReports, setSelectedReports] = useState([]);
-    const { items, requestSortObject, sortConfig  } = useSortableDataObject(reports);
+    const { items, requestSortObject, sortConfig  } = useSortableDataObject(reportsList);
 
     const username = useUserState();
+
+    useEffect(() => {
+        setReportsList(reports);
+    }, [reports]);
 
     const addReport = (name) => {
         const updatedSelectedReports = selectedReports.slice();
@@ -37,14 +45,53 @@ const ReportsList = (props) => {
         } 
     };
 
-    const shareReports = () => {
+    const showModal = () => {
         setShow(true);
     }
 
-    const closeShare = () => {
-        setShow(false);
+    const shareReports = async (userId) => {
+        let anyFailed = false;
+        const sharedReports = [];
+        for (let selectedReport of selectedReports) {
+            sharedReports.push(shareReport(userId, selectedReport));
+        }
+        await Promise.all(sharedReports).then((responses) => {
+            for (let response of responses) {
+                anyFailed = anyFailed || !response;
+            }
+        });
+        closeShareModal();
+        if (anyFailed) {
+            showFailure();
+        } else {
+            showSuccess();
+        }
+    }
+
+    const showFailure = () => {
+        setShowFailureMessage(true);
+        setTimeout(function () { setShowFailureMessage(false); }, 3000);
+    }
+
+    const showSuccess = () => {
         setShowSuccessMessage(true);
         setTimeout(function () { setShowSuccessMessage(false); }, 3000);
+    }
+
+    const closeShareModal = () => {
+        setShow(false);
+    }
+
+    const updateReportsList = () => {
+        getReports(username).then((data) => {
+            setReportsList(data);
+        })
+    }
+
+    const deleteReport = (reportName) => {
+        deleteReportPermenantly(reportName).then(() => {
+            updateReportsList();
+        })
     }
     
     const areSelected = selectedReports.length > 0;
@@ -73,20 +120,20 @@ const ReportsList = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {!reports || !reports.length ? (
+                        {!reportsList || !reportsList.length ? (
                             <tr>
                                 <td colSpan={7} >{message.NO_REPORTS}</td>
                             </tr>
                         )
                         :
                         items.filter((report)=>filterRepos(report, searchWord)).map((report, key) => (
-                            <Report key={key} report={report} addReport={addReport} removeReport={removeReport} username={username} />
+                            <Report key={key} report={report} addReport={addReport} removeReport={removeReport} username={username} deleteReport={deleteReport} />
                         ))}
                     </tbody>
                 </Table>
             </div>
-            <Button variant="dark" className="report-share-btn" disabled={!areSelected} onClick={shareReports} >Share</Button>
-            {show && <ShareReportModal toggleModal={closeShare} status={show} />}
+            <Button variant="dark" className="report-share-btn" disabled={!areSelected} onClick={showModal} >Share</Button>
+            {show && <ShareReportModal toggleModal={closeShareModal} status={show} shareReports={shareReports} />}
         </>
     );
 };
