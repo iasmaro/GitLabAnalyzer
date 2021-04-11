@@ -65,7 +65,7 @@ public class ReportService {
             List<CommitDTO> commits = commitService.getCommitsForSelectedMemberAndDate(userId, projectId, member);
 
             List<CommentDTO> MRComments = commentService.getMergeRequestComments(userId, projectId, member);
-            List<CommentDTO> issueComments = commentService.getMergeRequestComments(userId, projectId, member);
+            List<CommentDTO> issueComments = commentService.getIssueComments(userId, projectId, member);
 
             List<CommitGraphDTO> commitGraphs = graphService.getCommitGraphDetails(userId, member, projectId);
             List<MergeRequestGraphDTO> MRGraphs = graphService.getMergeRequestGraphDetails(userId, member, projectId);
@@ -140,7 +140,7 @@ public class ReportService {
     }
 
     public void deleteReport(String reportName) {
-        reportRepository.deleteReportDTO(reportName);
+        reportRepository.deleteReport(reportName);
     }
 
     public void giveUserAccessToReport(String userId, String reportName) {
@@ -230,4 +230,145 @@ public class ReportService {
         }
         reportRepository.updateMRGraph(reportName, memberId, convertedMRDate, start, oldScore, difference);
     }
+
+    private double getExtensionScoreOfMR(MergeRequestDTO modifiedMR, String extension) {
+        return modifiedMR.getScoreByFileTypes().getOrDefault(extension, 0.0);
+    }
+
+    private double getExtensionScoreOfCommit(CommitDTO modifiedCommit, String extension) {
+        return modifiedCommit.getScoreByFileTypes().getOrDefault(extension, 0.0);
+    }
+
+    private double getNewScoreDifference(DiffDTO modifiedDiff, double newDiffScore) {
+
+        double originalDiffScore = modifiedDiff.getScoreDTO().getScore();
+        return newDiffScore - originalDiffScore;
+    }
+
+    private boolean scoreHasBeenModified(DiffDTO diffDTO) {
+        return diffDTO.getScoreDTO().getModifiedScore() != -1;
+    }
+
+    private double getOriginalScore(double score, DiffDTO modifiedDiff) {
+        if(scoreHasBeenModified(modifiedDiff)) {
+            ScoreDTO modifiedScoreDTO = modifiedDiff.getScoreDTO();
+            double difference = modifiedScoreDTO.getModifiedScore() - modifiedScoreDTO.getScore();
+
+            score = score - difference;
+        }
+
+        return score;
+    }
+
+    private double getNewScore(double oldScore, double difference) {
+
+        oldScore = oldScore + difference;
+
+        return Math.round(oldScore * 10) / 10.0;
+    }
+
+    public void modifyDiffScoreOfMRDiff(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
+
+        MergeRequestDTO modifiedMR = reportRepository.getModifiedMergeRequestByMemberId(reportName, memberId, mergeIndex);
+        DiffDTO modifiedDiff = modifiedMR.getMergeRequestDiffs().get(diffIndex);
+
+        double difference = getNewScoreDifference(modifiedDiff, newDiffScore);
+
+        double MRScore = getOriginalScore(modifiedMR.getMRScore(), modifiedDiff);
+
+        double newMRScore = getNewScore(MRScore, difference);
+
+        String extension = modifiedDiff.getExtension();
+        double extensionScore = getExtensionScoreOfMR(modifiedMR, extension);
+        extensionScore = getOriginalScore(extensionScore, modifiedDiff);
+
+        double newExtensionScore = getNewScore(extensionScore, difference);
+
+        reportRepository.updateDBWithNewDiffScoreOfMR(reportName,
+                                                      memberId,
+                                                      mergeIndex,
+                                                      diffIndex,
+                                                      newDiffScore,
+                                                      newMRScore,
+                                                      extension,
+                                                      newExtensionScore);
+
+        updateMRGraph(reportName, memberId, modifiedMR.getMergedDate(), difference);
+    }
+
+    private boolean isOwnCommitOnSharedMR(String memberId, String commitAuthor) {
+        List<String> memberAlias = memberService.getAliasesForSelectedMember(memberId);
+
+        return memberAlias.contains(commitAuthor);
+    }
+
+    public void modifyDiffScoreOfCommitInOneMR(String reportName, String memberId, int mergeIndex, int commitIndex, int diffIndex, double newDiffScore) {
+        MergeRequestDTO modifiedMR = reportRepository.getModifiedMergeRequestByMemberId(reportName, memberId, mergeIndex);
+        CommitDTO modifiedCommit = modifiedMR.getCommitDTOList().get(commitIndex);
+        DiffDTO modifiedDiff = modifiedCommit.getCommitDiffs().get(diffIndex);
+
+        double difference = getNewScoreDifference(modifiedDiff, newDiffScore);
+
+        double commitScore = getOriginalScore(modifiedCommit.getCommitScore(), modifiedDiff);
+
+        double newCommitScore = getNewScore(commitScore, difference);
+
+        String extension = modifiedDiff.getExtension();
+        double extensionScore = getExtensionScoreOfCommit(modifiedCommit, extension);
+        extensionScore = getOriginalScore(extensionScore, modifiedDiff);
+
+        double newExtensionScore = getNewScore(extensionScore, difference);
+
+        double sumOfCommitScore = getOriginalScore(modifiedMR.getSumOfCommitScore(), modifiedDiff);
+        double newSumOfCommitScore = getNewScore(sumOfCommitScore, difference);
+
+        reportRepository.updateDBWithNewDiffScoreOfOneCommitInMR(reportName,
+                                                                 memberId,
+                                                                 mergeIndex,
+                                                                 diffIndex,
+                                                                 commitIndex,
+                                                                 newDiffScore,
+                                                                 newCommitScore,
+                                                                 extension,
+                                                                 newExtensionScore,
+                                                                 newSumOfCommitScore);
+
+        if(modifiedMR.isSharedMR() && isOwnCommitOnSharedMR(memberId, modifiedCommit.getCommitAuthor())) {
+            double sumOfCommitScoreOnSharedMR = getOriginalScore(modifiedMR.getSumOfCommitScoreOnSharedMR(), modifiedDiff);
+            double newSumOfCommitScoreOnSharedMR = getNewScore(sumOfCommitScoreOnSharedMR, difference);
+
+            reportRepository.updateSumOfCommitScoreOnSharedMR(reportName, memberId, mergeIndex, newSumOfCommitScoreOnSharedMR);
+        }
+
+        updateCommitGraph(reportName, memberId, modifiedCommit.getCommitDate(), difference);
+    }
+
+    public void modifyDiffScoreOfCommit(String reportName, String memberId, int commitIndex, int diffIndex, double newDiffScore) {
+        CommitDTO modifiedCommit = reportRepository.getModifiedCommitByMemberId(reportName, memberId, commitIndex);
+        DiffDTO modifiedDiff = modifiedCommit.getCommitDiffs().get(diffIndex);
+
+        double difference = getNewScoreDifference(modifiedDiff, newDiffScore);
+
+        double commitScore = getOriginalScore(modifiedCommit.getCommitScore(), modifiedDiff);
+
+        double newCommitScore = getNewScore(commitScore, difference);
+
+        String extension = modifiedDiff.getExtension();
+        double extensionScore = getExtensionScoreOfCommit(modifiedCommit, extension);
+        extensionScore = getOriginalScore(extensionScore, modifiedDiff);
+
+        double newExtensionScore = getNewScore(extensionScore, difference);
+
+        reportRepository.updateDBWithNewDiffScoreOfCommit(reportName,
+                                                          memberId,
+                                                          commitIndex,
+                                                          diffIndex,
+                                                          newDiffScore,
+                                                          newCommitScore,
+                                                          extension,
+                                                          newExtensionScore);
+
+        updateCommitGraph(reportName, memberId, modifiedCommit.getCommitDate(), difference);
+    }
+
 }
