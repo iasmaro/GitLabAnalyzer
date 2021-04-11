@@ -2,7 +2,11 @@ package com.haumea.gitanalyzer.dao;
 
 import com.haumea.gitanalyzer.dto.CommitDTO;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
+import com.haumea.gitanalyzer.dto.CommitGraphDTO;
+import com.haumea.gitanalyzer.dto.MergeRequestGraphDTO;
+import com.haumea.gitanalyzer.model.Member;
 import com.haumea.gitanalyzer.model.ReportDTO;
+import org.gitlab4j.api.models.Commit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -14,6 +18,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.io.IOException;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Repository
 public class ReportRepository {
@@ -72,6 +80,56 @@ public class ReportRepository {
         Query query = getReportNameQuery(reportName);
 
         mongoTemplate.findAndRemove(query, ReportDTO.class);
+
+    }
+
+    // taken from: https://stackoverflow.com/questions/20165564/calculating-days-between-two-dates-with-java
+    public static long betweenDates(Date firstDate, Date secondDate) {
+        return ChronoUnit.DAYS.between(firstDate.toInstant(), secondDate.toInstant());
+    }
+
+    public void updateCommitGraph(String reportName, String memberId, Date commitDate, Date start, double oldScore, double difference) {
+
+        long commitGraphDTOIndex = betweenDates(start, commitDate);
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("reportName").is(reportName));
+
+        double newScore = oldScore + difference;
+        newScore = Math.round(newScore * 10.0) / 10.0;
+
+        Update update = new Update();
+        update.set("commitGraphListByMemberId."
+                        + memberId
+                        + "."
+                        + commitGraphDTOIndex
+                        + ".totalCommitScore",
+                        newScore);
+
+        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+
+
+    }
+
+    public void updateMRGraph(String reportName, String memberId, Date MRDate, Date start, double oldScore, double difference) {
+
+        long MRGraphDTOIndex = betweenDates(start, MRDate);
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("reportName").is(reportName));
+
+        double newScore = oldScore + difference;
+        newScore = Math.round(newScore * 10.0) / 10.0;
+
+        Update update = new Update();
+        update.set("MRGraphListByMemberId."
+                        + memberId
+                        + "."
+                        + MRGraphDTOIndex
+                        + ".totalMergeRequestScore",
+                        newScore);
+
+        mongoTemplate.updateFirst(query, update, ReportDTO.class);
 
     }
 
