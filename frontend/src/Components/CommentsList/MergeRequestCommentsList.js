@@ -40,7 +40,7 @@ const MergeRequestCommentsList = (props) => {
                 </thead>
                 <thead>
                     <tr className='mr-row-headers'>
-                        <th><Button variant='dark' onClick={handleClick}>{isOwn}</Button></th>
+                        <th><Button variant='secondary' onClick={handleClick}>{isOwn}</Button></th>
                         <th className={getClassNamesFor(sortConfig, 'creationDate')} onClick={() => requestSortObject('creationDate')}>Created At</th>
                         <th className={getClassNamesFor(sortConfig, 'title')} onClick={() => requestSortObject('title')}>Title</th>
                         <th className={getClassNamesFor(sortConfig, 'commentDescription')} onClick={() => requestSortObject('commentDescription')}>Comment</th>
