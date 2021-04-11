@@ -5,10 +5,7 @@ import CodeDiffScoreBreakdown from './CodeDiffScoreBreakdown';
 
 const FileHeaderModal = (props) => {
 
-    const { 
-        show, 
-        handleClose, 
-        fileName } = props || {};
+    const { show, handleClose, fileName } = props || {};
 
     return (
         <>
