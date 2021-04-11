@@ -53,7 +53,7 @@ public class PastReportController {
 
     }
 
-    @PutMapping("/updateScore/mrDiff")
+    @PutMapping("/updateScore/mr/mrDiff")
     public void updateScoreForMRDiff(@RequestParam @NotBlank String reportName,
                                      @RequestParam @NotBlank String memberId,
                                      @RequestParam @NotNull int mergeIndex,
@@ -61,6 +61,18 @@ public class PastReportController {
                                      @RequestParam @NotNull double newScore) {
 
         reportService.modifyDiffScoreOfMRDiff(reportName, memberId, mergeIndex, diffIndex, newScore);
+
+    }
+
+    @PutMapping("/updateScore/mr/commitDiff")
+    public void updateScoreForCommitDiffInOneMR(@RequestParam @NotBlank String reportName,
+                                                @RequestParam @NotBlank String memberId,
+                                                @RequestParam @NotNull int mergeIndex,
+                                                @RequestParam @NotNull int diffIndex,
+                                                @RequestParam @NotNull int commitIndex,
+                                                @RequestParam @NotNull double newScore) {
+
+        reportService.modifyDiffScoreOfCommitInOneMR(reportName, memberId, mergeIndex, commitIndex, diffIndex, newScore);
 
     }
 }

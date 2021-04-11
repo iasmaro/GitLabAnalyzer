@@ -132,13 +132,33 @@ public class ReportService {
         return modifiedDiff.getScoreDTO().getScore();
     }
 
-    private double getNewScoresDifference(DiffDTO modifiedDiff, double newDiffScore) {
+    private double getExtensionScoreOfMR(MergeRequestDTO modifiedMR, String extension) {
+        return modifiedMR.getScoreByFileTypes().getOrDefault(extension, 0.0);
+    }
 
-        double modifiedDiffScore = modifiedDiff.getScoreDTO().getModifiedScore();
+    private double getExtensionScoreOfCommit(CommitDTO modifiedCommit, String extension) {
+        return modifiedCommit.getScoreByFileTypes().getOrDefault(extension, 0.0);
+    }
 
-        double originalDiffScore = (modifiedDiffScore != -1)?modifiedDiffScore: getDiffScore(modifiedDiff);
+    private double getNewScoreDifference(DiffDTO modifiedDiff, double newDiffScore) {
 
-        return (newDiffScore - originalDiffScore);
+        double originalDiffScore = modifiedDiff.getScoreDTO().getScore();
+        return newDiffScore - originalDiffScore;
+    }
+
+    private boolean scoreHasBeenModified(DiffDTO diffDTO) {
+        return diffDTO.getScoreDTO().getModifiedScore() != -1;
+    }
+
+    private double getOriginalScore(double score, DiffDTO modifiedDiff) {
+        if(scoreHasBeenModified(modifiedDiff)) {
+            ScoreDTO modifiedScoreDTO = modifiedDiff.getScoreDTO();
+            double difference = modifiedScoreDTO.getModifiedScore() - modifiedScoreDTO.getScore();
+
+            score = score - difference;
+        }
+
+        return score;
     }
 
     private double getNewScore(double oldScore, double difference) {
@@ -150,35 +170,68 @@ public class ReportService {
         return roundObject.roundScore(oldScore);
     }
 
-    private double getExtensionScore(MergeRequestDTO modifiedMR, String extension) {
-        return modifiedMR.getScoreByFileTypes().getOrDefault(extension, 0.0);
-    }
-
     public void modifyDiffScoreOfMRDiff(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
 
-            MergeRequestDTO modifiedMR = reportRepository.getModifiedMergeRequestByMemberId(reportName, memberId, mergeIndex);
-            DiffDTO modifiedDiff = modifiedMR.getMergeRequestDiffs().get(diffIndex);
+        MergeRequestDTO modifiedMR = reportRepository.getModifiedMergeRequestByMemberId(reportName, memberId, mergeIndex);
+        DiffDTO modifiedDiff = modifiedMR.getMergeRequestDiffs().get(diffIndex);
 
-            double difference = getNewScoresDifference(modifiedDiff, newDiffScore);
+        double difference = getNewScoreDifference(modifiedDiff, newDiffScore);
 
-            double newMRScore = getNewScore(modifiedMR.getMRScore(), difference);
+        double MRScore = getOriginalScore(modifiedMR.getMRScore(), modifiedDiff);
 
-            String extension = modifiedDiff.getExtension();
-            double extensionScore = getExtensionScore(modifiedMR, extension);
-            double newExtensionScore = getNewScore(extensionScore, difference);
+        double newMRScore = getNewScore(MRScore, difference);
 
-            reportRepository.updateDBWithNewDiffSCoreOfMR(reportName,
-                                                          memberId,
-                                                          mergeIndex,
-                                                          diffIndex,
-                                                          newDiffScore,
-                                                          newMRScore,
-                                                          extension,
-                                                          newExtensionScore);
+        String extension = modifiedDiff.getExtension();
+        double extensionScore = getExtensionScoreOfMR(modifiedMR, extension);
+        extensionScore = getOriginalScore(extensionScore, modifiedDiff);
+
+        double newExtensionScore = getNewScore(extensionScore, difference);
+
+        reportRepository.updateDBWithNewDiffSCoreOfMR(reportName,
+                                                      memberId,
+                                                      mergeIndex,
+                                                      diffIndex,
+                                                      newDiffScore,
+                                                      newMRScore,
+                                                      extension,
+                                                      newExtensionScore);
 
     }
 
-    public void modifyDiffScoreOfCommitDiff(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
+    public void modifyDiffScoreOfCommitInOneMR(String reportName, String memberId, int mergeIndex, int commitIndex, int diffIndex, double newDiffScore) {
+        MergeRequestDTO modifiedMR = reportRepository.getModifiedMergeRequestByMemberId(reportName, memberId, mergeIndex);
+        CommitDTO modifiedCommit = modifiedMR.getCommitDTOList().get(commitIndex);
+        DiffDTO modifiedDiff = modifiedCommit.getCommitDiffs().get(diffIndex);
+
+        double difference = getNewScoreDifference(modifiedDiff, newDiffScore);
+
+        double commitScore = getOriginalScore(modifiedCommit.getCommitScore(), modifiedDiff);
+
+        double newCommitScore = getNewScore(commitScore, difference);
+
+        String extension = modifiedDiff.getExtension();
+        double extensionScore = getExtensionScoreOfCommit(modifiedCommit, extension);
+        extensionScore = getOriginalScore(extensionScore, modifiedDiff);
+
+        double newExtensionScore = getNewScore(extensionScore, difference);
+
+        double sumOfCommitScore = getOriginalScore(modifiedMR.getSumOfCommitScore(), modifiedDiff);
+        double newSumOfCommitScore = getNewScore(sumOfCommitScore, difference);
+
+        reportRepository.updateDBWithNewDiffScoreOfOneCommitInMR(reportName,
+                                                                 memberId,
+                                                                 mergeIndex,
+                                                                 diffIndex,
+                                                                 commitIndex,
+                                                                 newDiffScore,
+                                                                 newCommitScore,
+                                                                 extension,
+                                                                 newExtensionScore,
+                                                                 newSumOfCommitScore);
+
+    }
+
+    public void modifyDiffScoreOfCommit(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
 
     }
 

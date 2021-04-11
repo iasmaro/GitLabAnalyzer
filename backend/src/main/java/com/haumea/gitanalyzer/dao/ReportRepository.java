@@ -1,8 +1,6 @@
 package com.haumea.gitanalyzer.dao;
 
-import com.haumea.gitanalyzer.dto.DiffDTO;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
-import com.haumea.gitanalyzer.dto.ScoreDTO;
 import com.haumea.gitanalyzer.model.ReportDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -90,14 +88,17 @@ public class ReportRepository {
         }
     }
 
-    private void modifyDiffScoreInDB(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {
-
-        Query query = getReportNameQuery(reportName);
-
-        String diffScorePath = "mergeRequestListByMemberId."
+    private String getPathToModifiedMR(String memberId, int mergeIndex) {
+        return ("mergeRequestListByMemberId."
                 + memberId
                 + "."
-                + mergeIndex
+                + mergeIndex);
+    }
+
+    private void updateDiffScoreOfMRDiff(String reportName, String mrPath, int diffIndex, double newDiffScore) {
+        Query query = getReportNameQuery(reportName);
+
+        String diffScorePath = mrPath
                 + ".mergeRequestDiffs."
                 + diffIndex
                 + ".scoreDTO.modifiedScore";
@@ -108,13 +109,10 @@ public class ReportRepository {
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
     }
 
-    private void updateMRScoreInDB(String reportName, String memberId, int mergeIndex, double newMRScore) {
+    private void updateMRScore(String reportName, String mrPath, double newMRScore) {
         Query query = getReportNameQuery(reportName);
 
-        String MRScorePath = "mergeRequestListByMemberId."
-                + memberId
-                + "."
-                + mergeIndex
+        String MRScorePath = mrPath
                 + ".MRScore";
 
         Update update = new Update();
@@ -123,13 +121,10 @@ public class ReportRepository {
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
     }
 
-    private void updateExtensionScoreInDB(String reportName, String memberId, int mergeIndex, String extension, double newExtensionScore) {
+    private void updateExtensionScoreOfMR(String reportName, String mrPath, String extension, double newExtensionScore) {
         Query query = getReportNameQuery(reportName);
 
-        String MRScorePath = "mergeRequestListByMemberId."
-                + memberId
-                + "."
-                + mergeIndex
+        String MRScorePath = mrPath
                 + ".scoreByFileTypes"
                 + "."
                 + extension;
@@ -140,14 +135,102 @@ public class ReportRepository {
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
     }
 
-    public void updateDBWithNewDiffSCoreOfMR(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore, double newMRScore, String modifiedExtension, double newExtensionScore) {
+    public void updateDBWithNewDiffSCoreOfMR(String reportName,
+                                             String memberId,
+                                             int mergeIndex,
+                                             int diffIndex,
+                                             double newDiffScore,
+                                             double newMRScore,
+                                             String modifiedExtension,
+                                             double newExtensionScore) {
 
-        modifyDiffScoreInDB(reportName, memberId, mergeIndex, diffIndex, newDiffScore);
+        String mrPath = getPathToModifiedMR(memberId, mergeIndex);
 
-        updateMRScoreInDB(reportName, memberId, mergeIndex, newMRScore);
+        updateDiffScoreOfMRDiff(reportName, mrPath, diffIndex, newDiffScore);
 
-        updateExtensionScoreInDB(reportName, memberId, mergeIndex, modifiedExtension, newExtensionScore);
+        updateMRScore(reportName, mrPath, newMRScore);
+
+        updateExtensionScoreOfMR(reportName, mrPath, modifiedExtension, newExtensionScore);
 
     }
 
+    private void updateDiffScoreOfCommitDiffInOneMR(String reportName, String mrPath, int commitIndex, int diffIndex, double newDiffScore) {
+        Query query = getReportNameQuery(reportName);
+
+        String diffScorePath = mrPath
+                + ".commitDTOList."
+                + commitIndex
+                + ".commitDiffs."
+                + diffIndex
+                + ".scoreDTO.modifiedScore";
+
+        Update update = new Update();
+        update.set(diffScorePath, newDiffScore);
+
+        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+    }
+
+    private void updateCommitScoreInOneMR(String reportName,String mrPath, int commitIndex, double newCommitScore) {
+        Query query = getReportNameQuery(reportName);
+
+        String MRScorePath = mrPath
+                + ".commitDTOList."
+                + commitIndex
+                + ".commitScore";
+
+        Update update = new Update();
+        update.set(MRScorePath, newCommitScore);
+
+        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+    }
+
+    private void updateExtensionScoreOfCommitInOneMR(String reportName, String mrPath, int commitIndex, String extension, double newExtensionScore) {
+        Query query = getReportNameQuery(reportName);
+
+        String MRScorePath = mrPath
+                + ".commitDTOList."
+                + commitIndex
+                + ".scoreByFileTypes"
+                + "."
+                + extension;
+
+        Update update = new Update();
+        update.set(MRScorePath, newExtensionScore);
+
+        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+    }
+
+    private void updateSumOfCommitScore(String reportName, String mrPath, double newSumOfCommitScore) {
+        Query query = getReportNameQuery(reportName);
+
+        String MRScorePath = mrPath
+                + ".sumOfCommitScore";
+
+        Update update = new Update();
+        update.set(MRScorePath, newSumOfCommitScore);
+
+        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+    }
+
+    public void updateDBWithNewDiffScoreOfOneCommitInMR(String reportName,
+                                                        String memberId,
+                                                        int mergeIndex,
+                                                        int commitIndex,
+                                                        int diffIndex,
+                                                        double newDiffScore,
+                                                        double newCommitScore,
+                                                        String modifiedExtension,
+                                                        double newExtensionScore,
+                                                        double newSumOfCommitScore) {
+
+        String mrPath = getPathToModifiedMR(memberId, mergeIndex);
+
+        updateDiffScoreOfCommitDiffInOneMR(reportName, mrPath, commitIndex, diffIndex, newDiffScore);
+
+        updateCommitScoreInOneMR(reportName, mrPath, commitIndex, newCommitScore);
+
+        updateExtensionScoreOfCommitInOneMR(reportName, mrPath, commitIndex, modifiedExtension, newExtensionScore);
+
+        updateSumOfCommitScore(reportName, mrPath, newSumOfCommitScore);
+    }
 }
