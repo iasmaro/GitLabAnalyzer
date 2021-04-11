@@ -64,7 +64,7 @@ public class ReportService {
             List<CommitDTO> commits = commitService.getCommitsForSelectedMemberAndDate(userId, projectId, member);
 
             List<CommentDTO> MRComments = commentService.getMergeRequestComments(userId, projectId, member);
-            List<CommentDTO> issueComments = commentService.getMergeRequestComments(userId, projectId, member);
+            List<CommentDTO> issueComments = commentService.getIssueComments(userId, projectId, member);
 
             List<CommitGraphDTO> commitGraphs = graphService.getCommitGraphDetails(userId, member, projectId);
             List<MergeRequestGraphDTO> MRGraphs = graphService.getMergeRequestGraphDetails(userId, member, projectId);
