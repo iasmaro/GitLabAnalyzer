@@ -9,8 +9,8 @@ const Comment = (props) => {
     return (
         <tr className='comment-row'>
             {isMR ? 
-                <td className='is-own'>{onOwnRequestOrIssue ? ("Own MR") : ("Other's MR")}</td> : 
-                <td className='is-own'>{onOwnRequestOrIssue ? ("Own Issue") : ("Other's Issue")}</td>
+                <td className='is-own'>{onOwnRequestOrIssue ? "Own MR" : "Other's MR"}</td> : 
+                <td className='is-own'>{onOwnRequestOrIssue ? "Own Issue" : "Other's Issue"}</td>
             }
             <td className='creation-date'>{utcToLocal(creationDate)}</td>
             <td className='title'>
