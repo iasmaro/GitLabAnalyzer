@@ -8,7 +8,7 @@ import { useUserState } from 'UserContext';
 
 import './ReportsList.css';
 
-const Repo = (props) => {
+const Report = (props) => {
     const { report, addReport, removeReport } = props || {};
     const username = useUserState();
 
@@ -46,4 +46,4 @@ const Repo = (props) => {
     );
 };
 
-export default Repo;
+export default Report;

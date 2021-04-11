@@ -3,7 +3,8 @@ import { Table, Button } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
 import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
-import filterRepos from 'Utils/filterRepos'
+import filterRepos from 'Utils/filterRepos';
+import ShareReportModal from 'Components/ShareReportModal/ShareReportModal';
 
 import Report from './Report';
 import SearchBar from 'Components/SearchBar/SearchBar';
@@ -12,6 +13,9 @@ import './ReportsList.css';
 const ReportsList = (props) => {
     const { reports } = props || {};
     const [searchWord, setSearchWord] = useState('');
+    const [show, setShow] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [showFailureMessage, setShowFailureMessage] = useState(false);
     const [selectedReports, setSelectedReports] = useState([]);
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(reports);
 
@@ -31,13 +35,21 @@ const ReportsList = (props) => {
     };
 
     const shareReports = () => {
+        setShow(true);
+    }
 
+    const closeShare = () => {
+        setShow(false);
+        setShowSuccessMessage(true);
+        setTimeout(function () { setShowSuccessMessage(false); }, 3000);
     }
     
     const areSelected = selectedReports.length > 0;
 
     return (
         <>
+            {showSuccessMessage && <div id="report-snackbar-success">Successfully Shared</div>}
+            {showFailureMessage && <div id="report-snackbar-failure">One Or More Reports Could Not Be Shared</div>}
             <div className = 'report-list-container'>
                 <Table striped borderless hover variant="light">
                     <thead>
@@ -70,7 +82,8 @@ const ReportsList = (props) => {
                     </tbody>
                 </Table>
             </div>
-            <Button variant="dark" className="report-share-btn" disabled={!areSelected} >Share</Button>
+            <Button variant="dark" className="report-share-btn" disabled={!areSelected} onClick={shareReports} >Share</Button>
+            {show && <ShareReportModal toggleModal={closeShare} status={show} />}
         </>
     );
 };
