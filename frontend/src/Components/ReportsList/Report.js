@@ -1,16 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import FormCheckInput from 'react-bootstrap/esm/FormCheckInput';
 import { AiOutlineDelete } from 'react-icons/ai';
+import { Redirect } from "react-router-dom";
 
 import { utcToLocal } from 'Components/Utils/formatDates';
-import { useUserState } from 'UserContext';
 
 import './ReportsList.css';
 
 const Report = (props) => {
-    const { report, addReport, removeReport } = props || {};
-    const username = useUserState();
+    const { report, addReport, removeReport, username } = props || {};
+
+    const [redirect, setRedirect] = useState(false);
 
     if (!report) {
         return null;
@@ -25,6 +26,24 @@ const Report = (props) => {
         }
     }
 
+    const viewReport = () => {
+        setRedirect(true);
+    }
+
+    if (redirect) {
+        const projectId = report.reportName?.split('_')[0];
+        const data = {
+            configuration: report.configName,
+            startDate: report.start,
+            endDate: report.end,
+            projectName: report.projectName,
+            reportName: report.reportName,
+            projectId: projectId
+        }
+
+        return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
+    }
+
     const deletable = username === report.creator;
 
     return (
@@ -37,7 +56,7 @@ const Report = (props) => {
             <td>{report.configName}</td>
             <td>{report.creator}</td>
             <td>
-                <Button variant="dark">View</Button>
+                <Button variant="dark" onClick={viewReport}>View</Button>
             </td>
             <td>
                 <Button variant="danger" disabled={!deletable}><AiOutlineDelete /></Button>

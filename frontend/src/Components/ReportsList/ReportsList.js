@@ -3,6 +3,7 @@ import { Table, Button } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
 import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
+import { useUserState } from 'UserContext';
 import filterRepos from 'Utils/filterRepos';
 import ShareReportModal from 'Components/ShareReportModal/ShareReportModal';
 
@@ -18,6 +19,8 @@ const ReportsList = (props) => {
     const [showFailureMessage, setShowFailureMessage] = useState(false);
     const [selectedReports, setSelectedReports] = useState([]);
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(reports);
+
+    const username = useUserState();
 
     const addReport = (name) => {
         const updatedSelectedReports = selectedReports.slice();
@@ -77,7 +80,7 @@ const ReportsList = (props) => {
                         )
                         :
                         items.filter((report)=>filterRepos(report, searchWord)).map((report, key) => (
-                            <Report key={key} report={report} addReport={addReport} removeReport={removeReport} />
+                            <Report key={key} report={report} addReport={addReport} removeReport={removeReport} username={username} />
                         ))}
                     </tbody>
                 </Table>

@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
 
 import { useUserState } from 'UserContext';
+import getReportDetails from 'Utils/getReportDetails';
 import AnalyzerTabs from 'Components/AnalyzerTabs/AnalyzerTabs';
 import AnalysisDropDown from 'Components/AnalyzerInfo/AnalysisDropDown';
 import AnalysisSpecifications from 'Components/AnalyzerInfo/AnalysisSpecifications';
@@ -17,7 +18,8 @@ const Analysis = (props) => {
     const { location } = props || {};
     const { state } = location || {};
     const { data } = state || {};
-    const { projectId, configuration, startDate, endDate, namespace, projectName } = data || {};
+    console.log(data);
+    const { projectId, configuration, startDate, endDate, namespace, projectName, reportName } = data || {};
     const [isLoading, setIsLoading] = useState(true);
     const [mergeRequests, setMergeRequests] = useState();
     const [commitsGraph, setCommitsGraph] = useState();
@@ -45,12 +47,18 @@ const Analysis = (props) => {
     }, [username, projectId]);
 
     useEffect(() => {
-        analyzeAll(username, projectId).then((data) => {
-            setAnalysis(data);
-            console.log(data);
-            setIsLoading(false);
-        })
-    }, [projectId, username]);
+        if (reportName) {
+            getReportDetails(reportName).then((data) => {
+                setAnalysis(data);
+                setIsLoading(false);
+            })
+        } else {
+            analyzeAll(username, projectId).then((data) => {
+                setAnalysis(data);
+                setIsLoading(false);
+            });
+        }
+    }, [projectId, username, reportName]);
 
     useEffect(() => {
         if (analysis && student) {
@@ -78,7 +86,7 @@ const Analysis = (props) => {
 
     return (
         <div className="analysis-page">
-            <AnalysisSpecifications startDate={startDate} endDate={endDate} configuration={configuration} namespace={namespace} projectName={projectName} />
+            <AnalysisSpecifications startDate={startDate} endDate={endDate} configuration={configuration} namespace={namespace || analysis?.namespace} projectName={projectName} />
             <div className="analysis-header">
                 <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
             </div>
