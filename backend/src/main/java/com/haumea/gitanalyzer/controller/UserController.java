@@ -90,6 +90,7 @@ public class UserController {
 
     }
 
+
     @PostMapping("/configuration")
     public void saveConfiguration(@RequestParam @NotBlank String userId, @Valid @RequestBody Configuration configuration) {
         userService.saveConfiguration(userId, configuration);

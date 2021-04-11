@@ -2,8 +2,9 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.ReportRepository;
 import com.haumea.gitanalyzer.dto.*;
+import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
-import com.haumea.gitanalyzer.model.ReportDTO;
+import com.haumea.gitanalyzer.model.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class ReportService {
 
     }
 
-    public ReportDTO getReportForRepository(String userId, int projectId) {
+    public Report getReportForRepository(String userId, int projectId) {
 
         Map<String, List<MergeRequestDTO>> mergeRequestListByMemberId = new HashMap<>();
         Map<String, List<CommitDTO>> commitListByMemberId = new HashMap<>();
@@ -86,7 +87,7 @@ public class ReportService {
 
         GitlabService gitlabService = userService.createGitlabService(userId);
 
-        return new ReportDTO(
+        return new Report(
                 projectId,
                 start,
                 end,
@@ -105,11 +106,11 @@ public class ReportService {
 
     }
 
-    public void saveReport(ReportDTO reportDTO) {
+    public void saveReport(Report reportDTO) {
         reportRepository.saveReportToDatabase(reportDTO);
     }
 
-    public Optional<ReportDTO> checkIfInDb(String userId,int projectId) {
+    public Optional<Report> checkIfInDb(String userId, int projectId) {
 
         return reportRepository.findReportInDb(
                 projectId,
@@ -118,16 +119,56 @@ public class ReportService {
                 userService.getConfiguration(userId).getFileName());
     }
 
-    public Optional<ReportDTO> checkIfInDbViaName(String reportName) {
-        return reportRepository.findReportInDbViaName(reportName);
+    public Report checkIfInDbViaName(String reportName) {
+
+        Optional<Report> databaseReport = reportRepository.findReportInDbViaName(reportName);
+        Report report;
+
+        try {
+            report = databaseReport.get();
+        }
+        catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Report is not in database");
+        }
+
+        return report;
+
     }
 
-    public List<ReportDTO> getAllReports() {
+    public List<Report> getAllReports() {
         return reportRepository.getAllReportsInDb();
     }
 
     public void deleteReport(String reportName) {
         reportRepository.deleteReportDTO(reportName);
+    }
+
+    public void giveUserAccessToReport(String userId, String reportName) {
+        reportRepository.giveUserAccess(userId, reportName);
+    }
+
+    public void revokeUserAccessToReport(String userId, String reportName) {
+        reportRepository.revokeUserAccess(userId, reportName);
+    }
+
+    public List<ReportMetadataDTO> getReportsForUser(String userId) {
+        List<String> reportNames = userService.getUserReportIds(userId);
+        List<ReportMetadataDTO> reports = new ArrayList<>();
+        final int creator = 0; // creator is always at index 0 in user list
+
+        for(String currentReport : reportNames) {
+            Report report = reportRepository.findReportInDbViaName(currentReport).orElseThrow(() -> new ResourceNotFoundException("Report doesn't exist in database"));
+            ReportMetadataDTO reportData = new ReportMetadataDTO(
+                    currentReport,
+                    report.getProjectName(),
+                    report.getStart(),
+                    report.getEnd(),
+                    report.getUserList().get(creator));
+
+            reports.add(reportData);
+        }
+
+        return reports;
     }
 
 
@@ -154,7 +195,7 @@ public class ReportService {
         date.set(Calendar.SECOND, 59);
         Date convertedCommitDate = date.getTime();
 
-        ReportDTO reportDTO = reportRepository.findReportInDbViaName(reportName).get();
+        Report reportDTO = reportRepository.findReportInDbViaName(reportName).get();
         Date start = reportDTO.getStart();
         Map<String, List<CommitGraphDTO>> CommitGraphMap = reportDTO.getCommitGraphListByMemberId();
         List<CommitGraphDTO> commitGraphDTOs = CommitGraphMap.get(memberId);
@@ -178,7 +219,7 @@ public class ReportService {
         date.set(Calendar.SECOND, 59);
         Date convertedMRDate = date.getTime();
 
-        ReportDTO reportDTO = reportRepository.findReportInDbViaName(reportName).get();
+        Report reportDTO = reportRepository.findReportInDbViaName(reportName).get();
         Date start = reportDTO.getStart();
         Map<String, List<MergeRequestGraphDTO>> MRGraphMap = reportDTO.getMRGraphListByMemberId();
         List<MergeRequestGraphDTO> MRGraphDTOs = MRGraphMap.get(memberId);
