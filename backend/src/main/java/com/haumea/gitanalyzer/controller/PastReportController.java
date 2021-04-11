@@ -1,5 +1,6 @@
 package com.haumea.gitanalyzer.controller;
 
+import com.haumea.gitanalyzer.dto.ReportMetadataDTO;
 import com.haumea.gitanalyzer.model.ReportDTO;
 import com.haumea.gitanalyzer.service.ReportService;
 import com.haumea.gitanalyzer.service.UserService;
@@ -47,8 +48,6 @@ public class PastReportController {
         for(String user : report.getUserList()) {
             userService.deleteReport(user, reportName);
         }
-
-
     }
 
     // make sure to pass in a correct report name as it will not check the report DB to see if it exists
@@ -62,5 +61,10 @@ public class PastReportController {
     public void revokeReportAccess(@RequestParam @NotBlank String userId, @RequestParam @NotBlank String reportName) {
         userService.deleteReport(userId, reportName);
         reportService.revokeUserAccessToReport(userId, reportName);
+    }
+
+    @GetMapping("/userReports")
+    public List<ReportMetadataDTO> getUserReports(@RequestParam @NotBlank String userId) {
+        return reportService.getReportsForUser(userId);
     }
 }

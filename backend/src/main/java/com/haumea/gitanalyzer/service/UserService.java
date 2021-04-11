@@ -152,4 +152,11 @@ public class UserService {
     public void deleteReport(String userId, String reportName) {
         userRepository.deleteReportFromUserList(userId, reportName);
     }
+
+
+    public List<String> getUserReportIds(String userId) {
+        User user = userRepository.findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found in database"));
+
+        return user.getReportNames();
+    }
 }

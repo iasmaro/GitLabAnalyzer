@@ -2,8 +2,10 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.ReportRepository;
 import com.haumea.gitanalyzer.dto.*;
+import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.ReportDTO;
+import com.haumea.gitanalyzer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -149,4 +151,23 @@ public class ReportService {
         reportRepository.revokeUserAccess(userId, reportName);
     }
 
+    public List<ReportMetadataDTO> getReportsForUser(String userId) {
+        List<String> reportNames = userService.getUserReportIds(userId);
+        List<ReportMetadataDTO> reports = new ArrayList<>();
+        final int creator = 0; // creator is always at index 0 in user list
+
+        for(String currentReport : reportNames) {
+            ReportDTO report = reportRepository.findReportInDbViaName(currentReport).orElseThrow(() -> new ResourceNotFoundException("Report doesn't exist in database"));
+            ReportMetadataDTO reportData = new ReportMetadataDTO(
+                    currentReport,
+                    report.getProjectName(),
+                    report.getStart(),
+                    report.getEnd(),
+                    report.getUserList().get(creator));
+
+            reports.add(reportData);
+        }
+
+        return reports;
+    }
 }

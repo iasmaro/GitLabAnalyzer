@@ -28,7 +28,7 @@ public class UserRepository {
     }
 
 
-    private Optional<User> findUserByUserId(String userId) {
+    public Optional<User> findUserByUserId(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
         return Optional.ofNullable(mongoTemplate.findOne(query, User.class));
