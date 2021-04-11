@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 import Checkbox from '@material-ui/core/Checkbox';
 
@@ -15,7 +15,7 @@ import getStartDate from 'Utils/getStartDate';
 import './RepoList.css';
 
 const Repo = (props) => {
-    const { repo, addRepo, removeRepo } = props || {};
+    const { repo, addRepo, removeRepo, uncheck } = props || {};
     const [configs, setConfigs] = useState([]);
     const [showAnalyzeModal, setShowAnalyzeModal] = useState(false);
     const [showAliasMappingModal, setShowAliasMappingModal] = useState(false);
@@ -30,7 +30,13 @@ const Repo = (props) => {
     const [endDate, setEndDate] = useState();
     const username = useUserState();
     const [checked, setChecked] = useState(false);
-    
+
+    useEffect(() => {
+        if (uncheck) {
+            setChecked(false);
+        }
+    }, [uncheck]);
+
     const handleShowAnalyzeModal = () => {
         setIsLoadingStartDate(true);
         setIsLoadingEndDate(true);

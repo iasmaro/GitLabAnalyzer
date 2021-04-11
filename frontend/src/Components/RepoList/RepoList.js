@@ -27,6 +27,7 @@ const RepoList = (props) => {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [showAnalyzeModal, setShowAnalyzeModal] = useState(false);
+    const [uncheck, setUncheck] = useState(0);
     const username = useUserState();
 
     const addRepo = (repo) => {
@@ -58,7 +59,11 @@ const RepoList = (props) => {
         setShowAnalyzeModal(true);
     }
     
-    const handleCloseAnalyzeModal = () => setShowAnalyzeModal(false);
+    const handleCloseAnalyzeModal = () => {
+        setShowAnalyzeModal(false);
+        setUncheck(uncheck + 1);
+        setReposBatch(new Set());
+    }
 
     return (
         <div className = 'list-container'>
@@ -107,7 +112,7 @@ const RepoList = (props) => {
                     )
                     :
                     items.filter((repo)=>filterRepos(repo, searchWord)).map((repo) => (
-                        <Repo key={repo?.projectId} repo={repo} addRepo={addRepo} removeRepo={removeRepo}/>
+                        <Repo key={repo?.projectId} repo={repo} addRepo={addRepo} removeRepo={removeRepo} uncheck={uncheck} />
                     ))}
                 </tbody>
             </Table>

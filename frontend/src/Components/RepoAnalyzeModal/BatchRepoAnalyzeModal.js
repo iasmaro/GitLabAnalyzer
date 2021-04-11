@@ -31,7 +31,7 @@ const BatchRepoAnalyzeModal = (props) => {
             toggleModal();
         }
         else {
-            setShowError(true)
+            setShowError(true);
         }
     }
 
