@@ -55,4 +55,44 @@ export const reports = [
         configName: 'default',
         creator: 'iasmaro'
     },
+    {
+        reportName: '26428_cmpt373Exercise2_default_Sun Feb 21 22:00:00 GMT 2021_Wed Mar 17 02:07:00 GMT 2021',
+        projectName: 'cmpt373Exercise2',
+        start: '2021-02-21T22:00:00.000+00:00',
+        end: '2021-03-17T02:07:00.000+00:00',
+        configName: 'default',
+        creator: 'iasmaro'
+    },
+    {
+        reportName: '26428_cmpt373Exercise2_default_Sun Feb 21 22:00:00 GMT 2021_Wed Mar 17 02:07:00 GMT 2021',
+        projectName: 'cmpt373Exercise2',
+        start: '2021-02-21T22:00:00.000+00:00',
+        end: '2021-03-17T02:07:00.000+00:00',
+        configName: 'default',
+        creator: 'iasmaro'
+    },
+    {
+        reportName: '26428_cmpt373Exercise2_default_Sun Feb 21 22:00:00 GMT 2021_Wed Mar 17 02:07:00 GMT 2021',
+        projectName: 'cmpt373Exercise2',
+        start: '2021-02-21T22:00:00.000+00:00',
+        end: '2021-03-17T02:07:00.000+00:00',
+        configName: 'default',
+        creator: 'iasmaro'
+    },
+    {
+        reportName: '26428_cmpt373Exercise2_default_Sun Feb 21 22:00:00 GMT 2021_Wed Mar 17 02:07:00 GMT 2021',
+        projectName: 'cmpt373Exercise2',
+        start: '2021-02-21T22:00:00.000+00:00',
+        end: '2021-03-17T02:07:00.000+00:00',
+        configName: 'default',
+        creator: 'iasmaro'
+    },
+    {
+        reportName: '26428_cmpt373Exercise2_default_Sun Feb 21 22:00:00 GMT 2021_Wed Mar 17 02:07:00 GMT 2021',
+        projectName: 'cmpt373Exercise2',
+        start: '2021-02-21T22:00:00.000+00:00',
+        end: '2021-03-17T02:07:00.000+00:00',
+        configName: 'default',
+        creator: 'iasmaro'
+    },
 ]

@@ -19,29 +19,24 @@ const ReportsList = (props) => {
             <Table striped borderless hover variant="light">
                 <thead>
                     <tr className='table-header'>
-                        <th colSpan='4' className='repoTitle'>Reports</th>
-                        <th colSpan='4' className='repoTitle'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord} /></th>
+                        <th colSpan='4' className='report-title'>Reports</th>
+                        <th colSpan='4' className='report-title'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord} /></th>
                     </tr>
                 </thead>
                 <thead>
-                    <tr className="repo-headers">
+                    <tr className="report-headers">
                         <th className={getClassNamesFor(sortConfig, 'projectName')} onClick={() => requestSortObject('projectName')}>Repo Name</th>
-                        <th className={getClassNamesFor(sortConfig, 'updatedAt')} onClick={() => requestSortObject('updatedAt')}>Start Date</th>
-                        <th className={getClassNamesFor(sortConfig, 'updatedAt')} onClick={() => requestSortObject('updatedAt')}>End Date</th>
-                        <th className={getClassNamesFor(sortConfig, 'updatedAt')} onClick={() => requestSortObject('updatedAt')}>Configuration</th>
-                        <th className={getClassNamesFor(sortConfig, 'updatedAt')} onClick={() => requestSortObject('updatedAt')}>Creator</th>
+                        <th className={getClassNamesFor(sortConfig, 'start')} onClick={() => requestSortObject('start')}>Start Date</th>
+                        <th className={getClassNamesFor(sortConfig, 'end')} onClick={() => requestSortObject('end')}>End Date</th>
+                        <th className={getClassNamesFor(sortConfig, 'configName')} onClick={() => requestSortObject('configName')}>Configuration</th>
+                        <th className={getClassNamesFor(sortConfig, 'creator')} onClick={() => requestSortObject('creator')}>Creator</th>
                         <th colSpan='2'></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {!reports ? (
+                    {!reports || !reports.length ? (
                         <tr>
                             <td colSpan={3} >{message.TOKEN_NOT_SET}</td>
-                        </tr>
-                    )
-                    : !reports.length ? (
-                        <tr>
-                            <td colSpan={3} >{message.NO_REPOS}</td>
                         </tr>
                     )
                     :
