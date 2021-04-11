@@ -2,10 +2,19 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 
 import './FileHeader.css';
+import FileHeaderModal from './FileHeaderModal';
 
 
 const FileHeader = (props) => {
-    const { isOpen, fileName, linesAdded, linesRemoved, diffScore } = props || {};
+    const { 
+        isOpen, 
+        fileName, 
+        linesAdded, 
+        linesRemoved, 
+        diffScore,
+        handleShow,
+        show } = props || {};
+
 
     return (
         <>
@@ -20,11 +29,12 @@ const FileHeader = (props) => {
                 <div className="lines-removed">
                     <span>-{linesRemoved}</span>
                 </div>
-                <div className="file-score">
-                    <span> Score: </span>
-                    <span>{diffScore}</span>
-                </div>
             </div>
+            <Button variant="info" onClick={handleShow} size='md' className="code-diff-score">
+                <span> Score: </span>
+                <span>{diffScore}</span>
+            </Button>
+            {show && <FileHeaderModal {...props}/>}
         </>         
     );
 };

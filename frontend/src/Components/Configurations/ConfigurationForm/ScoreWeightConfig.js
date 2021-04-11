@@ -37,14 +37,6 @@ const ScoreWeightConfig = (props) => {
             </td>
             <td>
                 <Form.Control 
-                    placeholder={ConfigLabels.SCORE_WEIGHT}
-                    defaultValue={state.SPACING}
-                    name = "SPACING"
-                    onChange = {handleInputChange}
-                />
-            </td>
-            <td>
-                <Form.Control 
                     placeholder={ConfigLabels.SCORE_WEIGHT} 
                     defaultValue={state.SYNTAX}
                     name = "SYNTAX"

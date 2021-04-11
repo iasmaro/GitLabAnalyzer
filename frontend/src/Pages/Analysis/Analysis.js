@@ -8,6 +8,7 @@ import AnalysisDropDown from 'Components/AnalyzerInfo/AnalysisDropDown';
 import AnalysisSpecifications from 'Components/AnalyzerInfo/AnalysisSpecifications';
 import analyzeAll from 'Utils/analyzeAll';
 import getProjectMembers from 'Utils/getProjectMembers';
+import getConfigurationInfo from 'Utils/getConfigurationInfo';
 import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
 
 import './Analysis.css'
@@ -24,9 +25,12 @@ const Analysis = (props) => {
     const [codeReviewsGraph, setCodeReviewsGraph] = useState();
     const [issueCommentsGraph, setIssueCommentsGraph] = useState();
     const [commits, setCommits] = useState();
+    const [issueComments, setIssueComments] = useState();
+    const [mergeRequestComments, setMergeRequestComments] = useState();
     const [members, setMembers] = useState([]);
     const [student, setStudent] = useState();
     const [analysis, setAnalysis] = useState();
+    const [configInfo, setConfigInfo] = useState();
     const [databaseMembersAndAliases, setDatabaseMembersAndAliases] = useState([]);
     const username = useUserState();
 
@@ -56,8 +60,17 @@ const Analysis = (props) => {
             setMRsGraph(analysis.mrgraphListByMemberId && analysis.mrgraphListByMemberId[student]);
             setCodeReviewsGraph(analysis.codeReviewGraphListByMemberId && analysis.codeReviewGraphListByMemberId[student]);
             setIssueCommentsGraph(analysis.issueGraphListByMemberId && analysis.issueGraphListByMemberId[student]);
+            setIssueComments(analysis.issueCommentListByMemberId && analysis.issueCommentListByMemberId[student]);
+            setMergeRequestComments(analysis.mrcommentListByMemberId && analysis.mrcommentListByMemberId[student]);
         }
     }, [student, analysis]);
+
+    useEffect(() => {
+        getConfigurationInfo(username, configuration).then((data) => {
+            setConfigInfo(data);
+        });
+    },[username, configuration]);
+
     
     if (!data) {
         return(<Redirect to={{ pathname: '/' }} />);
@@ -83,7 +96,10 @@ const Analysis = (props) => {
                     codeReviewsGraph={codeReviewsGraph}
                     issueCommentsGraph={issueCommentsGraph}
                     student={student}
-                    databaseMembersAndAliases={databaseMembersAndAliases}/>
+                    databaseMembersAndAliases={databaseMembersAndAliases}
+                    issueComments={issueComments}
+                    mergeRequestComments={mergeRequestComments}
+                    configInfo={configInfo}/>
             </>}
         </div>
     )

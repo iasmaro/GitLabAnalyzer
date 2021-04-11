@@ -8,7 +8,7 @@ import './CodeDifferenceList.css';
 
 
 const CodeDifferenceList = (props) => {
-    const { diffs, diffsTitle } = props || {};
+    const { diffs, diffsTitle, configInfo } = props || {};
     const [view, setView] = useState('unified');
     const [collapse, setCollapse] = useState(0);
     const [expand, setExpand] = useState(0);
@@ -42,7 +42,7 @@ const CodeDifferenceList = (props) => {
             </div>
             <DiffsTitle diffsTitle={diffsTitle} />
             <div className="code-diff-list">
-                {diffs.map((diff, i) => <CodeDifference key={i} diff={diff} view={view} expandAll={expand} collapseAll={collapse} />)}
+                {diffs.map((diff, i) => <CodeDifference key={i} diff={diff} view={view} expandAll={expand} collapseAll={collapse}  configInfo={configInfo} />)}
             </div>
         </>
     );
