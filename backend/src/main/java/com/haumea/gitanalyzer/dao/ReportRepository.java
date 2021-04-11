@@ -212,6 +212,20 @@ public class ReportRepository {
         mongoTemplate.updateFirst(query, update, ReportDTO.class);
     }
 
+    public void updateSumOfCommitScoreOnSharedMR(String reportName, String memberId, int mergeIndex, double newSumOfCommitScore) {
+        String mrPath = getPathToModifiedMR(memberId, mergeIndex);
+
+        Query query = getReportNameQuery(reportName);
+
+        String MRScorePath = mrPath
+                + ".sumOfCommitScoreOnSharedMR";
+
+        Update update = new Update();
+        update.set(MRScorePath, newSumOfCommitScore);
+
+        mongoTemplate.updateFirst(query, update, ReportDTO.class);
+    }
+
     public void updateDBWithNewDiffScoreOfOneCommitInMR(String reportName,
                                                         String memberId,
                                                         int mergeIndex,

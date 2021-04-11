@@ -198,6 +198,12 @@ public class ReportService {
 
     }
 
+    private boolean isOwnCommitOnSharedMR(String memberId, String commitAuthor) {
+        List<String> memberAlias = memberService.getAliasesForSelectedMember(memberId);
+
+        return memberAlias.contains(commitAuthor);
+    }
+
     public void modifyDiffScoreOfCommitInOneMR(String reportName, String memberId, int mergeIndex, int commitIndex, int diffIndex, double newDiffScore) {
         MergeRequestDTO modifiedMR = reportRepository.getModifiedMergeRequestByMemberId(reportName, memberId, mergeIndex);
         CommitDTO modifiedCommit = modifiedMR.getCommitDTOList().get(commitIndex);
@@ -228,6 +234,13 @@ public class ReportService {
                                                                  extension,
                                                                  newExtensionScore,
                                                                  newSumOfCommitScore);
+
+        if(modifiedMR.isSharedMR() && isOwnCommitOnSharedMR(memberId, modifiedCommit.getCommitAuthor())) {
+            double sumOfCommitScoreOnSharedMR = getOriginalScore(modifiedMR.getSumOfCommitScoreOnSharedMR(), modifiedDiff);
+            double newSumOfCommitScoreOnSharedMR = getNewScore(sumOfCommitScoreOnSharedMR, difference);
+
+            reportRepository.updateSumOfCommitScoreOnSharedMR(reportName, memberId, mergeIndex, newSumOfCommitScoreOnSharedMR);
+        }
 
     }
 
