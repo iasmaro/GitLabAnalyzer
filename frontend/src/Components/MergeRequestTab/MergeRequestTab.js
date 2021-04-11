@@ -9,6 +9,7 @@ import CodeDifferenceList from 'Components/CodeDifferenceList/CodeDifferenceList
 import './MergeRequestTab.css';
 
 const MergeRequestTab = (props) => {
+    const { configInfo } = props || {};
     const [commits, setCommits] = useState();
     const [diffs, setDiffs] = useState();
     const [expand, setExpand] = useState(false);
@@ -39,7 +40,7 @@ const MergeRequestTab = (props) => {
             {diffs && <div className="mrs-right">
                 <Button className="expand-button" onClick={handleExpand}>{expand ? '>' : '<'}</Button>
                 <div className={`mr-code-diffs ${expand ? 'expanded' : ''}`}>
-                    <CodeDifferenceList diffs={diffs} diffsTitle={diffsTitle}/>
+                    <CodeDifferenceList diffs={diffs} diffsTitle={diffsTitle} configInfo={configInfo}/>
                 </div>
             </div>}
         </div>
