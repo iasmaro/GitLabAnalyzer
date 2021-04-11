@@ -189,11 +189,6 @@ public class ReportService {
         }
         reportRepository.updateMRGraph(reportName, memberId, convertedMRDate, start, oldScore, difference);
     }
-}
-
-    private double getDiffScore(DiffDTO modifiedDiff) {
-        return modifiedDiff.getScoreDTO().getScore();
-    }
 
     private double getExtensionScoreOfMR(MergeRequestDTO modifiedMR, String extension) {
         return modifiedMR.getScoreByFileTypes().getOrDefault(extension, 0.0);
@@ -259,6 +254,7 @@ public class ReportService {
                                                       extension,
                                                       newExtensionScore);
 
+        updateMRGraph(reportName, memberId, modifiedMR.getMergedDate(), difference);
     }
 
     private boolean isOwnCommitOnSharedMR(String memberId, String commitAuthor) {
@@ -305,6 +301,7 @@ public class ReportService {
             reportRepository.updateSumOfCommitScoreOnSharedMR(reportName, memberId, mergeIndex, newSumOfCommitScoreOnSharedMR);
         }
 
+        updateCommitGraph(reportName, memberId, modifiedCommit.getCommitDate(), difference);
     }
 
     public void modifyDiffScoreOfCommit(String reportName, String memberId, int commitIndex, int diffIndex, double newDiffScore) {
@@ -331,6 +328,8 @@ public class ReportService {
                                                           newCommitScore,
                                                           extension,
                                                           newExtensionScore);
+
+        updateCommitGraph(reportName, memberId, modifiedCommit.getCommitDate(), difference);
     }
 
 }
