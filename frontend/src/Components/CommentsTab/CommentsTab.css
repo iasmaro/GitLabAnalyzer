@@ -1,0 +1,25 @@
+.comments-left {
+    float: left;
+    width: 50%;
+    padding: 0 10px;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    max-height: 52em;
+}
+
+.comments-left::-webkit-scrollbar { 
+    display: none;
+}
+
+.comments-right {
+    float: right;
+    width: 50%;
+    padding: 0 10px;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    max-height: 52em;
+}
+
+.comments-right::-webkit-scrollbar { 
+    display: none;
+}
