@@ -41,7 +41,7 @@ const IssueCommentsList = (props) => {
                 <tr className='issue-row-headers'>
                 <th><Button variant='dark' onClick={handleClick}>{isOwn}</Button></th>
                     <th className={getClassNamesFor(sortConfig, 'creationDate')} onClick={() => requestSortObject('creationDate')}>Created At</th>
-                    <th className={getClassNamesFor(sortConfig, 'url')} onClick={() => requestSortObject('url')}>Title</th>
+                    <th className={getClassNamesFor(sortConfig, 'title')} onClick={() => requestSortObject('title')}>Title</th>
                     <th className={getClassNamesFor(sortConfig, 'commentDescription')} onClick={() => requestSortObject('commentDescription')}>Comment</th>
                     <th className={getClassNamesFor(sortConfig, 'wordCount')} onClick={() => requestSortObject('wordCount')}>Word Count</th>
                 </tr>
