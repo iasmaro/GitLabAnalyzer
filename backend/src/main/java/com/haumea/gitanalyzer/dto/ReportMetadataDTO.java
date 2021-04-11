@@ -9,13 +9,15 @@ public class ReportMetadataDTO {
     private Date start;
     private Date end;
     private String creator;
+    private String configName;
 
-    public ReportMetadataDTO(String reportName, String projectName, Date start, Date end, String creator) {
+    public ReportMetadataDTO(String reportName, String projectName, Date start, Date end, String creator, String configName) {
         this.reportName = reportName;
         this.projectName = projectName;
         this.start = start;
         this.end = end;
         this.creator = creator;
+        this.configName = configName;
     }
 
     public String getReportName() {
@@ -37,5 +39,10 @@ public class ReportMetadataDTO {
     public String getCreator() {
         return creator;
     }
+
+    public String getConfigName() {
+        return configName;
+    }
+
 
 }
