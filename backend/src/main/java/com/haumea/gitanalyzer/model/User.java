@@ -31,6 +31,8 @@ public class User {
         super();
     }
 
+    private List<String> reportNames;
+
     @PersistenceConstructor
     public User(String userId, String personalAccessToken, String gitlabServer, String activeConfig, Date start, Date end) {
         this.userId = userId;
@@ -40,6 +42,8 @@ public class User {
         this.activeConfig = activeConfig;
         this.start = start;
         this.end = end;
+
+        this.reportNames = new ArrayList<>();
     }
 
     public Optional<String> getUserId() {
@@ -61,4 +65,12 @@ public class User {
     public Optional<Date> getStart() { return Optional.ofNullable(start); }
 
     public Optional<Date> getEnd() { return Optional.ofNullable(end); }
+
+    public void addReport(String reportName) {
+        reportNames.add(reportName);
+    }
+
+    public List<String> getReportNames() {
+        return reportNames;
+    }
 }
