@@ -21,7 +21,7 @@ public class MergeRequestGraphDTO {
         return numberOfMergeRequests;
     }
 
-    public double getMergeRequestScore() {
+    public double getTotalMergeRequestScore() {
         return totalMergeRequestScore;
     }
 }
