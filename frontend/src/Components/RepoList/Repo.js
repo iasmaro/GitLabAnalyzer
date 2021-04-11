@@ -15,7 +15,7 @@ import getStartDate from 'Utils/getStartDate';
 import './RepoList.css';
 
 const Repo = (props) => {
-    const { repo, handleCheckboxChange } = props || {};
+    const { repo, addRepo, removeRepo } = props || {};
     const [configs, setConfigs] = useState([]);
     const [showAnalyzeModal, setShowAnalyzeModal] = useState(false);
     const [showAliasMappingModal, setShowAliasMappingModal] = useState(false);
@@ -67,13 +67,23 @@ const Repo = (props) => {
 
     const handleCloseAliasMappingModal = () => setShowAliasMappingModal(false);
 
+    const handleChange = () => {
+        const isChecked = !checked;
+        setChecked(isChecked);
+        if (isChecked) {
+            addRepo && addRepo(repo);
+        } else {
+            removeRepo && removeRepo(repo);
+        }
+    }
+
     return (
         <tr>
             <td>
                 <Checkbox
                     checked={checked}
                     color='default'
-                    onClick={() => handleCheckboxChange && handleCheckboxChange(repo, checked, setChecked)}
+                    onClick={() => handleChange()}
                 />
             </td>
             <td>{repo?.projectName}</td>

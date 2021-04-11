@@ -29,11 +29,16 @@ const RepoList = (props) => {
     const [showAnalyzeModal, setShowAnalyzeModal] = useState(false);
     const username = useUserState();
 
-    const handleCheckboxChange = (repo, checked, setChecked) => {
-        checked ? reposBatch.delete(repo.projectId) : reposBatch.add(repo.projectId);
+    const addRepo = (repo) => {
+        reposBatch.add(repo.projectId);
         reposBatch.size > 0 ? setBatchAnalyzeDisabled(false) : setBatchAnalyzeDisabled(true);
         setReposBatch(reposBatch);
-        setChecked(!checked);
+    }
+
+    const removeRepo = (repo) => {
+        reposBatch.delete(repo.projectId);
+        reposBatch.size > 0 ? setBatchAnalyzeDisabled(false) : setBatchAnalyzeDisabled(true);
+        setReposBatch(reposBatch);
     }
 
     const handleShowBatchRepoAnalyzeModal = () => {
@@ -102,7 +107,7 @@ const RepoList = (props) => {
                     )
                     :
                     items.filter((repo)=>filterRepos(repo, searchWord)).map((repo) => (
-                        <Repo key={repo?.projectId} repo={repo} handleCheckboxChange={handleCheckboxChange}/>
+                        <Repo key={repo?.projectId} repo={repo} addRepo={addRepo} removeRepo={removeRepo}/>
                     ))}
                 </tbody>
             </Table>
