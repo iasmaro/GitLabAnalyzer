@@ -25,3 +25,7 @@ td.word-count {
 .tooltip {
     width: 50%;
 }
+
+.comment-long {
+    background-color: #f8f9fa;
+}

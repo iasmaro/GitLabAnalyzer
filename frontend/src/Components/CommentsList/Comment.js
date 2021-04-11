@@ -35,7 +35,7 @@ const Comment = (props) => {
                             </Tooltip>
                         }
                     >
-                        <p>{commentDescription.slice(0, 100) + '...'}</p>
+                        <p className='comment-long'>{commentDescription.slice(0, 100) + '...'}</p>
                     </OverlayTrigger>
                 }
             </td>
