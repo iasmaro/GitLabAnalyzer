@@ -1,9 +1,5 @@
 package com.haumea.gitanalyzer.dto;
 
-import com.haumea.gitanalyzer.utility.Round;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Map;
 
 public class ScoreDTO {

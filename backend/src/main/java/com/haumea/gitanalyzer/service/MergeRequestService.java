@@ -9,7 +9,6 @@ import com.haumea.gitanalyzer.gitlab.IndividualDiffScoreCalculator;
 import com.haumea.gitanalyzer.gitlab.MergeRequestWrapper;
 import com.haumea.gitanalyzer.dto.MergeRequestDTO;
 import com.haumea.gitanalyzer.model.Configuration;
-import com.haumea.gitanalyzer.utility.Round;
 import org.gitlab4j.api.models.Diff;
 import org.gitlab4j.api.models.MergeRequest;
 import org.gitlab4j.api.models.MergeRequestDiff;
@@ -121,7 +120,6 @@ public class MergeRequestService {
         int linesMoved = 0;
         double MRScore = 0.0;
         Map<String, Double> fileTypeScoresMap = new HashMap<>();
-        Round roundObject = new Round();
 
         for (DiffDTO diffDTO : diffDTOList) {
 
@@ -133,11 +131,11 @@ public class MergeRequestService {
             linesMoved = linesMoved + diffDTO.getScoreDTO().getLinesMoved();
 
             double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getScoreDTO().getScore();
-            fileTypeScore = roundObject.roundScore(fileTypeScore);
+            fileTypeScore = Math.round(fileTypeScore * 10) / 10.0;
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
 
-        MRScore = roundObject.roundScore(MRScore);
+        MRScore = Math.round(MRScore * 10) / 10.0;
 
         ScoreDTO mergeRequestScoreDTO = new ScoreDTO(linesAdded, linesRemoved, 0,0,0,0,0,0,linesMoved, 0, 0, MRScore);
         mergeRequestScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
@@ -155,9 +153,7 @@ public class MergeRequestService {
 
         }
 
-        Round roundObject = new Round();
-
-        return roundObject.roundScore(sumOfCommitsScore);
+        return Math.round(sumOfCommitsScore * 10) / 10.0;
     }
 
     private void checkAndSetScoreForSharedMR(MergeRequestDTO mergeRequestDTO, List<String> alias) {
@@ -179,8 +175,7 @@ public class MergeRequestService {
         }
 
         if(isSharedMR) {
-            Round roundObject = new Round();
-            sumOfCommitScoreForSharedMR = roundObject.roundScore(sumOfCommitScoreForSharedMR);
+            sumOfCommitScoreForSharedMR = Math.round(sumOfCommitScoreForSharedMR * 10) / 10.0;
 
             mergeRequestDTO.setSumOfCommitScoreOnSharedMR(sumOfCommitScoreForSharedMR);
         }

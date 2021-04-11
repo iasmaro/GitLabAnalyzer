@@ -5,7 +5,6 @@ import com.haumea.gitanalyzer.dto.*;
 import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
 import com.haumea.gitanalyzer.model.Report;
-import com.haumea.gitanalyzer.utility.Round;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -265,9 +264,7 @@ public class ReportService {
 
         oldScore = oldScore + difference;
 
-        Round roundObject = new Round();
-
-        return roundObject.roundScore(oldScore);
+        return Math.round(oldScore * 10) / 10.0;
     }
 
     public void modifyDiffScoreOfMRDiff(String reportName, String memberId, int mergeIndex, int diffIndex, double newDiffScore) {

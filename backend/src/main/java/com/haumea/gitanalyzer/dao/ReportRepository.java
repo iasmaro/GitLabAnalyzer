@@ -343,7 +343,7 @@ public class ReportRepository {
 
         updateDiffScoreOfCommitDiff(reportName, commitPath, diffIndex, newDiffScore);
 
-        updateCommitScore(reportName, commitPath + ".commitDTOList", newCommitScore);
+        updateCommitScore(reportName, commitPath, newCommitScore);
 
         updateExtensionScoreOfCommit(reportName, commitPath, modifiedExtension, newExtensionScore);
 
