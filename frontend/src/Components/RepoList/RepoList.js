@@ -41,12 +41,12 @@ const RepoList = (props) => {
                 <tbody>
                     {!repos ? (
                         <tr>
-                            <td colSpan={3} >{message.TOKEN_NOT_SET}</td>
+                            <td colSpan={4} >{message.TOKEN_NOT_SET}</td>
                         </tr>
                     )
                     : !repos.length ? (
                         <tr>
-                            <td colSpan={3} >{message.NO_REPOS}</td>
+                            <td colSpan={4} >{message.NO_REPOS}</td>
                         </tr>
                     )
                     :

@@ -62,6 +62,7 @@ export const message = {
     NO_REPOS: 'It seems that you do not have any repositories at this moment',
     NO_ALIASES: 'No aliases found',
     NO_COMMENTS: 'No comments found for this user',
+    NO_REPORTS: 'It seems that you have not generated any reports yet',
 };
 
 export const ConfigLabels = {

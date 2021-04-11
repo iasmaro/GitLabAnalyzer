@@ -60,7 +60,7 @@ const ReportsList = (props) => {
                     <tbody>
                         {!reports || !reports.length ? (
                             <tr>
-                                <td colSpan={3} >{message.TOKEN_NOT_SET}</td>
+                                <td colSpan={7} >{message.NO_REPORTS}</td>
                             </tr>
                         )
                         :
