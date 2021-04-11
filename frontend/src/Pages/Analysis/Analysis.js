@@ -18,8 +18,8 @@ const Analysis = (props) => {
     const { location } = props || {};
     const { state } = location || {};
     const { data } = state || {};
-    console.log(data);
-    const { projectId, configuration, startDate, endDate, namespace, projectName, reportName } = data || {};
+    const { projectId, configuration, startDate, endDate, namespace, projectName, reportName, creator } = data || {};
+
     const [isLoading, setIsLoading] = useState(true);
     const [mergeRequests, setMergeRequests] = useState();
     const [commitsGraph, setCommitsGraph] = useState();
@@ -37,28 +37,32 @@ const Analysis = (props) => {
     const username = useUserState();
 
     useEffect(() => {
-        getProjectMembers(username, projectId).then((data) => {
+        getProjectMembers(creator || username, projectId).then((data) => {
             setMembers(data);
             setStudent(data && data[0]);
         });
-        getMembersAndAliasesFromDatabase(username, projectId).then((data) => {
+        getMembersAndAliasesFromDatabase(creator || username, projectId).then((data) => {
             setDatabaseMembersAndAliases(data);
         });
-    }, [username, projectId]);
+    }, [username, projectId, creator]);
 
     useEffect(() => {
         if (reportName) {
             getReportDetails(reportName).then((data) => {
                 setAnalysis(data);
                 setIsLoading(false);
-            })
+                if (!members && data) {
+                    setMembers(Object.keys(data.mergeRequestListByMemberId));
+                    setStudent(Object.keys(data.mergeRequestListByMemberId)[0])
+                }
+            });
         } else {
             analyzeAll(username, projectId).then((data) => {
                 setAnalysis(data);
                 setIsLoading(false);
             });
         }
-    }, [projectId, username, reportName]);
+    }, [projectId, username, reportName, members]);
 
     useEffect(() => {
         if (analysis && student) {
@@ -74,12 +78,11 @@ const Analysis = (props) => {
     }, [student, analysis]);
 
     useEffect(() => {
-        getConfigurationInfo(username, configuration).then((data) => {
+        getConfigurationInfo(creator || username, configuration).then((data) => {
             setConfigInfo(data);
         });
-    },[username, configuration]);
+    },[username, configuration, creator]);
 
-    
     if (!data) {
         return(<Redirect to={{ pathname: '/' }} />);
     }
@@ -87,9 +90,6 @@ const Analysis = (props) => {
     return (
         <div className="analysis-page">
             <AnalysisSpecifications startDate={startDate} endDate={endDate} configuration={configuration} namespace={namespace || analysis?.namespace} projectName={projectName} />
-            <div className="analysis-header">
-                <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
-            </div>
             {isLoading ? <Spinner animation="border" className="spinner" /> : 
             <>
                 <div className="analysis-header">

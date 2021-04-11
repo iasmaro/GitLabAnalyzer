@@ -38,7 +38,8 @@ const Report = (props) => {
             endDate: report.end,
             projectName: report.projectName,
             reportName: report.reportName,
-            projectId: projectId
+            projectId: projectId,
+            creator: report.creator
         }
 
         return(<Redirect to={{pathname: '/Analysis', state: { data }}} />);
