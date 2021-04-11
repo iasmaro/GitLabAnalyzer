@@ -49,6 +49,4 @@ public class ReportMetadataDTO {
     public int getProjectId() {
         return projectId;
     }
-
-
 }
