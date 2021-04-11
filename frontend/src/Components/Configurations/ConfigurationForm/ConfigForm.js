@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Form, Col, Row, Container, Button, Table } from 'react-bootstrap';
 
-import { ConfigLabels, initialConfigState } from 'Constants/constants';
-import saveConfig from "Utils/saveConfig";
+import { ConfigLabels } from 'Constants/constants';
+import saveConfig from 'Utils/saveConfig';
+import editConfig from 'Utils/editConfig';
 
+import setInitialState from './utils/setInitialState';
+import setInitialFileInputList from './utils/setInitialFileInputList';
 import NewFileTypeCofig from './NewFileTypeConfig';
 import DefaultFileTypeConfig from './DefaultFileTypeConfig';
 import ScoreWeightConfig from './ScoreWeightConfig';
@@ -11,19 +14,27 @@ import ScoreWeightConfig from './ScoreWeightConfig';
 import './ConfigForm.css';
 
 const ConfigForm = (props) => {
-    const { username, toggleModal, setMessage } = props || {};
+    const { username, toggleModal, setMessage, configInfo } = props || {};
 
-    const [state, setstate] = useState(initialConfigState);
-    const [inputList, setInputList] = useState([{ FILE_EXTENSION: state.FILE_EXTENSION, SINGLE_COMMENT: state.SINGLE_COMMENT, MULTI_START_COMMENT: state.MULTI_LINE_COMMENT_START, MULTI_END_COMMENT: state.MULTI_LINE_COMMENT_END, WEIGHT: state.WEIGHT }]);
+    const [state, setstate] = useState(setInitialState(configInfo));
+    const [inputList, setInputList] = useState(setInitialFileInputList(configInfo));
     
     const displayAlert = (successful) => {
         let snackbar = document.getElementById("config-snackbar");
         if (successful) {
-            setMessage("Successfully created configuration");
+            if (configInfo) {
+                setMessage("Successfully modified configuration");
+            } else {
+                setMessage("Successfully created configuration");
+            }
             snackbar.style = 'background-color:green';
         }
         else {
-            setMessage("There was an error creating the configuration");
+            if (configInfo) {
+                setMessage("There was an error modifying the configuration");
+            } else {
+                setMessage("There was an error creating the configuration");
+            } 
             snackbar.style = 'background-color:red';
         }
         snackbar.className = "show";
@@ -68,7 +79,6 @@ const ConfigForm = (props) => {
             delLine: state.DELETE_LINE,
             movLine: state.MOVE_LINE,
             syntax: state.SYNTAX,
-            spaceChange: state.SPACING
         }
 
         const fileFactor = {
@@ -101,12 +111,21 @@ const ConfigForm = (props) => {
             }
         }
 
-        saveConfig(commentTypes, editFactor, username, fileFactor, state.CONFIGURATION_NAME).then(response => {
-            if (toggleModal) {
-                toggleModal();
-            }
-            displayAlert(response);
-        });
+        if (configInfo) {
+            editConfig(commentTypes, editFactor, username, fileFactor, state.CONFIGURATION_NAME).then(response => {
+                if (toggleModal) {
+                    toggleModal();
+                }
+                displayAlert(response);
+            });
+        } else {
+            saveConfig(commentTypes, editFactor, username, fileFactor, state.CONFIGURATION_NAME).then(response => {
+                if (toggleModal) {
+                    toggleModal();
+                }
+                displayAlert(response);
+            });
+        }
     };
 
     return (
@@ -116,9 +135,11 @@ const ConfigForm = (props) => {
                     <Form onSubmit={handleSubmit}>
                         <Table hover className="ConfigTable">
                             <thead>
-                                <th className='ConfigTitle'>
-                                    {ConfigLabels.CONFIGURATION_NAME}
-                                </th>
+                                <tr>
+                                    <th className='ConfigTitle'>
+                                        {ConfigLabels.CONFIGURATION_NAME}
+                                    </th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr>
@@ -128,6 +149,7 @@ const ConfigForm = (props) => {
                                             defaultValue={state.CONFIGURATION_NAME}
                                             name = "CONFIGURATION_NAME"
                                             onChange = {handleInputChange}
+                                            readOnly = {!!configInfo}
                                             required
                                         />
                                     </td>
@@ -147,7 +169,6 @@ const ConfigForm = (props) => {
                                     <th>{ConfigLabels.ADD_NEW_LINE}</th>
                                     <th>{ConfigLabels.DELETE_LINE}</th>
                                     <th>{ConfigLabels.MOVE_LINE}</th>
-                                    <th>{ConfigLabels.SPACING}</th>
                                     <th>{ConfigLabels.SYNTAX}</th>
                                 </tr>
                             </thead>
@@ -165,15 +186,17 @@ const ConfigForm = (props) => {
                                 </tr>
                             </thead>
                             <thead>
-                                <th>{ConfigLabels.JAVA}</th>
-                                <th>{ConfigLabels.JS}</th>
-                                <th>{ConfigLabels.TS}</th>
-                                <th>{ConfigLabels.PY}</th>
-                                <th>{ConfigLabels.HTML}</th>
-                                <th>{ConfigLabels.CSS}</th>
-                                <th>{ConfigLabels.XML}</th>
-                                <th>{ConfigLabels.CPP}</th>
-                                <th>{ConfigLabels.C}</th>
+                                <tr>
+                                    <th>{ConfigLabels.JAVA}</th>
+                                    <th>{ConfigLabels.JS}</th>
+                                    <th>{ConfigLabels.TS}</th>
+                                    <th>{ConfigLabels.PY}</th>
+                                    <th>{ConfigLabels.HTML}</th>
+                                    <th>{ConfigLabels.CSS}</th>
+                                    <th>{ConfigLabels.XML}</th>
+                                    <th>{ConfigLabels.CPP}</th>
+                                    <th>{ConfigLabels.C}</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <DefaultFileTypeConfig state={state} handleInputChange={handleInputChange} />
