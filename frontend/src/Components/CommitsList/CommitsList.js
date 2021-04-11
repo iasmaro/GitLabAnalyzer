@@ -25,12 +25,12 @@ const CommitsList = (props) => {
 
     return (
         <div className = 'commits-list-container'>
-            <Table bordered hover variant="light">
+            <Table borderless hover variant="light">
                 <thead>
-                        <tr>
-                            <th colSpan='4' className='commitTitle'>Commits</th>
-                            <th colSpan='2' className='mrTitle'>Total Commits: {commits?.length || 0}</th>
-                        </tr>
+                    <tr className='commits-table-headers'>
+                        <th colSpan='3' className='commitTitle'>Commits</th>
+                        <th colSpan='3' className='mrTitle'>Total Commits: {commits?.length || 0}</th>
+                    </tr>
                 </thead>
                 <thead>
                     <tr className='commits-headers'>

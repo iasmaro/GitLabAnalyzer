@@ -78,9 +78,9 @@ const ConfigurationPage = () => {
         <div className='configs-list-container'>
             <div id="config-snackbar">{message}</div>
             <div className="configs-left">
-                <Table striped bordered hover variant="light">
+                <Table striped borderless hover variant="light">
                     <thead>
-                        <tr>
+                        <tr className='config-header'>
                             <th colSpan='3' className={getClassNamesFor(sortConfig)} onClick={() => requestSortArray(configs)}>
                                 Configurations
                             <Button variant="info" onClick={handleShow} className="new-config-button">+</Button>

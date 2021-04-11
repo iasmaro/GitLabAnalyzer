@@ -41,7 +41,7 @@
 
 .mrs-bottom {
     position: relative;
-    margin-top: 5em;
+    margin-top: 0.5em;
     height: 23.3em;
     overflow-y: scroll;
 }
