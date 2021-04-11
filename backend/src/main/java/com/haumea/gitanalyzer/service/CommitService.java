@@ -106,7 +106,6 @@ public class CommitService {
 
         double commitScore = 0.0;
         Map<String, Double> fileTypeScoresMap = new HashMap<>();
-        ScoreDTO roundObject = new ScoreDTO();
 
         for (DiffDTO diffDTO : diffDTOList) {
 
@@ -118,9 +117,11 @@ public class CommitService {
             linesMoved = linesMoved + diffDTO.getScoreDTO().getLinesMoved();
 
             double fileTypeScore = fileTypeScoresMap.getOrDefault(diffExtension, 0.0) + diffDTO.getScoreDTO().getScore();
-            fileTypeScore = roundObject.roundScore(fileTypeScore);
+            fileTypeScore = Math.round(fileTypeScore * 10) / 10.0;
             fileTypeScoresMap.put(diffExtension, fileTypeScore);
         }
+
+        commitScore = Math.round(commitScore * 10) / 10.0;
 
         ScoreDTO commitScoreDTO = new ScoreDTO(linesAdded, linesRemoved, 0, 0, 0, 0, 0, 0, linesMoved, 0, 0, commitScore);
         commitScoreDTO.setScoreByFileTypes(fileTypeScoresMap);
