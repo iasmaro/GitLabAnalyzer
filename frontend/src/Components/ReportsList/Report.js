@@ -51,7 +51,7 @@ const Report = (props) => {
     return (
         <tr>
             
-            <td><Checkbox checked={checked} onClick={handleChange} /></td>
+            <td><Checkbox color='default' checked={checked} onClick={handleChange} /></td>
             <td>{report.projectName}</td>
             <td>{utcToLocal(report.start)}</td>
             <td>{utcToLocal(report.end)}</td>
