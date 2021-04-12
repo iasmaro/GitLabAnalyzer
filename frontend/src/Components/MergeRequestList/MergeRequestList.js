@@ -10,9 +10,9 @@ const MergeRequestList = (props) => {
     const { mergerequests, setCommit, setCodeDiffs, setDiffsTitle } = props || {};
     const [selectedRowIndex, setSelectedRowIndex] = useState(-1);    
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(mergerequests);
-    const handleClick = (commits, diffs, index, diffsTitle) => {
+    const handleClick = (commits, diffs, index, diffsTitle, mergeRequestLink) => {
         if(setCodeDiffs) {
-            setCodeDiffs(diffs);
+            setCodeDiffs(diffs, mergeRequestLink);
         }
         if(setCommit) {
             setCommit(commits);

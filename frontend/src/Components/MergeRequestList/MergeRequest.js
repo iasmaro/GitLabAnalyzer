@@ -19,7 +19,7 @@ const MergeRequest = (props) => {
     const mergeRequestTitleDisplay = mergerequest.mergeRequestTitle?.length > 40 ? mergerequest.mergeRequestTitle?.slice(0, 40) + '...' : mergerequest.mergeRequestTitle?.slice(0, 40);
 
     return (
-        <tr className={mergeRequestRowClass} onClick={() => {handleClick(mergerequest.commitDTOList, mergerequest.mergeRequestDiffs, index, mergerequest.mergeRequestTitle)}} >
+        <tr className={mergeRequestRowClass} onClick={() => {handleClick(mergerequest.commitDTOList, mergerequest.mergeRequestDiffs, index, mergerequest.mergeRequestTitle, mergerequest.mergeRequestLink)}} >
             <td>
                 {mergerequest.mergeId !== -1 ? utcToLocal(mergerequest.mergedDate) : 
                     <OverlayTrigger 
