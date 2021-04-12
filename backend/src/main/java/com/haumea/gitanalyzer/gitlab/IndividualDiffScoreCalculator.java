@@ -81,6 +81,7 @@ public class IndividualDiffScoreCalculator {
     // check file type and configs in calling code
     public ScoreDTO calculateDiffScore(String diff,
                                        boolean isFileDeleted,
+                                       boolean isFileRenamed,
                                        double addLineWeight,
                                        double deleteLineWeight,
                                        double syntaxLineWeight,
@@ -108,7 +109,7 @@ public class IndividualDiffScoreCalculator {
         this.numberOfCommentLinesRemoved = 0;
 
 
-        if(isFileDeleted) {
+        if(isFileDeleted || isFileRenamed) {
             return new ScoreDTO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0);
         }
         else {

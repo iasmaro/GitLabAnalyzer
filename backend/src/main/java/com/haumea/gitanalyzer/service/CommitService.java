@@ -75,6 +75,7 @@ public class CommitService {
 
             ScoreDTO scoreDTO = diffScoreCalculator.calculateDiffScore(diff.getDiff(),
                     diff.getDeletedFile(),
+                    diff.getRenamedFile(),
                     addLine,
                     deleteLine,
                     syntaxLine,
