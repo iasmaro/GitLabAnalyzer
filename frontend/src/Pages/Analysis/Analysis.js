@@ -32,6 +32,7 @@ const Analysis = (props) => {
     const [analysis, setAnalysis] = useState();
     const [configInfo, setConfigInfo] = useState();
     const [databaseMembersAndAliases, setDatabaseMembersAndAliases] = useState([]);
+    const [diffs, setDiffs] = useState();
     const username = useUserState();
 
     useEffect(() => {
@@ -80,14 +81,16 @@ const Analysis = (props) => {
         <div className="analysis-page">
             <AnalysisSpecifications startDate={startDate} endDate={endDate} configuration={configuration} namespace={namespace} projectName={projectName} />
             <div className="analysis-header">
-                <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} />
+                <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} setDiffs={setDiffs}/>
             </div>
             {isLoading ? <Spinner animation="border" className="spinner" /> : 
             <>
                 <div className="analysis-header">
-                    <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} />
+                    <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setDiffs={setDiffs} />
                 </div>
                 <AnalyzerTabs
+                    diffs={diffs}
+                    setDiffs={setDiffs}
                     mergerequests={mergeRequests}
                     projectId={projectId}
                     commits={commits}

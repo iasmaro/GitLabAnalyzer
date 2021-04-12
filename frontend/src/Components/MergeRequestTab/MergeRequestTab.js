@@ -9,9 +9,8 @@ import CodeDifferenceList from 'Components/CodeDifferenceList/CodeDifferenceList
 import './MergeRequestTab.css';
 
 const MergeRequestTab = (props) => {
-    const { configInfo } = props || {};
+    const { configInfo, diffs, setDiffs } = props || {};
     const [commits, setCommits] = useState();
-    const [diffs, setDiffs] = useState();
     const [expand, setExpand] = useState(false);
     const [diffsTitle, setDiffsTitle] = useState();
 
