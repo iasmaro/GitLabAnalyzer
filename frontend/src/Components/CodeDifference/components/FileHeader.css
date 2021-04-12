@@ -24,36 +24,36 @@
 }
 
 .chevron::before {
-	border-style: solid;
-	border-width: 0.1em 0.1em 0 0;
-	content: '';
-	display: inline-block;
-	height: 0.5em;
-	left: 0.15em;
-	position: relative;
-	top: 0.05em;
-	transform: rotate(-45deg);
-	width: 0.5em;
+    border-style: solid;
+    border-width: 0.1em 0.1em 0 0;
+    content: '';
+    display: inline-block;
+    height: 0.5em;
+    left: 0.15em;
+    position: relative;
+    top: 0.05em;
+    transform: rotate(-45deg);
+    width: 0.5em;
     cursor: pointer;
 }
 
 .chevron.chevron-right:before {
-	left: 0;
-	transform: rotate(45deg);
+    left: 0;
+    transform: rotate(45deg);
 }
 
 .chevron.chevron-bottom:before {
-	top: 0;
-	transform: rotate(135deg);
+    top: 0;
+    transform: rotate(135deg);
 }
 
 .code-diff-score {
-	color: #fff;
-	background-color: #4C4975 !important;
+    color: #fff;
+    background-color: #4C4975 !important;
 }
 
 .code-diff-score-updated {
-	color: #842bd7;
-	font-weight: bold;
-	border-color: black;
+    color: #842bd7;
+    font-weight: bold;
+    border-color: black;
 }
