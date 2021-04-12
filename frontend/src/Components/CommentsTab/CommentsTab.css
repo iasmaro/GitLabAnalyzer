@@ -1,10 +1,10 @@
 .comments-left {
     float: left;
     width: 50%;
-    padding: 0 10px;
+    padding: 0 5px;
     overflow-y: scroll;
     overflow-x: scroll;
-    max-height: 52em;
+    max-height: 51em;
 }
 
 .comments-left::-webkit-scrollbar { 
@@ -14,10 +14,10 @@
 .comments-right {
     float: right;
     width: 50%;
-    padding: 0 10px;
+    padding: 0 5px;
     overflow-y: scroll;
     overflow-x: scroll;
-    max-height: 52em;
+    max-height: 51em;
 }
 
 .comments-right::-webkit-scrollbar { 

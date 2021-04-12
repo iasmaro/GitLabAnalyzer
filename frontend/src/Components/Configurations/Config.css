@@ -1,0 +1,4 @@
+td.config-name {
+    max-width: 15em;
+    overflow-wrap: break-word;
+}
