@@ -28,7 +28,11 @@
     padding-right: 3em;
 }
 
-.clip-board-button {
-    margin-top: 1.0em;
-    margin-bottom: 1.0em;
+.clip-board-button{
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+    background-color: #ffa807 !important;
+    border-color: #ffa807 !important;
+    position: center;
+    font-size: 1.5rem;
 }
