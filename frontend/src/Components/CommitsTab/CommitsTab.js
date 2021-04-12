@@ -9,7 +9,7 @@ import CodeDifferenceList from 'Components/CodeDifferenceList/CodeDifferenceList
 import './CommitsTab.css';
 
 const CommitsTab = (props) => {
-    const { configInfo, commits: unmodifiedCommits, student, reportName } = props || {};
+    const { configInfo, commits: unmodifiedCommits, student, reportName, updateCommitsTotal } = props || {};
     const [diffs, setDiffs] = useState();
     const [commits, setCommits] = useState();
     const [selectedCommit, setSelectedCommit] = useState();
@@ -38,6 +38,7 @@ const CommitsTab = (props) => {
         const newScore = (oldScore + scoreChange + 0).toFixed(1);
         newCommits[selectedCommit].commitScore = newScore;
         setCommits(newCommits);
+        updateCommitsTotal(scoreChange);
         updateCommitScore(selectedCommit, diffIndex, student, newScore, reportName);
     }
 

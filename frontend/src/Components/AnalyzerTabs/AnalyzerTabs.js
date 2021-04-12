@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row, Tabs, Tab } from 'react-bootstrap';
 
 import { TABS } from 'Constants/constants';
@@ -15,11 +15,32 @@ import './AnalyzerTabs.css';
 const AnalyzerTabs = (props) => {
     const [key, setKey] = useState('summary');
 
+    const [commitScore, setCommitScore] = useState();
+    const [mrScore, setMrScore] = useState();
+
     const { commits, mergerequests, issueComments, mergeRequestComments } = props || {};
+
+    useEffect(() => {
+        const sumOfCommits = calculateCommitScore(commits);
+        setCommitScore(sumOfCommits);
+    }, [commits]);
+
+    useEffect(() => {
+        const sumOfMRs = calculateMrScore(mergerequests);
+        setMrScore(sumOfMRs);
+    }, [mergerequests]);
+
+    const updateCommitScore = (change) => {
+        console.log(change);
+        setCommitScore(commitScore + change);
+    }
+    
+    const updateMrScore = (change) => {
+        setMrScore(mrScore + change);
+    }
+
     const numOfCommits = commits?.length || 0;
     const numOfMRs = mergerequests?.length || 0;
-    const sumOfCommits = calculateCommitScore(commits);
-    const sumOfMRs = calculateMrScore(mergerequests);
 
     const changeTab = (k) => {
         setKey(k);
@@ -32,16 +53,16 @@ const AnalyzerTabs = (props) => {
                 <Col>
                     <Tabs activeKey={key} onSelect={(k) => changeTab(k)} data-testid="tabs" >
                         <Tab eventKey={"summary"} title={TABS.SUMMARY}>
-                            <Scores commitsScore={sumOfCommits} mrsScore={sumOfMRs} totalCommits={numOfCommits} totalMRs={numOfMRs} />
+                            <Scores commitsScore={commitScore} mrsScore={mrScore} totalCommits={numOfCommits} totalMRs={numOfMRs} />
                             <SummaryTab {...props} />
                         </Tab>
                         <Tab eventKey={"merge-requests"} title={TABS.MERGE_REQUESTS} data-testid="merge-request-tab">
-                            <Scores commitsScore={sumOfCommits} mrsScore={sumOfMRs} totalCommits={numOfCommits} totalMRs={numOfMRs} />
-                            <MergeRequestTab {...props} />
+                            <Scores commitsScore={commitScore} mrsScore={mrScore} totalCommits={numOfCommits} totalMRs={numOfMRs} />
+                            <MergeRequestTab {...props} updateMRsTotal={updateMrScore} updateCommitsTotal={updateCommitScore} />
                         </Tab>
                         <Tab eventKey={"commits"} title={TABS.COMMITS} data-testid="commits-tab">
-                            <Scores commitsScore={sumOfCommits} mrsScore={sumOfMRs} totalCommits={numOfCommits} totalMRs={numOfMRs} />
-                            <CommitsTab {...props} />
+                            <Scores commitsScore={commitScore} mrsScore={mrScore} totalCommits={numOfCommits} totalMRs={numOfMRs} />
+                            <CommitsTab {...props} updateCommitsTotal={updateCommitScore} />
                         </Tab>
                         <Tab eventKey={"comments"} title={TABS.COMMENTS}>
                             <CommentsTab issueComments={issueComments} mergeRequestComments={mergeRequestComments} />
