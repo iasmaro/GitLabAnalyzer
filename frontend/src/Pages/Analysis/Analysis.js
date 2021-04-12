@@ -12,7 +12,7 @@ import getProjectMembers from 'Utils/getProjectMembers';
 import getConfigurationInfo from 'Utils/getConfigurationInfo';
 import getMembersAndAliasesFromDatabase from 'Utils/getMembersAndAliasesFromDatabase';
 
-import './Analysis.css'
+import './Analysis.css';
 
 const Analysis = (props) => {
     const { location } = props || {};
