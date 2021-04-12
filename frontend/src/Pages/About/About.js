@@ -142,7 +142,7 @@ function About() {
                         <li>View past Reports</li>
                         <li>Batch Process Reports</li>
                         <li>Share reports with other users</li>
-                        <li>Veiw Graphs by Comments, Merge Requests, Issues</li>
+                        <li>View Graphs by Comments, Merge Requests, Issues</li>
                         
                        
                     </ul>
@@ -152,12 +152,12 @@ function About() {
                         <li>Create scoring configurations</li>
                         <li>Add multiple file types for configurations</li>
                         <li>Map Aliases</li>
-                        <li>Veiw and edit score breakdowns</li>
+                        <li>View and edit score breakdowns</li>
                         <li>Copy total scores easily to any platform</li>
-                        <li>Vew Code Changes with sytanx highlighting</li>
-                        <li>Veiw comments on a particular Merge Request or an Issue</li>
+                        <li>View Code Changes with sytanx highlighting</li>
+                        <li>View comments on a particular Merge Request or an Issue</li>
                         <li>Easily acess GitLab MR or Commit with the links provided</li>
-                        <li>Veiw score totals for MRs and commits and aslo number of words in a comment</li>
+                        <li>View score totals for MRs and commits and aslo number of words in a comment</li>
                     </ul>
                 </div>
                 <h8>We are not limited to SFU's GitLab server! We support any instance of GitLab or Github servers</h8>
