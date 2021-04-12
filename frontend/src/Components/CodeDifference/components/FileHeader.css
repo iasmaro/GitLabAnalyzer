@@ -1,13 +1,13 @@
 .diff-stats {
     align-items: center;
-    padding: 0.6rem 0rem 0 1rem;
+    padding: 0.2rem 0 0 1rem;
     display: inline-flex;
     float: right;
 }
 
 .lines-added {
     color: #217645;
-    padding: 0 0.5rem 1rem 0.25rem;
+    padding: 0 0.5rem 0 0.25rem;
 }
 
 .file-title {
@@ -20,7 +20,7 @@
 
 .lines-removed {
     color: #dd2b0e;
-    padding: 0 0.5rem 1rem 0.25rem;
+    padding: 0 0.5rem 0 0.25rem;
 }
 
 .chevron::before {
@@ -47,7 +47,12 @@
 	transform: rotate(135deg);
 }
 
-.code-diff-score{
+.code-diff-score {
 	color: black;
-	margin-left: 2rem;
+	border-color: black;
+}
+
+.code-diff-score-updated {
+	color: #842bd7;
+	border-color: black;
 }

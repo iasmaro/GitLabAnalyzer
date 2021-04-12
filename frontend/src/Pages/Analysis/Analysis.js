@@ -49,6 +49,7 @@ const Analysis = (props) => {
     useEffect(() => {
         if (reportName) {
             getReportDetails(reportName).then((data) => {
+                console.log(data);
                 setAnalysis(data);
                 setIsLoading(false);
                 if (!members && data) {
@@ -107,6 +108,7 @@ const Analysis = (props) => {
                     databaseMembersAndAliases={databaseMembersAndAliases}
                     issueComments={issueComments}
                     mergeRequestComments={mergeRequestComments}
+                    reportName={analysis.reportName}
                     configInfo={configInfo}/>
             </>}
         </div>
