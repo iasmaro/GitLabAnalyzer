@@ -13,9 +13,19 @@ import './syntaxHighlighter/prism.css';
 
 
 const CodeDifference = (props) => {
-    const { diff, view, collapseAll, expandAll, configInfo } = props || {};
+    const { diff, view, collapseAll, expandAll, configInfo, changeCommitScore, changeMRScore, index } = props || {};
     const [isActive, setIsActive] = useState('1');
     const [show, setShow] = useState(false);
+    const [score, setScore] = useState(0);
+    const [showScoreModal, setShowScoreModal] = useState(false);
+
+    useEffect(() => {
+        if (diff) {
+            const modifiedScore = diff.scoreDTO?.modifiedScore !== -1 ? diff.scoreDTO?.modifiedScore : null;
+            const diffScore = modifiedScore === null ? diff.scoreDTO?.score : modifiedScore || 0;
+            setScore(diffScore);
+        }
+    }, [diff]);
 
     useEffect(() => {
         if (collapseAll) {
@@ -37,7 +47,8 @@ const CodeDifference = (props) => {
     const linesAdded = diff.codeDiff.match(/\n\+/g)?.length || 0;
     const linesRemoved = diff.codeDiff.match(/\n-/g)?.length || 0;
     const fileName = diff.newPath;
-    const diffScore = diff.scoreDTO?.score || 0;
+    const diffScore =  diff.scoreDTO?.score || 0;
+    const updatedScore = score !== diffScore;
     const extension = diff.extension;
     const linesMoved = diff.scoreDTO?.linesMoved || 0;
     const syntaxLinesAdded = diff.scoreDTO?.syntaxLinesAdded || 0;
@@ -56,7 +67,7 @@ const CodeDifference = (props) => {
     };
 
     const handleClick = () => {
-        if (!show){
+        if (!show && !showScoreModal){
             if (isActive === '1') {
                 setIsActive('0');
             } else {
@@ -69,7 +80,21 @@ const CodeDifference = (props) => {
 
     const handleClose = () => {
         setShow(false);
+        setShowScoreModal(false);
     };
+
+    const handleShowScoreModal = () => setShowScoreModal(true);
+
+    const changeScore = (newScore) => {
+        if (changeCommitScore) {
+            changeCommitScore(newScore - score, index);
+        }
+        if (changeMRScore) {
+            changeMRScore(newScore - score, index);
+        }
+        setScore(newScore);
+        setShowScoreModal(false);
+    }
 
     const isOpen = isActive === '1';
     return (
@@ -82,7 +107,8 @@ const CodeDifference = (props) => {
                             linesAdded={linesAdded} 
                             linesRemoved={linesRemoved} 
                             fileName={fileName} 
-                            diffScore={diffScore} 
+                            diffScore={score}
+                            updatedScore={updatedScore}
                             extension={extension}
                             linesMoved={linesMoved}
                             addLine={linesAdded}
@@ -94,7 +120,10 @@ const CodeDifference = (props) => {
                             commentsLinesAdded = {commentsLinesAdded}
                             handleShow={handleShow}
                             handleClose={handleClose}
+                            handleShowScoreModal={handleShowScoreModal}
+                            changeScore={changeScore}
                             show={show}
+                            showScoreModal={showScoreModal}
                         />
                     </Accordion.Toggle>
                 </Card.Header>

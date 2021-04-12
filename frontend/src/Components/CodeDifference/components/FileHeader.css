@@ -1,13 +1,13 @@
 .diff-stats {
     align-items: center;
-    padding: 0.6rem 0rem 0 1rem;
+    padding: 0.2rem 0 0 1rem;
     display: inline-flex;
     float: right;
 }
 
 .lines-added {
     color: #217645;
-    padding: 0 0.5rem 1rem 0.25rem;
+    padding: 0 0.5rem 0 0.25rem;
 }
 
 .file-title {
@@ -20,34 +20,40 @@
 
 .lines-removed {
     color: #dd2b0e;
-    padding: 0 0.5rem 1rem 0.25rem;
+    padding: 0 0.5rem 0 0.25rem;
 }
 
 .chevron::before {
-	border-style: solid;
-	border-width: 0.1em 0.1em 0 0;
-	content: '';
-	display: inline-block;
-	height: 0.5em;
-	left: 0.15em;
-	position: relative;
-	top: 0.05em;
-	transform: rotate(-45deg);
-	width: 0.5em;
+    border-style: solid;
+    border-width: 0.1em 0.1em 0 0;
+    content: '';
+    display: inline-block;
+    height: 0.5em;
+    left: 0.15em;
+    position: relative;
+    top: 0.05em;
+    transform: rotate(-45deg);
+    width: 0.5em;
     cursor: pointer;
 }
 
 .chevron.chevron-right:before {
-	left: 0;
-	transform: rotate(45deg);
+    left: 0;
+    transform: rotate(45deg);
 }
 
 .chevron.chevron-bottom:before {
-	top: 0;
-	transform: rotate(135deg);
+    top: 0;
+    transform: rotate(135deg);
 }
 
-.code-diff-score{
-	color: black;
-	margin-left: 2rem;
+.code-diff-score {
+    color: #fff;
+    background-color: #4C4975 !important;
+}
+
+.code-diff-score-updated {
+    color: #842bd7;
+    font-weight: bold;
+    border-color: black;
 }
