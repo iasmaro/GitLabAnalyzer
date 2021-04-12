@@ -19,3 +19,33 @@
     width: 50%;
     padding: 40px;
   }
+
+.profile-links {
+    size: 5rem;
+    color: none;
+}
+
+.team-table {
+    text-align: center;
+}
+
+h8 {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.main-header-demo {
+    position: center;
+    margin: auto;
+    color: #000000;
+    padding-top: 15px;
+    margin-bottom: 15px;
+    width: 60%;
+    margin: auto;
+}
+
+.empty {
+    size: 100em;
+    height: 150px;
+    width: 100pc;
+}
