@@ -61,9 +61,13 @@ const MergeRequestTab = (props) => {
             const oldScore =  parseFloat(newCommits[selectedCommit].commitScore);
             const newScore = (oldScore + scoreChange + 0).toFixed(1);
             newCommits[selectedCommit].commitScore = newScore;
+            let newDiffScore = 0;
             if (newCommits[selectedCommit]?.commitDiffs[diffIndex]?.scoreDTO) {
-                const oldScore = newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.score;
-                newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.modifiedScore = oldScore + scoreChange;
+                const originalScore = newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.score;
+                const modifiedScore = newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.modifiedScore;
+                const oldScore = modifiedScore !== -1 ? modifiedScore : originalScore;
+                newDiffScore = oldScore + scoreChange;
+                newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.modifiedScore = newDiffScore;
             }
             setCommits(newCommits);
             updateCommitsTotal(scoreChange);
@@ -71,7 +75,7 @@ const MergeRequestTab = (props) => {
             newMRs[selectedMR].commitDTOList = newCommits;
             newMRs[selectedMR].sumOfCommitScore += scoreChange;
             setMergeRequests(newMRs);
-            updateMrCommitScore(selectedMR, selectedCommit, diffIndex, student, newScore, reportName);
+            updateMrCommitScore(selectedMR, selectedCommit, diffIndex, student, newDiffScore, reportName);
         } else {
             const newMRs = mergerequests.slice();
             const oldScore =  parseFloat(newMRs[selectedMR].mrscore);
@@ -79,7 +83,9 @@ const MergeRequestTab = (props) => {
             newMRs[selectedMR].mrscore = newScore;
             let newDiffScore = 0;
             if (newMRs[selectedMR].mergeRequestDiffs[diffIndex]?.scoreDTO) {
-                const oldScore = newMRs[selectedMR].mergeRequestDiffs[diffIndex].scoreDTO.score;
+                const originalScore = newMRs[selectedMR].mergeRequestDiffs[diffIndex].scoreDTO.score;
+                const modifiedScore = newMRs[selectedMR].mergeRequestDiffs[diffIndex].scoreDTO.modifiedScore;
+                const oldScore = modifiedScore !== -1 ? modifiedScore : originalScore;
                 newDiffScore = oldScore + scoreChange;
                 newMRs[selectedMR].mergeRequestDiffs[diffIndex].scoreDTO.modifiedScore = newDiffScore;
             }

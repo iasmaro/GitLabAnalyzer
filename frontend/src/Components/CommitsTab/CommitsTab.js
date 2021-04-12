@@ -39,7 +39,9 @@ const CommitsTab = (props) => {
         newCommits[selectedCommit].commitScore = newScore;
         let newDiffScore = 0;
         if (newCommits[selectedCommit]?.commitDiffs[diffIndex]?.scoreDTO) {
-            const oldScore = newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.score || 0;
+            const originalScore = newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.score;
+            const modifiedScore = newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.modifiedScore;
+            const oldScore = modifiedScore !== -1 ? modifiedScore : originalScore;
             newDiffScore = oldScore + scoreChange;
             newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.modifiedScore = newDiffScore;
         }

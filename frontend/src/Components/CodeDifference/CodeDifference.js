@@ -22,7 +22,7 @@ const CodeDifference = (props) => {
     useEffect(() => {
         if (diff) {
             const modifiedScore = diff.scoreDTO?.modifiedScore !== -1 ? diff.scoreDTO?.modifiedScore : null;
-            const diffScore = modifiedScore || diff.scoreDTO?.score || 0;
+            const diffScore = modifiedScore === null ? diff.scoreDTO?.score : modifiedScore || 0;
             setScore(diffScore);
         }
     }, [diff]);
