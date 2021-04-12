@@ -12,7 +12,7 @@ import RepoAnalyzeModalDateTimePicker from './RepoAnalyzeModalDateTimePicker';
 import './RepoAnalyzeModal.css';
 
 const BatchRepoAnalyzeModal = (props) => {
-    const { configs, status, toggleModal, start, end, reposBatch } = props || {};    
+    const { configs, status, toggleModal, start, end, reposBatch, showAlert } = props || {};    
     const [config, setConfig] = useState('Select a configuration');
     const [showError, setShowError] = useState(false);
     const [startDate, setStartDate] = useState(start || new Date());
@@ -29,6 +29,7 @@ const BatchRepoAnalyzeModal = (props) => {
                 analyzeAll(username, repo);
             }
             toggleModal();
+            showAlert();
         }
         else {
             setShowError(true);

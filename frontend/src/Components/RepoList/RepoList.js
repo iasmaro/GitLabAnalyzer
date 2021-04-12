@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Badge, Tooltip, OverlayTrigger, Button, Spinner} from 'react-bootstrap';
+import { Table, Badge, Tooltip, OverlayTrigger, Button, Spinner, Alert } from 'react-bootstrap';
 
 import { message } from 'Constants/constants';
 import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
@@ -19,7 +19,7 @@ const RepoList = (props) => {
     const [searchWord, setSearchWord] = useState('');
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(repos);
     const namespaceTooltip = <Tooltip>Namespace refers to the user name, group name, or subgroup name associated with the repository.</Tooltip>;
-    const batchAnalyzeTooltip = <Tooltip>Select repos to batch process and check the 'Past Reports' section for processed reports.</Tooltip>;
+    const batchAnalyzeTooltip = <Tooltip>Select repos to batch process and check the 'Past Reports' page for processed reports.</Tooltip>;
     const [reposBatch, setReposBatch] = useState(new Set());
     const [batchAnalyzeDisabled, setBatchAnalyzeDisabled] = useState(true);
     const [isLoadingStartDate, setIsLoadingStartDate] = useState(false);
@@ -29,6 +29,7 @@ const RepoList = (props) => {
     const [endDate, setEndDate] = useState();
     const [showAnalyzeModal, setShowAnalyzeModal] = useState(false);
     const [uncheck, setUncheck] = useState(0);
+    const [showAlertMessage, setShowAlertMessage] = useState(false);
     const username = useUserState();
 
     const addRepo = (repo) => {
@@ -67,9 +68,19 @@ const RepoList = (props) => {
         setBatchAnalyzeDisabled(true);
     }
 
+    const showAlert = () => {
+        setShowAlertMessage(true);
+        setTimeout(() => {
+            setShowAlertMessage(false);;
+        }, 4000);
+    }
+
     return (
         <div className = 'list-container'>
-            <Table striped borderless hover variant="light">
+            <Alert show={showAlertMessage} variant='warning'>
+                !! Check 'Past Reports' page to access batch processed reports !! 
+            </Alert>
+            <Table striped borderless hover variant='light'>
                 <thead>
                     <tr className='table-header'>
                         <th colSpan='3' className='repoTitle'>Repositories</th>
@@ -92,7 +103,8 @@ const RepoList = (props) => {
                                                         toggleModal={handleCloseAnalyzeModal} 
                                                         start={startDate} 
                                                         end={endDate}
-                                                        reposBatch={reposBatch} />}
+                                                        reposBatch={reposBatch} 
+                                                        showAlert={showAlert}/>}
                         </th>
                         <th className={getClassNamesFor(sortConfig, 'projectName')} onClick={() => requestSortObject('projectName')}>Name</th>
                         <th className={getClassNamesFor(sortConfig, 'namespace')} onClick={() => requestSortObject('namespace')}>Namespace {' '}
