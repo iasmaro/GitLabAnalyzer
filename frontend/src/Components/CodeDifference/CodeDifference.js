@@ -90,7 +90,7 @@ const CodeDifference = (props) => {
             changeCommitScore(newScore - score, index);
         }
         if (changeMRScore) {
-            changeMRScore(newScore - score, index)
+            changeMRScore(newScore - score, index);
         }
         setScore(newScore);
         setShowScoreModal(false);
