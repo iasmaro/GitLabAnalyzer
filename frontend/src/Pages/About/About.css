@@ -12,17 +12,31 @@
     padding-top: 15px;
     width: 60%;
     margin: auto;
+    padding-bottom: 1rem;
+}
+
+.get-started {
+    text-align: center;
+    padding-top: 15px;
+    width: 60%;
+    margin: auto;
+    padding-bottom: 1rem;
+}
+
+.get-started-list {
+    text-align: left;
+    width: 23%;
+    margin: auto;
 }
 
 .column {
     float: left;
     width: 50%;
-    padding: 40px;
+    text-align: left;
   }
 
 .profile-links {
-    size: 5rem;
-    color: none;
+    font-size: 2rem;
 }
 
 .team-table {
@@ -32,20 +46,34 @@
 h8 {
     font-size: 1.1rem;
     font-weight: 500;
+    padding: 40px;
 }
 
 .main-header-demo {
-    position: center;
-    margin: auto;
-    color: #000000;
-    padding-top: 15px;
-    margin-bottom: 15px;
+    text-align: center;
+    padding-top: 40px;
     width: 60%;
     margin: auto;
+    padding-bottom: 1rem;
 }
 
 .empty {
     size: 100em;
-    height: 150px;
+    height: 100px;
     width: 100pc;
+}
+
+.about-us {
+    text-align: center;
+    padding-top: 15px;
+    width: 80%;
+    margin: auto;
+}
+
+.profile-links a {
+    color: black;
+}
+
+.copy-rights {
+    text-align: center;
 }
