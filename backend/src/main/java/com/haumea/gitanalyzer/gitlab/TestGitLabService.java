@@ -432,7 +432,7 @@ public class TestGitLabService {
                     System.out.println("diff is: ");
                     System.out.println(diff.getDiff());
 
-                    ScoreDTO score = calculator.calculateDiffScore(diff.getDiff(), false,
+                    ScoreDTO score = calculator.calculateDiffScore(diff.getDiff(), false, false,
                             1.0,
                             0.2, 0.2, 0.5, 1.0, commentTypes);
 

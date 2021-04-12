@@ -25,7 +25,7 @@ public class IndividualDiffScoreCalculator {
     private boolean addition;
     private boolean removal;
 
-    String lastLineSeen;
+    private String lastLineSeen;
 
     private String longCommentEndBrace;
 
@@ -81,6 +81,7 @@ public class IndividualDiffScoreCalculator {
     // check file type and configs in calling code
     public ScoreDTO calculateDiffScore(String diff,
                                        boolean isFileDeleted,
+                                       boolean isFileRenamed,
                                        double addLineWeight,
                                        double deleteLineWeight,
                                        double syntaxLineWeight,
@@ -108,7 +109,7 @@ public class IndividualDiffScoreCalculator {
         this.numberOfCommentLinesRemoved = 0;
 
 
-        if(isFileDeleted) {
+        if(isFileDeleted || isFileRenamed) {
             return new ScoreDTO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0);
         }
         else {
@@ -120,11 +121,12 @@ public class IndividualDiffScoreCalculator {
                 throw new IllegalArgumentException("input error");
             }
 
+            score = score * fileTypeMultiplier;
+
+
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            // needed for debugging. will eliminate in future MR once a few scoring bugs are resolved
-            printValueOfLineTypes();
 
             return new ScoreDTO(
                     numberOfLinesAdded,
@@ -144,29 +146,6 @@ public class IndividualDiffScoreCalculator {
     }
 
 
-    // needed for debugging. will eliminate in future MR once a few scoring bugs are resolved
-    private void printValueOfLineTypes() {
-        System.out.println("Lines added are: " + numberOfLinesAdded);
-        System.out.println("Code Lines added are: " + meaningFullLinesAdded);
-        System.out.println();
-        System.out.println("Lines removed are: "+ numberOfLinesRemoved);
-        System.out.println("Code lines removed are: "+ meaningFullLinesRemoved);
-        System.out.println();
-        System.out.println("Num of spaces added is: " + numberOfSpaceLinesAdded);
-        System.out.println("Num of spaces removed is: " + numberOfSpaceLinesRemoved);
-        System.out.println();
-        System.out.println("Num of syntax lines added is: " + numberOfSyntaxLinesAdded);
-        System.out.println("Num of syntax lines removed is: " + numberOfSyntaxLinesRemoved);
-        System.out.println();
-        System.out.println("Num of lines moved is: " + numberOfLinesMoved);
-        System.out.println();
-        System.out.println("Num of comment lines added: " + numberOfCommentLinesAdded);
-        System.out.println("Num of comment lines removed: " + numberOfCommentLinesRemoved);
-
-
-
-
-    }
 
     private double analyzeDiff(String diff) throws IOException {
 
@@ -221,6 +200,8 @@ public class IndividualDiffScoreCalculator {
         return diffScore;
     }
 
+
+
     private String removesSpacesInString(String line) {
         return line.replaceAll("\\s+","");
 
@@ -229,7 +210,7 @@ public class IndividualDiffScoreCalculator {
     /*
       Gitlab adds a special line to the end of the files that doesn't show up in the syntax highlighting.
       Most of the time this doesn't matter but there are times where it may interfere with the move line system as the
-      calculator views it as a piece of code and this tricks the calculator into thinking a piece of moved code
+      calculator views it as a piece of code and this tricks the calculator into thinking a piece of code moved
 
      */
     private boolean isAutoGitlabLine(String line) {
@@ -248,12 +229,11 @@ public class IndividualDiffScoreCalculator {
                     lineScore = calcMovedLineScoreOnRemoveSide(line);
                 }
                 // move went over code where the prev line scanned was identical
-                else if(lastLineSeen.equals(line) == true && addition == false) {
+                else if(lastLineSeen.equals(line) == true && addition == false ) {
                     lineScore = calcMovedLineScoreOnRemoveSide(line);
 
                 }
-                // false move, the move didn't change the order of the code
-                else if(lastLineSeen.equals(line) == true && addition == true) {
+                else {
                     lineScore = calcFalseMoveLineScore(line);
                 }
                 if(isSyntax(line) == false) {
@@ -361,19 +341,25 @@ public class IndividualDiffScoreCalculator {
             else if(isLongComment == false && lineWasRemoved(line) == true) {
                 /// normal case where line is moved from one area to another over different code
                 if(lastLineSeen.equals(line) == false) {
+
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
                 // case where line is moved from one area to another where prev line scanned was the same
                 else if(lastLineSeen.equals(line) == true && removal == false) {
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
-                // line was just removed before being added again. This is a false move and should not be counted
-                else if(lastLineSeen.equals(line) == true && removal == true) {
+                else if(lastLineSeen.equals(line) == false && removal == false) {
+                    lineScore = calcMovedLineScoreOnAddSide(line);
+                }
+                else {
+
                     lineScore = undoRemoveLineScore(line);
 
                     addition = true;
                     removal = false;
+
                 }
+
                 if(isSyntax(line) == false) {
                     this.meaningFullLinesRemoved--;
                 }
@@ -418,7 +404,6 @@ public class IndividualDiffScoreCalculator {
         }
         else if(line.equals("+")){
             this.numberOfSpaceLinesAdded++;
-
         }
 
         return lineScore;
