@@ -113,7 +113,7 @@ function About() {
                             </td>
                         </tr>
                         <tr>
-                            <td>Viet</td>
+                            <td>Viet Hoang Truong</td>
                             <td>Backend</td>
                             <td>3rd year Computing Science student at SFU, interested in coding and solving mathematical problems</td>
                             <td className="profile-links">
