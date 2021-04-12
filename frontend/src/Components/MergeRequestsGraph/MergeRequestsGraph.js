@@ -21,7 +21,7 @@ const MergeRequestsGraph = (props) => {
         const scoresOfMRs = [ ['Date', 'MR Score', { role: 'style' }] ];
         for (let MR of MRsGraph) {
             numberOfMRs.push([graphDateFormatter(MR?.date), MR?.numberOfMergeRequests, '#F6B636']);
-            scoresOfMRs.push([graphDateFormatter(MR?.date), MR?.mergeRequestScore, '#F6B636']);
+            scoresOfMRs.push([graphDateFormatter(MR?.date), MR?.totalMergeRequestScore, '#F6B636']);
         }
         setNumbers(numberOfMRs);
         setScores(scoresOfMRs);
@@ -39,7 +39,6 @@ const MergeRequestsGraph = (props) => {
     }
 
     const title = 'Merge Requests';
-
     return (
         <Graph data={data} title={title} handleAxisChange={handleAxisChange} radios={radios} radioValue={radioValue} />
     )

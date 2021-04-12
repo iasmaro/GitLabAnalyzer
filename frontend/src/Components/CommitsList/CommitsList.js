@@ -15,9 +15,9 @@ const CommitsList = (props) => {
         setSelectedRowIndex(-1);
     }, [commits]);
 
-    const handleClick = (diffs, index, diffsTitle) => {
+    const handleClick = (diffs, index, diffsTitle, commitLink) => {
         if(setCodeDiffs) {
-            setCodeDiffs(diffs);
+            setCodeDiffs(diffs, commitLink);
         }
         setSelectedRowIndex(index);
         setDiffsTitle(diffsTitle);

@@ -18,7 +18,7 @@ const Commit = (props) => {
     const commitMessageDisplay = commit.commitMessage?.length > 40 ? commit.commitMessage?.slice(0, 40) + '...' : commit.commitMessage?.slice(0, 40);
 
     return (
-        <tr className={commitRowClass} onClick={() => handleClick(commit.commitDiffs, index, commit.commitMessage)} >
+        <tr className={commitRowClass} onClick={() => handleClick(commit.commitDiffs, index, commit.commitMessage, commit.commitLink)} >
             <td>{utcToLocal(commit.commitDate)}</td>
             <td>
                 <OverlayTrigger
