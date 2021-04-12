@@ -63,6 +63,7 @@ const RepoList = (props) => {
         setShowAnalyzeModal(false);
         setUncheck(uncheck + 1);
         setReposBatch(new Set());
+        setBatchAnalyzeDisabled(true);
     }
 
     return (
@@ -77,7 +78,7 @@ const RepoList = (props) => {
                 <thead>
                     <tr className="repo-headers">
                         <th>
-                            <Button variant="dark" disabled={batchAnalyzeDisabled} onClick={() => handleShowBatchRepoAnalyzeModal()}> Analyze Selected </Button>
+                            <Button variant="dark" disabled={batchAnalyzeDisabled} onClick={() => handleShowBatchRepoAnalyzeModal()}>Batch Process</Button>
                             { (isLoadingStartDate || isLoadingEndDate) ? <Spinner animation="border" className="spinner-repo-list" /> :
                             showAnalyzeModal && <BatchRepoAnalyzeModal                                        
                                                         configs={configs} 

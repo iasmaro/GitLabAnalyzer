@@ -45,7 +45,7 @@ const BatchRepoAnalyzeModal = (props) => {
             scrollable={true}
         >
             <Modal.Header closeButton>
-                <Modal.Title>Batch Analysis</Modal.Title>
+                <Modal.Title>Batch Process</Modal.Title>
             </Modal.Header>
 
             <Modal.Body className="repo-modal-body">
@@ -63,7 +63,7 @@ const BatchRepoAnalyzeModal = (props) => {
 
             <Modal.Footer>
                 <Button onClick={toggleModal} variant="secondary">Cancel</Button>
-                <Button variant="success" onClick={handleClick}>Analyze</Button>
+                <Button variant="success" onClick={handleClick}>Process</Button>
             </Modal.Footer>
 
         </Modal>
