@@ -37,9 +37,15 @@ const CommitsTab = (props) => {
         const oldScore =  parseFloat(newCommits[selectedCommit].commitScore);
         const newScore = (oldScore + scoreChange + 0).toFixed(1);
         newCommits[selectedCommit].commitScore = newScore;
+        let newDiffScore = 0;
+        if (newCommits[selectedCommit]?.commitDiffs[diffIndex]?.scoreDTO) {
+            const oldScore = newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.score || 0;
+            newDiffScore = oldScore + scoreChange;
+            newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.modifiedScore = newDiffScore;
+        }
         setCommits(newCommits);
         updateCommitsTotal(scoreChange);
-        updateCommitScore(selectedCommit, diffIndex, student, newScore, reportName);
+        updateCommitScore(selectedCommit, diffIndex, student, newDiffScore, reportName);
     }
 
     const handleExpand = () => {

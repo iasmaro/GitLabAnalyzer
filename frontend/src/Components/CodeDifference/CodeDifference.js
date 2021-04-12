@@ -13,7 +13,7 @@ import './syntaxHighlighter/prism.css';
 
 
 const CodeDifference = (props) => {
-    const { diff, view, collapseAll, expandAll, configInfo, changeCommitScore, index } = props || {};
+    const { diff, view, collapseAll, expandAll, configInfo, changeCommitScore, changeMRScore, index } = props || {};
     const [isActive, setIsActive] = useState('1');
     const [show, setShow] = useState(false);
     const [score, setScore] = useState(0);
@@ -88,6 +88,9 @@ const CodeDifference = (props) => {
     const changeScore = (newScore) => {
         if (changeCommitScore) {
             changeCommitScore(newScore - score, index);
+        }
+        if (changeMRScore) {
+            changeMRScore(newScore - score, index)
         }
         setScore(newScore);
         setShowScoreModal(false);

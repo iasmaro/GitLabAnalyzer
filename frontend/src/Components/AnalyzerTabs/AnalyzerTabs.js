@@ -32,11 +32,11 @@ const AnalyzerTabs = (props) => {
 
     const updateCommitScore = (change) => {
         console.log(change);
-        setCommitScore(commitScore + change);
+        setCommitScore(Math.round((commitScore + change) * 10) / 10);
     }
     
     const updateMrScore = (change) => {
-        setMrScore(mrScore + change);
+        setMrScore(Math.round((mrScore + change) * 10) / 10);
     }
 
     const numOfCommits = commits?.length || 0;
