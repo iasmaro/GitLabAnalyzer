@@ -122,6 +122,7 @@ public class IndividualDiffScoreCalculator {
 
             score = score * fileTypeMultiplier;
 
+
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
@@ -142,6 +143,8 @@ public class IndividualDiffScoreCalculator {
                    );
         }
     }
+
+
 
     private double analyzeDiff(String diff) throws IOException {
 
@@ -196,6 +199,8 @@ public class IndividualDiffScoreCalculator {
         return diffScore;
     }
 
+
+
     private String removesSpacesInString(String line) {
         return line.replaceAll("\\s+","");
 
@@ -219,11 +224,11 @@ public class IndividualDiffScoreCalculator {
             // line was moved
             if(lineWasAdded(line) == true) {
                 // move went over non identical code
-                if(lastLineSeen.equals(line) == false && lineWasAdded(lastLineSeen) == false) {
+                if(lastLineSeen.equals(line) == false) {
                     lineScore = calcMovedLineScoreOnRemoveSide(line);
                 }
                 // move went over code where the prev line scanned was identical
-                else if(lastLineSeen.equals(line) == true && addition == false  && lineWasAdded(lastLineSeen) == false) {
+                else if(lastLineSeen.equals(line) == true && addition == false ) {
                     lineScore = calcMovedLineScoreOnRemoveSide(line);
 
                 }
@@ -334,15 +339,15 @@ public class IndividualDiffScoreCalculator {
             // moved line
             else if(isLongComment == false && lineWasRemoved(line) == true) {
                 /// normal case where line is moved from one area to another over different code
-                if(lastLineSeen.equals(line) == false && lineWasRemoved(lastLineSeen) == false) {
+                if(lastLineSeen.equals(line) == false) {
 
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
                 // case where line is moved from one area to another where prev line scanned was the same
-                else if(lastLineSeen.equals(line) == true && removal == false && lineWasRemoved(lastLineSeen) == false) {
+                else if(lastLineSeen.equals(line) == true && removal == false) {
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
-                else if(lastLineSeen.equals(line) == false && removal == false && lineWasRemoved(lastLineSeen) == true) {
+                else if(lastLineSeen.equals(line) == false && removal == false) {
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
                 else {
