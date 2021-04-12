@@ -120,11 +120,11 @@ public class IndividualDiffScoreCalculator {
                 throw new IllegalArgumentException("input error");
             }
 
+            score = score * fileTypeMultiplier;
+
             BigDecimal roundedScore = new BigDecimal(Double.toString(score));
             roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
 
-            // needed for debugging. will eliminate in future MR once a few scoring bugs are resolved
-            printValueOfLineTypes();
 
             return new ScoreDTO(
                     numberOfLinesAdded,
@@ -141,31 +141,6 @@ public class IndividualDiffScoreCalculator {
                     roundedScore.doubleValue()
                    );
         }
-    }
-
-
-    // needed for debugging. will eliminate in future MR once a few scoring bugs are resolved
-    private void printValueOfLineTypes() {
-        System.out.println("Lines added are: " + numberOfLinesAdded);
-        System.out.println("Code Lines added are: " + meaningFullLinesAdded);
-        System.out.println();
-        System.out.println("Lines removed are: "+ numberOfLinesRemoved);
-        System.out.println("Code lines removed are: "+ meaningFullLinesRemoved);
-        System.out.println();
-        System.out.println("Num of spaces added is: " + numberOfSpaceLinesAdded);
-        System.out.println("Num of spaces removed is: " + numberOfSpaceLinesRemoved);
-        System.out.println();
-        System.out.println("Num of syntax lines added is: " + numberOfSyntaxLinesAdded);
-        System.out.println("Num of syntax lines removed is: " + numberOfSyntaxLinesRemoved);
-        System.out.println();
-        System.out.println("Num of lines moved is: " + numberOfLinesMoved);
-        System.out.println();
-        System.out.println("Num of comment lines added: " + numberOfCommentLinesAdded);
-        System.out.println("Num of comment lines removed: " + numberOfCommentLinesRemoved);
-
-
-
-
     }
 
     private double analyzeDiff(String diff) throws IOException {
@@ -252,10 +227,6 @@ public class IndividualDiffScoreCalculator {
                     lineScore = calcMovedLineScoreOnRemoveSide(line);
 
                 }
-                // false move, the move didn't change the order of the code
-//                else if(lastLineSeen.equals(line) == true && addition == true) {
-//                    lineScore = calcFalseMoveLineScore(line);
-//                }
                 else {
                     lineScore = calcFalseMoveLineScore(line);
                 }
@@ -365,26 +336,16 @@ public class IndividualDiffScoreCalculator {
                 /// normal case where line is moved from one area to another over different code
                 if(lastLineSeen.equals(line) == false && lineWasRemoved(lastLineSeen) == false) {
 
-                    System.out.println("In first case: " + lastLineSeen);
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
                 // case where line is moved from one area to another where prev line scanned was the same
                 else if(lastLineSeen.equals(line) == true && removal == false && lineWasRemoved(lastLineSeen) == false) {
-                    System.out.println("In second case: " + lastLineSeen);
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
                 else if(lastLineSeen.equals(line) == false && removal == false && lineWasRemoved(lastLineSeen) == true) {
                     lineScore = calcMovedLineScoreOnAddSide(line);
                 }
-                // line was just removed before being added again. This is a false move and should not be counted
-//                else if(lastLineSeen.equals(line) == true && removal == true) {
-//                    lineScore = undoRemoveLineScore(line);
-//
-//                    addition = true;
-//                    removal = false;
-//                }
                 else {
-                    System.out.println("In third case: " + line + " " + lastLineSeen);
 
                     lineScore = undoRemoveLineScore(line);
 
