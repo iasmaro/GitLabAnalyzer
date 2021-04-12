@@ -13,14 +13,21 @@ const Graph = (props) => {
         hAxis: {
             textPosition: 'out',
             slantedText: true,
-            slantedTextAngle: 90
+            slantedTextAngle: 90,
+            textStyle:{color: '#FFF'}
+
         },
         vAxis: {
             minValue: 0,
             maxValue: 1,
+            textStyle:{color: '#FFF'}
         },
         theme: 'material',
-        legend: "none"
+        legend: "none",
+        backgroundColor:'#4C4975',
+        legendTextStyle: { color: '#FFF' },
+        titleTextStyle: { color: '#FFF' },
+        tooltip: {isHtml: true}
     };
 
     if (!data) {

@@ -18,14 +18,14 @@ const IssuesGraph = (props) => {
     ];
 
     useEffect(() => {
-        const wordsPerDay = [ ['Date', 'Words/Day'] ];
-        const ownIssues = [ ['Date', 'Words/Day'] ];
-        const othersIssues = [ ['Date', 'Words/Day'] ];
+        const wordsPerDay = [ ['Date', 'Words/Day', { role: 'style' }] ];
+        const ownIssues = [ ['Date', 'Words/Day', { role: 'style' }] ];
+        const othersIssues = [ ['Date', 'Words/Day', { role: 'style' }] ];
 
         for (let issue of issueCommentsGraph) {
-            wordsPerDay.push([graphDateFormatter(issue?.date), issue?.wordsPerDay]);
-            ownIssues.push([graphDateFormatter(issue?.date), issue?.wordsPerDayOnOwn]);
-            othersIssues.push([graphDateFormatter(issue?.date), issue?.wordsPerDayOnOtherIssues]);
+            wordsPerDay.push([graphDateFormatter(issue?.date), issue?.wordsPerDay, '#F6B636']);
+            ownIssues.push([graphDateFormatter(issue?.date), issue?.wordsPerDayOnOwn, '#F6B636']);
+            othersIssues.push([graphDateFormatter(issue?.date), issue?.wordsPerDayOnOtherIssues, '#F6B636']);
         }
         setWords(wordsPerDay);
         setOwn(ownIssues);

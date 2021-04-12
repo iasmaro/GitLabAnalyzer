@@ -37,8 +37,8 @@ const CodeDifferenceList = (props) => {
         <>
             <div className="button-container">
                 <Button className="view-button" variant="dark" onClick={handleChangeView} >{view === 'unified' ? 'Side-by-side' : 'Inline'}</Button>
-                <Button variant="dark" onClick={expandAll} >Expand All</Button>
-                <Button variant="dark" onClick={collapseAll} >Collapse All</Button>
+                <Button className="expand-colapse" variant="dark" onClick={expandAll} >Expand All</Button>
+                <Button className="expand-colapse" variant="dark" onClick={collapseAll} >Collapse All</Button>
             </div>
             <DiffsTitle diffsTitle={diffsTitle} />
             <div className="code-diff-list">

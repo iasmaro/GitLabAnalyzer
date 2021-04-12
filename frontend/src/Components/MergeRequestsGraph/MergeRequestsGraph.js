@@ -17,11 +17,11 @@ const MergeRequestsGraph = (props) => {
     
 
     useEffect(() => {
-        const numberOfMRs = [ ['Date', 'Number of MRs'] ];
-        const scoresOfMRs = [ ['Date', 'MR Score'] ];
+        const numberOfMRs = [ ['Date', 'Number of MRs', { role: 'style' }] ];
+        const scoresOfMRs = [ ['Date', 'MR Score', { role: 'style' }] ];
         for (let MR of MRsGraph) {
-            numberOfMRs.push([graphDateFormatter(MR?.date), MR?.numberOfMergeRequests]);
-            scoresOfMRs.push([graphDateFormatter(MR?.date), MR?.mergeRequestScore]);
+            numberOfMRs.push([graphDateFormatter(MR?.date), MR?.numberOfMergeRequests, '#F6B636']);
+            scoresOfMRs.push([graphDateFormatter(MR?.date), MR?.mergeRequestScore, '#F6B636']);
         }
         setNumbers(numberOfMRs);
         setScores(scoresOfMRs);
