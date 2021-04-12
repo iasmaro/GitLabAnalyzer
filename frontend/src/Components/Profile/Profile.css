@@ -1,22 +1,25 @@
 .profile-title {
-  background-color: #747474;
+  background-color: #4C4975;
   text-align: center;
   padding: 10px 20px;
   border-radius: 3px;
+  font-size: large;
 }
 
 .profile-form {
   margin-top: 10px;
+  font-size: large;
 }
 
 label {
   margin-top: 0.5rem;
   margin-bottom: 0;
+  font-size: large;
 }
 
 /* Adapted from https://www.w3schools.com/howto/howto_js_snackbar.asp */
 #profile-snackbar {
-  font-size: 18px;
+  font-size: large;
   visibility: hidden;
   margin: 10px 0px;
 }

@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #141538;
+    background-color: #4C4975;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -8,7 +8,7 @@
 }
 
 .navbar-brand:hover {
-    color: #47CE65;
+    color: #AFA4E0;
 }
 
 .nav-link {
@@ -16,5 +16,5 @@
 }
 
 .nav-link:hover {
-    color: #47CE65;
+    color: #AFA4E0;
 }
