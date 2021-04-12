@@ -1,6 +1,8 @@
 import React from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 
+import './AnalysisSpecifications.css'
+
 const AnalysisDropDown = (props) => {
 
     const { members, student, setStudent, setDiffs, setActiveCommits } = props || {};
@@ -17,7 +19,7 @@ const AnalysisDropDown = (props) => {
     };
 
     return (
-        <DropdownButton variant="secondary" id="dropdown-basic-button" title={student}>
+        <DropdownButton variant="dark" id="dropdown-basic-button" title={student}>
             {members.map((member) => (
                 <Dropdown.Item key={member} as="button" onClick={() => selectStudent(member)}>{member}</Dropdown.Item>
             ))}

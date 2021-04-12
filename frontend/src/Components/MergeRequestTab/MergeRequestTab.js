@@ -104,7 +104,7 @@ const MergeRequestTab = (props) => {
                 </div>
             </div>}
             {diffs && <div className="mrs-right">
-                <Button className="expand-button" onClick={handleExpand}>{expand ? '>' : '<'}</Button>
+                <Button variant="dark" className="expand-button" onClick={handleExpand}>{expand ? '>' : '<'}</Button>
                 <div className={`mr-code-diffs ${expand ? 'expanded' : ''}`}>
                     <CodeDifferenceList diffs={diffs} diffsTitle={diffsTitle} changeMRScore={changeMRScore} configInfo={configInfo}/>
                 </div>

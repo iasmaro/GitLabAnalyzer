@@ -15,6 +15,13 @@
 
 .view-button {
     min-width: 7.2em;
+    background-color: #4C4975 !important;
+    border-color: #4C4975 !important;
+}
+
+.expand-colapse {
+    background-color: #4C4975 !important;
+    border-color: #4C4975 !important;
 }
 
 .code-diff-list {

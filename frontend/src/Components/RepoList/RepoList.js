@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Badge, Tooltip, OverlayTrigger, Button, Spinner, Alert } from 'react-bootstrap';
+import { FaInfo } from 'react-icons/fa';
 
 import { message } from 'Constants/constants';
 import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
@@ -90,10 +91,10 @@ const RepoList = (props) => {
                 <thead>
                     <tr className="repo-headers">
                         <th>
-                            <Button variant="dark" disabled={batchAnalyzeDisabled} onClick={() => handleShowBatchRepoAnalyzeModal()}>Batch Process</Button> {' '}
+                            <Button variant="dark" className='batch-process-button' disabled={batchAnalyzeDisabled} onClick={() => handleShowBatchRepoAnalyzeModal()}>Batch Process</Button> {' '}
                             <OverlayTrigger placement='right' overlay={batchAnalyzeTooltip}>
-                                <Badge pill variant="dark">
-                                    i
+                                <Badge variant="dark">
+                                    <FaInfo/>
                                 </Badge>
                             </OverlayTrigger>
                             { (isLoadingStartDate || isLoadingEndDate) ? <Spinner animation="border" className="spinner-repo-list" /> :
@@ -109,8 +110,8 @@ const RepoList = (props) => {
                         <th className={getClassNamesFor(sortConfig, 'projectName')} onClick={() => requestSortObject('projectName')}>Name</th>
                         <th className={getClassNamesFor(sortConfig, 'namespace')} onClick={() => requestSortObject('namespace')}>Namespace {' '}
                             <OverlayTrigger placement='right' overlay={namespaceTooltip}>
-                                <Badge pill variant="dark">
-                                    i
+                                <Badge variant="dark">
+                                    <FaInfo/>
                                 </Badge>
                             </OverlayTrigger>
                         </th>

@@ -18,13 +18,13 @@ const ReviewsGraph = (props) => {
     ];
 
     useEffect(() => {
-        const wordsPerDay = [ ['Date', 'Words/Day'] ];
-        const ownMRs = [ ['Date', 'Words/Day'] ];
-        const othersMRs = [ ['Date', 'Words/Day'] ];
+        const wordsPerDay = [ ['Date', 'Words/Day', { role: 'style' }] ];
+        const ownMRs = [ ['Date', 'Words/Day', { role: 'style' }] ];
+        const othersMRs = [ ['Date', 'Words/Day',{ role: 'style' }] ];
         for (let review of codeReviewsGraph) {
-            wordsPerDay.push([graphDateFormatter(review?.date), review?.wordsPerDay]);
-            ownMRs.push([graphDateFormatter(review?.date), review?.wordsPerDayOnOwn]);
-            othersMRs.push([graphDateFormatter(review?.date), review?.wordsPerDayOnOtherMergeRequests]);
+            wordsPerDay.push([graphDateFormatter(review?.date), review?.wordsPerDay, '#F6B636']);
+            ownMRs.push([graphDateFormatter(review?.date), review?.wordsPerDayOnOwn, '#F6B636']);
+            othersMRs.push([graphDateFormatter(review?.date), review?.wordsPerDayOnOtherMergeRequests, '#F6B636']);
         }
         setWords(wordsPerDay);
         setOwn(ownMRs);

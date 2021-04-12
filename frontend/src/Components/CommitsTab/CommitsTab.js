@@ -59,7 +59,7 @@ const CommitsTab = (props) => {
                 <CommitsList {...props} commits={commits} setCodeDiffs={setCodeDiffs} setDiffsTitle={setDiffsTitle}/>
             </div>}
             {diffs && <div className="commits-right">
-                <Button className="expand-button" onClick={handleExpand}>{expand ? '>' : '<'}</Button>
+                <Button variant="dark" className="expand-button" onClick={handleExpand}>{expand ? '>' : '<'}</Button>
                 <div className={`commits-code-diffs ${expand ? 'expanded' : ''}`}>
                 {diffs && <CodeDifferenceList changeCommitScore={changeCommitScore} diffs={diffs} diffsTitle={diffsTitle} configInfo={configInfo}/>}
                 </div>
