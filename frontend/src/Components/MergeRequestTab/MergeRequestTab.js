@@ -59,7 +59,7 @@ const MergeRequestTab = (props) => {
         if (selected === 'commit') {
             const newCommits = commits.slice();
             const oldScore =  parseFloat(newCommits[selectedCommit].commitScore);
-            const newScore = (oldScore + scoreChange + 0).toFixed(1);
+            const newScore = Math.round(10*(oldScore + scoreChange)) / 10;
             newCommits[selectedCommit].commitScore = newScore;
             let newDiffScore = 0;
             if (newCommits[selectedCommit]?.commitDiffs[diffIndex]?.scoreDTO) {
