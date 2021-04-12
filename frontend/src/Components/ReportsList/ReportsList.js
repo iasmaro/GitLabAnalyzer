@@ -6,12 +6,12 @@ import { useSortableDataObject, getClassNamesFor } from 'Utils/sortTables';
 import shareReport from 'Utils/shareReport';
 import filterRepos from 'Utils/filterRepos';
 import getReports from 'Utils/getReports';
-import deleteReportPermenantly from 'Utils/deleteReport';
+import deleteReportPermanently from 'Utils/deleteReport';
 import { useUserState } from 'UserContext';
 import ShareReportModal from 'Components/ShareReportModal/ShareReportModal';
+import SearchBar from 'Components/SearchBar/SearchBar';
 
 import Report from './Report';
-import SearchBar from 'Components/SearchBar/SearchBar';
 import './ReportsList.css';
 
 const ReportsList = (props) => {
@@ -92,7 +92,7 @@ const ReportsList = (props) => {
     }
 
     const deleteReport = (reportName) => {
-        deleteReportPermenantly(reportName).then(() => {
+        deleteReportPermanently(reportName).then(() => {
             updateReportsList();
         })
     }
