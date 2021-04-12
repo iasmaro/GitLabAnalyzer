@@ -48,11 +48,12 @@
 }
 
 .code-diff-score {
-	color: black;
-	border-color: black;
+	color: #fff;
+	background-color: #4C4975 !important;
 }
 
 .code-diff-score-updated {
 	color: #842bd7;
+	font-weight: bold;
 	border-color: black;
 }

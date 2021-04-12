@@ -40,7 +40,7 @@ const FileHeader = (props) => {
                 </div>
             </div>
             <Button variant="white" onClick={handleShow} className={scoreClass}>
-                <span> Score: </span>
+                <span>{updatedScore? '*' : ''}Score: </span>
                 <span>{diffScore}</span>
             </Button>
             {show && <FileHeaderModal {...props}/>}
