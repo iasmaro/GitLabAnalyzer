@@ -16,11 +16,11 @@ const CommitsGraph = (props) => {
     ];
 
     useEffect(() => {
-        const numberOfCommits = [ ['Date', 'Number of Commits'] ];
-        const scoresOfCommits = [ ['Date', 'Commits Score'] ];
+        const numberOfCommits = [ ['Date', 'Number of Commits', { role: 'style' }] ];
+        const scoresOfCommits = [ ['Date', 'Commits Score', { role: 'style' }] ];
         for (let commit of commitsGraph) {
-            numberOfCommits.push([graphDateFormatter(commit.date), commit.numberOfCommits]);
-            scoresOfCommits.push([graphDateFormatter(commit.date), commit.totalCommitScore]);
+            numberOfCommits.push([graphDateFormatter(commit.date), commit.numberOfCommits, '#F6B636']);
+            scoresOfCommits.push([graphDateFormatter(commit.date), commit.totalCommitScore, '#F6B636']);
         }
         setNumbers(numberOfCommits);
         setScores(scoresOfCommits);

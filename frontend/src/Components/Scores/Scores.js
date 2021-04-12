@@ -1,4 +1,5 @@
 import Button from 'react-bootstrap/Button';
+import { IoMdCopy } from 'react-icons/io';
 
 import copyToClipBoard from './utils/copyToClipboard';
 import './Scores.css';
@@ -27,9 +28,10 @@ const Scores = (props) => {
                     </div>
                 </div>
             </div>
-            <Button variant="success" onClick={handleClick} className="clip-board-button">Copy to Clipboard</Button>
+            <Button onClick={handleClick} className="clip-board-button"><IoMdCopy /></Button>
         </>
     );
 }
 
 export default Scores;
+

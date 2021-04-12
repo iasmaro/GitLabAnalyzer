@@ -10,11 +10,10 @@ const DefaultNavbar = () => {
             <Navbar.Brand href="/">
                 <img
                     alt=""
-                    src="/HaumeaNav.JPG"
+                    src="/Haumea2.jpg"
                     width="50"
                     height="30"
-                />
-                GitLab Analyzer
+                />  GitLab Analyzer
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
