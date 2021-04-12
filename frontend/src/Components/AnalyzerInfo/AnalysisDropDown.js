@@ -3,11 +3,12 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 const AnalysisDropDown = (props) => {
 
-    const { members, student, setStudent, setDiffs} = props || {};
+    const { members, student, setStudent, setDiffs, setActiveCommits} = props || {};
 
     const selectStudent = (student) => {
-        setStudent(student);
-        setDiffs();
+        setStudent && setStudent(student);
+        setStudent && setDiffs();
+        setActiveCommits && setActiveCommits();
 
     };
 

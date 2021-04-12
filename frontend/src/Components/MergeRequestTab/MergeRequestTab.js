@@ -9,13 +9,12 @@ import CodeDifferenceList from 'Components/CodeDifferenceList/CodeDifferenceList
 import './MergeRequestTab.css';
 
 const MergeRequestTab = (props) => {
-    const { configInfo, diffs, setDiffs } = props || {};
-    const [commits, setCommits] = useState();
+    const { configInfo, diffs, setDiffs, activeCommits, setActiveCommits } = props || {};
     const [expand, setExpand] = useState(false);
     const [diffsTitle, setDiffsTitle] = useState();
 
     const setCommit = (commitList) => {
-        setCommits(commitList);
+        setActiveCommits(commitList);
     }
 
     const setCodeDiffs = (diffsList) => {
@@ -33,7 +32,7 @@ const MergeRequestTab = (props) => {
                     <MergeRequestList {...props} setCommit={setCommit} setCodeDiffs={setCodeDiffs} setDiffsTitle={setDiffsTitle} />
                 </div>
                 <div className="mrs-bottom">
-                    {commits && <CommitsList {...props} commits={commits} setCodeDiffs={setCodeDiffs} setDiffsTitle={setDiffsTitle}/>}
+                    {activeCommits && <CommitsList {...props} commits={activeCommits} setCodeDiffs={setCodeDiffs} setDiffsTitle={setDiffsTitle}/>}
                 </div>
             </div>}
             {diffs && <div className="mrs-right">

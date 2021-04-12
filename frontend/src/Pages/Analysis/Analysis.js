@@ -33,6 +33,7 @@ const Analysis = (props) => {
     const [configInfo, setConfigInfo] = useState();
     const [databaseMembersAndAliases, setDatabaseMembersAndAliases] = useState([]);
     const [diffs, setDiffs] = useState();
+    const [activeCommits, setActiveCommits] = useState();
     const username = useUserState();
 
     useEffect(() => {
@@ -81,14 +82,16 @@ const Analysis = (props) => {
         <div className="analysis-page">
             <AnalysisSpecifications startDate={startDate} endDate={endDate} configuration={configuration} namespace={namespace} projectName={projectName} />
             <div className="analysis-header">
-                <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} setDiffs={setDiffs}/>
+                <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setIsLoading={setIsLoading} setDiffs={setDiffs} setActiveCommits={setActiveCommits}/>
             </div>
             {isLoading ? <Spinner animation="border" className="spinner" /> : 
             <>
                 <div className="analysis-header">
-                    <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setDiffs={setDiffs} />
+                    <AnalysisDropDown members={members} student={student} setStudent={setStudent} data={data} setDiffs={setDiffs} setActiveCommits={setActiveCommits}/>
                 </div>
                 <AnalyzerTabs
+                    activeCommits={activeCommits}
+                    setActiveCommits={setActiveCommits}
                     diffs={diffs}
                     setDiffs={setDiffs}
                     mergerequests={mergeRequests}
