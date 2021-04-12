@@ -539,6 +539,11 @@ public class GitlabService {
                 List<Note> issueNotes = notesApi.getIssueNotes(projectId, issue.getIid());
                 for(Note note : issueNotes) {
 
+                    Date commentDate = note.getCreatedAt();
+                    if(commentDate.before(start) || commentDate.after(end)) {
+                        continue;
+                    }
+
                     String commentAuthor = note.getAuthor().getUsername();
                     String issueAuthor = issue.getAuthor().getUsername();
                     CommentWrapper commentWrapper = new CommentWrapper(
@@ -584,6 +589,12 @@ public class GitlabService {
             for(MergeRequest mergeRequest : mergeRequests) {
                 List<Note> MRNotes = notesApi.getMergeRequestNotes(projectId, mergeRequest.getIid());
                 for(Note note : MRNotes) {
+
+                    Date commentDate = note.getCreatedAt();
+                    if(commentDate.before(start) || commentDate.after(end)) {
+                        continue;
+                    }
+
                     String commentAuthor = note.getAuthor().getUsername();
                     String mergeRequestAuthor = mergeRequest.getAuthor().getUsername();
                     CommentWrapper commentWrapper = new CommentWrapper(
