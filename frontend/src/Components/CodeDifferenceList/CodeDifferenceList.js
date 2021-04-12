@@ -42,7 +42,7 @@ const CodeDifferenceList = (props) => {
             </div>
             <DiffsTitle diffsTitle={diffsTitle} />
             <div className="code-diff-list">
-                {diffs.map((diff, i) => <CodeDifference key={i} diff={diff} view={view} expandAll={expand} collapseAll={collapse}  configInfo={configInfo} />)}
+                {diffs.map((diff, i) => <CodeDifference key={i} diff={diff} view={view} expandAll={expand} collapseAll={collapse} configInfo={configInfo} />)}
             </div>
         </>
     );

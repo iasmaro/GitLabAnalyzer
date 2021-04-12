@@ -96,7 +96,7 @@ public class GraphService {
             }
 
             // round to 1 decimal place to avoid weird floating point bug
-            totalScore = Math.round(totalScore * 10.0) / 10.0;
+            totalScore = Math.round(totalScore * 10) / 10.0;
 
             CommitGraphDTO commitGraphDTO = new CommitGraphDTO (date,numberOfCommits, totalScore);
             returnList.add(0, commitGraphDTO);
@@ -151,7 +151,7 @@ public class GraphService {
             }
 
             // round to 1 decimal place to avoid weird floating point bug
-            totalScore = Math.round(totalScore * 10.0) / 10.0;
+            totalScore = Math.round(totalScore * 10) / 10.0;
 
             MergeRequestGraphDTO mergeRequestGraphDTO = new MergeRequestGraphDTO(date, numberOfMergeRequests, totalScore);
             returnList.add(0, mergeRequestGraphDTO);
@@ -273,4 +273,5 @@ public class GraphService {
 
         return returnList;
     }
+
 }

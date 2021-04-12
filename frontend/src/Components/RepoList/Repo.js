@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import RepoAnalyzeModal from 'Components/RepoAnalyzeModal/RepoAnalyzeModal';
 import RepoMapAliasModal from 'Components/RepoMapAliasModal/RepoMapAliasModal';
@@ -14,7 +15,7 @@ import getStartDate from 'Utils/getStartDate';
 import './RepoList.css';
 
 const Repo = (props) => {
-    const { repo } = props || {};
+    const { repo, addRepo, removeRepo, uncheck } = props || {};
     const [configs, setConfigs] = useState([]);
     const [showAnalyzeModal, setShowAnalyzeModal] = useState(false);
     const [showAliasMappingModal, setShowAliasMappingModal] = useState(false);
@@ -28,7 +29,14 @@ const Repo = (props) => {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const username = useUserState();
-    
+    const [checked, setChecked] = useState(false);
+
+    useEffect(() => {
+        if (uncheck) {
+            setChecked(false);
+        }
+    }, [uncheck]);
+
     const handleShowAnalyzeModal = () => {
         setIsLoadingStartDate(true);
         setIsLoadingEndDate(true);
@@ -65,36 +73,52 @@ const Repo = (props) => {
 
     const handleCloseAliasMappingModal = () => setShowAliasMappingModal(false);
 
+    const handleChange = () => {
+        const isChecked = !checked;
+        setChecked(isChecked);
+        if (isChecked) {
+            addRepo && addRepo(repo);
+        } else {
+            removeRepo && removeRepo(repo);
+        }
+    }
+
     return (
         <tr>
+            <td>
+                <Checkbox
+                    checked={checked}
+                    color='default'
+                    onClick={() => handleChange()}
+                />
+            </td>
             <td>{repo?.projectName}</td>
             <td>{repo?.namespace}</td>
             <td>{utcToLocal(repo?.updatedAt)}</td>
             <td>
                 <Button variant="outline-dark" className='repo-list-button' onClick={handleShowAliasMappingModal}> Map Aliases </Button>
+                { (isLoadingGitLabCall || isLoadingDatabaseCall) ? <Spinner animation="border" className="spinner" /> :
+                showAliasMappingModal && <RepoMapAliasModal 
+                                            name={repo?.projectName} 
+                                            members={members} 
+                                            aliases={aliases} 
+                                            databaseMapping={databaseMapping} 
+                                            status={showAliasMappingModal} 
+                                            toggleModal={handleCloseAliasMappingModal} />}
             </td>
             <td>
                 <Button variant="dark" className='repo-list-button' onClick={handleShowAnalyzeModal}> Analyze </Button>
+                { (isLoadingStartDate || isLoadingEndDate) ? <Spinner animation="border" className="spinner" /> :
+                showAnalyzeModal && <RepoAnalyzeModal 
+                                            name={repo?.projectName} 
+                                            id={repo?.projectId}                                         
+                                            configs={configs} 
+                                            status={showAnalyzeModal} 
+                                            toggleModal={handleCloseAnalyzeModal} 
+                                            start={startDate} 
+                                            end={endDate}
+                                            namespace={repo?.namespace} />}
             </td>
-            { (isLoadingStartDate || isLoadingEndDate) ? <Spinner animation="border" className="spinner" /> :
-             showAnalyzeModal && <RepoAnalyzeModal 
-                                        name={repo?.projectName} 
-                                        id={repo?.projectId}                                         
-                                        configs={configs} 
-                                        status={showAnalyzeModal} 
-                                        toggleModal={handleCloseAnalyzeModal} 
-                                        start={startDate} 
-                                        end={endDate}
-                                        namespace={repo?.namespace} />}
-
-            { (isLoadingGitLabCall || isLoadingDatabaseCall) ? <Spinner animation="border" className="spinner" /> :
-             showAliasMappingModal && <RepoMapAliasModal 
-                                        name={repo?.projectName} 
-                                        members={members} 
-                                        aliases={aliases} 
-                                        databaseMapping={databaseMapping} 
-                                        status={showAliasMappingModal} 
-                                        toggleModal={handleCloseAliasMappingModal} />}
         </tr>
     );
 };

@@ -2,9 +2,7 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.UserRepository;
 import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
-import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
-import com.haumea.gitanalyzer.gitlab.ProjectWrapper;
 import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,4 +143,18 @@ public class UserService {
         return userRepository.deleteConfiguration(userId, fileName);
     }
 
+    public void addReport(String userId, String reportName) {
+        userRepository.addReportToUser(userId, reportName);
+    }
+
+    public void deleteReport(String userId, String reportName) {
+        userRepository.deleteReportFromUserList(userId, reportName);
+    }
+
+
+    public List<String> getUserReportIds(String userId) {
+        User user = userRepository.findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found in database"));
+
+        return user.getReportNames();
+    }
 }

@@ -28,7 +28,7 @@ public class UserRepository {
     }
 
 
-    private Optional<User> findUserByUserId(String userId) {
+    public Optional<User> findUserByUserId(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
         return Optional.ofNullable(mongoTemplate.findOne(query, User.class));
@@ -77,6 +77,32 @@ public class UserRepository {
         return user;
     }
 
+    public void addReportToUser(String userId, String reportName) {
+        User user = findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
+        List<String> reports = user.getReportNames();
+
+        if(reports.contains(reportName)) {
+            throw new IllegalArgumentException("The report already exists!");
+        }
+        else {
+            reports.add(reportName);
+        }
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(user.getUserId().get()));
+        Update update = new Update();
+
+
+
+        update.set("reportNames", reports);
+
+        if(mongoTemplate.findAndModify(query, update, User.class) == null) {
+            throw new ResourceNotFoundException("User not found!");
+        }
+
+    }
+
+
     public String getPersonalAccessToken(String userId) throws ResourceNotFoundException {
 
         User user = findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
@@ -116,6 +142,27 @@ public class UserRepository {
         mongoTemplate.updateFirst(query, update, User.class);
 
     }
+
+    public void deleteReportFromUserList(String userId, String reportName) {
+        User user = findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
+        List<String> reports = user.getReportNames();
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+        Update update = new Update();
+
+        if(reports.remove(reportName)) {
+            update.set("reportNames", reports);
+        }
+        else {
+            throw new ResourceNotFoundException("Report name doesn't exist in user report list");
+        }
+
+        if(mongoTemplate.findAndModify(query, update, User.class) == null) {
+            throw new ResourceNotFoundException("User not found!");
+        }
+    }
+
 
     public String getActiveConfig(String userId) throws ResourceNotFoundException {
 
@@ -200,6 +247,8 @@ public class UserRepository {
 
     }
 
+
+
     public User deleteConfiguration(String userId, String fileName) throws ResourceNotFoundException {
 
         User user = findUserByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
@@ -223,5 +272,6 @@ public class UserRepository {
 
         return user;
     }
+
 
 }
