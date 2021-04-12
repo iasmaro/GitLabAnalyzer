@@ -107,7 +107,7 @@ const Analysis = (props) => {
                     databaseMembersAndAliases={databaseMembersAndAliases}
                     issueComments={issueComments}
                     mergeRequestComments={mergeRequestComments}
-                    reportName={analysis.reportName}
+                    reportName={analysis && analysis.reportName}
                     configInfo={configInfo}/>
             </>}
         </div>
