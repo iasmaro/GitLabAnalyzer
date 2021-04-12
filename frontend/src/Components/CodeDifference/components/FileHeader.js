@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import { FiEdit } from 'react-icons/fi';
 
 import FileHeaderModal from './FileHeaderModal';
-import ScoreChangeModal from './ScoreChangeModal'
+import ScoreChangeModal from './ScoreChangeModal';
 import './FileHeader.css';
 
 
