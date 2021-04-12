@@ -1,7 +1,5 @@
 package com.haumea.gitanalyzer.dto;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Map;
 
 public class ScoreDTO {
@@ -20,18 +18,8 @@ public class ScoreDTO {
 
 
     private double score;
+    private double modifiedScore;
     private Map<String, Double> scoreByFileTypes;
-
-    public ScoreDTO() {
-        this.meaningFullLinesRemoved = 0;
-
-        this.linesAdded = 0;
-        this.linesRemoved = 0;
-        this.score = 0.0;
-        this.linesMoved = 0;
-        this.spaceLinesAdded = 0;
-        this.meaningFullLinesAdded = 0;
-    }
 
     public ScoreDTO(int linesAdded,
                     int linesRemoved,
@@ -52,20 +40,13 @@ public class ScoreDTO {
         this.linesRemoved = linesRemoved;
         this.spaceLinesRemoved = spaceLinesRemoved;
         this.syntaxLinesRemoved = syntaxLinesRemoved;
-        this.score = this.roundScore(score);
+        this.score = score;
+        this.modifiedScore = -1;
         this.linesMoved = linesMoved;
         this.spaceLinesAdded = spaceLinesAdded;
         this.syntaxLinesAdded = syntaxLinesAdded;
         this.commentLinesAdded = commentLinesAdded;
         this.commentLinesRemoved = commentLinesRemoved;
-    }
-
-    public double roundScore(double score) {
-
-        BigDecimal roundedScore = new BigDecimal(Double.toString(score));
-        roundedScore = roundedScore.setScale(2, RoundingMode.HALF_UP);
-
-        return roundedScore.doubleValue();
     }
 
     public int getLinesAdded() {
@@ -113,7 +94,6 @@ public class ScoreDTO {
         return commentLinesAdded;
     }
 
-
     public int getSpaceLinesRemoved() {
         return spaceLinesRemoved;
     }
@@ -126,6 +106,8 @@ public class ScoreDTO {
         return commentLinesRemoved;
     }
 
-
+    public double getModifiedScore() {
+        return modifiedScore;
+    }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -62,5 +63,39 @@ public class PastReportController {
     @GetMapping("/userReports")
     public List<ReportMetadataDTO> getUserReports(@RequestParam @NotBlank String userId) {
         return reportService.getReportsForUser(userId);
+    }
+
+    @PutMapping("/updateScore/mr/mrDiff")
+    public void updateScoreForMRDiff(@RequestParam @NotBlank String reportName,
+                                     @RequestParam @NotBlank String memberId,
+                                     @RequestParam @NotNull int mergeIndex,
+                                     @RequestParam @NotNull int diffIndex,
+                                     @RequestParam @NotNull double newScore) {
+
+        reportService.modifyDiffScoreOfMRDiff(reportName, memberId, mergeIndex, diffIndex, newScore);
+
+    }
+
+    @PutMapping("/updateScore/mr/commitDiff")
+    public void updateScoreForCommitDiffInOneMR(@RequestParam @NotBlank String reportName,
+                                                @RequestParam @NotBlank String memberId,
+                                                @RequestParam @NotNull int mergeIndex,
+                                                @RequestParam @NotNull int diffIndex,
+                                                @RequestParam @NotNull int commitIndex,
+                                                @RequestParam @NotNull double newScore) {
+
+        reportService.modifyDiffScoreOfCommitInOneMR(reportName, memberId, mergeIndex, commitIndex, diffIndex, newScore);
+
+    }
+
+    @PutMapping("updateScore/commit/commitDiff")
+    public void updateScoreForCommitDiff(@RequestParam @NotBlank String reportName,
+                                         @RequestParam @NotBlank String memberId,
+                                         @RequestParam @NotNull int commitIndex,
+                                         @RequestParam @NotNull int diffIndex,
+                                         @RequestParam @NotNull double newScore) {
+
+        reportService.modifyDiffScoreOfCommit(reportName, memberId, commitIndex, diffIndex, newScore);
+
     }
 }

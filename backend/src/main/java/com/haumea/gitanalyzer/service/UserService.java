@@ -2,9 +2,7 @@ package com.haumea.gitanalyzer.service;
 
 import com.haumea.gitanalyzer.dao.UserRepository;
 import com.haumea.gitanalyzer.exception.ResourceNotFoundException;
-import com.haumea.gitanalyzer.gitlab.CommentType;
 import com.haumea.gitanalyzer.gitlab.GitlabService;
-import com.haumea.gitanalyzer.gitlab.ProjectWrapper;
 import com.haumea.gitanalyzer.model.Configuration;
 import com.haumea.gitanalyzer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
