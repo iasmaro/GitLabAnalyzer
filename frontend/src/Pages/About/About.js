@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactPlayer from 'react-player/youtube';
 import { Table } from 'react-bootstrap';
-import { AiFillGithub, AiFillLinkedin } from 'react-icons/ai';
+import { AiFillGithub, AiFillLinkedin, AiOutlineCopyrightCircle } from 'react-icons/ai';
 
 import './About.css';
 
@@ -17,10 +17,60 @@ function About() {
                     of students between a specified start/end date.  
                 </p>
             </div>
-            <div className='column'>
-                <p>
-                    <h8>We are a diverse group of 8 CS students studying at Simon Fraser University and together we are team Haumea!</h8>
-                </p>
+            <div className='get-started'>
+                <h3>Get Started</h3>
+                <div className='get-started-list'>
+                    <ul>
+                        <li>Sign in with your SFU account</li>
+                        <li>Add your GitLab token </li>
+                        <li>Add an url to the GitLab server</li>
+                    </ul>
+                </div>
+            </div>
+            <div className='get-started'>
+                <h3>Current Features</h3>
+                <div className='column'>
+                    <ul>
+                        <li>Limit analysis for a user between specified dates</li>
+                        <li>Display list of all merge requests</li>
+                        <li>Display list of commits within a specific merge request</li>
+                        <li>Display list of all commits</li>
+                        <li>View past Reports</li>
+                        <li>Batch Process Reports</li>
+                        <li>Share reports with other users</li>
+                        <li>View Graphs by Comments, Merge Requests, Issues</li>
+                    </ul>
+                </div>
+                <div className='column'>
+                    <ul>
+                        <li>Create scoring configurations</li>
+                        <li>Add multiple file types for configurations</li>
+                        <li>Map Aliases</li>
+                        <li>View and edit score breakdowns</li>
+                        <li>Copy total scores easily to any platform</li>
+                        <li>View Code Changes with sytanx highlighting</li>
+                        <li>View comments on a particular Merge Request or an Issue</li>
+                        <li>Easily acess GitLab MR or Commit with the links provided</li>
+                        <li>View score totals for MRs and commits and aslo number of words in a comment</li>
+                    </ul>
+                </div>
+                <h8>We are not limited to SFU's GitLab server! We support any instance of GitLab or Github servers!</h8>
+            </div>
+            <div className='main-header-demo'>
+                <h3>Demo Video</h3>
+                <ReactPlayer
+                    url="https://www.youtube.com/watch?v=S7kQ9qxSALU"
+                    width="1280px"
+                    height="720px"
+                />
+            </div>
+            <div className='main-header-demo'>
+                <div className='about-us'>
+                    <h3>About Us</h3>
+                    <p>
+                        <h8>We are a diverse group of 8 CS students studying at Simon Fraser University and together we are team Haumea!</h8>
+                    </p>
+                </div>
                 <Table striped hover className="team-table">
                     <thead>
                         <tr>
@@ -41,7 +91,7 @@ function About() {
                             <td>Backend</td>
                             <td>Software systems student at SFU who enjoys working on real-world software applications</td>
                             <td className="profile-links">
-                                <a href="https://www.linkedin.com/in/andrew-ursu-6424171b7/">
+                                <a href="https://www.linkedin.com/in/andrew-ursu-6424171b7/" target="https://www.linkedin.com/in/andrew-ursu-6424171b7/">
                                     <AiFillLinkedin />
                                 </a>
                             </td>
@@ -51,7 +101,7 @@ function About() {
                             <td>Backend</td>
                             <td>3rd year Computing Science student at SFU</td>
                             <td className="profile-links">
-                                <a href="https://github.com/AustinjhWang">
+                                <a href="https://github.com/AustinjhWang" target="https://github.com/AustinjhWang">
                                     <AiFillGithub />
                                 </a>
                             </td>
@@ -61,7 +111,7 @@ function About() {
                             <td>Frontend</td>
                             <td>2nd year Computing Science Student at SFU</td>
                             <td className="profile-links">
-                                <a href="https://www.linkedin.com/in/doris-chang/">
+                                <a href="https://www.linkedin.com/in/doris-chang/" target="https://www.linkedin.com/in/doris-chang/">
                                     <AiFillLinkedin />
                                 </a>
                             </td>
@@ -71,7 +121,7 @@ function About() {
                             <td>Frontend</td>
                             <td>Computing Science student at SFU graduating in August 2021</td>
                             <td className="profile-links">
-                                <a href=" https://github.com/iasmaro">
+                                <a href="https://github.com/iasmaro" target="https://github.com/iasmaro">
                                     <AiFillGithub />
                                 </a>
                             </td>
@@ -81,7 +131,7 @@ function About() {
                             <td>Backend</td>
                             <td>Computing Science student at SFU</td>
                             <td className="profile-links">
-                                <a href="https://www.linkedin.com/in/minh--bui/">
+                                <a href="https://www.linkedin.com/in/minh--bui/" target="https://www.linkedin.com/in/minh--bui/">
                                     <AiFillLinkedin />
                                 </a>
                             </td>
@@ -91,10 +141,10 @@ function About() {
                             <td>Frontend</td>
                             <td>Computer Science and Statistics student at SFU who enjoys to work with data and artificial intelligence applications</td>
                             <td className="profile-links">
-                                <a href="https://github.com/nmshah1609">
+                                <a href="https://github.com/nmshah1609" target="https://github.com/nmshah1609">
                                     <AiFillGithub />
                                 </a>
-                                <a href="www.linkedin.com/in/neilshah16">
+                                <a href="https://www.linkedin.com/in/neilshah16/" target="https://www.linkedin.com/in/neilshah16/">
                                     <AiFillLinkedin />
                                 </a>
                             </td>
@@ -104,10 +154,10 @@ function About() {
                             <td>Frontend</td>
                             <td>Software Systems student at SFU with an expected graduation date of Summer 2022</td>
                             <td className="profile-links">
-                                <a href="https://github.com/sterlst ">
+                                <a href="https://github.com/sterlst" target="https://github.com/sterlst">
                                     <AiFillGithub />
                                 </a>
-                                <a href="https://www.linkedin.com/in/sterling-tamboline-39507a192">
+                                <a href="https://www.linkedin.com/in/sterling-tamboline-39507a192" target="https://www.linkedin.com/in/sterling-tamboline-39507a192">
                                     <AiFillLinkedin />
                                 </a>
                             </td>
@@ -117,7 +167,7 @@ function About() {
                             <td>Backend</td>
                             <td>3rd year Computing Science student at SFU, interested in coding and solving mathematical problems</td>
                             <td className="profile-links">
-                                <a href="https://github.com/hvtruong">
+                                <a href="https://github.com/hvtruong" target="https://github.com/hvtruong">
                                     <AiFillGithub />
                                 </a>
                             </td>
@@ -125,51 +175,7 @@ function About() {
                     </tbody>
                 </Table>
             </div>
-            <div className='column'>
-                <h3>Get Started</h3>
-                    <ul>
-                        <li>Sign in with your SFU account</li>
-                        <li>Add your GitLab token </li>
-                        <li>Add an url to the GitLab server</li>
-                    </ul>
-                <h3>Current Features</h3>
-                <div className='column'>
-                    <ul>
-                        <li>Limit analysis for a user between specified dates</li>
-                        <li>Display list of all merge requests</li>
-                        <li>Display list of commits within a specific merge request</li>
-                        <li>Display list of all commits</li>
-                        <li>View past Reports</li>
-                        <li>Batch Process Reports</li>
-                        <li>Share reports with other users</li>
-                        <li>View Graphs by Comments, Merge Requests, Issues</li>
-                        
-                       
-                    </ul>
-                </div>
-                <div className='column'>
-                    <ul>
-                        <li>Create scoring configurations</li>
-                        <li>Add multiple file types for configurations</li>
-                        <li>Map Aliases</li>
-                        <li>View and edit score breakdowns</li>
-                        <li>Copy total scores easily to any platform</li>
-                        <li>View Code Changes with sytanx highlighting</li>
-                        <li>View comments on a particular Merge Request or an Issue</li>
-                        <li>Easily acess GitLab MR or Commit with the links provided</li>
-                        <li>View score totals for MRs and commits and aslo number of words in a comment</li>
-                    </ul>
-                </div>
-                <h8>We are not limited to SFU's GitLab server! We support any instance of GitLab or Github servers</h8>
-            </div>
-            <div className='main-header-demo'>
-                <h3>Demo Video</h3>
-                <ReactPlayer
-                    url="https://www.youtube.com/watch?v=S7kQ9qxSALU"
-                    width="1280px"
-                    height="720px"
-                />
-            </div>
+            <div className="copy-rights">Copyright<AiOutlineCopyrightCircle /> 2021, 373-2021-1-Haumea</div>
             <div className="empty"></div>
         </div>
     )
