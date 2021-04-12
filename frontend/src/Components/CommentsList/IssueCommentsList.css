@@ -1,0 +1,24 @@
+.issue-comments-table {
+    height: 100%;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    word-break: break-all;
+    width: 100%;
+}
+
+
+.issue-table-headers th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0em;
+    background-color: rgb(245, 245, 245);
+    text-align: end;
+}
+
+.issue-row-headers th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 3em;
+    background-color: rgb(245, 245, 245);
+}

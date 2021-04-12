@@ -2,9 +2,9 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 
 import { message } from 'Constants/constants';
-import RepoModalMapAliasTableRow from './RepoModalMapAliasTableRow';
+import MapAliasTableRow from './MapAliasTableRow';
 
-import './RepoModalMapAliasTable.css';
+import './MapAliasTable.css';
 
 const RepoModalMapAliasTable = (props) => {
     const { aliases, members, aliasIdPairs, setAliasIdPairs } = props || {};
@@ -31,7 +31,7 @@ const RepoModalMapAliasTable = (props) => {
                         </tr>
                     )
                     : aliases.map((alias, index) => (
-                        <RepoModalMapAliasTableRow 
+                        <MapAliasTableRow 
                             key={alias} 
                             alias={alias} 
                             members={members} 

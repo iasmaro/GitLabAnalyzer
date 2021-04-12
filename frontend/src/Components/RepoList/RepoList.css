@@ -38,11 +38,12 @@
 }
 
 .repo-headers th {
-  width: 37.5%;
+  max-width: 25.5%;
   position: sticky;
   position: -webkit-sticky;
   top: 4em;
   background-color: #fff;
+  z-index: 1;
 }
 
 .table-header th {
@@ -50,6 +51,7 @@
     position: sticky;
     position: -webkit-sticky;
     top: 0em;
+    z-index: 1;
 }
 
 thead th.default {
@@ -74,4 +76,15 @@ thead th.descending::after {
   content: '↓';
   display: inline-block;
   margin-left: 8px;
+}
+
+.repo-list-button {
+  min-width: 7.2em;
+}
+
+.spinner-repo-list {
+  color: #fff;
+  position: fixed;
+  top: 50%;
+  left: 50%;
 }

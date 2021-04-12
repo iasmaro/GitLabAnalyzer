@@ -13,8 +13,19 @@ import './syntaxHighlighter/prism.css';
 
 
 const CodeDifference = (props) => {
-    const { diff, view, collapseAll, expandAll } = props || {};
+    const { diff, view, collapseAll, expandAll, configInfo, changeCommitScore, changeMRScore, index } = props || {};
     const [isActive, setIsActive] = useState('1');
+    const [show, setShow] = useState(false);
+    const [score, setScore] = useState(0);
+    const [showScoreModal, setShowScoreModal] = useState(false);
+
+    useEffect(() => {
+        if (diff) {
+            const modifiedScore = diff.scoreDTO?.modifiedScore !== -1 ? diff.scoreDTO?.modifiedScore : null;
+            const diffScore = modifiedScore === null ? diff.scoreDTO?.score : modifiedScore || 0;
+            setScore(diffScore);
+        }
+    }, [diff]);
 
     useEffect(() => {
         if (collapseAll) {
@@ -36,7 +47,15 @@ const CodeDifference = (props) => {
     const linesAdded = diff.codeDiff.match(/\n\+/g)?.length || 0;
     const linesRemoved = diff.codeDiff.match(/\n-/g)?.length || 0;
     const fileName = diff.newPath;
-    const diffScore = diff.diffScore || 0;
+    const diffScore =  diff.scoreDTO?.score || 0;
+    const updatedScore = score !== diffScore;
+    const extension = diff.extension;
+    const linesMoved = diff.scoreDTO?.linesMoved || 0;
+    const syntaxLinesAdded = diff.scoreDTO?.syntaxLinesAdded || 0;
+    const spaceLinesAdded = diff.scoreDTO?.spaceLinesAdded || 0;
+    const meaningfullLinesAdded = diff.scoreDTO?.meaningFullLinesAdded || 0;
+    const meaningfullLinesRemoved = diff.scoreDTO?.meaningFullLinesRemoved;
+    const commentsLinesAdded = diff.scoreDTO?.commentLinesAdded || 0;
 
     const language = getLanguageFromFile(fileName);
 
@@ -48,12 +67,34 @@ const CodeDifference = (props) => {
     };
 
     const handleClick = () => {
-        if (isActive === '1') {
-            setIsActive('0');
-        } else {
-            setIsActive('1');
+        if (!show && !showScoreModal){
+            if (isActive === '1') {
+                setIsActive('0');
+            } else {
+                setIsActive('1');
+            }
         }
     };
+    
+    const handleShow = () => setShow(true);
+
+    const handleClose = () => {
+        setShow(false);
+        setShowScoreModal(false);
+    };
+
+    const handleShowScoreModal = () => setShowScoreModal(true);
+
+    const changeScore = (newScore) => {
+        if (changeCommitScore) {
+            changeCommitScore(newScore - score, index);
+        }
+        if (changeMRScore) {
+            changeMRScore(newScore - score, index);
+        }
+        setScore(newScore);
+        setShowScoreModal(false);
+    }
 
     const isOpen = isActive === '1';
     return (
@@ -61,7 +102,29 @@ const CodeDifference = (props) => {
             <Card>
                 <Card.Header>
                     <Accordion.Toggle as="div" eventKey="1" onClick={handleClick} className="diff-toggle">
-                        <FileHeader isOpen={isOpen} linesAdded={linesAdded} linesRemoved={linesRemoved} fileName={fileName} diffScore={diffScore} />
+                        <FileHeader 
+                            isOpen={isOpen} 
+                            linesAdded={linesAdded} 
+                            linesRemoved={linesRemoved} 
+                            fileName={fileName} 
+                            diffScore={score}
+                            updatedScore={updatedScore}
+                            extension={extension}
+                            linesMoved={linesMoved}
+                            addLine={linesAdded}
+                            syntaxLinesAdded={syntaxLinesAdded}
+                            deleteLine={meaningfullLinesRemoved}
+                            configInfo={configInfo}
+                            spaceLinesAdded={spaceLinesAdded}
+                            meaningfulLinesAdded={meaningfullLinesAdded}
+                            commentsLinesAdded = {commentsLinesAdded}
+                            handleShow={handleShow}
+                            handleClose={handleClose}
+                            handleShowScoreModal={handleShowScoreModal}
+                            changeScore={changeScore}
+                            show={show}
+                            showScoreModal={showScoreModal}
+                        />
                     </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="1">

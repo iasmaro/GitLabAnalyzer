@@ -7,17 +7,18 @@ import './MergeRequestList.css';
 import MergeRequest from './MergeRequest';
 
 const MergeRequestList = (props) => {
-    const { mergerequests, setCommit, setCodeDiffs } = props || {};
+    const { mergerequests, setCommit, setCodeDiffs, setDiffsTitle } = props || {};
     const [selectedRowIndex, setSelectedRowIndex] = useState(-1);    
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(mergerequests);
-    const handleClick = (commits, diffs, index) => {
+    const handleClick = (commits, diffs, index, diffsTitle, mergeRequestLink) => {
         if(setCodeDiffs) {
-            setCodeDiffs(diffs);
+            setCodeDiffs(diffs, mergeRequestLink);
         }
         if(setCommit) {
             setCommit(commits);
         }
         setSelectedRowIndex(index);
+        setDiffsTitle(diffsTitle);
     }
     return (
         <div className='merge-request-list-container'>

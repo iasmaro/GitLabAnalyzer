@@ -1,0 +1,15 @@
+.past-reports {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    width: 100%;
+    background-color: #AFA4E0;
+    color: #ffffff;
+    margin: 0;
+    overflow: auto;
+}
+
+.spinner {
+    position: absolute;
+    top: 50%;
+}

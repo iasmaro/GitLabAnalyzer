@@ -7,13 +7,19 @@ import './CommitsList.css';
 
 const Commit = (props) => {
     const { commit, handleClick, selected, index, student, databaseMembersAndAliases } = props || {};
+
+    if (!commit) {
+        return null;
+    }
+
     const commitRowClass = selected ? 'commit-selected' : 'commit';
     const member = databaseMembersAndAliases?.find(mapping => mapping.memberId === student);
-    const commitAuthorClass = member?.alias?.includes(commit?.commitAuthor) ? 'author-highlighted' : 'author';
+    const commitAuthorClass = member?.alias?.includes(commit.commitAuthor) ? 'author-highlighted' : 'author';
+    const commitMessageDisplay = commit.commitMessage?.length > 40 ? commit.commitMessage?.slice(0, 40) + '...' : commit.commitMessage?.slice(0, 40);
 
     return (
-        <tr className={commitRowClass} onClick={() => handleClick(commit?.commitDiffs, index)} >
-            <td>{utcToLocal(commit?.commitDate)}</td>
+        <tr className={commitRowClass} onClick={() => handleClick(commit.commitDiffs, index, commit.commitMessage, commit.commitLink)} >
+            <td>{utcToLocal(commit.commitDate)}</td>
             <td>
                 <OverlayTrigger
                     placement='top'
@@ -23,13 +29,13 @@ const Commit = (props) => {
                         </Tooltip>
                     }
                 >
-                    <a href={commit?.commitLink} target='_blank' rel='noreferrer'>{commit?.commitMessage}</a>
+                    <a href={commit.commitLink} target='_blank' rel='noreferrer'>{commitMessageDisplay}</a>
                 </OverlayTrigger>
             </td>
-            <td>{commit?.commitScore}</td>
-            <td className={commitAuthorClass}>{commit?.commitAuthor}</td>
-            <td className='lines-added'>+{commit?.linesAdded}</td>
-            <td className='lines-removed'>-{commit?.linesRemoved}</td>
+            <td>{commit.commitScore}</td>
+            <td className={commitAuthorClass}>{commit.commitAuthor}</td>
+            <td className='lines-added'>+{commit.linesAdded}</td>
+            <td className='lines-removed'>-{commit.linesRemoved}</td>
         </tr>
     );
 };
