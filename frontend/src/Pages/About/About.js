@@ -59,7 +59,7 @@ function About() {
             <div className='main-header-demo'>
                 <h3>Demo Video</h3>
                 <ReactPlayer
-                    url="https://www.youtube.com/watch?v=S7kQ9qxSALU"
+                    url="https://youtu.be/QMB1TWo7td4"
                     width="1280px"
                     height="720px"
                 />
