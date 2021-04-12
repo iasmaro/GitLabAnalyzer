@@ -22,11 +22,11 @@ const MergeRequestList = (props) => {
     }
     return (
         <div className='merge-request-list-container'>
-            <Table bordered hover variant='light'>
+            <Table borderless hover variant='light'>
                 <thead>
-                    <tr>
-                        <th colSpan='5' className='mrTitle'>Merge Requests</th>
-                        <th colSpan='2' className='mrTitle'>Total Merge Requests: {mergerequests?.length || 0}</th>
+                    <tr className='mr-table-headers'>
+                        <th colSpan='4' className='mrTitle'>Merge Requests</th>
+                        <th colSpan='3' className='mrTitle'>Total Merge Requests: {mergerequests?.length || 0}</th>
                     </tr>
                 </thead>
                 <thead>
