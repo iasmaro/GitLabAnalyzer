@@ -3,7 +3,7 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 const AnalysisDropDown = (props) => {
 
-    const { members, student, setStudent, setDiffs, setActiveCommits} = props || {};
+    const { members, student, setStudent, setDiffs, setActiveCommits } = props || {};
 
     if (!members) {
         return null;

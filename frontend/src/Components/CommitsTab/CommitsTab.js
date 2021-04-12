@@ -8,7 +8,7 @@ import CodeDifferenceList from 'Components/CodeDifferenceList/CodeDifferenceList
 import './CommitsTab.css';
 
 const CommitsTab = (props) => {
-    const { configInfo, diffs, setDiffs} = props || {};
+    const { configInfo, diffs, setDiffs } = props || {};
     const [expand, setExpand] = useState(false);
     const [diffsTitle, setDiffsTitle] = useState();
 
