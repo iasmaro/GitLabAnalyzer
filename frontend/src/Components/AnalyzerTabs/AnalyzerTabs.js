@@ -15,10 +15,9 @@ import './AnalyzerTabs.css';
 const AnalyzerTabs = (props) => {
     const [key, setKey] = useState('summary');
 
+    const { commits, mergerequests, issueComments, mergeRequestComments, setDiffs, setActiveCommits } = props || {};
     const [commitScore, setCommitScore] = useState();
     const [mrScore, setMrScore] = useState();
-
-    const { commits, mergerequests, issueComments, mergeRequestComments } = props || {};
 
     useEffect(() => {
         const sumOfCommits = calculateCommitScore(commits);
@@ -43,6 +42,8 @@ const AnalyzerTabs = (props) => {
 
     const changeTab = (k) => {
         setKey(k);
+        setDiffs && setDiffs();
+        setActiveCommits && setActiveCommits();
     }
     
 

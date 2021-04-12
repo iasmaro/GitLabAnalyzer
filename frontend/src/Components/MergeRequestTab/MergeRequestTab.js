@@ -11,10 +11,8 @@ import CodeDifferenceList from 'Components/CodeDifferenceList/CodeDifferenceList
 import './MergeRequestTab.css';
 
 const MergeRequestTab = (props) => {
-    const { configInfo, mergerequests: MRs, updateCommitsTotal, updateMRsTotal, student, reportName } = props || {};
+    const { configInfo, mergerequests: MRs, updateCommitsTotal, updateMRsTotal, student, reportName, diffs, setDiffs, activeCommits, setActiveCommits } = props || {};
     const [mergerequests, setMergeRequests] = useState();
-    const [commits, setCommits] = useState();
-    const [diffs, setDiffs] = useState();
     const [expand, setExpand] = useState(false);
     const [diffsTitle, setDiffsTitle] = useState();
     const [selected, setSelected] = useState();
@@ -26,7 +24,7 @@ const MergeRequestTab = (props) => {
     }, [MRs]);
 
     const setCommit = (commitList) => {
-        setCommits(commitList);
+        setActiveCommits(commitList);
     }
 
     const setCodeDiffs = (diffsList, mergeRequestLink) => {
@@ -41,8 +39,8 @@ const MergeRequestTab = (props) => {
     }
 
     const setCommitCodeDiffs = (diffsList, commitLink) => {
-        for (let i = 0; commits.length; i++) {
-            if (commits[i].commitLink === commitLink) {
+        for (let i = 0; activeCommits.length; i++) {
+            if (activeCommits[i].commitLink === commitLink) {
                 setSelectedCommit(i);
                 break;
             }
@@ -57,7 +55,7 @@ const MergeRequestTab = (props) => {
 
     const changeMRScore = (scoreChange, diffIndex) => {
         if (selected === 'commit') {
-            const newCommits = commits.slice();
+            const newCommits = activeCommits.slice();
             const oldScore =  parseFloat(newCommits[selectedCommit].commitScore);
             const newScore = Math.round(10*(oldScore + scoreChange)) / 10;
             newCommits[selectedCommit].commitScore = newScore;
@@ -69,7 +67,7 @@ const MergeRequestTab = (props) => {
                 newDiffScore = oldScore + scoreChange;
                 newCommits[selectedCommit].commitDiffs[diffIndex].scoreDTO.modifiedScore = newDiffScore;
             }
-            setCommits(newCommits);
+            setActiveCommits(newCommits);
             updateCommitsTotal(scoreChange);
             const newMRs = mergerequests.slice();
             newMRs[selectedMR].commitDTOList = newCommits;
@@ -102,7 +100,7 @@ const MergeRequestTab = (props) => {
                     <MergeRequestList {...props} mergerequests={mergerequests} setCommit={setCommit} setCodeDiffs={setCodeDiffs} setDiffsTitle={setDiffsTitle} />
                 </div>
                 <div className="mrs-bottom">
-                    {commits && <CommitsList {...props} commits={commits} setCodeDiffs={setCommitCodeDiffs} setDiffsTitle={setDiffsTitle}/>}
+                    {activeCommits && <CommitsList {...props} commits={activeCommits} setCodeDiffs={setCommitCodeDiffs} setDiffsTitle={setDiffsTitle}/>}
                 </div>
             </div>}
             {diffs && <div className="mrs-right">

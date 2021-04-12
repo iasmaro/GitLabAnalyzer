@@ -5,14 +5,17 @@ import './AnalysisSpecifications.css'
 
 const AnalysisDropDown = (props) => {
 
-    const { members, student, setStudent } = props || {};
+    const { members, student, setStudent, setDiffs, setActiveCommits } = props || {};
 
     if (!members) {
         return null;
     }
 
     const selectStudent = (student) => {
-        setStudent(student);
+        setStudent && setStudent(student);
+        setStudent && setDiffs();
+        setActiveCommits && setActiveCommits();
+
     };
 
     return (
