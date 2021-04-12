@@ -5,6 +5,10 @@ const AnalysisDropDown = (props) => {
 
     const { members, student, setStudent, setDiffs, setActiveCommits} = props || {};
 
+    if (!members) {
+        return null;
+    }
+
     const selectStudent = (student) => {
         setStudent && setStudent(student);
         setStudent && setDiffs();

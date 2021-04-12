@@ -6,6 +6,7 @@ const dev = {
     USERS_API_URL: 'http://localhost:8080/api/v1/users',
     USERS_TOKEN_API_URL: 'http://localhost:8080/api/v1/users/token',
     PROJECT_MEMBERS_API_URL: 'http://localhost:8080/api/v1/members',
+    PAST_REPORTS_API_URL: 'http://localhost:8080/api/v1/PastReports',
     SAVE_CONFIG_URL: 'http://localhost:8080/api/v1/users/configuration',
     PROJECT_ALIAS_API_URL: 'http://localhost:8080/api/v1/members/alias',
     PROJECT_MAPPING_API_URL: 'http://localhost:8080/api/v1/members/mapping',
@@ -23,6 +24,7 @@ const prod = {
     USERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users',
     USERS_TOKEN_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/token',
     PROJECT_MEMBERS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members',
+    PAST_REPORTS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/PastReports',
     SAVE_CONFIG_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/users/configuration',
     PROJECT_ALIAS_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members/alias',
     PROJECT_MAPPING_API_URL: 'http://cmpt373-1211-11.cmpt.sfu.ca:8080/api/v1/members/mapping',
@@ -62,6 +64,7 @@ export const message = {
     NO_REPOS: 'It seems that you do not have any repositories at this moment',
     NO_ALIASES: 'No aliases found',
     NO_COMMENTS: 'No comments found for this user',
+    NO_REPORTS: 'It seems that you have not generated any reports yet',
 };
 
 export const ConfigLabels = {
