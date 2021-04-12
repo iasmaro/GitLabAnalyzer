@@ -31,7 +31,6 @@ const AnalyzerTabs = (props) => {
     }, [mergerequests]);
 
     const updateCommitScore = (change) => {
-        console.log(change);
         setCommitScore(Math.round((commitScore + change) * 10) / 10);
     }
     

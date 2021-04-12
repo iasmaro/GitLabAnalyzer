@@ -49,7 +49,6 @@ const Analysis = (props) => {
     useEffect(() => {
         if (reportName) {
             getReportDetails(reportName).then((data) => {
-                console.log(data);
                 setAnalysis(data);
                 setIsLoading(false);
                 if (!members && data) {
