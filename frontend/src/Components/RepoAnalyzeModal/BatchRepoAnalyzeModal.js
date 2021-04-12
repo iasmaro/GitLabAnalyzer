@@ -13,14 +13,14 @@ import './RepoAnalyzeModal.css';
 
 const BatchRepoAnalyzeModal = (props) => {
     const { configs, status, toggleModal, start, end, reposBatch } = props || {};    
-    const [config, setConfig] = useState("Select a configuration");
+    const [config, setConfig] = useState('Select a configuration');
     const [showError, setShowError] = useState(false);
     const [startDate, setStartDate] = useState(start || new Date());
     const [endDate, setEndDate] = useState(end || new Date());
     const username = useUserState();
 
     const handleClick = () => {
-        if (config !== "Select a configuration") {
+        if (config !== 'Select a configuration') {
             setShowError(false);
             if (startDate !== start || endDate !== end) {
                 updateUser(username, '', '', startDate, endDate);

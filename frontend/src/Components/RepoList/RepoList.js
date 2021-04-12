@@ -19,6 +19,7 @@ const RepoList = (props) => {
     const [searchWord, setSearchWord] = useState('');
     const { items, requestSortObject, sortConfig  } = useSortableDataObject(repos);
     const namespaceTooltip = <Tooltip>Namespace refers to the user name, group name, or subgroup name associated with the repository.</Tooltip>;
+    const batchAnalyzeTooltip = <Tooltip>Select repos to batch process and check the 'Past Reports' section for processed reports.</Tooltip>;
     const [reposBatch, setReposBatch] = useState(new Set());
     const [batchAnalyzeDisabled, setBatchAnalyzeDisabled] = useState(true);
     const [isLoadingStartDate, setIsLoadingStartDate] = useState(false);
@@ -78,7 +79,12 @@ const RepoList = (props) => {
                 <thead>
                     <tr className="repo-headers">
                         <th>
-                            <Button variant="dark" disabled={batchAnalyzeDisabled} onClick={() => handleShowBatchRepoAnalyzeModal()}>Batch Process</Button>
+                            <Button variant="dark" disabled={batchAnalyzeDisabled} onClick={() => handleShowBatchRepoAnalyzeModal()}>Batch Process</Button> {' '}
+                            <OverlayTrigger placement='right' overlay={batchAnalyzeTooltip}>
+                                <Badge pill variant="dark">
+                                    i
+                                </Badge>
+                            </OverlayTrigger>
                             { (isLoadingStartDate || isLoadingEndDate) ? <Spinner animation="border" className="spinner-repo-list" /> :
                             showAnalyzeModal && <BatchRepoAnalyzeModal                                        
                                                         configs={configs} 
