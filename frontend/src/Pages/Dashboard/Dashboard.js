@@ -22,7 +22,7 @@ const Dashboard = () => {
         <div className='dashboard'>
             {isLoading ? <Spinner animation="border" className="spinner" /> : <RepoList repos={repos}/>}
         </div>
-    )
+    );
 }
 
 export default Dashboard;

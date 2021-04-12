@@ -11,7 +11,7 @@ import getStartDate from 'Utils/getStartDate';
 import BatchRepoAnalyzeModal from 'Components/RepoAnalyzeModal/BatchRepoAnalyzeModal';
 
 import Repo from './Repo';
-import RepoSearchBar from './RepoSearchBar';
+import SearchBar from 'Components/SearchBar/SearchBar';
 import './RepoList.css';
 
 const RepoList = (props) => {
@@ -84,7 +84,7 @@ const RepoList = (props) => {
                 <thead>
                     <tr className='table-header'>
                         <th colSpan='3' className='repoTitle'>Repositories</th>
-                        <th colSpan='3' className='repoTitle'><RepoSearchBar searchWord={searchWord} setSearchWord={setSearchWord} /></th>
+                        <th colSpan='3' className='repoTitle'><SearchBar searchWord={searchWord} setSearchWord={setSearchWord} /></th>
                     </tr>
                 </thead>
                 <thead>
@@ -121,12 +121,12 @@ const RepoList = (props) => {
                 <tbody>
                     {!repos ? (
                         <tr>
-                            <td colSpan={3} >{message.TOKEN_NOT_SET}</td>
+                            <td colSpan={4} >{message.TOKEN_NOT_SET}</td>
                         </tr>
                     )
                     : !repos.length ? (
                         <tr>
-                            <td colSpan={3} >{message.NO_REPOS}</td>
+                            <td colSpan={4} >{message.NO_REPOS}</td>
                         </tr>
                     )
                     :

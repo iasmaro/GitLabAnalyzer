@@ -6,6 +6,7 @@ import Configuration from 'Pages/Configuration/Configuration';
 import Profile from 'Pages/Profile/Profile';
 import LogoutPage from 'Pages/Logout/LogoutPage';
 import Analysis from 'Pages/Analysis/Analysis';
+import PastReports from 'Pages/PastReports/PastReports';
 import Navbar from 'Components/Navbar/Navbar';
 import getUserData from 'Utils/getUserData';
 
@@ -37,7 +38,7 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route exact path="/Analysis" component={Analysis} />
         <ProtectedRoute exact path="/Configurations" Component={Configuration} />
-        <ProtectedRoute exact path="/Reports" Component={Home} />
+        <ProtectedRoute exact path="/Reports" Component={PastReports} />
         <ProtectedRoute exact path="/Profile" Component={Profile} />
         <LogoutPage exact path="/Logout" />
       </Switch>
