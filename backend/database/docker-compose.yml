@@ -18,22 +18,10 @@ version: '3.7'
 services:
   mongodb_container:
     image: mongo:4.2
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: admin
-#      MONGO_INITDB_ROOT_PASSWORD: adminpassword
-#      MONGO_INITDB_DATABASE: admin
-#      MONGO_INITDB_USERNAME: minh
-#      MONGO_INITDB_PASSWORD: minhpassword
-#      MONGO_NON_ROOT_USERNAME: minh
-#      MONGO_NON_ROOT_PASSWORD: minhpassword
+
     ports:
       - 27017:27017
     volumes:
-#      - ./docker-entrypoint-initdb.d/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-#      - ./docker-entrypoint-initdb.d/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
-#      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-#      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
-#      - ./mongo/data:/data/db
       - mongodb_data_container:/data/db
 volumes:
   mongodb_data_container:

@@ -131,9 +131,6 @@ function About() {
                             <td>Backend</td>
                             <td>Computing Science student at SFU</td>
                             <td className="profile-links">
-                                <a href="https://www.linkedin.com/in/minh--bui/" target="https://www.linkedin.com/in/minh--bui/">
-                                    <AiFillLinkedin />
-                                </a>
                             </td>
                         </tr>
                         <tr>

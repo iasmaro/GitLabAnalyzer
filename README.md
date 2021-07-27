@@ -20,25 +20,22 @@ A web app for analyzing individual contribution to a Gitlab project.
 
 ## Directions
 
-To run the program on the team VM, please follow the instruction below.
+To run the program locally first run the backend:
 
-### Dependencies
+- navigate to the backend directory
 
-The following dependencies are already installed on the team VM, no further actions required. 
+- run the command `./gradlew bootRun`
 
-- `Docker` 
-- `Docker-compose` 
-- `nginx`
+- Once the server has started proceed with running the frontend
 
-### Build & Run 
+To run the frontend:
 
-- Login to the team VM: `ssh -p 24 YourSfuId@cmpt373-1211-11.cmpt.sfu.ca `
-- Clone the git repo: `git clone git@csil-git1.cs.surrey.sfu.ca:373-2021-1-Haumea/gitlabanalyzer.git`
-- Build & Run the app:
+- navigate to the frontend directory
 
-  ```
-  cd gitlabanalyzer
-  docker-compose down --rmi all
-  docker-compose up --build -d
-  ```
-- The web app is live at: http://cmpt373-1211-11.cmpt.sfu.ca/
+- install all dependencies using `npm install` or `npm i`
+
+- run the frontend using `npm start`
+
+## License
+
+BSD 3-Clause License

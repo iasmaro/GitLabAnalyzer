@@ -27,7 +27,7 @@ export const diffs = [
        new_file:false,
        renamed_file:false,
        deleted_file:false,
-       diff:"@@ -14,13 +14,13 @@\n #spring.data.mongodb.database=minhdb\n \n # local server\n-spring.data.mongodb.host=localhost\n+# spring.data.mongodb.host=localhost\n # team VM server\n #spring.data.mongodb.host=142.58.22.176\n #spring.data.mongodb.port=27017\n \n #Connect to a remote MongoDB server\n-# spring.data.mongodb.uri=mongodb+srv://haumea:cmpt3732021@cmpt373-project.unzqm.mongodb.net/testdb?retryWrites=true\u0026w=majority\n+spring.data.mongodb.uri=mongodb+srv://haumea:cmpt3732021@cmpt373-project.unzqm.mongodb.net/testdb?retryWrites=true\u0026w=majority\n #mongodb+srv://haumea:\u003cpassword\u003e@cmpt373-project.unzqm.mongodb.net/test\n \n #spring.data.mongodb.uri=mongodb://admin:NU%2B!n2ju%2BVFr!X*F@cmpt373-1211-11.cmpt.sfu.ca:27017/?authSource=admin\u0026ssl=true\n"
+       diff:"@@ -14,13 +14,13 @@\n #spring.data.mongodb.database=\n \n # local server\n-spring.data.mongodb.host=localhost\n+# spring.data.mongodb.host=localhost\n # team VM server\n #spring.data.mongodb.host=142.58.22.176\n #spring.data.mongodb.port=27017\n \n #Connect to a remote MongoDB server\n-# spring.data.mongodb.uri=mongodb+srv://haumea:cmpt3732021@cmpt373-project.unzqm.mongodb.net/testdb?retryWrites=true\u0026w=majority\n+spring.data.mongodb.uri=mongodb+srv://haumea:cmpt3732021@cmpt373-project.unzqm.mongodb.net/testdb?retryWrites=true\u0026w=majority\n #mongodb+srv://haumea:\u003cpassword\u003e@cmpt373-project.unzqm.mongodb.net/test\n \n #spring.data.mongodb.uri=mongodb://admin:NU%2B!n2ju%2BVFr!X*F@cmpt373-1211-11.cmpt.sfu.ca:27017/?authSource=admin\u0026ssl=true\n"
     },
     {
        old_path:"docker-compose.yaml",
